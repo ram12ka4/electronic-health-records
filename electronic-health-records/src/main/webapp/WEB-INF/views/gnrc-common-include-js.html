@@ -1,0 +1,45 @@
+
+<!-- JS -->
+
+<!-- JQuery Core -->
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+
+<!-- <script type="text/javascript" src="js/jquery-3.3.1.js"></script> -->
+
+<!-- JQuery UI  -->
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+<!-- Bootstrap and Jquery Data Table -->
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/dataTables.bootstrap.min.js"></script>
+<!-- End of JS -->
+
+<script>
+
+	$(document).ready(function() {
+	    $('#example').DataTable();
+	} );
+
+	
+
+	$(document).ready(function (){
+		 $( "#fromDate" ).datepicker({
+			  changeMonth: true,
+		      changeYear: true,
+		      yearRange: '1830:+0',
+		      dateFormat: 'd-M-yy'
+			 });
+		});
+
+	function addDashes(f)
+	{
+		
+	f.value = f.value.slice(0,2)+"-"+f.value.slice(2,4)+"-"+f.value.slice(4,6);
+	}
+
+
+</script>
+
