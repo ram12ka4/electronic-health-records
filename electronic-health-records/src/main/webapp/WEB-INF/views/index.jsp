@@ -27,8 +27,9 @@
 						<option value="0">Select Location</option>
 						<option value="DIS">GNRC Dispur</option>
 						<option value="SIX">GNRC Six Mile</option>
-						<option value="NORTH">GNRC North Guwahati</option>
-						<option value="BARASAT">GNRC Barasat</option>
+						<option value="NGM">GNRC North Guwahati</option>
+						<option value="BRS">GNRC Barasat</option>
+						<option value="TST">GNRC TEST</option>
 					</select>
 					<button class="btn btn-info btn-block login" name="index_submit">Login</button>
 				</form>

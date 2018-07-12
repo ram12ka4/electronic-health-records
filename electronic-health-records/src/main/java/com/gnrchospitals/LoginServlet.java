@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("Password : " + password);
 		System.out.println("Location : " + location);
 
-		boolean isValid = service.isLoginValid(userName, password);
+		boolean isValid = service.isLoginValid(location, userName, password);
 
 		if (isValid) {
 
