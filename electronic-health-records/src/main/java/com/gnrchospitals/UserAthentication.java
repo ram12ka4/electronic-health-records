@@ -61,7 +61,7 @@ public class UserAthentication {
 	}
 
 	private PreparedStatement createPreparedStatement(Connection con, String userName) throws SQLException {
-		String sql = "select dpw(HUM_USER_PASSWD) from as_user_master where HUM_USER_ID = ?";
+		String sql = "select dpw(HUM_USER_PASSWD) from as_user_master where HUM_USER_ID = ? and HUM_USER_STATUS = 'A'";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, userName.trim());
 		return ps;

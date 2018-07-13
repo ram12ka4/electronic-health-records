@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.dao;
 
 public interface DatabaseInterface {
 

@@ -1,10 +1,8 @@
 package com.gnrchospitals.dao;
 
 import static java.lang.System.out;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-import com.gnrchospitals.DatabaseInterface;
 
 public class DatabaseDao implements DatabaseInterface {
 
