@@ -8,18 +8,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = "/dashboard.do")
-public class DashboardServlet extends HttpServlet {
+@WebServlet(urlPatterns="/patient.do")
+public class PatientIdentificationServlet extends HttpServlet {
 
-	
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
-		
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-indoor-patient-pane.jsp").forward(request, response);
-		
+		request.getRequestDispatcher("/WEB-INF/views/gnrc-pat-id-card.jsp").forward(request, response);
 	}
+	
 	
 
 }

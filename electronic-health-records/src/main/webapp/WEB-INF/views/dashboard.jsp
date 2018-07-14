@@ -20,7 +20,6 @@
 /* Ensure that the demo table scrolls */
 th, td {
 	white-space: nowrap;
-	
 }
 
 /* div.dataTables_wrapper {
@@ -28,9 +27,9 @@ th, td {
 	margin: 0 auto;
 }
  */
- div.dataTables_wrapper {
-        margin: 0 auto;
-    }
+div.dataTables_wrapper {
+	margin: 0 auto;
+}
 
 tr, tbody tr {
 	height: 10px;
@@ -53,7 +52,7 @@ tr, tbody tr {
 	</p>
 	<div class="container">
 		<h1 style="text-align: center;">Electronic Health Record</h1>
-		<form>
+
 		<table class="table table-striped table-bordered table-hover"
 			id="myTable" style="width: 100%">
 
@@ -63,12 +62,14 @@ tr, tbody tr {
 					<%
 						for (int i = 0; i < col.size(); i++) {
 					%>
-					<th style="background-color: #A90D82; color: #fff; text-align: center; "><%=col.get(i)%></th>
+					<th
+						style="background-color: #A90D82; color: #fff; text-align: center;"><%=col.get(i)%></th>
 
 					<%
 						}
 					%>
-					<th style="background-color: #A90D82; color: #fff; text-align: center; ">Action</th>
+					<th
+						style="background-color: #A90D82; color: #fff; text-align: center;">Action</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -76,7 +77,8 @@ tr, tbody tr {
 					<%
 						for (int i = 0; i < col.size(); i++) {
 					%>
-					<th style="background-color: #A90D82;  color: #fff; text-align: center;"><%=col.get(i)%></th>
+					<th
+						style="background-color: #A90D82; color: #fff; text-align: center;"><%=col.get(i)%></th>
 
 					<%
 						}
@@ -93,39 +95,35 @@ tr, tbody tr {
 					int ipIndex = 0;
 					String ipNo = "";
 					while (i < rowSize) {
-						ipNo = (String)row.get(ipIndex);
+						ipNo = (String) row.get(ipIndex);
 				%>
+
 				<tr style="font-size: 11px;">
 					<%
 						for (int j = 0; j < col.size(); j++) {
-							 
 					%>
-					
+
 					<td><%=row.get(index)%></td>
-					
+
 					<%
-						
 						index++;
 							}
 					%>
-						
-						
-						<td><button class="btn btn-info btn-xs" name="dashboard_submit">EMR</button></td>
-					
-					
 
+
+					<td><a href="/dashboard.do?ip_no=<%=ipNo%>"
+						class="btn btn-info btn-xs">EMR</a></td>
 				</tr>
-				<input type="hidden" name="ip_no" value="<%=ipNo%>"/>
 				<%
 					ipIndex += col.size();
-					i++;
+						i++;
 					}
 				%>
 
 			</tbody>
 		</table>
-				
-		</form>
+
+
 	</div>
 	<%@include file="gnrc-common-include-js.html"%>
 	<script>
@@ -141,12 +139,6 @@ tr, tbody tr {
 
 			var table = $('#myTable').DataTable();
 
-			
-
-			
-			
-			
-			
 			//table.columns.adjust().draw();
 
 			/*  $('#myTable').DataTable( {
@@ -180,7 +172,7 @@ tr, tbody tr {
 			
 			            column.data().unique().sort().each( function ( d, j ) {
 
-		            		var val = $.fn.dataTable.util.escapeRegex(d);
+			        		var val = $.fn.dataTable.util.escapeRegex(d);
 				            
 			            	 if(column.search() === '^'+val+'$'){
 			            		 select.append('<option value="'+d+'" selected="selected">'+d+'</option>') 
