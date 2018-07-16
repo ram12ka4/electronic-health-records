@@ -17,11 +17,11 @@
 						<ul class="collapse collapseable" id="collapse-registration">
 							<li><a href="/patient.do">Patient Identification Card  </a></li>
 							<li><a href="/invest.do">Investigation Sheet  </a></li>
-							<li><a href="gnrc-doctor-note.jsp">Doctor's Notes </a></li>
-							<li><a href="gnrc-doctor-order.jsp">Doctor's Orders </a></li>
-							<li><a href="gnrc-consult-record.jsp">Consultation Record</a></li>
-							<li><a href="gnrc-lab-report.jsp">Laboratory Report</a></li>
-							<li><a href="gnrc-transfer-sum.jsp">Transfer Summary </a></li>
+							<li><a href="/docnote.do">Doctor's Notes </a></li>
+							<li><a href="/docorder.do">Doctor's Orders </a></li>
+							<li><a href="/consult.do">Consultation Record</a></li>
+							<li><a href="/lab.do">Laboratory Report</a></li>
+							<li><a href="/transfer.do">Transfer Summary </a></li>
 						</ul></li>
 
 
