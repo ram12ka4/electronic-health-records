@@ -14,6 +14,8 @@
 <title>GNRC</title>
 </head>
 <body>
+
+
 	<div class="container">
 		<div class="login-container">
 			<div id="output"></div>
@@ -39,5 +41,19 @@
 	</div>
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/login.js"></script>
+	<%
+		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
+
+		if (!"".equals(msg)) {
+	%>
+	<script>
+	$(document).ready(function() {
+				$("#output").addClass("alert alert-danger animated fadeInUp")
+							.html('<%=msg%>');
+				});
+	</script>
+	<%
+		}
+	%>
 </body>
 </html>

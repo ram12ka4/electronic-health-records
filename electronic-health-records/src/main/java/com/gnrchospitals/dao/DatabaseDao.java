@@ -3,6 +3,7 @@ package com.gnrchospitals.dao;
 import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseDao implements DatabaseInterface {
 
@@ -77,7 +78,7 @@ public class DatabaseDao implements DatabaseInterface {
 
 	}
 
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException {
 
 		out.println("------------------ Oracle JDBC Connection Testing ------------");
 
@@ -93,21 +94,22 @@ public class DatabaseDao implements DatabaseInterface {
 
 		Connection con = null;
 
-		try {
-			con = DriverManager.getConnection("jdbc:oracle:thin:@" + serverAddress + ":" + dbPort + ":" + dbName,
-					dbUserName, dbPassword);
-		} catch (Exception e) {
-			out.println("Connection Failed! check output console");
-			e.printStackTrace();
-			return null;
-		}
+		// try {
+		con = DriverManager.getConnection("jdbc:oracle:thin:@" + serverAddress + ":" + dbPort + ":" + dbName,
+				dbUserName, dbPassword);
 
 		if (con != null) {
 			out.println("You made it! take control your database now! ");
 		} else {
 			out.println("Failed yo make connection");
-			return null;
+			System.out.println(con);
 		}
+
+		/*
+		 * } catch (Exception e) {
+		 * out.println("Connection Failed! check output console"); e.printStackTrace();
+		 * // return null; }
+		 */
 
 		return con;
 

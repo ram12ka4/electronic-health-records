@@ -51,6 +51,7 @@ public class UserAthentication {
 			}
 
 		} catch (SQLException e) {
+			System.out.println("Connection failed");
 			e.printStackTrace();
 		}
 		

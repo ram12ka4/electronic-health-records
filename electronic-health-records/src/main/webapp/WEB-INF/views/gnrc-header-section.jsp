@@ -31,7 +31,7 @@
 										class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
 										<span class="label label-message">3</span>
 								</a></li>
-								<li><a href="#" class="logout"> <span
+								<li><a href="/logout.do" class="logout"> <span
 										class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 										log out
 								</a></li>

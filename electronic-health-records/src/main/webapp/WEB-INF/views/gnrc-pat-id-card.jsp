@@ -1,3 +1,6 @@
+<<jsp:useBean id="patIden"
+	class="com.gnrchospitals.PatientIdentification"></jsp:useBean>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,6 +21,39 @@
 <!-- End of CSS -->
 </head>
 <body>
+
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
+
+		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
+				: (String) request.getAttribute("ipName");
+		System.out.println("Ip Name : " + ipNumber);
+		ArrayList<ArrayList<String>> list = patIden.getPatientIdenList(ipNumber);
+		ArrayList<String> col = new ArrayList<>();
+		ArrayList<String> row = new ArrayList<>();
+	%>
 
 	<!-- Upper Layout -->
 	<%@include file="gnrc-page-upper-layout.jsp"%>
@@ -60,14 +96,14 @@
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="title"><span
 									class="required-label" id="title"> Patient Name</span> :</label>
-							
+
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
 										id="first-name" name="first_name" placeholder="First Name"
 										required>
 
 								</div>
-							
+
 							</div>
 
 							<div class="form-group">
@@ -106,7 +142,7 @@
 									<input type="text" class="form-control input-sm"
 										name="last_name" placeholder="Last Name" required>
 								</div>
-								
+
 							</div>
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="status"><span

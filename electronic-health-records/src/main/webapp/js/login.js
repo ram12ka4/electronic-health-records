@@ -17,7 +17,7 @@ $(document).ready(
 									.html("sorry enter a username");
 							return false;
 						} else if ($("input[name=password]").val() === "") {
-							alert(password);
+							//alert(password);
 							$("#output").addClass(
 									"alert alert-danger animated fadeInUp")
 									.html("sorry enter a password");

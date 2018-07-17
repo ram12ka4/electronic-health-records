@@ -47,11 +47,46 @@ tr, tbody tr {
 
 
 <body>
+
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
+	%>
+
 	<p>
 		<br />
 	</p>
 	<div class="container">
 		<h1 style="text-align: center;">Electronic Health Record</h1>
+		<br />
+		<h5>
+			Hi
+			<%=userName%>, Login successful. Your Session ID=<%=sessionID%></h5>
+		<br> User=<%=user%>
+		<form action="<%=response.encodeURL("/logout.do")%>" method="get">
+			<input type="submit" value="Logout">
+		</form>
 
 		<table class="table table-striped table-bordered table-hover"
 			id="myTable" style="width: 100%">
