@@ -146,7 +146,7 @@ tr, tbody tr {
 					%>
 
 
-					<td><a href="/dashboard.do?ip_no=<%=ipNo%>"
+					<td><a href="/pat_panel.do?ip_no=<%=ipNo%>"
 						class="btn btn-info btn-xs">EMR</a></td>
 				</tr>
 				<%

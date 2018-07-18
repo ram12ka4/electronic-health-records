@@ -34,10 +34,10 @@ public class LogoutServlet extends HttpServlet {
 			System.out.println("User= " + session.getAttribute("user"));
 			if (session != null) {
 				session.invalidate();
-				/*response.setHeader("Cache-Control", "no-cache");
+				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Cache-Control", "no-store");
 				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);*/
+				response.setDateHeader("Expires", 0);
 			}
 
 			response.sendRedirect("/login.do");

@@ -292,4 +292,7 @@ textarea:required {
 	border: 1px solid red;
 }
 
-
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    /* background-color: #fff; */
+    opacity: 1;
+}

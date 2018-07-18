@@ -1,6 +1,6 @@
-<<jsp:useBean id="patIden"
-	class="com.gnrchospitals.PatientIdentification"></jsp:useBean>
-<%@page import="java.util.ArrayList"%>
+<jsp:useBean id="patIden"
+	class="com.gnrchospitals.daoimpl.PatientIdentificationDaoImpl"></jsp:useBean>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -50,9 +50,9 @@
 		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
 				: (String) request.getAttribute("ipName");
 		System.out.println("Ip Name : " + ipNumber);
-		ArrayList<ArrayList<String>> list = patIden.getPatientIdenList(ipNumber);
-		ArrayList<String> col = new ArrayList<>();
-		ArrayList<String> row = new ArrayList<>();
+		List<List<String>> list = patIden.findByIPNumber(ipNumber);
+		List<String> col = list.get(0);
+		List<String> row = list.get(1);
 	%>
 
 	<!-- Upper Layout -->
@@ -75,72 +75,68 @@
 
 
 						<div class="form-horizontal">
-
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="mrd"><span
 									class="required-label" id="mrd">MRD Number</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm" id="mrd"
-										name="mrd_number" placeholder="MRD Number" required>
+										name="mrd_number"
+										value="<%=(String) row.get(0) == null ? "-" : (String) row.get(0)%>"
+										placeholder="MRD Number" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">IP Number</span> :</label>
+								<label class="control-label col-xs-2" for="ip-num"><span
+									class="required-label" id="ip">IP Number</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="mrd"
-										name="mrd_number" placeholder="MRD Number" required>
+									<input type="text" class="form-control input-sm" id="ip"
+										name="ip_number" value="<%=(String) row.get(1) == null ? "-" : (String) row.get(1)%>" placeholder="IP Number" readonly>
 								</div>
 							</div>
-
-
 
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="title"><span
-									class="required-label" id="title"> Patient Name</span> :</label>
-
+									class="required-label" id="pat-name"> Patient Name</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										id="first-name" name="first_name" placeholder="First Name"
-										required>
-
+										id="pat-name" value="<%=(String) row.get(2) == null ? "-" : (String) row.get(2)%>" name="pat_name" placeholder="First Name"
+										readonly>
 								</div>
-
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Age</span> :</label>
+								<label class="control-label col-xs-2" for="age"><span
+									class="required-label" id="age"> Age</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										name="age" value="<%=(String) row.get(4) == null ? "-" : (String) row.get(4)%>" placeholder="Age" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
+								<label class="control-label col-xs-2" for="sex"><span
 									class="required-label"> Sex</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm" id="sex"
+										name="sex" value="<%=(String) row.get(3) == null ? "-" : (String) row.get(3)%>" placeholder="Sex" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
+								<label class="control-label col-xs-2" for="weight"><span
 									class="required-label"> Weight</span> :</label>
 								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="age-yy"
-										name="age_yy" placeholder="Y" required>
+									<input type="text" class="form-control input-sm" id="weight"
+										name="weight" placeholder="Weight" >
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Date of Admission</span> :</label>
+								<label class="control-label col-xs-2" for="dt-of-admit"><span
+									class="required-label" id="dt-of-admit"> Date of Admission</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										name="dt_of_admit" value="<%=(String) row.get(5) == null ? "-" : (String) row.get(5)%>" placeholder="Date of Admission" readonly>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Consultant</span> :</label>
+								<label class="control-label col-xs-2" for="doctor"><span
+									class="required-label" id="doctor"> Consultant</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										name="doctor" value="<%=(String) row.get(6) == null ? "-" : (String) row.get(6)%>" placeholder="Doctor" readonly>
 								</div>
 
 							</div>

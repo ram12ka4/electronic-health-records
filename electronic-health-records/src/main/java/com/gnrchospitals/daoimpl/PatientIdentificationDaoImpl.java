@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.daoimpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,16 +6,19 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.gnrchospitals.dao.DatabaseDao;
+import com.gnrchospitals.dao.PatientIdenficationDao;
 
-public class PatientIdentification {
-	
-	public ArrayList<ArrayList<String>> getPatientIdenList(String ipNumber) {
+public class PatientIdentificationDaoImpl implements PatientIdenficationDao {
+
+	@Override
+	public List<List<String>> findByIPNumber(String ipNumber) {
 
 		ArrayList<String> row = new ArrayList<>();
 		ArrayList<String> column = new ArrayList<>();
-		ArrayList<ArrayList<String>> list = new ArrayList<>();
+		List<List<String>> list = new ArrayList<>();
 		int rowCount = 0;
 
 		try (Connection con = DatabaseDao.getConnection();
@@ -39,6 +42,8 @@ public class PatientIdentification {
 				} while (rs.next());
 			}
 			
+			System.out.println("List is : " + list);
+
 			list.add(row);
 
 		} catch (SQLException e) {
@@ -49,26 +54,29 @@ public class PatientIdentification {
 		System.out.println("Indoor Patient List : " + list);
 		System.out.println("Indoor Patient List size : " + list.get(1).size());
 		return list;
-
 	}
 
 	private PreparedStatement createPreparedStatement(Connection con, String ipNumber) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("select a.WAT_IP_NUM \"IP NUMBER\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, ");
-		sql.append(
-				"d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED NUMBER\", c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMITTING DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\" ");
-		sql.append(" from wa_admission_txn a " + " ,RE_REGISTRATION_HEADER b " + " ,hr_employee_master c"
-				+ " ,wa_ward_master d" + " ,ga_department_master e");
-		sql.append(" where a.WAT_MR_NUM = b.RRH_MR_NUM " + "  and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
-				+ "  and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM " + "  and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
-				+ "  and WAT_pat_status = 'ADIP' order by name");
+		sql.append(" SELECT  B.RRH_MR_NUM \"MRD NO\", A.WAT_IP_NUM \"IP NO\", B.RRH_FIRST_NAME||' '||B.RRH_MIDDLE_NAME||' '||B.RRH_LAST_NAME NAME ");
+		sql.append(" , (SELECT C.GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER C WHERE C.GPM_PARAMETER_CD = B.RRH_PAT_SEX AND C.GPM_PARAMETER_TYPE = 'SEX') SEX");
+		sql.append(" , ROUND((trunc(SYSDATE) - B.RRH_PAT_DOB) / 365) AGE");
+		sql.append(" , TO_CHAR(A.WAT_ADMN_DT, 'DD-MON-YYYY hh:mi AM') \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR NAME\"");
+		sql.append(" FROM WA_ADMISSION_TXN A, RE_REGISTRATION_HEADER B,  HR_EMPLOYEE_MASTER D ");
+		sql.append(" WHERE  A.WAT_MR_NUM = B.RRH_MR_NUM AND D.EEM_EMP_NUM = A.WAT_DOCTOR_INCHARGE AND  A.WAT_IP_NUM = ?");
 
 		System.out.println(sql.toString());
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, ipNumber);
 		return ps;
 	}
-	
+
+	@Override
+	public boolean save(String ipNumber) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

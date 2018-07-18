@@ -25,7 +25,7 @@ public class PatientIdentificationServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		
-		request.setAttribute("ipName", request.getParameter("ip_no"));
+	
 
 		request.getRequestDispatcher("/WEB-INF/views/gnrc-pat-id-card.jsp").forward(request, response);
 	}

@@ -1,3 +1,6 @@
+<jsp:useBean id="patIden"
+	class="com.gnrchospitals.daoimpl.PatientIdentificationDaoImpl"></jsp:useBean>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,6 +21,40 @@
 <!-- End of CSS -->
 </head>
 <body>
+
+
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
+		
+		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
+				: (String) request.getAttribute("ipName");
+		System.out.println("Ip Name : " + ipNumber);
+		List<List<String>> list = patIden.findByIPNumber(ipNumber);
+		List<String> col = list.get(0);
+		List<String> row = list.get(1);
+	%>
 
 	<!-- Upper Layout -->
 	<%@include file="gnrc-page-upper-layout.jsp"%>
@@ -42,59 +79,62 @@
 
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Name</span> :</label>
+								<label class="control-label col-xs-2" for="name"><span
+									class="required-label" id="name"> Name</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+									<input type="text" class="form-control input-sm" name="name"
+										id="name" value="<%=(String) row.get(2) == null ? "-" : (String) row.get(2)%>" placeholder="Name" readonly>
 								</div>
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> Age</span> :</label>
+								<label class="control-label col-xs-1" for="age"><span
+									class="required-label" id="age"> Age</span> :</label>
 								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm" id="age"
+										name="age" value="<%=(String) row.get(4) == null ? "-" : (String) row.get(4)%>" placeholder="Age" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label"> Sex</span> :</label>
+								<label class="control-label col-xs-2" for="sex"><span
+									class="required-label" id="sex"> Sex</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="age-yy"
-										name="age_yy" placeholder="Y" required>
+									<input type="text" class="form-control input-sm" id="sex"
+										name="sex" value="<%=(String) row.get(3) == null ? "-" : (String) row.get(3)%>" placeholder="Sex" readonly>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Service & Unit</span> :</label>
+								<label class="control-label col-xs-2" for="service"><span
+									class="required-label" id="service"> Service </span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+									<input type="text" class="form-control input-sm" id="service"
+										name="service" placeholder="Service & Unit" readonly>
 								</div>
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> IP No</span> :</label>
+								<label class="control-label col-xs-1" for="ip-no"><span
+									class="required-label" id="ip-no"> IP No</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm" id="ip-no"
+										name="ip_no" value="<%=(String) row.get(1) == null ? "-" : (String) row.get(1)%>" placeholder="IP Number" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label"> Bed No</span> :</label>
+								<label class="control-label col-xs-2" for="bed-no"><span
+									class="required-label" id="bed-no"> Bed No</span> :</label>
 								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="age-yy"
-										name="age_yy" placeholder="Y" required>
+									<input type="text" id="bed-no" class="form-control input-sm"
+										name="bed_no" placeholder="Bed No." readonly>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Date</span> :</label>
+								<label class="control-label col-xs-2" for="from-Date"><span
+									class="required-label" id="from-Date"> Date</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+									<input type="text" class="form-control input-sm text-readonly" id="fromDate"
+										name="from_date" placeholder="Date" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label"> Blood Group</span> :</label>
+								<label class="control-label col-xs-2" for="blood-group"><span
+									class="required-label" id="blood-group"> Blood Group</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<select class="form-control input-sm" id="blood-group"
+										name="blood_group">
+										<option value="A+">A+</option>
+										<option value="A-">A+</option>
+										<option value="B+">A+</option>
+									</select>
 								</div>
-
 							</div>
 						</div>
 					</div>

@@ -12,7 +12,7 @@
 	id="side-menu">
 	<h1 class="hidden-xs hidden-sm">GNRC</h1>
 	<ul>
-		<li class="link active"><a href="index5.jsp"> <span
+		<li class="link active"><a href="/dashboard.do"> <span
 				class="glyphicon glyphicon-th" aria-hidden="true"></span> <span
 				class="hidden-xs hidden-sm">Dashboard</span>
 		</a></li>

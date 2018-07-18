@@ -32,7 +32,7 @@ $(document).ready(function() {
 		var id = $(this).attr("id");
 		if ($(this).val().length === 0) {
 			$("#" + id).css('color', 'red');
-		} else if ($(this).val().lebgth !== 0) {
+		} else if ($(this).val().length !== 0) {
 			$('#' + id).css('color', '#00C492');
 		}
 	});
