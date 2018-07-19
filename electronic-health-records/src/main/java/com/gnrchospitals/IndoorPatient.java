@@ -7,7 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.gnrchospitals.dao.DatabaseDao;
+import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
 
 public class IndoorPatient {
 
@@ -18,7 +18,7 @@ public class IndoorPatient {
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int rowCount = 0;
 
-		try (Connection con = DatabaseDao.getConnection();
+		try (Connection con = DatabaseDaoImpl.getConnection();
 				PreparedStatement ps = createPreparedStatement(con);
 				ResultSet rs = ps.executeQuery()) {
 

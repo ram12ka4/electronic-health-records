@@ -1,3 +1,6 @@
+<%@page import="com.gnrchospitals.dto.Patient"%>
+<%@page import="com.gnrchospitals.dao.PatientDao"%>
+<%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -18,6 +21,43 @@
 <!-- End of CSS -->
 </head>
 <body>
+
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
+
+		String ipNumber = (String) request.getAttribute("ipName") == null
+				? ""
+				: (String) request.getAttribute("ipName");
+		System.out.println("Ip Name : " + ipNumber);
+
+		PatientDao patientDao = new PatientDaoImpl();
+		Patient patient = patientDao.findByIpNumber(ipNumber);
+
+		System.out.println("Patient Object " + patient);
+	%>
+
 	<!-- Upper Layout -->
 	<%@include file="gnrc-page-upper-layout.jsp"%>
 	<!-- End of Upper Layout -->
@@ -42,23 +82,26 @@
 
 
 							<div class="form-group">
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label" id="gender"> Name</span> :</label>
+								<label class="control-label col-xs-1" for="name"><span
+									class="required-label" id="name"> Name</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Name" required>
+									<input type="text" class="form-control input-sm" id="name"
+										value="<%=patient.getPatientName()%>" name="name"
+										placeholder="Name" readonly>
 								</div>
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> MRD No.</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+								<label class="control-label col-xs-1" for="mrd"><span
+									class="required-label" id="mrd"> MRD No.</span> :</label>
+								<div class="col-xs-2">
+									<input type="text" class="form-control input-sm" id="mrd"
+										value="<%=patient.getMrdNumber()%>" name="mrd_no"
+										placeholder="MRD" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label"> Hospital No.</span> :</label>
-								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="age-yy"
-										name="age_yy" placeholder="Y" required>
+								<label class="control-label col-xs-1" for="ip-no"><span
+									class="required-label" id="ip-no"> IP No.</span> :</label>
+								<div class="col-xs-2">
+									<input type="text" class="form-control input-sm" id="ip-no"
+										value="<%=patient.getIpNumber()%>" name="ip_no"
+										placeholder="IP Number" readonly>
 								</div>
 							</div>
 
@@ -321,8 +364,6 @@
 							var wrapper = $(".input-field-wrap"); //Fields wrapper
 							var add_button = $(".add-field-button"); //Add button ID
 
-							
-
 							var x = 1; //initlal text box count
 							$(add_button)
 									.click(
@@ -337,8 +378,6 @@
 												}
 											});
 
-			
-
 							$(wrapper).on("click", ".remove_field",
 									function(e) { //user click on remove text
 										e.preventDefault();
@@ -346,7 +385,6 @@
 										x--;
 									});
 
-						
 						});
 	</script>
 </body>

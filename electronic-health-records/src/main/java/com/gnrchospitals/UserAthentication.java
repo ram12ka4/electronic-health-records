@@ -5,11 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.gnrchospitals.dao.DatabaseDao;
+
+import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
 
 public class UserAthentication {
 
-	private DatabaseDao dao = new DatabaseDao();
+	private DatabaseDaoImpl dao = new DatabaseDaoImpl();
 
 	public String getUserAuthDetail(ArrayList<String> list, String userName) {
 
@@ -41,7 +42,7 @@ public class UserAthentication {
 
 		String password = "";
 
-		try (Connection con = DatabaseDao.getConnection();
+		try (Connection con = DatabaseDaoImpl.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, userName);
 				ResultSet rs = ps.executeQuery()) {
 

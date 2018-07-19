@@ -1,3 +1,6 @@
+<%@page import="com.gnrchospitals.dto.Patient"%>
+<%@page import="com.gnrchospitals.dao.PatientDao"%>
+<%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -19,6 +22,42 @@
 </head>
 <body>
 
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
+
+		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
+				: (String) request.getAttribute("ipName");
+		System.out.println("Ip Name : " + ipNumber);
+
+		PatientDao patientDao = new PatientDaoImpl();
+		Patient patient = patientDao.findByIpNumber(ipNumber);
+
+		System.out.println("Patient Object " + patient);
+	%>
+
+
 	<!-- Upper Layout -->
 	<%@include file="gnrc-page-upper-layout.jsp"%>
 	<!-- End of Upper Layout -->
@@ -32,7 +71,7 @@
 				<div class="col-md-12">
 					<div class="admin-content-con">
 						<header class="clearfix">
-							<h5 class="pull-left">DOCTOR'S NOTESS</h5>
+							<h5 class="pull-left">DOCTOR'S NOTES</h5>
 							<h5 class="pull-right">QR/9-28</h5>
 						</header>
 
@@ -41,57 +80,59 @@
 
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Name</span> :</label>
+								<label class="control-label col-xs-2" for="name"><span
+									class="required-label" id="name"> Name</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+									<input type="text" class="form-control input-sm" id="name"
+										value="<%=patient.getPatientName()%>" name="name"
+										placeholder="Name" readonly>
 								</div>
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> Age</span> :</label>
+								<label class="control-label col-xs-1" for="age"><span
+									class="required-label" id="age"> Age</span> :</label>
 								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm"
+										value="<%=patient.getAge()%>" id="age" name="age"
+										placeholder="Age" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label"> Sex</span> :</label>
+								<label class="control-label col-xs-2" for="sex"><span
+									class="required-label" id="sex"> Sex</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="age-yy"
-										name="age_yy" placeholder="Y" required>
+									<input type="text" class="form-control input-sm" id="sex" value="<%=patient.getSex()%>"
+										name="sex" placeholder="Y" readonly>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Service Unit</span> :</label>
+								<label class="control-label col-xs-2" for="service"><span
+									class="required-label" id="service"> Service Unit</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										name="service" placeholder="Service Unit" readonly>
 								</div>
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> Bed</span> :</label>
+								<label class="control-label col-xs-1" for="bed"><span
+									class="required-label" id="bed"> Bed</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm" id="bed" value="<%=patient.getBedNo()%>"
+										name="bed" placeholder="Date of Birth" readonly>
 								</div>
-								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> Ward</span> :</label>
-								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="age-yy"
-										name="age_yy" placeholder="Y" required>
+								<label class="control-label col-xs-1" for="ward"><span
+									class="required-label" id="ward"> Ward</span> :</label>
+								<div class="col-xs-3">
+									<input type="text" class="form-control input-sm" id="ward" value="<%=patient.getWardNo()%>"
+										name="ward" placeholder="Ward" readonly>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> IP No.</span> :</label>
+								<label class="control-label col-xs-2" for="ip-no"><span
+									class="required-label" id="ip-no"> IP No.</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+									<input type="text" class="form-control input-sm" id="ip-no" value="<%=patient.getIpNumber()%>"
+										name="ip_no" placeholder="IP Number" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label"> MR No.</span> :</label>
+								<label class="control-label col-xs-2" for="mrd"><span
+									class="required-label" id="mrd"> MRD No.</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm" id="fromDate" id="mrd" value="<%=patient.getMrdNumber()%>"
+										name="mrd" placeholder="Date of Birth" readonly>
 								</div>
 								<label class="control-label col-xs-1" for="status"><span
 									class="required-label"> Date</span> :</label>
@@ -109,7 +150,8 @@
 										name="dt_of_birth" placeholder="Date of Birth" required>
 								</div>
 								<div class="checkbox">
-									<label> <input type="checkbox" value=""> Visiting Doctor
+									<label> <input type="checkbox" value="">
+										Visiting Doctor
 									</label>
 								</div>
 

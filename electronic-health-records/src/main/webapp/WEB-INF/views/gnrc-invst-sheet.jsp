@@ -1,6 +1,6 @@
-<jsp:useBean id="patIden"
-	class="com.gnrchospitals.daoimpl.PatientIdentificationDaoImpl"></jsp:useBean>
-<%@page import="java.util.List"%>
+<%@page import="com.gnrchospitals.dto.Patient"%>
+<%@page import="com.gnrchospitals.dao.PatientDao"%>
+<%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -51,9 +51,11 @@
 		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
 				: (String) request.getAttribute("ipName");
 		System.out.println("Ip Name : " + ipNumber);
-		List<List<String>> list = patIden.findByIPNumber(ipNumber);
-		List<String> col = list.get(0);
-		List<String> row = list.get(1);
+
+		PatientDao patientDao = new PatientDaoImpl();
+		Patient patient = patientDao.findByIpNumber(ipNumber);
+
+		System.out.println("Patient Object " + patient);
 	%>
 
 	<!-- Upper Layout -->
@@ -83,19 +85,19 @@
 									class="required-label" id="name"> Name</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm" name="name"
-										id="name" value="<%=(String) row.get(2) == null ? "-" : (String) row.get(2)%>" placeholder="Name" readonly>
+										id="name" value="<%=patient.getPatientName()%>" placeholder="Name" readonly>
 								</div>
 								<label class="control-label col-xs-1" for="age"><span
 									class="required-label" id="age"> Age</span> :</label>
 								<div class="col-xs-1">
 									<input type="text" class="form-control input-sm" id="age"
-										name="age" value="<%=(String) row.get(4) == null ? "-" : (String) row.get(4)%>" placeholder="Age" readonly>
+										value="<%=patient.getAge()%>" name="age"  placeholder="Age" readonly>
 								</div>
 								<label class="control-label col-xs-2" for="sex"><span
 									class="required-label" id="sex"> Sex</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm" id="sex"
-										name="sex" value="<%=(String) row.get(3) == null ? "-" : (String) row.get(3)%>" placeholder="Sex" readonly>
+										name="sex" value="<%=patient.getSex()%>" placeholder="Sex" readonly>
 								</div>
 							</div>
 							<div class="form-group">
@@ -109,13 +111,13 @@
 									class="required-label" id="ip-no"> IP No</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm" id="ip-no"
-										name="ip_no" value="<%=(String) row.get(1) == null ? "-" : (String) row.get(1)%>" placeholder="IP Number" readonly>
+										name="ip_no" value="<%=patient.getIpNumber()%>" placeholder="IP Number" readonly>
 								</div>
 								<label class="control-label col-xs-2" for="bed-no"><span
 									class="required-label" id="bed-no"> Bed No</span> :</label>
 								<div class="col-xs-1">
 									<input type="text" id="bed-no" class="form-control input-sm"
-										name="bed_no" placeholder="Bed No." readonly>
+										value="<%=patient.getBedNo()%>" name="bed_no" placeholder="Bed No." readonly>
 								</div>
 							</div>
 							<div class="form-group">

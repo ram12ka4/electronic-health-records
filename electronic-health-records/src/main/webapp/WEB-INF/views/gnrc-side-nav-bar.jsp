@@ -37,17 +37,17 @@
 
 
 
-		<li class="link"><a href="index5.jsp"> <span
+		<li class="link"><a href="#"> <span
 				class="glyphicon glyphicon-user" aria-hidden="true"></span> <span
 				class="hidden-xs hidden-sm">Commenters</span>
 		</a></li>
 
-		<li class="link"><a href="index5.jsp"> <span
+		<li class="link"><a href="#"> <span
 				class="glyphicon glyphicon-tags" aria-hidden="true"></span> <span
 				class="hidden-xs hidden-sm">Tags</span>
 		</a></li>
 
-		<li class="link setting-btn"><a href="index5.jsp"> <span
+		<li class="link setting-btn"><a href="#"> <span
 				class="glyphicon glyphicon-cog" aria-hidden="true"></span> <span
 				class="hidden-xs hidden-sm">Settings</span>
 		</a></li>
