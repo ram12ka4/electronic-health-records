@@ -292,7 +292,35 @@ textarea:required {
 	border: 1px solid red;
 }
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    /* background-color: #fff; */
-    opacity: 1;
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
+	{
+	/* background-color: #fff; */
+	opacity: 1;
 }
+
+  .modal {
+	text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+	.modal:before {
+		display: inline-block;
+		vertical-align: middle;
+		content: " ";
+		height: 100%;
+	}
+}
+
+.modal-dialog {
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+} 
+
+.alert {
+	margin-bottom: 1px;
+	height: 100px;
+	
+	line-height: 100px;
+	padding: 0px 15px;
+} 

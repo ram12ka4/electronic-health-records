@@ -6,18 +6,20 @@ public class EmrClinical {
 	private String emrNumber;
 	private String ipNumber;
 	private String visitNumber;
+	private String encounterNumber;
+	private String createUser;
+	private String updateUser;
 
-
-	public void setMrdNumber(String mrdNumber) {
+	public EmrClinical(String mrdNumber, String emrNumber, String ipNumber, String visitNumber, String encounterNumber,
+			String createUser, String updateUser) {
+		super();
 		this.mrdNumber = mrdNumber;
-	}
-
-	public void setEmrNumber(String emrNumber) {
 		this.emrNumber = emrNumber;
-	}
-
-	public void setIpNumber(String ipNumber) {
 		this.ipNumber = ipNumber;
+		this.visitNumber = visitNumber;
+		this.encounterNumber = encounterNumber;
+		this.createUser = createUser;
+		this.updateUser = updateUser;
 	}
 
 	public String getMrdNumber() {
@@ -30,6 +32,22 @@ public class EmrClinical {
 
 	public String getIpNumber() {
 		return ipNumber;
+	}
+
+	public String getVisitNumber() {
+		return visitNumber;
+	}
+
+	public String getEncounterNumber() {
+		return encounterNumber;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
 	}
 
 }

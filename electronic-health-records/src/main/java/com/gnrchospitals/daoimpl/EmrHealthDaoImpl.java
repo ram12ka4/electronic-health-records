@@ -46,20 +46,35 @@ public class EmrHealthDaoImpl implements EmrHealthDao {
 	@Override
 	public boolean insert(EmrHealth data) {
 
-		try (Connection con = DatabaseDaoImpl.getConnection();
-				PreparedStatement ps = createPreparedStatement(con, data)) {
+		boolean flag = false;
 
-			int affectedRecords[] = ps.executeBatch();
+		try (Connection con = DatabaseDaoImpl.getConnection()) {
 
-			if (affectedRecords.length != 0)
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement(con, data)) {
+
+				int affectedRecords[] = ps.executeBatch();
+
+				if (affectedRecords.length != 0)
+					flag = true;
+
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+			if (flag)
 				return true;
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
 
 		return false;
-
 	}
 
 	private PreparedStatement createPreparedStatement(Connection con, EmrHealth data) throws SQLException {
@@ -69,15 +84,13 @@ public class EmrHealthDaoImpl implements EmrHealthDao {
 		String emrNo = data.getEmr();
 		String emrDetNo = data.getEmrDetNo();
 		String createdUser = data.getCreatedUser();
-		String createdDate = data.getCreatedDate();
 		String lastCreatedUser = data.getLastCreatedUser();
-		String lastCreatedDate = data.getLastCreatedDate();
 		Map<String, String> keyValue = data.getKeyValue();
 		Set<Map.Entry<String, String>> st = keyValue.entrySet();
 
 		sql.append(
 				"INSERT INTO EMR_HEALTH_RECORD(EHR_EMR_NUM, EHR_DTL_CODE, EHR_ATTRB_CODE, EHR_ATTRB_VALUE, EHR_CRT_UID, EHR_CRT_DT, EHR_LAST_UPD_UID, EHR_LAST_UPD_DT) "
-						+ " VALUES(?,?,?,?,?,?,?,?)");
+						+ " VALUES(?,?,?,?,?,sysdate,?,sysdate)");
 
 		System.out.println(sql.toString());
 
@@ -89,18 +102,14 @@ public class EmrHealthDaoImpl implements EmrHealthDao {
 			ps.setString(3, me.getKey());
 			ps.setString(4, me.getValue());
 			ps.setString(5, createdUser);
-			ps.setString(6, createdDate);
-			ps.setString(7, lastCreatedUser);
-			ps.setString(8, lastCreatedDate);
+			ps.setString(6, lastCreatedUser);
 
 			System.out.println("EMR NO : " + emrNo);
 			System.out.println("EMR DET NO : " + emrDetNo);
 			System.out.println("KEY : " + me.getKey());
 			System.out.println("VALUE  : " + me.getValue());
 			System.out.println("CREATED USER : " + createdUser);
-			System.out.println("CREATED DATE : " + createdDate);
 			System.out.println("LAST CREATED USER : " + lastCreatedUser);
-			System.out.println("LAST CREATED DATE : " + lastCreatedDate);
 			ps.addBatch();
 		}
 		return ps;

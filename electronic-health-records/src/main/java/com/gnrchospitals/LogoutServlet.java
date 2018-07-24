@@ -31,9 +31,14 @@ public class LogoutServlet extends HttpServlet {
 			}
 
 			HttpSession session = request.getSession(false);
-			System.out.println("User= " + session.getAttribute("user"));
+		
+			
+			System.out.println("Logout User Session = " + session.getAttribute("user"));
+			
+			
 			if (session != null) {
 				session.invalidate();
+				
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Cache-Control", "no-store");
 				response.setHeader("Pragma", "no-cache");

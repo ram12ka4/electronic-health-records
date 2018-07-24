@@ -23,4 +23,9 @@ public class SequenceNumber {
 		return sequenceCode;
 	}
 
+	@Override
+	public String toString() {
+		return "[Sequence Code : " + sequenceCode + " User Id : " + uid +  " ]";
+	}
+
 }

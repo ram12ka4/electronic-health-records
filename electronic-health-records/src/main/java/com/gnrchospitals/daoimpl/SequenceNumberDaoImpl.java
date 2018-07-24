@@ -11,20 +11,20 @@ import com.gnrchospitals.dto.SequenceNumber;
 public class SequenceNumberDaoImpl implements SequenceNumberDao {
 
 	@Override
-	public String getSequenceNumber() {
+	public String getSequenceNumber(SequenceNumber data) {
 
-		SequenceNumber sequenceNumber = new SequenceNumber();
+		String sequenceCode = data.getSequenceCode();
+		String userId = data.getUid();
 
-		String sequenceCode = sequenceNumber.getSequenceCode();
-		String userId = sequenceNumber.getUid();
+		System.out.println("SEQUENCE CODE : " + sequenceCode);
+		System.out.println("USER ID : " + userId);
 
 		try (Connection con = DatabaseDaoImpl.getConnection();
 				CallableStatement cs = createCallableStatement(con, sequenceCode, userId);
 				ResultSet rs = cs.executeQuery()) {
 
-			if (rs.next()) {
-				return cs.getString(3);
-			}
+			System.out.println("OUT parameter : " + cs.getString(3));
+			return cs.getString(3);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

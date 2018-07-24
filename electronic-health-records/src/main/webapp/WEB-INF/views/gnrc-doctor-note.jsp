@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-user-reg.css">
+ <link rel="stylesheet" href="css/circle.css"> 
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -48,6 +49,8 @@
 			sessionID = session.getId();
 		}
 
+		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
+		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
 		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
 				: (String) request.getAttribute("ipName");
 		System.out.println("Ip Name : " + ipNumber);
@@ -66,7 +69,7 @@
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form action="/docnote.do" method="post">
+	<form id="doctor-note-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -146,7 +149,7 @@
 									class="required-label" id="note-date"> Date</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm" id="fromDate"
-										name="DN003" placeholder="Date of Birth" required>
+										name="DN003" placeholder="Date of Birth">
 								</div>
 
 							</div>
@@ -154,17 +157,19 @@
 								<label class="control-label col-xs-2" for="doctor-name"><span
 									class="required-label" id="doctor-name"> Doctor Name</span> :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm"
-										id="doctor-name" name="DN001" placeholder="Doctor Name"
-										required>
-								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" value="Y"
-										name="DN002"> Visiting Doctor
-									</label>
+									<input type="text" class="form-control input-sm" name="DN001"
+										placeholder="Doctor Name">
+									<div class="checkbox">
+										<label> <input type="checkbox" name="DN002">
+											Visiting Doctor
+										</label>
+									</div>
 								</div>
 
 							</div>
+
+
+
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="note"><span
 									class="required-label" id="note"> Note</span> :</label>
@@ -275,8 +280,9 @@
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div style="padding-right: 16px;" class="pull-right">
-									<input type="reset" class="btn btn-default" value="Reset">
-									<input type="submit" class="btn btn-primary" value="Submit">
+									<button type="button" class="btn btn-default" name="reset">Reset</button>
+									<button type="button" class="btn btn-primary"
+										name="doctor_note_submit" id="submit-btn">Submit</button>
 								</div>
 							</div>
 						</div>
@@ -290,6 +296,13 @@
 
 	<!-- End of Registration Form -->
 
+	<!-- Form Submit Alert Message -->
+	<%@include file="alert-modal.jsp"%>
+	<%@include file="confirm-box.html"%>
+	<%@include file="alert-box.html"%>
+	
+	<!-- End of Form Submit Alert Message -->
+
 
 
 	<!-- Lower Layout -->
@@ -302,6 +315,8 @@
 	<script type="text/javascript" src="js/dashboard.js"></script>
 	<script type="text/javascript" src="js/doctor-note.js"></script>
 	<!-- End of JS -->
+
+
 
 </body>
 </html>

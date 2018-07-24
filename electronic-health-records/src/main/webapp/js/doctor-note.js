@@ -1,26 +1,55 @@
-$(document).ready(function(e) {
+$(document)
+		.ready(
+				function() {
 
-	e.preventDefault();
+					$('button[name=doctor_note_submit]')
+							.click(
+									function(e) {
 
-	var noteDate = $('input[name=note_date]').val();
-	var doctorName = $('input[name=doctor_name]').val();
-	var note = $('input[name=note]').val();
+										alert("ram");
 
-	if ($("input[name=note_date]").val() === "") {
-		alert("Sorry enter a date");
-		return false;
-	} else if ($("input[name=doctor_name]").val() === "") {
-		// alert(password);
-		alert("Sorry enter a doctor name");
-		return false;
-	} else if ($("input[name=note]").val() === "") {
-		// alert(password);
-		alert("Sorry enter a some on note box");
-		return false;
-	}
+										e.preventDefault();
 
-	document.getElementById("doctor_note_form").method = "post";
-	document.getElementById("doctor_note_form").action = "/login.do";
-	document.getElementById("doctor_note_form").submit();
+										if ($('input[name=DN003]').val() === "") {
+											var id = $('input[name=DN003]')
+													.attr("id");
 
-});
+											alert(id);
+											$('#' + id).focus();
+											$('#myAlert')
+													.addClass(
+															'alert alert-danger alert-dismissible')
+													.html(
+															'<Strong>Required!</Strong> Please pick current date');
+											$('#alert-box').modal();
+
+										} else if ($('input[name=DN001]').val() === "") {
+											var id = $('input[name=DN001]')
+													.attr("id");
+
+											$('#myAlert')
+													.addClass(
+															'alert alert-danger alert-dismissible')
+													.html(
+															'<Strong>Required!</Strong> Please mention doctor name');
+											$('#alert-box').modal();
+
+											$('#' + id).focus();
+
+										} else if ($('textarea[name=DN004]')
+												.val() === "") {
+											$('textarea[name=DN004]').focus();
+
+											$('#myAlert')
+													.addClass(
+															'alert alert-danger alert-dismissible')
+													.html(
+															'<Strong>Required!</Strong> Please mention note');
+											$('#alert-box').modal();
+										} else {
+											$('#confirm-box').modal();
+										}
+
+									});
+
+				});

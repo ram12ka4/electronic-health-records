@@ -3,7 +3,7 @@
 <%
 	String ipNo = (String) session.getAttribute("ipNo");
 	
-	//out.println("IP No set in session " + ipNo);
+	System.out.println("IP No set in session " + ipNo);
 %>
 
 

@@ -1,6 +1,12 @@
 @charset "utf-8";
 
-body{background: #eee url(http://subtlepatterns.com/patterns/sativa.png);}
+body{
+	/* background: #eee url(http://subtlepatterns.com/patterns/sativa.png); */
+	background: #eee url(http://gnrchospitals.com/wp-content/uploads/2015/08/1_gnrc-medical-north-guwahati.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	
+	}
 
 html,body{
     position: relative;
