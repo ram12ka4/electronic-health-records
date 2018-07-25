@@ -1,12 +1,14 @@
 $(document)
 		.ready(
 				function() {
-
+					
+					$('#fromDate').datepicker().datepicker("setDate", new Date());
+					
 					$('button[name=doctor_note_submit]')
 							.click(
 									function(e) {
 
-										alert("ram");
+										//alert("ram");
 
 										e.preventDefault();
 
@@ -14,7 +16,7 @@ $(document)
 											var id = $('input[name=DN003]')
 													.attr("id");
 
-											alert(id);
+											//alert(id);
 											$('#' + id).focus();
 											$('#myAlert')
 													.addClass(
@@ -51,5 +53,22 @@ $(document)
 										}
 
 									});
+					
+					$('button[name=confirm]').click(function(){
+						//alert('Button');
+					
+						$('#circle').modal({
+							backdrop: 'static',
+							keyboard: false
+						});
+						
+						$('#confirm-box').modal('hide');
+						
+						document.getElementById("doctor-note-frm").method = "post";
+						document.getElementById("doctor-note-frm").action = "/docnote.do";
+						document.getElementById("doctor-note-frm").submit(); 
+						
+					});
+					
 
 				});

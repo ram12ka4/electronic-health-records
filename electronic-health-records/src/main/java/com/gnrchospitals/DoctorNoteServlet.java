@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.gnrchospitals.dao.EmrClinicalDao;
 import com.gnrchospitals.dao.EmrHealthDao;
 import com.gnrchospitals.dao.SequenceNumberDao;
@@ -37,8 +35,14 @@ public class DoctorNoteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.setAttribute("token", request.getParameter("token"));
-		request.setAttribute("msg", request.getParameter("msg"));
+		String token = request.getParameter("token") == null ? "" : request.getParameter("token");
+		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
+		
+	/*	System.out.println("TOKEN : " + token);
+		System.out.println("MSG : " + msg);
+*/
+		request.setAttribute("token", token);
+		request.setAttribute("msg", msg);
 		request.setAttribute("ipName", request.getParameter("ip_no"));
 		request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
 
@@ -55,17 +59,17 @@ public class DoctorNoteServlet extends HttpServlet {
 
 		long start = System.currentTimeMillis();
 
-		System.out.println("USER NAME : " + userName);
-		System.out.println("MRD NO : " + mrdNo);
-		System.out.println("IP NO : " + ipNo);
+		//System.out.println("USER NAME : " + userName);
+		//System.out.println("MRD NO : " + mrdNo);
+		//System.out.println("IP NO : " + ipNo);
 
 		boolean isIpPresent = clinicalDao.findByIpNum(ipNo);
 
-		System.out.println("IS IP PRESENT : " + isIpPresent);
+		//System.out.println("IS IP PRESENT : " + isIpPresent);
 
 		SequenceNumber emrSeqNum = new SequenceNumber("EMR", userName);
 
-		System.out.println("Sequence Number :  " + emrSeqNum);
+		//System.out.println("Sequence Number :  " + emrSeqNum);
 
 		String emrNo = sequenceNumberDao.getSequenceNumber(emrSeqNum);
 
@@ -85,20 +89,20 @@ public class DoctorNoteServlet extends HttpServlet {
 
 		SequenceNumber emrDetSeqNum = new SequenceNumber("EMRDET", userName);
 
-		System.out.println("Sequence Number :  " + emrDetSeqNum);
+		//System.out.println("Sequence Number :  " + emrDetSeqNum);
 
 		String emrDetNo = sequenceNumberDao.getSequenceNumber(emrDetSeqNum);
 
 		while (parameterName.hasMoreElements()) {
 
 			String paramName = parameterName.nextElement();
-			System.out.println("parameter Name " + paramName);
+			//System.out.println("parameter Name " + paramName);
 
 			boolean isValid = emrHealthDao.validateKey(paramName);
 
 			if (isValid) {
 				String paramValue = request.getParameter(paramName) == null ? "" : request.getParameter(paramName);
-				System.out.println("parameter Value " + paramValue);
+				//System.out.println("parameter Value " + paramValue);
 				keyValue.put(paramName, paramValue);
 			}
 		}
@@ -112,12 +116,12 @@ public class DoctorNoteServlet extends HttpServlet {
 		System.out.println("Time takes to process this : " + (end - start) + " ms");
 
 		if (isEmrHealthDataInsert) {
-			request.getRequestDispatcher(
-					"/WEB-INF/views/gnrc-doctor-note.jsp?token=success&msg=EmrHealthData insert success")
-					.forward(request, response);
+			//System.out.println("If clause");
+
+			response.sendRedirect("/docnote.do?token=success&msg=Data have been added successfully");
+
 		} else {
-			request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp?token=fail&msg=EmrHealthData insert fail")
-					.forward(request, response);
+			response.sendRedirect("/docnote.do?token=fail&msg=Something went wrong");
 		}
 
 	}

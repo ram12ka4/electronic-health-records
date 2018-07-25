@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-user-reg.css">
- <link rel="stylesheet" href="css/circle.css"> 
+<link rel="stylesheet" href="css/circle.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -51,9 +51,13 @@
 
 		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
 		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
-		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
+		String ipNumber = (String) request.getAttribute("ipName") == null
+				? ""
 				: (String) request.getAttribute("ipName");
+
 		System.out.println("Ip Name : " + ipNumber);
+		System.out.println("MSG : " + msg);
+		System.out.println("token : " + token);
 
 		Enumeration<String> noteDate = request.getParameterNames();
 
@@ -179,6 +183,14 @@
 								</div>
 
 							</div>
+							
+							<div class="form-group">
+								<div style="padding-right: 16px;" class="pull-right">
+									<button type="button" class="btn btn-default" name="reset">Reset</button>
+									<button type="button" class="btn btn-primary"
+										name="doctor_note_submit" id="submit-btn">Submit</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -270,25 +282,6 @@
 				</div>
 
 			</div>
-
-
-
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="admin-content-con">
-						<div class="form-horizontal">
-							<div class="form-group">
-								<div style="padding-right: 16px;" class="pull-right">
-									<button type="button" class="btn btn-default" name="reset">Reset</button>
-									<button type="button" class="btn btn-primary"
-										name="doctor_note_submit" id="submit-btn">Submit</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 
 		<!-- End of Dashboard -->
@@ -296,12 +289,17 @@
 
 	<!-- End of Registration Form -->
 
+
+
 	<!-- Form Submit Alert Message -->
 	<%@include file="alert-modal.jsp"%>
 	<%@include file="confirm-box.html"%>
 	<%@include file="alert-box.html"%>
-	
+
 	<!-- End of Form Submit Alert Message -->
+	
+	
+	
 
 
 
@@ -316,6 +314,39 @@
 	<script type="text/javascript" src="js/doctor-note.js"></script>
 	<!-- End of JS -->
 
+
+
+	<%
+		if (!"".equals(msg) && !"".equals(token)) {
+
+			//System.out.println(msg);
+
+			if ("success".equalsIgnoreCase(token)) {
+				//System.out.println(token);
+	%>
+	<script>
+		$(document).ready(function() {
+					//alert("if clause");
+					
+					swal("Well done!", '<%=msg%>', "success");
+
+				});
+	</script>
+
+	<%
+		} else {
+	%>
+	<script>
+		$(document).ready(function() {
+					
+					swal("Oh no!", '<%=msg%>', "error");
+				});
+	</script>
+
+	<%
+		}
+		}
+	%>
 
 
 </body>
