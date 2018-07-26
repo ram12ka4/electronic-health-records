@@ -1,120 +1,113 @@
 package com.gnrchospitals.daoimpl;
 
-import static java.lang.System.out;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.gnrchospitals.dao.DatabaseDao;
+import com.gnrchospitals.util.LocationDBConnection;
 
 public class DatabaseDaoImpl implements DatabaseDao {
 
+	private static String host;
+	private static String port;
 	private static String dbName;
-	private static String serverAddress;
-	private static String dbUserName;
-	private static String dbPassword;
-	private static String dbPort;
+	private static String userName;
+	private static String password;
 
 	@Override
-	public String getDbName() {
+	public void setDbHost(String host) {
 		// TODO Auto-generated method stub
-		return dbName;
+		DatabaseDaoImpl.host = host;
+
+	}
+
+	@Override
+	public void setDbPort(String port) {
+		// TODO Auto-generated method stub
+		DatabaseDaoImpl.port = port;
+
 	}
 
 	@Override
 	public void setDbName(String dbName) {
 		// TODO Auto-generated method stub
 		DatabaseDaoImpl.dbName = dbName;
+	}
+
+	@Override
+	public void setDbUserName(String userName) {
+		// TODO Auto-generated method stub
+		DatabaseDaoImpl.userName = userName;
+	}
+
+	@Override
+	public void setDbPassword(String password) {
+		// TODO Auto-generated method stub
+		DatabaseDaoImpl.password = password;
 
 	}
 
 	@Override
-	public String getServerAddress() {
+	public String getDbHost() {
 		// TODO Auto-generated method stub
-		return serverAddress;
-	}
-
-	@Override
-	public void setServerAddress(String serverAddress) {
-		// TODO Auto-generated method stub
-		DatabaseDaoImpl.serverAddress = serverAddress;
-
-	}
-
-	@Override
-	public String getDbUserName() {
-		// TODO Auto-generated method stub
-		return dbUserName;
-	}
-
-	@Override
-	public void setDbUserName(String dbUserName) {
-		// TODO Auto-generated method stub
-		DatabaseDaoImpl.dbUserName = dbUserName;
-
-	}
-
-	@Override
-	public String getDbPassword() {
-		// TODO Auto-generated method stub
-		return dbPassword;
-	}
-
-	@Override
-	public void setDbPassword(String dbPassword) {
-		// TODO Auto-generated method stub
-		DatabaseDaoImpl.dbPassword = dbPassword;
-
+		return DatabaseDaoImpl.host;
 	}
 
 	@Override
 	public String getDbPort() {
 		// TODO Auto-generated method stub
-		return dbPort;
+		return DatabaseDaoImpl.port;
 	}
 
 	@Override
-	public void setDbPort(String dbPort) {
+	public String getDbName() {
 		// TODO Auto-generated method stub
-		DatabaseDaoImpl.dbPort = dbPort;
-
+		return DatabaseDaoImpl.dbName;
 	}
 
-	public static Connection getConnection() throws SQLException {
+	@Override
+	public String getDbUserName() {
+		// TODO Auto-generated method stub
+		return DatabaseDaoImpl.userName;
+	}
 
-		out.println("------------------ Oracle JDBC Connection Testing ------------");
+	@Override
+	public String getDbPassword() {
+		// TODO Auto-generated method stub
+		return DatabaseDaoImpl.password;
+	}
 
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			out.println("Where is your Oracle JDBC Driver");
+	@Override
+	public boolean findByLocation(String location) {
+
+		try (Connection con = LocationDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement(con, location);
+				ResultSet rs = ps.executeQuery()) {
+
+			DatabaseDaoImpl databaseImpl = new DatabaseDaoImpl();
+
+			if (rs.next()) {
+				databaseImpl.setDbHost(rs.getString(1));
+				databaseImpl.setDbPort(rs.getString(2));
+				databaseImpl.setDbName(rs.getString(3));
+				databaseImpl.setDbUserName(rs.getString(4));
+				databaseImpl.setDbPassword(rs.getString(5));
+				return true;
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
 
-		out.println("Oracle JDBC Driver Registered");
+		return false;
+	}
 
-		Connection con = null;
-
-		// try {
-		con = DriverManager.getConnection("jdbc:oracle:thin:@" + serverAddress + ":" + dbPort + ":" + dbName,
-				dbUserName, dbPassword);
-
-		if (con != null) {
-			out.println("You made it! take control your database now! ");
-		} else {
-			out.println("Failed yo make connection");
-			System.out.println(con);
-		}
-
-		/*
-		 * } catch (Exception e) {
-		 * out.println("Connection Failed! check output console"); e.printStackTrace();
-		 * // return null; }
-		 */
-
-		return con;
-
+	private PreparedStatement createPreparedStatement(Connection con, String location) throws SQLException {
+		String sql = "select SRV_ADD, DB_PORT, DB_NAME, DB_USER, DB_PSWD from MST_GLOBAL_INFO where LOC_ID = ? and STATUS ='A'";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, location);
+		return ps;
 	}
 
 }

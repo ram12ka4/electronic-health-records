@@ -7,15 +7,15 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.gnrchospitals.dao.LoginDatabaseDao;
+import com.gnrchospitals.util.LoginDBConnection;
 
-public class DatabaseCredentials {
+public class DBConnection {
 
 	public ArrayList<String> getDbCredentials(String locationId) {
 
 		ArrayList<String> list = new ArrayList<>();
 
-		try (Connection con = LoginDatabaseDao.getConnection();
+		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, locationId);
 				ResultSet rs = ps.executeQuery()) {
 

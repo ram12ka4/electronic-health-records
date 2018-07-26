@@ -1,25 +1,29 @@
 package com.gnrchospitals.dao;
 
+import com.gnrchospitals.dto.Database;
+
 public interface DatabaseDao {
 
-	String getDbName();
+	public abstract void setDbHost(String host);
 
-	void setDbName(String dbName);
+	public abstract void setDbPort(String port);
 
-	String getServerAddress();
+	public abstract void setDbName(String dbName);
 
-	void setServerAddress(String serverAddress);
+	public abstract void setDbUserName(String userName);
 
-	String getDbUserName();
+	public abstract void setDbPassword(String password);
 
-	void setDbUserName(String dbUserName);
+	public abstract String getDbHost();
 
-	String getDbPassword();
+	public abstract String getDbPort();
 
-	void setDbPassword(String dbPassword);
+	public abstract String getDbName();
 
-	String getDbPort();
+	public abstract String getDbUserName();
 
-	void setDbPort(String dbPort);
+	public abstract String getDbPassword();
+
+	public abstract boolean findByLocation(String location);
 
 }

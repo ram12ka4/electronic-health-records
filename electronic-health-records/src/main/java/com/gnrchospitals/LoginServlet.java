@@ -31,9 +31,11 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password") == null ? "" : request.getParameter("password");
 		String location = request.getParameter("location") == null ? "" : request.getParameter("location");
 
-		System.out.println("User Name : " + user);
+		System.out.println("User ID : " + user);
 		System.out.println("Password : " + password);
 		System.out.println("Location : " + location);
+		
+		
 
 		boolean isValid = service.isLoginValid(location, user, password);
 		

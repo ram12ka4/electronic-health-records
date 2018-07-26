@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import com.gnrchospitals.dao.EmrClinicalDao;
 import com.gnrchospitals.dto.EmrClinical;
 

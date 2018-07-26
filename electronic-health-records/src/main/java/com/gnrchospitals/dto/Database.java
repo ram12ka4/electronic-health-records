@@ -8,12 +8,27 @@ public class Database {
 	private String dbPassword;
 	private String dbPort;
 
-	public Database(String serverIp, String dbName, String userName, String dbPassword, String dbPort) {
-		super();
+	public Database() {
+
+	}
+
+	public void setServerIp(String serverIp) {
 		this.serverIp = serverIp;
+	}
+
+	public void setDbName(String dbName) {
 		this.dbName = dbName;
+	}
+
+	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public void setDbPassword(String dbPassword) {
 		this.dbPassword = dbPassword;
+	}
+
+	public void setDbPort(String dbPort) {
 		this.dbPort = dbPort;
 	}
 

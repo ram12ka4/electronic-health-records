@@ -2,6 +2,10 @@ package com.gnrchospitals;
 
 import java.util.ArrayList;
 
+import com.gnrchospitals.dao.DatabaseDao;
+import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
+import com.gnrchospitals.dto.Database;
+
 
 
 public class LoginService {
@@ -15,8 +19,13 @@ public class LoginService {
 		 * get specific database credentials for given user name and password as per
 		 * given location
 		 */
-		ArrayList<String> list = dbService.getDbCredentials(locId);
-		String dbPassword =  userAuth.getUserAuthDetail(list, userName);
+		//ArrayList<String> list = dbService.getDbCredentials(locId);
+		
+		DatabaseDao databaseDo = new DatabaseDaoImpl();
+		
+		boolean isLoginDatabaseConfigure = databaseDo.findByLocation(locId);
+		
+		String dbPassword =  userAuth.getUserAuthDetail(userName);
 		
 
 		if (dbPassword.trim().equalsIgnoreCase(password))
