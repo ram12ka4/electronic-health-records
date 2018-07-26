@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 
@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = "/docorder.do")
-public class DoctorOrderServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/dashboard.do")
+public class DashBoardControl extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setAttribute("ipName", request.getParameter("ip_no"));
 
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-order.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 
 	}
+
 }

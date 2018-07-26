@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 
@@ -8,14 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = "/consult.do")
-public class ConsultRecordServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/lab.do")
+public class LaboratoryReportServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-consult-record.jsp").forward(request, response);
+
+		request.getRequestDispatcher("/WEB-INF/views/gnrc-lab-report.jsp").forward(request, response);
+
 	}
 
 }

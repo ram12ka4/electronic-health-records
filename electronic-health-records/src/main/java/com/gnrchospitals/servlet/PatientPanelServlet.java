@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.servlet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
+import com.gnrchospitals.util.LoginDBConnection;
 
 public class IndoorPatient {
 
@@ -18,7 +18,7 @@ public class IndoorPatient {
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int rowCount = 0;
 
-		try (Connection con = DatabaseDaoImpl.getConnection();
+		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con);
 				ResultSet rs = ps.executeQuery()) {
 

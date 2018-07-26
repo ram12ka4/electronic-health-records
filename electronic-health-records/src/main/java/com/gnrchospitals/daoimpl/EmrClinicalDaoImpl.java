@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.gnrchospitals.dao.EmrClinicalDao;
 import com.gnrchospitals.dto.EmrClinical;
+import com.gnrchospitals.util.LoginDBConnection;
 
 public class EmrClinicalDaoImpl implements EmrClinicalDao {
 
@@ -15,7 +16,7 @@ public class EmrClinicalDaoImpl implements EmrClinicalDao {
 
 		boolean flag = false;
 
-		try (Connection con = DatabaseDaoImpl.getConnection()) {
+		try (Connection con = LoginDBConnection.getConnection()) {
 
 			con.setAutoCommit(false);
 
@@ -74,7 +75,7 @@ public class EmrClinicalDaoImpl implements EmrClinicalDao {
 	@Override
 	public boolean findByIpNum(String ipNumber) {
 
-		try (Connection con = DatabaseDaoImpl.getConnection();
+		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, ipNumber);
 				ResultSet rs = ps.executeQuery()) {
 

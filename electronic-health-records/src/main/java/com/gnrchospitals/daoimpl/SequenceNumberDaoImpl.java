@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.gnrchospitals.dao.SequenceNumberDao;
 import com.gnrchospitals.dto.SequenceNumber;
+import com.gnrchospitals.util.LoginDBConnection;
 
 public class SequenceNumberDaoImpl implements SequenceNumberDao {
 
@@ -19,7 +20,7 @@ public class SequenceNumberDaoImpl implements SequenceNumberDao {
 		System.out.println("SEQUENCE CODE : " + sequenceCode);
 		System.out.println("USER ID : " + userId);
 
-		try (Connection con = DatabaseDaoImpl.getConnection();
+		try (Connection con = LoginDBConnection.getConnection();
 				CallableStatement cs = createCallableStatement(con, sequenceCode, userId);
 				ResultSet rs = cs.executeQuery()) {
 

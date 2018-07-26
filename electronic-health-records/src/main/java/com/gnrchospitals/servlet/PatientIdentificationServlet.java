@@ -1,4 +1,4 @@
-package com.gnrchospitals;
+package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 
@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = "/invest.do")
-public class InvestigationSheetServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/patient.do")
+public class PatientIdentificationServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,16 +18,16 @@ public class InvestigationSheetServlet extends HttpServlet {
 
 		request.setAttribute("ipName", request.getParameter("ip_no"));
 
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-invst-sheet.jsp").forward(request, response);
-
+		request.getRequestDispatcher("/WEB-INF/views/gnrc-pat-id-card.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		
+	
 
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-invst-sheet.jsp").forward(request, response);
-
+		request.getRequestDispatcher("/WEB-INF/views/gnrc-pat-id-card.jsp").forward(request, response);
 	}
+
 }

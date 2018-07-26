@@ -9,13 +9,14 @@ import java.util.Set;
 
 import com.gnrchospitals.dao.EmrHealthDao;
 import com.gnrchospitals.dto.EmrHealth;
+import com.gnrchospitals.util.LoginDBConnection;
 
 public class EmrHealthDaoImpl implements EmrHealthDao {
 
 	@Override
 	public boolean validateKey(String key) {
 
-		try (Connection con = DatabaseDaoImpl.getConnection();
+		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, key);
 				ResultSet rs = ps.executeQuery()) {
 
@@ -48,7 +49,7 @@ public class EmrHealthDaoImpl implements EmrHealthDao {
 
 		boolean flag = false;
 
-		try (Connection con = DatabaseDaoImpl.getConnection()) {
+		try (Connection con = LoginDBConnection.getConnection()) {
 
 			con.setAutoCommit(false);
 

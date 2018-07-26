@@ -1,6 +1,5 @@
 package com.gnrchospitals.dao;
 
-import com.gnrchospitals.dto.Database;
 
 public interface DatabaseDao {
 

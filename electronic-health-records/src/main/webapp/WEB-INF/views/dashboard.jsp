@@ -1,8 +1,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; utf-8"
 	pageEncoding="utf-8"%>
-<jsp:useBean id="indoorPat" class="com.gnrchospitals.IndoorPatient"
-	scope="request"></jsp:useBean>
+<jsp:useBean id="indoorPat"
+	class="com.gnrchospitals.servlet.IndoorPatient" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,20 +74,46 @@ tr, tbody tr {
 		}
 	%>
 
-	<p>
-		<br />
-	</p>
-	<div class="container">
-		<h1 style="text-align: center;">Electronic Health Record</h1>
-		<br />
-		<h5>
-			Hi
-			<%=userName%>, Login successful. Your Session ID=<%=sessionID%></h5>
-		<br> User=<%=user%>
-		<form action="<%=response.encodeURL("/logout.do")%>" method="get">
-			<input type="submit" value="Logout">
-		</form>
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+					aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><img alt=""
+					src="image/logo.jpg"></a>
+			</div>
 
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="#">Contact</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+							<li><a href="#">Change Password</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!--  /.container-fluid -->
+	</nav>
+
+
+	<div class="container">
 		<table class="table table-striped table-bordered table-hover"
 			id="myTable" style="width: 100%">
 
@@ -158,8 +184,13 @@ tr, tbody tr {
 			</tbody>
 		</table>
 
-
 	</div>
+
+
+	<%@include file="logout-modal.html"%>
+
+
+
 	<%@include file="gnrc-common-include-js.html"%>
 	<script>
 		$(document).ready(function() {

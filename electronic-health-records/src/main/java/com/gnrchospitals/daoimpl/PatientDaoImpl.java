@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.dto.Patient;
+import com.gnrchospitals.util.LoginDBConnection;
 
 public class PatientDaoImpl implements PatientDao {
 
@@ -15,7 +16,7 @@ public class PatientDaoImpl implements PatientDao {
 	@Override
 	public Patient findByIpNumber(String ipNumber) {
 
-		try (Connection con = DatabaseDaoImpl.getConnection();
+		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, ipNumber);
 				ResultSet rs = ps.executeQuery()) {
 

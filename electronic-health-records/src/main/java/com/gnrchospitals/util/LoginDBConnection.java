@@ -3,9 +3,7 @@ package com.gnrchospitals.util;
 import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
-
 import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
-import com.gnrchospitals.dto.Database;
 
 public class LoginDBConnection {
 
@@ -34,8 +32,10 @@ public class LoginDBConnection {
 		Connection con = null;
 
 		try {
-			con = DriverManager.getConnection("jdbc:oracle:thin:@" + database.getServerIp() + ":" + database.getDbPort()
-					+ ":" + database.getDbPort(), database.getUserName(), database.getDbPassword());
+			con = DriverManager.getConnection(
+					"jdbc:oracle:thin:@" + databaseDaoImpl.getDbHost() + ":" + databaseDaoImpl.getDbPort() + ":"
+							+ databaseDaoImpl.getDbName(),
+					databaseDaoImpl.getDbUserName(), databaseDaoImpl.getDbPassword());
 
 			if (con != null) {
 				out.println("You made it! take control your database now! ");

@@ -161,7 +161,7 @@
 								<label class="control-label col-xs-2" for="doctor-name"><span
 									class="required-label" id="doctor-name"> Doctor Name</span> :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" name="DN001"
+									<input type="text" class="form-control input-sm" value="${sessionScope.username.username}"name="DN001"
 										placeholder="Doctor Name">
 									<div class="checkbox">
 										<label> <input type="checkbox" name="DN002">
