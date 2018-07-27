@@ -19,11 +19,17 @@ html, body {
 	padding: 0px;
 }
 
+.side-active #side-menu  {
+	left: 150px;
+	 width: 150px;
+    transition: all .4s ease 0s;
+}
+
 #side-menu h1 {
 	/* color: #1f3647; */
 	color: #fff;
-	text-align: center;
-	margin: 10px 0px;
+	text-align: left;
+	margin: 10px 1px;
 	font-size: 25px;
 }
 
@@ -298,7 +304,7 @@ textarea:required {
 	opacity: 1;
 }
 
-  .modal {
+.modal {
 	text-align: center;
 }
 
@@ -315,12 +321,11 @@ textarea:required {
 	display: inline-block;
 	text-align: center;
 	vertical-align: middle;
-} 
+}
 
 .alert {
 	margin-bottom: 1px;
 	height: 100px;
-	
 	line-height: 100px;
 	padding: 0px 15px;
-} 
+}

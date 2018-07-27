@@ -7,6 +7,12 @@ $(document).ready(function() {
 	$('[data-toggle="offcanvas"]').click(function() {
 		$('#side-menu').toggleClass('hidden-xs');
 	});
+	
+	$('#menu-toggle').click(function() {
+		alert("ram")
+		$('#side-menu').toggleClass('hidden-xs');
+		alert("ram1");
+	});
 
 	/*
 	 * validate select element compulsory value

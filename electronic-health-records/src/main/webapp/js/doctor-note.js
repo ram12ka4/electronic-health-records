@@ -2,7 +2,15 @@ $(document)
 		.ready(
 				function() {
 					
+					var now = moment();
+					//$('.days-dash').text(now.fromNow());
+					$('.days-dash').text(now.format("lll"));
 					$('#fromDate').datepicker().datepicker("setDate", new Date());
+					
+					for (var i = 0; i < 200; i++) {
+				        $('.modal-body').append(i + '<br>');
+				    }
+					
 					
 					$('button[name=doctor_note_submit]')
 							.click(

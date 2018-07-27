@@ -10,7 +10,7 @@
 		
 					<!-- Main Content area -->
 					
-					<div class="col-md-10 col-sm-11 box display-table-cell valign-top">
+					<div class="col-md-10 col-sm-11 box display-table-cell valign-top main-active">
 					
 					<!-- Header Section -->
 						<%@include file="gnrc-header-section.jsp"%>

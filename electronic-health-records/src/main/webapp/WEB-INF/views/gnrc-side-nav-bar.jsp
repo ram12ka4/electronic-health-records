@@ -8,9 +8,9 @@
 
 
 
-<div class="col-md-2 col-sm-1 hidden-xs display-table-cell valign-top"
+<div class="col-md-2 col-sm-1 hidden-xs display-table-cell valign-top side-active"
 	id="side-menu">
-	<h1 class="hidden-xs hidden-sm">GNRC</h1>
+	<h1 class="hidden-xs hidden-sm"><a id="menu-toggle" href="#"><span id="main_icon" class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>GNRC</a></h1>
 	<ul>
 		<li class="link active"><a href="/dashboard.do"> <span
 				class="glyphicon glyphicon-th" aria-hidden="true"></span> <span
