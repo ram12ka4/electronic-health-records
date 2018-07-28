@@ -43,6 +43,8 @@ public class LocationDBConnection {
 			out.println("Failed yo make connection");
 			return null;
 		}
+		
+		System.out.println("Location Connection object ID : " + con);
 
 		return con;
 

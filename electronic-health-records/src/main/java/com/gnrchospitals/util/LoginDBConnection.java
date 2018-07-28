@@ -3,21 +3,29 @@ package com.gnrchospitals.util;
 import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
+import com.gnrchospitals.dto.Database;
 
 public class LoginDBConnection {
 
-	private static DatabaseDaoImpl databaseDaoImpl = new DatabaseDaoImpl();
-
+	private LoginDBConnection() {
+		
+	}
+	
+	
 	public static Connection getConnection() {
+		
+		Database database = Database.getInstance();
 
 		out.println("------------------ Oracle JDBC Connection Testing ------------");
+		
+		System.out.println("Database credentials : " + database);
 
-		System.out.println("SERVER IP : " + databaseDaoImpl.getDbHost());
-		System.out.println("PORT : " + databaseDaoImpl.getDbPort());
-		System.out.println("DATABASE NAME : " + databaseDaoImpl.getDbName());
-		System.out.println("USER NAME : " + databaseDaoImpl.getDbUserName());
-		System.out.println("PASSWORD : " + databaseDaoImpl.getDbPassword());
+		System.out.println("Database Instance ID : " + database);
+		System.out.println("SERVER IP : " + database.getServerIp());
+		System.out.println("PORT : " + database.getDbPort());
+		System.out.println("DATABASE NAME : " + database.getDbName());
+		System.out.println("USER NAME : " + database.getUserName());
+		System.out.println("PASSWORD : " + database.getDbPassword());
 
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -33,9 +41,9 @@ public class LoginDBConnection {
 
 		try {
 			con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@" + databaseDaoImpl.getDbHost() + ":" + databaseDaoImpl.getDbPort() + ":"
-							+ databaseDaoImpl.getDbName(),
-					databaseDaoImpl.getDbUserName(), databaseDaoImpl.getDbPassword());
+					"jdbc:oracle:thin:@" + database.getServerIp() + ":" + database.getDbPort() + ":"
+							+ database.getDbName(),
+					database.getUserName(), database.getDbPassword());
 
 			if (con != null) {
 				out.println("You made it! take control your database now! ");

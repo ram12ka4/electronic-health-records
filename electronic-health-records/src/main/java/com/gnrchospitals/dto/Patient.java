@@ -13,20 +13,66 @@ public class Patient {
 	private String bedNo;
 	private String wardNo;
 	private String maritalStatus;
+	private Emr emr;
+	private static Patient patient;
 
-	public Patient(String mrdNumber, String ipNumber, String patientName, String sex, String age, String admissionDate,
-			String doctorIncharge, String speciality, String bedNo, String wardNo, String maritalStatus) {
-		super();
+	private Patient() {
+
+	}
+
+	static {
+		try {
+			patient = new Patient();
+		} catch (Exception ex) {
+			throw new RuntimeException("Exception occured in creating singleton instance");
+		}
+	}
+
+	public static Patient getInstance() {
+		return patient;
+	}
+
+	public void setMrdNumber(String mrdNumber) {
 		this.mrdNumber = mrdNumber;
+	}
+
+	public void setIpNumber(String ipNumber) {
 		this.ipNumber = ipNumber;
+	}
+
+	public void setPatientName(String patientName) {
 		this.patientName = patientName;
+	}
+
+	public void setSex(String sex) {
 		this.sex = sex;
+	}
+
+	public void setAge(String age) {
 		this.age = age;
+	}
+
+	public void setAdmissionDate(String admissionDate) {
 		this.admissionDate = admissionDate;
+	}
+
+	public void setDoctorIncharge(String doctorIncharge) {
 		this.doctorIncharge = doctorIncharge;
+	}
+
+	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
+	}
+
+	public void setBedNo(String bedNo) {
 		this.bedNo = bedNo;
+	}
+
+	public void setWardNo(String wardNo) {
 		this.wardNo = wardNo;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
 		this.maritalStatus = maritalStatus;
 	}
 
@@ -72,6 +118,22 @@ public class Patient {
 
 	public String getMaritalStatus() {
 		return maritalStatus;
+	}
+
+	public Emr getEmr() {
+		return emr;
+	}
+
+	public void setEmr(Emr emr) {
+		this.emr = emr;
+	}
+
+	@Override
+	public String toString() {
+		return "Patient [mrdNumber=" + mrdNumber + ", ipNumber=" + ipNumber + ", patientName=" + patientName + ", sex="
+				+ sex + ", age=" + age + ", admissionDate=" + admissionDate + ", doctorIncharge=" + doctorIncharge
+				+ ", speciality=" + speciality + ", bedNo=" + bedNo + ", wardNo=" + wardNo + ", maritalStatus="
+				+ maritalStatus + ", emr=" + emr + "]";
 	}
 
 }

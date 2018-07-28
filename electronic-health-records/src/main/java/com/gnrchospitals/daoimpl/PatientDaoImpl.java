@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.Set;
 
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.dto.Patient;
@@ -11,7 +13,7 @@ import com.gnrchospitals.util.LoginDBConnection;
 
 public class PatientDaoImpl implements PatientDao {
 
-	private static Patient patientInfo = null;
+	private Patient patient = Patient.getInstance();
 
 	@Override
 	public Patient findByIpNumber(String ipNumber) {
@@ -22,18 +24,27 @@ public class PatientDaoImpl implements PatientDao {
 
 			if (rs.next()) {
 				do {
-					patientInfo = new Patient(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-							rs.getString(10), rs.getString(11));
+					patient.setMrdNumber(rs.getString(1));
+					patient.setIpNumber(rs.getString(2));
+					patient.setPatientName(rs.getString(3));
+					patient.setSex(rs.getString(4));
+					patient.setAge(rs.getString(5));
+					patient.setAdmissionDate(rs.getString(6));
+					patient.setDoctorIncharge(rs.getString(7));
+					patient.setSpeciality(rs.getString(8));
+					patient.setBedNo(rs.getString(9));
+					patient.setWardNo(rs.getString(10));
+					patient.setMaritalStatus(rs.getString(11));
+
 				} while (rs.next());
 			}
 
-			System.out.println("List is : " + patientInfo);
+			System.out.println("List is : " + patient);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return patientInfo;
+		return patient;
 	}
 
 	private PreparedStatement createPreparedStatement(Connection con, String ipNumber) throws SQLException {
@@ -54,6 +65,195 @@ public class PatientDaoImpl implements PatientDao {
 				" WHERE a.WAT_MR_NUM = b.RRH_MR_NUM and d.EEM_EMP_NUM = a.WAT_DOCTOR_INCHARGE and a.WAT_WARD_CD = e.WWM_WARD_CD and ");
 		sql.append(
 				" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD and a.WAT_IP_NUM = ? ");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, ipNumber);
+		return ps;
+	}
+
+	@Override
+	public boolean validateKey(String key) {
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement2(con, key);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				return true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	private PreparedStatement createPreparedStatement2(Connection con, String key) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_CODE = ?");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, key);
+		return ps;
+	}
+
+	@Override
+	public boolean insertEmrClinicalData(Patient data) {
+		boolean flag = false;
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement(con, data)) {
+
+				int result = ps.executeUpdate();
+
+				if (result != 0)
+					flag = true;
+
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+
+			if (flag)
+				return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private PreparedStatement createPreparedStatement(Connection con, Patient patientEmr) throws SQLException {
+
+		System.out.println("In insertEmrClinicalData Method");
+		System.out.println("Patient instance ID " + patientEmr);
+		System.out.println(patientEmr.getEmr().getEmrNo());
+		System.out.println(patientEmr.getMrdNumber());
+		System.out.println(patientEmr.getIpNumber());
+		System.out.println(patientEmr.getEmr().getVisitNo());
+		System.out.println(patientEmr.getEmr().getEncounterNo());
+		System.out.println(patientEmr.getEmr().getCreateUser());
+		System.out.println(patientEmr.getEmr().getUpdateUser());
+
+		String sql = "INSERT INTO EMR_CLINICAL_DETAIL(ECD_EM_NUM, ECD_MR_NUM, ECD_PAT_NUM, ECD_VISIT_NUM, ECD_ENCOUNTER_NUMBER, ECD_ENCOUNTER_DATE, "
+				+ "   ECD_CRT_USER_ID, ECD_CRT_DATE, ECD_LST_UPD_USER_ID, ECD_LST_UPD_DATE) VALUES(?,?,?,?,?,sysdate,?,sysdate,?,sysdate)";
+
+		System.out.println(sql);
+
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, patientEmr.getEmr().getEmrNo());
+		ps.setString(2, patientEmr.getMrdNumber());
+		ps.setString(3, patientEmr.getIpNumber());
+		ps.setString(4, patientEmr.getEmr().getVisitNo());
+		ps.setString(5, patientEmr.getEmr().getEncounterNo());
+		ps.setString(6, patientEmr.getEmr().getCreateUser());
+		ps.setString(7, patientEmr.getEmr().getUpdateUser());
+
+		return ps;
+	}
+
+	@Override
+	public boolean insertEmrHealthData(Patient data) {
+		boolean flag = false;
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement4(con, data)) {
+
+				int affectedRecords[] = ps.executeBatch();
+
+				if (affectedRecords.length != 0)
+					flag = true;
+
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+			if (flag)
+				return true;
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return false;
+	}
+
+	private PreparedStatement createPreparedStatement4(Connection con, Patient patientEmr) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		System.out.println("Patient Instance ID : " + patientEmr);
+		String emrNo = patientEmr.getEmr().getEmrNo();
+		String emrDetNo = patientEmr.getEmr().getEmrDetNo();
+		String createdUser = patientEmr.getEmr().getCreateUser();
+		String lastCreatedUser = patientEmr.getEmr().getUpdateUser();
+		Map<String, String> keyValue = patientEmr.getEmr().getKeyValue();
+		Set<Map.Entry<String, String>> st = keyValue.entrySet();
+
+		sql.append(
+				"INSERT INTO EMR_HEALTH_RECORD(EHR_EMR_NUM, EHR_DTL_CODE, EHR_ATTRB_CODE, EHR_ATTRB_VALUE, EHR_CRT_UID, EHR_CRT_DT, EHR_LAST_UPD_UID, EHR_LAST_UPD_DT) "
+						+ " VALUES(?,?,?,?,?,sysdate,?,sysdate)");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		for (Map.Entry<String, String> me : st) {
+			ps.setString(1, emrNo);
+			ps.setString(2, emrDetNo);
+			ps.setString(3, me.getKey());
+			ps.setString(4, me.getValue());
+			ps.setString(5, createdUser);
+			ps.setString(6, lastCreatedUser);
+
+		
+			ps.addBatch();
+		}
+		return ps;
+	}
+
+	@Override
+	public boolean getValidatedIp(String ipNumber) {
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement1(con, ipNumber);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				return true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	private PreparedStatement createPreparedStatement1(Connection con, String ipNumber) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * FROM EMR_CLINICAL_DETAIL WHERE ECD_PAT_NUM = ?");
 
 		System.out.println(sql.toString());
 

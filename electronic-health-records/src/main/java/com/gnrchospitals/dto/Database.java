@@ -7,8 +7,9 @@ public class Database {
 	private String userName;
 	private String dbPassword;
 	private String dbPort;
+	private static Database database;
 
-	public Database() {
+	private Database() {
 
 	}
 
@@ -44,12 +45,30 @@ public class Database {
 		return userName;
 	}
 
+	@Override
+	public String toString() {
+		return "Database [serverIp=" + serverIp + ", dbName=" + dbName + ", userName=" + userName + ", dbPassword="
+				+ dbPassword + ", dbPort=" + dbPort + "]";
+	}
+
 	public String getDbPassword() {
 		return dbPassword;
 	}
 
 	public String getDbPort() {
 		return dbPort;
+	}
+
+	static {
+		try {
+			database = new Database();
+		} catch (Exception e) {
+			throw new RuntimeException("Exception occured in creating singleton instance");
+		}
+	}
+
+	public static Database getInstance() {
+		return database;
 	}
 
 }

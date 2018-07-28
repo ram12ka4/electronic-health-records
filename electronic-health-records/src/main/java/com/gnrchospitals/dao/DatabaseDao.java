@@ -3,7 +3,7 @@ package com.gnrchospitals.dao;
 
 public interface DatabaseDao {
 
-	public abstract void setDbHost(String host);
+	/*public abstract void setDbHost(String host);
 
 	public abstract void setDbPort(String port);
 
@@ -21,7 +21,7 @@ public interface DatabaseDao {
 
 	public abstract String getDbUserName();
 
-	public abstract String getDbPassword();
+	public abstract String getDbPassword();*/
 
 	public abstract boolean findByLocation(String location);
 
