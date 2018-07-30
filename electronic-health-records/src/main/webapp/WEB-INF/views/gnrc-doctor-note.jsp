@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.gnrchospitals.dto.Patient"%>
 <%@page import="com.gnrchospitals.dao.PatientDao"%>
@@ -52,10 +53,9 @@
 
 		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
 		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
-		String ipNumber = (String) request.getAttribute("ipName") == null
-				? ""
-				: (String) request.getAttribute("ipName");
-
+		String ipNumber = (String) request.getAttribute("ipName") == null	? ""	: (String) request.getAttribute("ipName");
+		
+		
 		System.out.println("Ip Name : " + ipNumber);
 		System.out.println("MSG : " + msg);
 		System.out.println("token : " + token);
@@ -64,6 +64,8 @@
 
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
+		
+
 
 		System.out.println("Patient Object " + patient);
 	%>

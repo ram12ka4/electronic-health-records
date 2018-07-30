@@ -7,10 +7,10 @@ $(document)
 					$('.days-dash').text(now.format("lll"));
 					$('#fromDate').datepicker().datepicker("setDate", new Date());
 					
-					for (var i = 0; i < 200; i++) {
+					/*for (var i = 0; i < 200; i++) {
 				        $('.modal-body').append(i + '<br>');
 				    }
-					
+					*/
 					
 					$('button[name=doctor_note_submit]')
 							.click(
@@ -75,6 +75,23 @@ $(document)
 						document.getElementById("doctor-note-frm").method = "post";
 						document.getElementById("doctor-note-frm").action = "/docnote.do";
 						document.getElementById("doctor-note-frm").submit(); 
+						
+					});
+					
+					
+					$('.doctor-del-button').on('click', function(){
+						alert("ram");
+						var myId = $(this).data('id');
+						alert("ED Value " + myId)
+						$("#delete-doctor-note .modal-body p").html( myId );
+						
+					});
+					
+					$('.doctor-edit-button').on('click', function(){
+						alert("ram");
+						var myId = $(this).data('id');
+						alert("ED Value " + myId)
+						$("#edit-doctor-note .modal-body p").html( myId );
 						
 					});
 					

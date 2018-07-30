@@ -3,11 +3,14 @@ package com.gnrchospitals.daoimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import com.gnrchospitals.dao.PatientDao;
+import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.util.LoginDBConnection;
 
@@ -226,7 +229,6 @@ public class PatientDaoImpl implements PatientDao {
 			ps.setString(5, createdUser);
 			ps.setString(6, lastCreatedUser);
 
-		
 			ps.addBatch();
 		}
 		return ps;
@@ -254,6 +256,99 @@ public class PatientDaoImpl implements PatientDao {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append("SELECT * FROM EMR_CLINICAL_DETAIL WHERE ECD_PAT_NUM = ?");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, ipNumber);
+		return ps;
+	}
+
+	@Override
+	public boolean findEmrByIpNumber(String ipNumber) {
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement4(con, ipNumber);
+				ResultSet rs = ps.executeQuery()) {
+
+			Patient patient = Patient.getInstance();
+			Emr emr = Emr.getInstance();
+
+			if (rs.next()) {
+				emr.setEmrNo(rs.getString(1));
+				patient.setEmr(emr);
+				return true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	private PreparedStatement createPreparedStatement4(Connection con, String ipNumber) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT ECD_EM_NUM FROM EMR_CLINICAL_DETAIL WHERE ECD_PAT_NUM = ?");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, ipNumber);
+		return ps;
+	}
+
+	@Override
+	public List<List<String>> getDoctorPreviousNote(String ipNumber) {
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> col = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement5(con, ipNumber);
+				ResultSet rs = ps.executeQuery()) {
+
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				col.add(rsmd.getColumnName(i));
+			}
+
+			list.add(col);
+
+			if (rs.next()) {
+
+				do {
+					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+						row.add(rs.getString(rsmd.getColumnName(i)));
+					}
+				} while (rs.next());
+
+			}
+
+			list.add(row);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private PreparedStatement createPreparedStatement5(Connection con, String ipNumber) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(" SELECT MAX(DECODE(B.EHR_ATTRB_CODE, 'DN001',B.EHR_ATTRB_VALUE,'')) DOCTOR_NAME ");
+		sql.append(" , MAX(DECODE(B.EHR_ATTRB_CODE, 'DN004',B.EHR_ATTRB_VALUE,'')) DOCTOR_NOTE ");
+		sql.append(" , B.EHR_DTL_CODE, B.EHR_CRT_DT ");
+		sql.append(" FROM EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
+		sql.append(" WHERE B.EHR_ATTRB_CODE IN ( 'DN004', 'DN001') ");
+		sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
+		sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
+		sql.append(" ORDER BY EHR_DTL_CODE DESC ");
+		
 
 		System.out.println(sql.toString());
 
