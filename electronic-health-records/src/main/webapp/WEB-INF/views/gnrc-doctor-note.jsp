@@ -191,7 +191,8 @@
 							<div class="form-group">
 								<div style="padding-right: 16px;" class="pull-right">
 									<button type="button" class="btn btn-warning" name="reset">Reset</button>
-									<a href="#" class="btn btn-success" data-target="#myModal" data-toggle="modal">Previous Notes</a>
+									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
+									<button type="button" class="btn btn-success openBtn" data-id='<%=ipNumber%>'>Previous Notes</button>
 									<button type="button" class="btn btn-primary"
 										name="doctor_note_submit" id="submit-btn">Submit</button>
 								</div>

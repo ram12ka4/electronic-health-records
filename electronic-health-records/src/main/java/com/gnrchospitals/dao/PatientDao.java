@@ -19,5 +19,7 @@ public interface PatientDao {
 	public abstract boolean insertEmrHealthData(Patient data);
 	
 	public abstract List<List<String>> getDoctorPreviousNote(String ipNumber);
+	
+	public abstract boolean deleteDoctorNote(String emrDetId); 
 
 }

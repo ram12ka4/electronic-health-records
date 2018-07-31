@@ -348,12 +348,60 @@ public class PatientDaoImpl implements PatientDao {
 		sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
 		sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
 		sql.append(" ORDER BY EHR_DTL_CODE DESC ");
-		
 
 		System.out.println(sql.toString());
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, ipNumber);
+		return ps;
+	}
+
+	@Override
+	public boolean deleteDoctorNote(String emrDetId) {
+		boolean flag = false;
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement6(con, emrDetId)) {
+					
+				int result = ps.executeUpdate();
+
+				if (result != 0)
+					flag = true;
+
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+			if (flag)
+				return true;
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return false;
+
+	}
+
+	private PreparedStatement createPreparedStatement6(Connection con, String edNo) throws SQLException {
+
+		System.out.println("EMR DET ID: " + edNo);
+
+		String sql = "DELETE FROM EMR_HEALTH_RECORD WHERE EHR_DTL_CODE = ?";
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, edNo);
+
 		return ps;
 	}
 
