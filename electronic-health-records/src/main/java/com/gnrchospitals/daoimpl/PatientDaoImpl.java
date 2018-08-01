@@ -365,7 +365,7 @@ public class PatientDaoImpl implements PatientDao {
 			con.setAutoCommit(false);
 
 			try (PreparedStatement ps = createPreparedStatement6(con, emrDetId)) {
-					
+
 				int result = ps.executeUpdate();
 
 				if (result != 0)
@@ -395,6 +395,118 @@ public class PatientDaoImpl implements PatientDao {
 		System.out.println("EMR DET ID: " + edNo);
 
 		String sql = "DELETE FROM EMR_HEALTH_RECORD WHERE EHR_DTL_CODE = ?";
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, edNo);
+
+		return ps;
+	}
+
+	@Override
+	public boolean updateDoctorNote(String doctorNote, String emrDetId) {
+		boolean flag = false;
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement7(con, doctorNote, emrDetId)) {
+
+				int result = ps.executeUpdate();
+
+				if (result != 0)
+					flag = true;
+
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+			if (flag)
+				return true;
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return false;
+	}
+
+	private PreparedStatement createPreparedStatement7(Connection con, String doctorNote, String edNo)
+			throws SQLException {
+
+		System.out.println("EMR DET ID: " + edNo);
+
+		String sql = "UPDATE EMR_HEALTH_RECORD SET EHR_ATTRB_VALUE = ?  WHERE EHR_DTL_CODE = ? and EHR_ATTRB_CODE='DN004'";
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, doctorNote);
+		ps.setString(2, edNo);
+
+		return ps;
+	}
+
+	@Override
+	public List<List<String>> getDoctorNote(String emrDetId) {
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> col = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement8(con, emrDetId);
+				ResultSet rs = ps.executeQuery()) {
+
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				col.add(rsmd.getColumnName(i));
+			}
+
+			list.add(col);
+
+			if (rs.next()) {
+
+				do {
+					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+						row.add(rs.getString(rsmd.getColumnName(i)));
+					}
+				} while (rs.next());
+
+			}
+
+			list.add(row);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+
+	private PreparedStatement createPreparedStatement8(Connection con, String edNo) throws SQLException {
+
+		System.out.println("EMR DET ID: " + edNo);
+		
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(" SELECT MAX(DECODE(B.EHR_ATTRB_CODE, 'DN001',B.EHR_ATTRB_VALUE,'')) DOCTOR_NAME ");
+		sql.append(" , MAX(DECODE(B.EHR_ATTRB_CODE, 'DN004',B.EHR_ATTRB_VALUE,'')) DOCTOR_NOTE ");
+		sql.append(" , B.EHR_DTL_CODE, B.EHR_CRT_DT ");
+		sql.append(" FROM EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
+		sql.append(" WHERE B.EHR_ATTRB_CODE IN ( 'DN004', 'DN001') ");
+		sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND b.EHR_DTL_CODE = ? ");
+		sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
+		sql.append(" ORDER BY EHR_DTL_CODE DESC ");
 
 		System.out.println(sql.toString());
 

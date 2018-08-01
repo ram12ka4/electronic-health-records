@@ -192,7 +192,7 @@
 								<div style="padding-right: 16px;" class="pull-right">
 									<button type="button" class="btn btn-warning" name="reset">Reset</button>
 									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
-									<button type="button" class="btn btn-success openBtn" data-id='<%=ipNumber%>'>Previous Notes</button>
+									<button type="button" class="btn btn-success previousBtn" data-id='<%=ipNumber%>'>Previous Notes</button>
 									<button type="button" class="btn btn-primary"
 										name="doctor_note_submit" id="submit-btn">Submit</button>
 								</div>
@@ -202,54 +202,7 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-md-12">
-					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">DOCTOR'S PREVIOUS NOTES</h5>
-							<h5 class="pull-right">QR/9-28</h5>
-						</header>
-						<!-- Start of Accordian -->
-						<div class="panel-group" id="accordion" role="tablist"
-							aria-multiselectable="true">
-							<div class="panel panel-default">
-								<div class="panel-heading" role="tab" id="headingOne">
-									<h4 class="panel-title">
-										<a role="button" data-toggle="collapse"
-											data-parent="#accordion" href="#collapseOne"
-											aria-expanded="true" aria-controls="collapseOne"> Date: 27/07/2018
-										</a>
-									</h4>
-								</div>
-								<div id="collapseOne" class="panel-collapse collapse in"
-									role="tabpanel" aria-labelledby="headingOne">
-									<div class="panel-body">
-
-										<div class="comment-head-dash clearfix">
-											<div class="commenter-name-dash pull-left">Ram Kumar Basak</div>
-											<div class="days-dash pull-right" id="now">Now</div>
-										</div>
-										<p class="comment-dash">Anim pariatur cliche
-											reprehenderit, enim eiusmod high life accusamus terry
-											richardson ad squid. 3 wolf moon officia aute, non cupidatat
-											skateboard dolor brunch. Food truck quinoa nesciunt laborum
-											eiusmod. .</p>
-									
-										<hr>
-
-
-
-									</div>
-								</div>
-							</div>
-							
-							
-						</div>
-						<!-- End of Accordian -->
-					</div>
-				</div>
-
-			</div>
+		
 		</div>
 
 		<!-- End of Dashboard -->

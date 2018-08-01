@@ -21,5 +21,9 @@ public interface PatientDao {
 	public abstract List<List<String>> getDoctorPreviousNote(String ipNumber);
 	
 	public abstract boolean deleteDoctorNote(String emrDetId); 
+	
+	public abstract List<List<String>> getDoctorNote(String emrDetId);
+	
+	public abstract boolean updateDoctorNote(String doctorNote, String emrDetId);
 
 }

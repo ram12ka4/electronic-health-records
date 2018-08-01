@@ -2,7 +2,6 @@ package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -41,14 +40,45 @@ public class DoctorNoteServlet extends HttpServlet {
 		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
 		String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
 		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
+		String emrDetNo = request.getParameter("ed_no") == null ? "" : request.getParameter("ed_no");
+		HttpSession session = request.getSession();
+
 		PrintWriter out = response.getWriter();
 
-		if ("FETCH_DOCTOR_NOTE".equals(action)) {
+		System.out.println("IP NO : " + ipNo);
+		System.out.println("EMR DET NO : " + emrDetNo);
+		System.out.println("ACTION : " + action);
 
-			List<List<String>> list = patientDao.getDoctorPreviousNote("IP/171222/000013");
+		if ("FETCH_DOCTOR_NOTE_BY_ED_ID".equals(action)) {
+
+			List<List<String>> list = patientDao.getDoctorNote(emrDetNo);
+			List<String> col = list.get(0);
+			List<String> row = list.get(1);
+			System.out.println("Doctor list in modal " + list);
+
+			int rowCount = row.size() / col.size();
+			int i = 0;
+			int indexStart = 0;
+
+			while (i < rowCount) {
+
+				indexStart = i * col.size();
+
+				out.println("<div class=\"comment-head-dash clearfix\">\r\n"
+						+ "  <div class=\"commenter-name-dash pull-left\">" + row.get(indexStart) + "</div>\r\n"
+						+ "  <div class=\"days-dash pull-right\" id=\"now\">" + row.get(indexStart + 3) + "</div>\r\n"
+						+ "				</div>");
+				out.println("<p><textarea rows=\"5\" class=\"form-control input-sm updated-note\">" + row.get(indexStart + 1)
+						+ "</textarea></p>");
+
+				i++;
+			}
+
+		} else if ("FETCH_DOCTOR_NOTE".equals(action)) {
+
+			List<List<String>> list = patientDao.getDoctorPreviousNote(ipNo);
 			System.out.println("Doctor Previous Notes :" + list);
 
-			/* List<List<String>> list = (ArrayList) request.getAttribute("doctorNotes"); */
 			List<String> col = list.get(0);
 			List<String> row = list.get(1);
 			System.out.println("Doctor list in modal " + list);
@@ -63,35 +93,26 @@ public class DoctorNoteServlet extends HttpServlet {
 
 				indexStart = i * col.size();
 
-			//	for (int j = 0; j < col.size(); j++) {
-
-					out.println("<div class=\"comment-head-dash clearfix\">\r\n"
-							+ "  <div class=\"commenter-name-dash pull-left\">" + row.get(indexStart+2) + " "+row.get(indexStart) + "</div>\r\n"
-							+ "  <div class=\"days-dash pull-right\" id=\"now\">" + row.get(indexStart + 3)
-							+ "</div>\r\n" + "				</div>");
-					out.println("<p>" + row.get(indexStart + 1) + "</p>");
-					out.println("<div class=\"button-right clearfix pull-right\">\r\n"
-							+ "					<button type=\"button\" data-id=\""+ row.get(indexStart+2)+"\" data-toggle=\"modal\"\r\n"
-							+ "						class=\"btn btn-warning btn-sm doctor-edit-button\" >edit</button> <button\r\n"
-							+ "						type=\"button\" data-id=\""+row.get(indexStart+2)+"\" data-toggle=\"modal\"\r\n"
-							+ "						class=\"btn btn-danger btn-sm doctor-del-button\" id=\"myButton\">del</button>\r\n"
-							+ "				</div>");
-			//	}
+				out.println("<div class=\"comment-head-dash clearfix\">\r\n"
+						+ "  <div class=\"commenter-name-dash pull-left\">" + row.get(indexStart) + "</div>\r\n"
+						+ "  <div class=\"days-dash pull-right\" id=\"now\">" + row.get(indexStart + 3) + "</div>\r\n"
+						+ "				</div>");
+				out.println("<p><textarea rows=\"5\" class=\"form-control input-sm updated-note\" readonly>" + row.get(indexStart + 1) + "</textarea></p>");
+				out.println("<div class=\"modal-footer1 clearfix\">\r\n" + "					<a data-id=\""
+						+ row.get(indexStart + 2) + "\" data-toggle=\"modal\"\r\n"
+						+ "						class=\"btn btn-warning btn-sm doctor-edit-button pull-left\" >edit</a> <a\r\n"
+						+ "						data-id=\"" + row.get(indexStart + 2) + "\" data-toggle=\"modal\"\r\n"
+						+ "						class=\"btn btn-primary btn-sm doctor-del-button pull-right\">del</a>\r\n"
+						+ "				</div>");
 
 				i++;
 			}
 
-			// out.print(row);
-
 		} else {
 
-			/*
-			 * System.out.println("TOKEN : " + token); System.out.println("MSG : " + msg);
-			 */
 			request.setAttribute("token", token);
 			request.setAttribute("msg", msg);
-			request.setAttribute("ipName", ipNo);
-			// request.setAttribute("doctorNotes", list);
+			request.setAttribute("ipName", (String) session.getAttribute("ipNo"));
 			request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
 		}
 
@@ -104,14 +125,23 @@ public class DoctorNoteServlet extends HttpServlet {
 
 		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
 		String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
+		String emr_det = request.getParameter("emrDetNo") == null ? "" : request.getParameter("emrDetNo");
+		String note = request.getParameter("doctor_note") == null ? "" : request.getParameter("doctor_note");
 
 		System.out.println("ACTION : " + action);
 		System.out.println("IP NO : " + ipNo);
+		System.out.println("NOTE : " + note);
+		System.out.println("EMD DET NO" + emr_det);
 
-		if ("DEL_NOTE".equals(action)) {
-			String emrDetNo = request.getParameter("emrDetNo") == null ? "" : request.getParameter("emrDetNo");
-			System.out.println("EMD DET NO" + emrDetNo);
-			boolean status = deleteDoctorNote(emrDetNo);
+		if ("UPDATE_NOTE".equals(action)) {
+			boolean status = updateDoctorNote(note, emr_det);
+			System.out.println("DELETE STATUS : " + status);
+			out.print(status);
+
+		} else if ("DEL_NOTE".equals(action)) {
+
+			System.out.println("EMD DET NO" + emr_det);
+			boolean status = deleteDoctorNote(emr_det);
 			System.out.println("DELETE STATUS : " + status);
 			out.print(status);
 
@@ -222,4 +252,10 @@ public class DoctorNoteServlet extends HttpServlet {
 
 	}
 
+	public boolean updateDoctorNote(String note, String emrDetNumber) {
+
+		return patientDao.updateDoctorNote(note, emrDetNumber);
+
+	}
+	
 }

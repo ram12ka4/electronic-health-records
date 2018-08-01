@@ -54,7 +54,7 @@
 
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-		
+
 		System.out.println("Patient Object " + patient);
 	%>
 
@@ -65,7 +65,7 @@
 
 
 	<!-- User Registration Form -->
-	<form action="" method="post">
+	<form id="doctor-order-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -79,8 +79,6 @@
 
 
 						<div class="form-horizontal">
-
-
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="name"><span
 									class="required-label" id="name"> Name</span> :</label>
@@ -103,7 +101,6 @@
 										value="<%=patient.getSex()%>" name="sex" placeholder="Sex"
 										readonly>
 								</div>
-
 							</div>
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="ip-no"><span
@@ -122,8 +119,9 @@
 								<label class="control-label col-xs-1" for="bed"><span
 									class="required-label" id="bed"> Bed</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="bed" value="<%=patient.getBedNo()%>"
-										name="bed" placeholder="Date of Birth" readonly>
+									<input type="text" class="form-control input-sm" id="bed"
+										value="<%=patient.getBedNo()%>" name="bed"
+										placeholder="Date of Birth" readonly>
 								</div>
 
 							</div>
@@ -131,8 +129,9 @@
 								<label class="control-label col-xs-2" for="ward"><span
 									class="required-label" id="ward"> Ward</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="ward" value="<%=patient.getWardNo()%>"
-										name="ward" placeholder="Y" readonly>
+									<input type="text" class="form-control input-sm" id="ward"
+										value="<%=patient.getWardNo()%>" name="ward" placeholder="Y"
+										readonly>
 								</div>
 								<label class="control-label col-xs-1" for="mrd"><span
 									class="required-label" id="mrd"> MRD No.</span> :</label>
@@ -144,24 +143,29 @@
 								<label class="control-label col-xs-1" for="status"><span
 									class="required-label"> OCCI</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm occi"
+										name="occi" placeholder="OCCI" required>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
+								<label class="control-label col-xs-2" for="doctor-name"><span
 									class="required-label"> Doctor Name</span> :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm" value="${sessionScope.username.username}"
+										name="doctor_name" placeholder="Doctor Name" required>
+									<div class="checkbox">
+										<label> <input type="checkbox" value="">
+											Visiting Doctor
+										</label>
+									</div>
 								</div>
-								<div class="checkbox">
-									<label> <input type="checkbox" value="">
-										Visiting Doctor
-									</label>
+								<label class="control-label col-xs-3" for="date"><span
+									class="required-label"> Date</span> :</label>
+								<div class="col-xs-2">
+									<input type="text" class="form-control input-sm " id="fromDate"
+										name="date" placeholder="Date">
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>
@@ -280,124 +284,23 @@
 											</div>
 										</div>
 									</div>
-
-
-
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">DOCTOR'S PREVIOUS ORDERS</h5>
-							<h5 class="pull-right">QR/9-28</h5>
-						</header>
-						<div class="panel-group" id="accordion" role="tablist"
-							aria-multiselectable="true">
-							<div class="panel panel-default">
-								<div class="panel-heading" role="tab" id="headingOne">
-									<h4 class="panel-title">
-										<a role="button" data-toggle="collapse"
-											data-parent="#accordion" href="#collapseOne"
-											aria-expanded="true" aria-controls="collapseOne"> Date :
-										</a>
-									</h4>
-								</div>
-								<div id="collapseOne" class="panel-collapse collapse in"
-									role="tabpanel" aria-labelledby="headingOne">
-									<div class="panel-body">Anim pariatur cliche
-										reprehenderit, enim eiusmod high life accusamus terry
-										richardson ad squid. 3 wolf moon officia aute, non cupidatat
-										skateboard dolor brunch. Food truck quinoa nesciunt laborum
-										eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on
-										it squid single-origin coffee nulla assumenda shoreditch et.
-										Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-										cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-										vice lomo. Leggings occaecat craft beer farm-to-table, raw
-										denim aesthetic synth nesciunt you probably haven't heard of
-										them accusamus labore sustainable VHS.</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading" role="tab" id="headingTwo">
-									<h4 class="panel-title">
-										<a class="collapsed" role="button" data-toggle="collapse"
-											data-parent="#accordion" href="#collapseTwo"
-											aria-expanded="false" aria-controls="collapseTwo"> Date :
-										</a>
-									</h4>
-								</div>
-								<div id="collapseTwo" class="panel-collapse collapse"
-									role="tabpanel" aria-labelledby="headingTwo">
-									<div class="panel-body">Anim pariatur cliche
-										reprehenderit, enim eiusmod high life accusamus terry
-										richardson ad squid. 3 wolf moon officia aute, non cupidatat
-										skateboard dolor brunch. Food truck quinoa nesciunt laborum
-										eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on
-										it squid single-origin coffee nulla assumenda shoreditch et.
-										Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-										cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-										vice lomo. Leggings occaecat craft beer farm-to-table, raw
-										denim aesthetic synth nesciunt you probably haven't heard of
-										them accusamus labore sustainable VHS.</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading" role="tab" id="headingThree">
-									<h4 class="panel-title">
-										<a class="collapsed" role="button" data-toggle="collapse"
-											data-parent="#accordion" href="#collapseThree"
-											aria-expanded="false" aria-controls="collapseThree"> Date
-											: </a>
-									</h4>
-								</div>
-								<div id="collapseThree" class="panel-collapse collapse"
-									role="tabpanel" aria-labelledby="headingThree">
-									<div class="panel-body">Anim pariatur cliche
-										reprehenderit, enim eiusmod high life accusamus terry
-										richardson ad squid. 3 wolf moon officia aute, non cupidatat
-										skateboard dolor brunch. Food truck quinoa nesciunt laborum
-										eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on
-										it squid single-origin coffee nulla assumenda shoreditch et.
-										Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-										cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-										vice lomo. Leggings occaecat craft beer farm-to-table, raw
-										denim aesthetic synth nesciunt you probably haven't heard of
-										them accusamus labore sustainable VHS.</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-			</div>
-
-
-
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="admin-content-con">
-						<div class="form-horizontal">
-							<div class="form-group">
-								<div style="padding-right: 16px;" class="pull-right">
-									<input type="reset" class="btn btn-default" value="Reset">
-									<input type="submit" class="btn btn-primary" value="Submit">
-								</div>
-							</div>
-						</div>
+				<div class="form-group">
+					<div style="padding-right: 16px;" class="pull-right">
+						<button type="button" class="btn btn-warning" name="reset">Reset</button>
+						<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
+						<button type="button" class="btn btn-success previousBtn"
+							data-id='<%=ipNumber%>'>Previous Notes</button>
+						<button type="button" class="btn btn-primary"
+							name="doctor_note_submit" id="submit-btn">Submit</button>
 					</div>
 				</div>
 			</div>
 		</div>
-
 		<!-- End of Dashboard -->
 	</form>
 
