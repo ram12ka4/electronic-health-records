@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-user-reg.css">
+<link rel="stylesheet" href="css/circle.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -46,7 +47,9 @@
 		} else {
 			sessionID = session.getId();
 		}
-
+		
+		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
+		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
 		String ipNumber = (String) request.getAttribute("ipName") == null
 				? ""
 				: (String) request.getAttribute("ipName");
@@ -141,18 +144,19 @@
 										placeholder="Last Name" readonly>
 								</div>
 								<label class="control-label col-xs-1" for="status"><span
-									class="required-label"> OCCI</span> :</label>
+									class="required-label"> OCCU</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm occi"
-										name="occi" placeholder="OCCI" required>
+										name="DO001" placeholder="OCCU">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="doctor-name"><span
 									class="required-label"> Doctor Name</span> :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" value="${sessionScope.username.username}"
-										name="doctor_name" placeholder="Doctor Name" required>
+									<input type="text" class="form-control input-sm"
+										value="${sessionScope.username.username}" name="DN001"
+										placeholder="Doctor Name" required>
 									<div class="checkbox">
 										<label> <input type="checkbox" value="">
 											Visiting Doctor
@@ -163,7 +167,7 @@
 									class="required-label"> Date</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm " id="fromDate"
-										name="date" placeholder="Date">
+										name="date" placeholder="Date" readonly>
 								</div>
 							</div>
 						</div>
@@ -204,7 +208,7 @@
 												<div class="form-group ">
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="speciality" name="medicine[]" placeholder="Medicine">
+															id="speciality" name="DO003[]" placeholder="Medicine">
 													</div>
 												</div>
 											</div>
@@ -224,7 +228,8 @@
 											<div class="form-horizontal">
 												<div class="form-group">
 													<div class="col-xs-12">
-														<textarea rows="5" class="form-control input-sm"></textarea>
+														<textarea rows="5" class="form-control input-sm"
+															name="DO002"></textarea>
 													</div>
 												</div>
 											</div>
@@ -247,7 +252,8 @@
 											<div class="form-horizontal">
 												<div class="form-group">
 													<div class="col-xs-12">
-														<textarea rows="5" class="form-control input-sm"></textarea>
+														<textarea rows="5" class="form-control input-sm"
+															name="DO005"></textarea>
 													</div>
 												</div>
 											</div>
@@ -278,7 +284,7 @@
 												<div class="form-group">
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="speciality" name="lab[]" placeholder="Laboratory">
+															id="speciality" name="DO004[]" placeholder="Laboratory">
 													</div>
 												</div>
 											</div>
@@ -292,11 +298,10 @@
 				<div class="form-group">
 					<div style="padding-right: 16px;" class="pull-right">
 						<button type="button" class="btn btn-warning" name="reset">Reset</button>
-						<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
 						<button type="button" class="btn btn-success previousBtn"
 							data-id='<%=ipNumber%>'>Previous Notes</button>
-						<button type="button" class="btn btn-primary"
-							name="doctor_note_submit" id="submit-btn">Submit</button>
+						<button type="button" class="btn btn-primary submit-btn"
+							name="doctor_order_submit">Submit</button>
 					</div>
 				</div>
 			</div>
@@ -312,13 +317,19 @@
 
 	<!-- Lower Layout -->
 	<%@include file="gnrc-page-lower-layout.jsp"%>
+	<%@include file="confirm-box.html"%>
+	<%@include file="alert-box.html"%>
+	<%@include file="alert-modal.jsp"%>
 	<!-- End of Lower Layout -->
 
 	<!-- JS -->
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
+	<script type="text/javascript" src="js/doctor-order.js"></script>
 	<!-- End of JS -->
+
+	<%@include file="success-error-msg.jsp"%>
 
 	<script type="text/javascript">
 		$(document)
@@ -374,6 +385,8 @@
 									});
 						});
 	</script>
+
+
 
 </body>
 </html>

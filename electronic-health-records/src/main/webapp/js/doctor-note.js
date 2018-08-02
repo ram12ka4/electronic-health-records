@@ -90,7 +90,7 @@ $(document)
 					$(document).on('click', '.previousBtn', function(){
 						
 						var id = $(this).data('id');
-						alert(id);
+						//alert(id);
 						
 						$('.myModal .modal-body').load('/docnote.do?ACTION=FETCH_DOCTOR_NOTE&ip_no='+id, function(){
 							
@@ -101,8 +101,8 @@ $(document)
 					$(document).on('click', '.doctor-edit-button', function(){
 						
 						var id = $(this).attr('data-id');
+						alert(id);
 						$('.editModal .update-note').attr('data-id', id);
-						//alert(id);
 						
 						$('.editModal .modal-body').load('/docnote.do?ACTION=FETCH_DOCTOR_NOTE_BY_ED_ID&ed_no='+id, function(){
 							$('.myModal').modal('hide');
@@ -161,11 +161,11 @@ $(document)
 					
 					$(document).on('click', '.editModal .update-note', function() {
 						
-						//alert("Delete Doctor Note");
-						var id = $(this).data('id');
+						alert("Update Doctor Note");
+						var id = $(this).attr('data-id');
 						var note = $('.updated-note').val();
-						
-						//alert(id + " " + note);
+						//var note = $('#updated-note').val();
+						alert(id + " " + note);
 						
 
 						req = $.ajax({

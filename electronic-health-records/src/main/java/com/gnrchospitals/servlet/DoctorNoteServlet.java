@@ -97,7 +97,7 @@ public class DoctorNoteServlet extends HttpServlet {
 						+ "  <div class=\"commenter-name-dash pull-left\">" + row.get(indexStart) + "</div>\r\n"
 						+ "  <div class=\"days-dash pull-right\" id=\"now\">" + row.get(indexStart + 3) + "</div>\r\n"
 						+ "				</div>");
-				out.println("<p><textarea rows=\"5\" class=\"form-control input-sm updated-note\" readonly>" + row.get(indexStart + 1) + "</textarea></p>");
+				out.println("<p><textarea rows=\"5\" class=\"form-control input-sm\" readonly>" + row.get(indexStart + 1) + "</textarea></p>");
 				out.println("<div class=\"modal-footer1 clearfix\">\r\n" + "					<a data-id=\""
 						+ row.get(indexStart + 2) + "\" data-toggle=\"modal\"\r\n"
 						+ "						class=\"btn btn-warning btn-sm doctor-edit-button pull-left\" >edit</a> <a\r\n"

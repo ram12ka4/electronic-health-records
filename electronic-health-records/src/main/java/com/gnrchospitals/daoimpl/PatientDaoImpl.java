@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
@@ -441,7 +442,8 @@ public class PatientDaoImpl implements PatientDao {
 	private PreparedStatement createPreparedStatement7(Connection con, String doctorNote, String edNo)
 			throws SQLException {
 
-		System.out.println("EMR DET ID: " + edNo);
+		System.out.println("EMR DET ID : " + edNo);
+		System.out.println("DOCTOR NOTE : " + doctorNote);
 
 		String sql = "UPDATE EMR_HEALTH_RECORD SET EHR_ATTRB_VALUE = ?  WHERE EHR_DTL_CODE = ? and EHR_ATTRB_CODE='DN004'";
 

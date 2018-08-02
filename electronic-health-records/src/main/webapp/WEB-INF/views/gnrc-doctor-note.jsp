@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.gnrchospitals.dto.Patient"%>
 <%@page import="com.gnrchospitals.dao.PatientDao"%>
@@ -53,9 +53,9 @@
 
 		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
 		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
-		String ipNumber = (String) request.getAttribute("ipName") == null	? ""	: (String) request.getAttribute("ipName");
-		
-		
+		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
+				: (String) request.getAttribute("ipName");
+
 		System.out.println("Ip Name : " + ipNumber);
 		System.out.println("MSG : " + msg);
 		System.out.println("token : " + token);
@@ -64,8 +64,6 @@
 
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-		
-
 
 		System.out.println("Patient Object " + patient);
 	%>
@@ -192,7 +190,8 @@
 								<div style="padding-right: 16px;" class="pull-right">
 									<button type="button" class="btn btn-warning" name="reset">Reset</button>
 									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
-									<button type="button" class="btn btn-success previousBtn" data-id='<%=ipNumber%>'>Previous Notes</button>
+									<button type="button" class="btn btn-success previousBtn"
+										data-id='<%=ipNumber%>'>Previous Notes</button>
 									<button type="button" class="btn btn-primary"
 										name="doctor_note_submit" id="submit-btn">Submit</button>
 								</div>
@@ -202,7 +201,7 @@
 				</div>
 			</div>
 
-		
+
 		</div>
 
 		<!-- End of Dashboard -->
@@ -216,7 +215,7 @@
 	<%@include file="alert-modal.jsp"%>
 	<%@include file="confirm-box.html"%>
 	<%@include file="alert-box.html"%>
-	<%@include file="doctor-note-modal.jsp" %>
+	<%@include file="doctor-note-modal.jsp"%>
 
 	<!-- End of Form Submit Alert Message -->
 
@@ -238,38 +237,8 @@
 	<!-- End of JS -->
 
 
+	<%@include file="success-error-msg.jsp"%>
 
-	<%
-		if (!"".equals(msg) && !"".equals(token)) {
-
-			//System.out.println(msg);
-
-			if ("success".equalsIgnoreCase(token)) {
-				//System.out.println(token);
-	%>
-	<script>
-		$(document).ready(function() {
-					//alert("if clause");
-					
-					swal("Well done!", '<%=msg%>', "success");
-
-				});
-	</script>
-
-	<%
-		} else {
-	%>
-	<script>
-		$(document).ready(function() {
-					
-					swal("Oh no!", '<%=msg%>', "error");
-		});
-	</script>
-
-	<%
-		}
-		}
-	%>
 
 </body>
 </html>
