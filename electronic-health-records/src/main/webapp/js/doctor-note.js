@@ -78,8 +78,7 @@ $(document)
 												.getElementById("doctor-note-frm").method = "post";
 										document
 												.getElementById("doctor-note-frm").action = "/docnote.do";
-										document.getElementById(
-												"doctor-note-frm").submit();
+										document.getElementById("doctor-note-frm").submit();
 
 									});
 									

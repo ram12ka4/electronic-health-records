@@ -1,12 +1,16 @@
+
 <%
-		if (!"".equals(msg) && !"".equals(token)) {
+	String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
+	String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
 
-			//System.out.println(msg);
+	if (!"".equals(msg) && !"".equals(token)) {
 
-			if ("success".equalsIgnoreCase(token)) {
-				//System.out.println(token);
-	%>
-	<script>
+		//System.out.println(msg);
+
+		if ("success".equalsIgnoreCase(token)) {
+			//System.out.println(token);
+%>
+<script>
 		$(document).ready(function() {
 					//alert("if clause");
 					
@@ -15,17 +19,17 @@
 				});
 	</script>
 
-	<%
-		} else {
-	%>
-	<script>
+<%
+	} else {
+%>
+<script>
 		$(document).ready(function() {
 					
 					swal("Oh no!", '<%=msg%>', "error");
-		});
-	</script>
+	});
+</script>
 
-	<%
-		}
-		}
-	%>
+<%
+	}
+	}
+%>

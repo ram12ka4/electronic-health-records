@@ -51,14 +51,10 @@
 			sessionID = session.getId();
 		}
 
-		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
-		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
 		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
 				: (String) request.getAttribute("ipName");
 
 		System.out.println("Ip Name : " + ipNumber);
-		System.out.println("MSG : " + msg);
-		System.out.println("token : " + token);
 
 		Enumeration<String> noteDate = request.getParameterNames();
 
@@ -212,7 +208,7 @@
 
 
 	<!-- Form Submit Alert Message -->
-	<%@include file="alert-modal.jsp"%>
+	<%@include file="progress-circle-modal.jsp"%>
 	<%@include file="confirm-box.html"%>
 	<%@include file="alert-box.html"%>
 	<%@include file="doctor-note-modal.jsp"%>

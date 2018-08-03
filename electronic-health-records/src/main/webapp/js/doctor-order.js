@@ -1,8 +1,8 @@
 $(function() {
 
 	$('#fromDate').datepicker().datepicker('setDate', new Date());
-	var medicine = document.getElementsByName('DO003[]');
-	var lab = document.getElementsByName('DO004[]');
+	var medicine = document.getElementsByName('DO003');
+	var lab = document.getElementsByName('DO004');
 
 	function medicineValidation() {
 
@@ -12,6 +12,7 @@ $(function() {
 
 			if (medicine[i].value !== "") {
 				alert('Completed All fields');
+				alert(medicine[i].value);
 				flag = true;
 			} else {
 				alert('Misssing data');
@@ -59,6 +60,9 @@ $(function() {
 						alert('Submit Button');
 
 						e.preventDefault();
+						
+						
+						medicineValidation();
 
 						if ($('input[name=DO001]').val() === "") {
 
@@ -112,7 +116,15 @@ $(function() {
 	 * Submit Form
 	 */
 	$(document).on('click', '.confirm', function() {
-		alert('Submit form section')
+		
+		alert("Final confirm");
+		
+		$('#circle').modal({
+			backdrop : 'static',
+			keyboard : false
+		});
+
+		$('#confirm-box').modal('hide');
 
 		document.getElementById("doctor-order-frm").method = "post";
 		document.getElementById("doctor-order-frm").action = "/docorder.do";

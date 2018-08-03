@@ -47,18 +47,20 @@
 		} else {
 			sessionID = session.getId();
 		}
-		
-		String token = (String) request.getAttribute("token") == null ? "" : (String) request.getAttribute("token");
-		String msg = (String) request.getAttribute("msg") == null ? "" : (String) request.getAttribute("msg");
+
 		String ipNumber = (String) request.getAttribute("ipName") == null
 				? ""
 				: (String) request.getAttribute("ipName");
 		System.out.println("Ip Name : " + ipNumber);
 
-		PatientDao patientDao = new PatientDaoImpl();
-		Patient patient = patientDao.findByIpNumber(ipNumber);
+		try {
+			
+			PatientDao patientDao = new PatientDaoImpl();
+			Patient patient = patientDao.findByIpNumber(ipNumber);
 
-		System.out.println("Patient Object " + patient);
+			if (patient != null) {
+
+				System.out.println("Patient Object " + patient);
 	%>
 
 
@@ -155,7 +157,7 @@
 									class="required-label"> Doctor Name</span> :</label>
 								<div class="col-xs-4">
 									<input type="text" class="form-control input-sm"
-										value="${sessionScope.username.username}" name="DN001"
+										value="${sessionScope.username.username}" name="DO007"
 										placeholder="Doctor Name" required>
 									<div class="checkbox">
 										<label> <input type="checkbox" value="">
@@ -208,7 +210,7 @@
 												<div class="form-group ">
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="speciality" name="DO003[]" placeholder="Medicine">
+															id="speciality" name="DO003" placeholder="Medicine">
 													</div>
 												</div>
 											</div>
@@ -284,7 +286,7 @@
 												<div class="form-group">
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="speciality" name="DO004[]" placeholder="Laboratory">
+															id="speciality" name="DO004" placeholder="Laboratory">
 													</div>
 												</div>
 											</div>
@@ -311,7 +313,16 @@
 
 	<!-- End of Registration Form -->
 
-
+	<%
+		} else {
+				response.sendRedirect("/login.do");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			response.sendRedirect("/login.do");
+			//throw ex;
+		}
+	%>
 
 
 
@@ -319,7 +330,7 @@
 	<%@include file="gnrc-page-lower-layout.jsp"%>
 	<%@include file="confirm-box.html"%>
 	<%@include file="alert-box.html"%>
-	<%@include file="alert-modal.jsp"%>
+	<%@include file="progress-circle-modal.jsp"%>
 	<!-- End of Lower Layout -->
 
 	<!-- JS -->
@@ -353,7 +364,7 @@
 													$(wrapper)
 															.append(
 
-																	'<div class="form-group "><div class="col-xs-4"><input type="text" class="form-control input-sm" id="speciality" name="medicine[]" placeholder="Medicine"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
+																	'<div class="form-group "><div class="col-xs-4"><input type="text" class="form-control input-sm" id="speciality" name="DO003" placeholder="Medicine"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
 												}
 											});
 
@@ -366,7 +377,7 @@
 													$(wrapper2)
 															.append(
 
-																	'<div class="form-group "><div class="col-xs-4"><input type="text" class="form-control input-sm" id="speciality" name="lab[]" placeholder="Laboratory"></div><a href="#" class="remove_field2">Remove</a></div>'); //add input box
+																	'<div class="form-group "><div class="col-xs-4"><input type="text" class="form-control input-sm" id="speciality" name="DO004" placeholder="Laboratory"></div><a href="#" class="remove_field2">Remove</a></div>'); //add input box
 												}
 											});
 

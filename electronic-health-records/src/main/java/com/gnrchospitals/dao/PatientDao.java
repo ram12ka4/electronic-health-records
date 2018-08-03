@@ -1,29 +1,30 @@
 package com.gnrchospitals.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.gnrchospitals.dto.Patient;
 
 public interface PatientDao {
 
-	public abstract boolean getValidatedIp(String ipNumber);
+	public abstract boolean getValidatedIp(String ipNumber) throws SQLException;
 
-	public abstract Patient findByIpNumber(String ipNumber);
+	public abstract Patient findByIpNumber(String ipNumber) throws SQLException;
 
-	public abstract boolean findEmrByIpNumber(String ipNumber);
+	public abstract boolean findEmrByIpNumber(String ipNumber) throws SQLException;
 
-	public abstract boolean validateKey(String key);
+	public abstract boolean validateKey(String key) throws SQLException;
+ 
+	public abstract boolean insertEmrClinicalData(Patient data) throws SQLException;
 
-	public abstract boolean insertEmrClinicalData(Patient data);
-
-	public abstract boolean insertEmrHealthData(Patient data);
+	public abstract boolean insertEmrHealthData(Patient data) throws SQLException;
 	
-	public abstract List<List<String>> getDoctorPreviousNote(String ipNumber);
+	public abstract List<List<String>> getDoctorPreviousNote(String ipNumber) throws SQLException;
 	
-	public abstract boolean deleteDoctorNote(String emrDetId); 
+	public abstract boolean deleteDoctorNote(String emrDetId) throws SQLException; 
 	
-	public abstract List<List<String>> getDoctorNote(String emrDetId);
+	public abstract List<List<String>> getDoctorNote(String emrDetId) throws SQLException;
 	
-	public abstract boolean updateDoctorNote(String doctorNote, String emrDetId);
+	public abstract boolean updateDoctorNote(String doctorNote, String emrDetId) throws SQLException;
 
 }

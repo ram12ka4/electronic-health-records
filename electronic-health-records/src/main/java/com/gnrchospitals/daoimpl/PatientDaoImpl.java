@@ -20,7 +20,7 @@ public class PatientDaoImpl implements PatientDao {
 	private Patient patient = Patient.getInstance();
 
 	@Override
-	public Patient findByIpNumber(String ipNumber) {
+	public Patient findByIpNumber(String ipNumber) throws SQLException {
 
 		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, ipNumber);
@@ -45,8 +45,6 @@ public class PatientDaoImpl implements PatientDao {
 
 			System.out.println("List is : " + patient);
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return patient;
 	}
@@ -78,7 +76,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean validateKey(String key) {
+	public boolean validateKey(String key) throws SQLException {
 		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement2(con, key);
 				ResultSet rs = ps.executeQuery()) {
@@ -87,8 +85,6 @@ public class PatientDaoImpl implements PatientDao {
 				return true;
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 		return false;
@@ -108,7 +104,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean insertEmrClinicalData(Patient data) {
+	public boolean insertEmrClinicalData(Patient data) throws SQLException {
 		boolean flag = false;
 
 		try (Connection con = LoginDBConnection.getConnection()) {
@@ -134,8 +130,6 @@ public class PatientDaoImpl implements PatientDao {
 			if (flag)
 				return true;
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
@@ -170,7 +164,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean insertEmrHealthData(Patient data) {
+	public boolean insertEmrHealthData(Patient data) throws SQLException {
 		boolean flag = false;
 
 		try (Connection con = LoginDBConnection.getConnection()) {
@@ -187,7 +181,7 @@ public class PatientDaoImpl implements PatientDao {
 			} catch (SQLException e) {
 				con.rollback();
 				con.setAutoCommit(true);
-				e.printStackTrace();
+				throw e;
 			}
 
 			con.commit();
@@ -195,8 +189,6 @@ public class PatientDaoImpl implements PatientDao {
 			if (flag)
 				return true;
 
-		} catch (SQLException ex) {
-			ex.printStackTrace();
 		}
 
 		return false;
@@ -215,7 +207,7 @@ public class PatientDaoImpl implements PatientDao {
 		Set<Map.Entry<String, String>> st = keyValue.entrySet();
 
 		sql.append(
-				"INSERT INTO EMR_HEALTH_RECORD(EHR_EMR_NUM, EHR_DTL_CODE, EHR_ATTRB_CODE, EHR_ATTRB_VALUE, EHR_CRT_UID, EHR_CRT_DT, EHR_LAST_UPD_UID, EHR_LAST_UPD_DT) "
+				"INSERT INTO EMR_HEALTH_RECORD(EHR_EMR_NU, EHR_DTL_CODE, EHR_ATTRB_CODE, EHR_ATTRB_VALUE, EHR_CRT_UID, EHR_CRT_DT, EHR_LAST_UPD_UID, EHR_LAST_UPD_DT) "
 						+ " VALUES(?,?,?,?,?,sysdate,?,sysdate)");
 
 		System.out.println(sql.toString());
@@ -236,7 +228,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean getValidatedIp(String ipNumber) {
+	public boolean getValidatedIp(String ipNumber) throws SQLException {
 		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement1(con, ipNumber);
 				ResultSet rs = ps.executeQuery()) {
@@ -245,8 +237,6 @@ public class PatientDaoImpl implements PatientDao {
 				return true;
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 		return false;
@@ -266,7 +256,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean findEmrByIpNumber(String ipNumber) {
+	public boolean findEmrByIpNumber(String ipNumber) throws SQLException {
 		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement4(con, ipNumber);
 				ResultSet rs = ps.executeQuery()) {
@@ -280,8 +270,6 @@ public class PatientDaoImpl implements PatientDao {
 				return true;
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 		return false;
@@ -301,7 +289,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public List<List<String>> getDoctorPreviousNote(String ipNumber) {
+	public List<List<String>> getDoctorPreviousNote(String ipNumber) throws SQLException {
 
 		List<List<String>> list = new ArrayList<>();
 		List<String> col = new ArrayList<>();
@@ -331,8 +319,6 @@ public class PatientDaoImpl implements PatientDao {
 
 			list.add(row);
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return list;
 	}
@@ -358,7 +344,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean deleteDoctorNote(String emrDetId) {
+	public boolean deleteDoctorNote(String emrDetId) throws SQLException {
 		boolean flag = false;
 
 		try (Connection con = LoginDBConnection.getConnection()) {
@@ -383,8 +369,6 @@ public class PatientDaoImpl implements PatientDao {
 			if (flag)
 				return true;
 
-		} catch (SQLException ex) {
-			ex.printStackTrace();
 		}
 
 		return false;
@@ -407,7 +391,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean updateDoctorNote(String doctorNote, String emrDetId) {
+	public boolean updateDoctorNote(String doctorNote, String emrDetId) throws SQLException {
 		boolean flag = false;
 
 		try (Connection con = LoginDBConnection.getConnection()) {
@@ -432,8 +416,6 @@ public class PatientDaoImpl implements PatientDao {
 			if (flag)
 				return true;
 
-		} catch (SQLException ex) {
-			ex.printStackTrace();
 		}
 
 		return false;
@@ -458,7 +440,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public List<List<String>> getDoctorNote(String emrDetId) {
+	public List<List<String>> getDoctorNote(String emrDetId) throws SQLException {
 
 		List<List<String>> list = new ArrayList<>();
 		List<String> col = new ArrayList<>();
@@ -488,8 +470,6 @@ public class PatientDaoImpl implements PatientDao {
 
 			list.add(row);
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return list;
 
@@ -498,7 +478,7 @@ public class PatientDaoImpl implements PatientDao {
 	private PreparedStatement createPreparedStatement8(Connection con, String edNo) throws SQLException {
 
 		System.out.println("EMR DET ID: " + edNo);
-		
+
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(" SELECT MAX(DECODE(B.EHR_ATTRB_CODE, 'DN001',B.EHR_ATTRB_VALUE,'')) DOCTOR_NAME ");
