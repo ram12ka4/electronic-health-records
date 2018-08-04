@@ -207,7 +207,7 @@ public class PatientDaoImpl implements PatientDao {
 		Set<Map.Entry<String, String>> st = keyValue.entrySet();
 
 		sql.append(
-				"INSERT INTO EMR_HEALTH_RECORD(EHR_EMR_NU, EHR_DTL_CODE, EHR_ATTRB_CODE, EHR_ATTRB_VALUE, EHR_CRT_UID, EHR_CRT_DT, EHR_LAST_UPD_UID, EHR_LAST_UPD_DT) "
+				"INSERT INTO EMR_HEALTH_RECORD(EHR_EMR_NUM, EHR_DTL_CODE, EHR_ATTRB_CODE, EHR_ATTRB_VALUE, EHR_CRT_UID, EHR_CRT_DT, EHR_LAST_UPD_UID, EHR_LAST_UPD_DT) "
 						+ " VALUES(?,?,?,?,?,sysdate,?,sysdate)");
 
 		System.out.println(sql.toString());
@@ -289,14 +289,14 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public List<List<String>> getDoctorPreviousNote(String ipNumber) throws SQLException {
+	public List<List<String>> getDoctorPreviousData(String ipNumber, String action) throws SQLException {
 
 		List<List<String>> list = new ArrayList<>();
 		List<String> col = new ArrayList<>();
 		List<String> row = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection();
-				PreparedStatement ps = createPreparedStatement5(con, ipNumber);
+				PreparedStatement ps = createPreparedStatement5(con, ipNumber, action);
 				ResultSet rs = ps.executeQuery()) {
 
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -323,18 +323,34 @@ public class PatientDaoImpl implements PatientDao {
 		return list;
 	}
 
-	private PreparedStatement createPreparedStatement5(Connection con, String ipNumber) throws SQLException {
+	private PreparedStatement createPreparedStatement5(Connection con, String ipNumber, String action)
+			throws SQLException {
 
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(" SELECT MAX(DECODE(B.EHR_ATTRB_CODE, 'DN001',B.EHR_ATTRB_VALUE,'')) DOCTOR_NAME ");
-		sql.append(" , MAX(DECODE(B.EHR_ATTRB_CODE, 'DN004',B.EHR_ATTRB_VALUE,'')) DOCTOR_NOTE ");
-		sql.append(" , B.EHR_DTL_CODE, B.EHR_CRT_DT ");
-		sql.append(" FROM EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
-		sql.append(" WHERE B.EHR_ATTRB_CODE IN ( 'DN004', 'DN001') ");
-		sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
-		sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
-		sql.append(" ORDER BY EHR_DTL_CODE DESC ");
+		if ("DOCTOR_PREVIOUS_NOTES".equals(action)) {
+
+			sql.append(" SELECT MAX(DECODE(B.EHR_ATTRB_CODE, 'DN001',B.EHR_ATTRB_VALUE,'')) DOCTOR_NAME ");
+			sql.append(" , MAX(DECODE(B.EHR_ATTRB_CODE, 'DN004',B.EHR_ATTRB_VALUE,'')) DOCTOR_NOTE ");
+			sql.append(" , B.EHR_DTL_CODE, B.EHR_CRT_DT ");
+			sql.append(" FROM EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
+			sql.append(" WHERE B.EHR_ATTRB_CODE IN ( 'DN004', 'DN001') ");
+			sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
+			sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
+			sql.append(" ORDER BY EHR_DTL_CODE DESC ");
+		} else if ("DOCTORE_PREVIOUS_ORDERS".equals(action)) {
+			sql.append(" select  b.EHR_CRT_DT, b.EHR_DTL_CODE, max(decode(b.ehr_attrb_code,'DO007' , b.EHR_ATTRB_VALUE, '')) DOCTOR_NAME, ");
+			sql.append(" max(decode(b.ehr_attrb_code,'DO003' , b.EHR_ATTRB_VALUE, '')) MEDICINE, ");
+			sql.append(" max(decode(b.ehr_attrb_code,'DO008' , b.EHR_ATTRB_VALUE, '')) VISITING_DOCTOR, ");
+			sql.append(" max(decode(b.ehr_attrb_code,'DO002' , b.EHR_ATTRB_VALUE, '')) TREATMENT, ");
+			sql.append(" max(decode(b.ehr_attrb_code,'DO005' , b.EHR_ATTRB_VALUE, '')) DIET, ");
+			sql.append(" max(decode(b.ehr_attrb_code,'DO004' , b.EHR_ATTRB_VALUE, '')) LABORATORY ");
+			sql.append(" from  EMR_CLINICAL_DETAIL a, EMR_HEALTH_RECORD b ");
+			sql.append(" where b.EHR_ATTRB_CODE in ( 'DO007', 'DO003', 'DO002', 'DO005', 'DO004', 'DO008') ");
+			sql.append(" and a.ECD_EM_NUM = b.EHR_EMR_NUM and a.ECD_PAT_NUM = 'IP/171222/000013' ");
+			sql.append(" group by   b.EHR_CRT_DT , b.EHR_DTL_CODE ");
+			sql.append(" order by b.EHR_DTL_CODE desc ");
+		}
 
 		System.out.println(sql.toString());
 

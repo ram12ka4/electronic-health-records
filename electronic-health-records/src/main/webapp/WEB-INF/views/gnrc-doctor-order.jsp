@@ -156,11 +156,14 @@
 								<label class="control-label col-xs-2" for="doctor-name"><span
 									class="required-label"> Doctor Name</span> :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm"
+									<input type="text" class="form-control input-sm "
 										value="${sessionScope.username.username}" name="DO007"
 										placeholder="Doctor Name" required>
+									<div id="hidden-container"></div> 
+									
+										
 									<div class="checkbox">
-										<label> <input type="checkbox" value="">
+										<label> <input type="checkbox" name="DO008" value="">
 											Visiting Doctor
 										</label>
 									</div>

@@ -79,7 +79,7 @@ public class DoctorNoteServlet extends HttpServlet {
 
 			} else if ("FETCH_DOCTOR_NOTE".equals(action)) {
 
-				List<List<String>> list = patientDao.getDoctorPreviousNote(ipNo);
+				List<List<String>> list = patientDao.getDoctorPreviousData(ipNo, "DOCTOR_PREVIOUS_NOTES");
 				System.out.println("Doctor Previous Notes :" + list);
 
 				List<String> col = list.get(0);

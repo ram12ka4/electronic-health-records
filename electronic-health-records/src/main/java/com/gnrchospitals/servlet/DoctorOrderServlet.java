@@ -69,6 +69,7 @@ public class DoctorOrderServlet extends HttpServlet {
 			String diet = request.getParameter("DO005") == null ? "" : request.getParameter("DO005");
 			String[] DO004 = request.getParameterValues("DO004") == null ? new String[] { "NO DATA" }
 					: request.getParameterValues("DO004");
+			String visitDoctor = request.getParameter("DO008") == null ? "" : request.getParameter("DO008");
 
 			long start = System.currentTimeMillis();
 
@@ -85,6 +86,7 @@ public class DoctorOrderServlet extends HttpServlet {
 			System.out.println("TREATMENT : " + treatment);
 			System.out.println("DIET : " + diet);
 			System.out.println("LABORATORY : " + laboratory);
+			System.out.println("VISITING DOCTOR : " + visitDoctor);
 
 			keyValue.put("DO001", occupation);
 			keyValue.put("DO002", treatment);
@@ -92,6 +94,7 @@ public class DoctorOrderServlet extends HttpServlet {
 			keyValue.put("DO004", laboratory);
 			keyValue.put("DO005", diet);
 			keyValue.put("DO007", doctorName);
+			keyValue.put("DO008", visitDoctor);
 
 			patient = Patient.getInstance();
 			emr = Emr.getInstance();

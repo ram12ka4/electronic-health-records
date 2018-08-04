@@ -19,12 +19,13 @@ public interface PatientDao {
 
 	public abstract boolean insertEmrHealthData(Patient data) throws SQLException;
 	
-	public abstract List<List<String>> getDoctorPreviousNote(String ipNumber) throws SQLException;
-	
+	public abstract List<List<String>> getDoctorPreviousData(String ipNumber, String action) throws SQLException;
+
 	public abstract boolean deleteDoctorNote(String emrDetId) throws SQLException; 
 	
 	public abstract List<List<String>> getDoctorNote(String emrDetId) throws SQLException;
 	
 	public abstract boolean updateDoctorNote(String doctorNote, String emrDetId) throws SQLException;
+
 
 }

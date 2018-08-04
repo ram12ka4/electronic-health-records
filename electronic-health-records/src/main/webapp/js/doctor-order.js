@@ -60,9 +60,6 @@ $(function() {
 						alert('Submit Button');
 
 						e.preventDefault();
-						
-						
-						medicineValidation();
 
 						if ($('input[name=DO001]').val() === "") {
 
@@ -82,23 +79,7 @@ $(function() {
 											'<Strong>Required!</Strong> Please mention doctor name');
 							$('#alert-box').modal();
 
-						}/*
-							 * else if (medicineValidation() === false) {
-							 * $('#myAlert') .addClass( 'alert alert-danger
-							 * alert-dismissible') .html( '<Strong>Required!</Strong>
-							 * Please mention medicine');
-							 * $('#alert-box').modal(); } else if
-							 * (laboratoryValidation() === false) {
-							 * $('#myAlert') .addClass( 'alert alert-danger
-							 * alert-dismissible') .html( '<Strong>Required!</Strong>
-							 * Please mention lab test');
-							 * $('#alert-box').modal(); } else if
-							 * ($('textarea[name=DO005]').val() === "") {
-							 * 
-							 * $('#myAlert') .addClass( 'alert alert-danger
-							 * alert-dismissible') .html( '<Strong>Required!</Strong>
-							 * Please mention diet'); $('#alert-box').modal(); }
-							 */else if ($('textarea[name=DO002]').val() === "") {
+						} else if ($('textarea[name=DO002]').val() === "") {
 
 							$('#myAlert')
 									.addClass(
@@ -116,15 +97,28 @@ $(function() {
 	 * Submit Form
 	 */
 	$(document).on('click', '.confirm', function() {
-		
+
 		alert("Final confirm");
-		
+
 		$('#circle').modal({
 			backdrop : 'static',
 			keyboard : false
 		});
 
 		$('#confirm-box').modal('hide');
+
+		var isVisitDoc = $('input[name=DO008]').is(':checked');
+		var container = document.getElementById("hidden-container");
+		var input = document.createElement("input");
+		input.type = "hidden";
+		input.name = "DO008";
+		if (isVisitDoc === true) {
+			input.setAttribute("value", "YES");
+			container.appendChild(input);
+		} else {
+			input.setAttribute("value", "NO");
+			container.appendChild(input);
+		}
 
 		document.getElementById("doctor-order-frm").method = "post";
 		document.getElementById("doctor-order-frm").action = "/docorder.do";
