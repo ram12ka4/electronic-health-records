@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-user-reg.css">
 <link rel="stylesheet" href="css/circle.css">
+<link rel="stylesheet" href="css/doctor-order.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -54,7 +55,7 @@
 		System.out.println("Ip Name : " + ipNumber);
 
 		try {
-			
+
 			PatientDao patientDao = new PatientDaoImpl();
 			Patient patient = patientDao.findByIpNumber(ipNumber);
 
@@ -159,9 +160,9 @@
 									<input type="text" class="form-control input-sm "
 										value="${sessionScope.username.username}" name="DO007"
 										placeholder="Doctor Name" required>
-									<div id="hidden-container"></div> 
-									
-										
+									<div id="hidden-container"></div>
+
+
 									<div class="checkbox">
 										<label> <input type="checkbox" name="DO008" value="">
 											Visiting Doctor
@@ -303,8 +304,8 @@
 				<div class="form-group">
 					<div style="padding-right: 16px;" class="pull-right">
 						<button type="button" class="btn btn-warning" name="reset">Reset</button>
-						<button type="button" class="btn btn-success previousBtn"
-							data-id='<%=ipNumber%>'>Previous Notes</button>
+						<button type="button" class="btn btn-success previousBtn">Previous
+							Orders</button>
 						<button type="button" class="btn btn-primary submit-btn"
 							name="doctor_order_submit">Submit</button>
 					</div>
@@ -343,6 +344,7 @@
 	<script type="text/javascript" src="js/doctor-order.js"></script>
 	<!-- End of JS -->
 
+	<%@include file="doctor-order-modal.jsp"%>
 	<%@include file="success-error-msg.jsp"%>
 
 	<script type="text/javascript">

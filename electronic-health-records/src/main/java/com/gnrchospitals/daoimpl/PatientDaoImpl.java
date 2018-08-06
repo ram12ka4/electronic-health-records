@@ -341,13 +341,13 @@ public class PatientDaoImpl implements PatientDao {
 		} else if ("DOCTORE_PREVIOUS_ORDERS".equals(action)) {
 			sql.append(" select  b.EHR_CRT_DT, b.EHR_DTL_CODE, max(decode(b.ehr_attrb_code,'DO007' , b.EHR_ATTRB_VALUE, '')) DOCTOR_NAME, ");
 			sql.append(" max(decode(b.ehr_attrb_code,'DO003' , b.EHR_ATTRB_VALUE, '')) MEDICINE, ");
-			sql.append(" max(decode(b.ehr_attrb_code,'DO008' , b.EHR_ATTRB_VALUE, '')) VISITING_DOCTOR, ");
+			//sql.append(" max(decode(b.ehr_attrb_code,'DO008' , b.EHR_ATTRB_VALUE, '')) VISITING_DOCTOR, ");
 			sql.append(" max(decode(b.ehr_attrb_code,'DO002' , b.EHR_ATTRB_VALUE, '')) TREATMENT, ");
 			sql.append(" max(decode(b.ehr_attrb_code,'DO005' , b.EHR_ATTRB_VALUE, '')) DIET, ");
 			sql.append(" max(decode(b.ehr_attrb_code,'DO004' , b.EHR_ATTRB_VALUE, '')) LABORATORY ");
 			sql.append(" from  EMR_CLINICAL_DETAIL a, EMR_HEALTH_RECORD b ");
 			sql.append(" where b.EHR_ATTRB_CODE in ( 'DO007', 'DO003', 'DO002', 'DO005', 'DO004', 'DO008') ");
-			sql.append(" and a.ECD_EM_NUM = b.EHR_EMR_NUM and a.ECD_PAT_NUM = 'IP/171222/000013' ");
+			sql.append(" and a.ECD_EM_NUM = b.EHR_EMR_NUM and a.ECD_PAT_NUM = ? ");
 			sql.append(" group by   b.EHR_CRT_DT , b.EHR_DTL_CODE ");
 			sql.append(" order by b.EHR_DTL_CODE desc ");
 		}
@@ -360,7 +360,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean deleteDoctorNote(String emrDetId) throws SQLException {
+	public boolean deleteDoctorData(String emrDetId) throws SQLException {
 		boolean flag = false;
 
 		try (Connection con = LoginDBConnection.getConnection()) {

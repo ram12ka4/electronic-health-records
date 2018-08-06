@@ -126,4 +126,66 @@ $(function() {
 
 	});
 
+	$(document).on(
+			'click',
+			'.previousBtn',
+			function() {
+
+				alert("previous Btn");
+
+				$('.myModal .modal-body').load(
+						'/docorder.do?ACTION=DOCTORE_PREVIOUS_ORDERS',
+						function() {
+
+							$('.myModal').modal({
+								show : true
+							});
+						});
+			});
+
+	$(document).on('click', '.order-del', function() {
+		var id = $(this).data('id');
+		alert("ED ID :" + id);
+		$('.deleteModal .delete-order').attr('ed-id', id);
+		$('.myModal').modal('hide');
+		$('.deleteModal').modal({
+			show : true
+		});
+	});
+	
+	$(document).on('click', '.deleteModal .close-order', function(){
+		
+		$('.deleteModal').modal('hide');
+		$('.previousBtn').trigger('click');
+	});
+	
+	$(document).on('click', '.delete-order', function() {
+		
+		alert("Delete Doctor Order");
+		var id = $(this).attr('ed-id');
+		alert(id);
+
+		req = $.ajax({
+			dataType: "html",
+			url : '/docorder.do',
+			type : 'POST',
+			data : {
+				emrDetNo : id,
+				ACTION : "DEL_ORDER"
+			},
+			success: function(data){
+				//alert(data);
+				swal("Well done!", 'Doctor order deleted successfully.', "success");
+				$('.deleteModal').modal('hide');
+				$('.previousBtn').trigger('click');
+			},
+			error: function(data) {
+				//alert(data);
+				swal("Oh no!", 'something went wrong.', "error");
+			}
+		});
+	});
+	
+	
+
 });

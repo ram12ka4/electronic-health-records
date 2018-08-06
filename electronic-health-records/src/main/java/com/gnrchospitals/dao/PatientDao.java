@@ -21,7 +21,7 @@ public interface PatientDao {
 	
 	public abstract List<List<String>> getDoctorPreviousData(String ipNumber, String action) throws SQLException;
 
-	public abstract boolean deleteDoctorNote(String emrDetId) throws SQLException; 
+	public abstract boolean deleteDoctorData(String emrDetId) throws SQLException; 
 	
 	public abstract List<List<String>> getDoctorNote(String emrDetId) throws SQLException;
 	

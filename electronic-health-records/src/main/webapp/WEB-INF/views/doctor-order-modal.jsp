@@ -8,7 +8,7 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 				<h4 class="modal-title" id="myModalLabel">Doctor's Previous
-					Notes</h4>
+					Orders</h4>
 			</div>
 			<div class="modal-body"></div>
 		</div>
@@ -47,14 +47,14 @@
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title">Delete Doctor Note</h4>
+				<h4 class="modal-title">Delete Doctor Order</h4>
 			</div>
 			<div class="modal-body">
 				<p>Do you want to delete&hellip;</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default close-note">Close</button>
-				<button type="button" class="btn btn-primary delete_note">Delete</button>
+				<button type="button" class="btn btn-default close-order">Close</button>
+				<button type="button" class="btn btn-primary delete-order">Delete</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

@@ -262,7 +262,7 @@ public class DoctorNoteServlet extends HttpServlet {
 
 	public boolean deleteDoctorNote(String emrDetNumber) throws SQLException {
 
-		return patientDao.deleteDoctorNote(emrDetNumber);
+		return patientDao.deleteDoctorData(emrDetNumber);
 
 	}
 
