@@ -134,7 +134,7 @@ $(function() {
 				alert("previous Btn");
 
 				$('.myModal .modal-body').load(
-						'/docorder.do?ACTION=DOCTORE_PREVIOUS_ORDERS',
+						'/docorder.do?ACTION=DOCTOR_PREVIOUS_ORDERS',
 						function() {
 
 							$('.myModal').modal({

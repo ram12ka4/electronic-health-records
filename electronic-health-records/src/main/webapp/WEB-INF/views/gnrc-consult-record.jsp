@@ -15,7 +15,9 @@
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
+<link rel="stylesheet" href="css/circle.css">
 <link rel="stylesheet" href="css/gnrc-user-reg.css">
+<link rel="stylesheet" href="css/consult-record.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -47,14 +49,12 @@
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
-				: (String) request.getAttribute("ipName");
+		String ipNumber = (String) session.getAttribute("ipNo") == null ? ""
+				: (String) request.getAttribute("ipNo");
 		System.out.println("Ip Name : " + ipNumber);
 
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-	
-		 
 
 		System.out.println("Patient Object " + patient);
 	%>
@@ -65,7 +65,7 @@
 
 
 	<!-- User Registration Form -->
-	<form action="" method="post">
+	<form id="consult-record-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -151,11 +151,12 @@
 										value="<%=patient.getIpNumber()%>" name="ip_no"
 										placeholder="IP Number" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="status"><span
+								<label class="control-label col-xs-2" for="rel-status"><span
 									class="required-label"> Religion Status</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text" class="form-control input-sm"
+										id="rel-status" name="rel-status"
+										placeholder="Religion Status" required>
 								</div>
 
 							</div>
@@ -177,107 +178,84 @@
 						<div class="form-horizontal">
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Referred by Dr. </span> :</label>
+								<label class="control-label col-xs-2" for="refer-by-doc"><span
+									class="required-label" id="refer-by-doc">Referred by Dr.
+								</span> :</label>
 								<div class="col-xs-3">
-									<select data-placeholder="" name="title" id="title"
-										class="form-control input-sm">
-										<option value="MR">MR</option>
-										<option value="MR">MRS</option>
-										<option value="MR">DR</option>
-									</select>
+									<input type="text" class="form-control input-sm"
+										id="refer-by-doc" value="${sessionScope.username.username}"
+										name="CR001" placeholder="Refer by Doctor" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Consultant & Speciality</span>
-									:</label>
+								<label class="control-label col-xs-2" for="refer-by-consult"><span
+									class="required-label" id="refer-by-consult">Consultant
+										& Speciality</span> :</label>
 								<div class="col-xs-3">
-									<select data-placeholder="" name="title" id="title"
-										class="form-control input-sm">
-										<option value="MR">MR</option>
-										<option value="MR">MRS</option>
-										<option value="MR">DR</option>
-									</select>
+									<input type="text" class="form-control input-sm"
+										id="refer-by-consult" name="CR003"
+										placeholder="Consultant & Speciality">
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Referred to Dr. </span> :</label>
+								<label class="control-label col-xs-2" for="refer-to-doc"><span
+									class="required-label" id="refer-to-doc">Referred to Dr.
+								</span> :</label>
 								<div class="col-xs-3">
-									<select data-placeholder="" name="title" id="title"
-										class="form-control input-sm">
-										<option value="MR">MR</option>
-										<option value="MR">MRS</option>
-										<option value="MR">DR</option>
-									</select>
+									<input type="text" class="form-control input-sm"
+										id="refer-to-doc" name="CR002" placeholder="Refer to Doctor"
+										required>
 								</div>
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Consultant & Speciality</span>
-									:</label>
+								<label class="control-label col-xs-2" for="refer-to-consult"><span
+									class="required-label" id="refer-to-consult">Consultant
+										& Speciality</span> :</label>
 								<div class="col-xs-3">
-									<select data-placeholder="" name="title" id="title"
-										class="form-control input-sm">
-										<option value="MR">MR</option>
-										<option value="MR">MRS</option>
-										<option value="MR">DR</option>
-									</select>
+									<input type="text" class="form-control input-sm"
+										id="refer-to-consult" name="CR004"
+										placeholder="Consultant & Speciality" >
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Date</span> :</label>
+								<label class="control-label col-xs-2" for="date-of-consult"><span
+									class="required-label" id="date-of-consult">Date</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="dt_of_birth" placeholder="Date of Birth" required>
+									<input type="text"	class="form-control input-sm date-of-consult" name="CR005" placeholder="Date" readonly>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Brief clinical notes<br />and
-										reasons for referral
+								<label class="control-label col-xs-2" for="brief-clinical-note"><span
+									class="required-label" id="brief-clinical-note">Brief
+										clinical notes<br />and reasons for referral
 								</span> :</label>
 								<div class="col-xs-5">
-									<textarea rows="5" class="form-control input-sm"></textarea>
+									<textarea rows="5" class="form-control input-sm" name="CR006"></textarea>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">Consultant's opinion<br />and
-										recommendations
+								<label class="control-label col-xs-2" for="consultant-opinion"><span
+									class="required-label" id="consultant-opinion">Consultant's
+										opinion<br />and recommendations
 								</span> :</label>
 								<div class="col-xs-5">
-									<textarea rows="5" class="form-control input-sm"></textarea>
+									<textarea rows="5" class="form-control input-sm" name="CR007"></textarea>
 								</div>
 							</div>
-
-
-
-
-
-
-
-
-
 						</div>
 					</div>
 				</div>
-
-
 			</div>
-
-
-
 			<div class="row">
 				<div class="col-md-12">
 					<div class="admin-content-con">
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div style="padding-right: 16px;" class="pull-right">
-									<input type="reset" class="btn btn-default" value="Reset">
-									<input type="submit" class="btn btn-primary" value="Submit">
+									<button type="button" class="btn btn-warning reset-btn">Reset</button>
+									<button type="button" class="btn btn-success previous-btn">Previous
+										Records</button>
+									<button type="button" class="btn btn-primary submit-btn">Submit</button>
 								</div>
 							</div>
 						</div>
@@ -294,6 +272,7 @@
 
 	<!-- Lower Layout -->
 	<%@include file="gnrc-page-lower-layout.jsp"%>
+	<%@include file="gnrc-modal.jsp"%>
 	<!-- End of Lower Layout -->
 
 
@@ -302,6 +281,7 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
+	<script type="text/javascript" src="js/consult-record.js"></script>
 	<!-- End of JS -->
 
 </body>

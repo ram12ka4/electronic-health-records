@@ -51,8 +51,8 @@
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
-				: (String) request.getAttribute("ipName");
+		String ipNumber = (String) session.getAttribute("ipNo") == null ? ""
+				: (String) session.getAttribute("ipNo");
 
 		System.out.println("Ip Name : " + ipNumber);
 

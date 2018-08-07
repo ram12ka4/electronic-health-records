@@ -44,7 +44,7 @@ public class DoctorOrderServlet extends HttpServlet {
 			String ipNo = (String) session.getAttribute("ipNo") == null ? "" : (String) session.getAttribute("ipNo");
 			String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
 
-			if ("DOCTORE_PREVIOUS_ORDERS".equals(action)) {
+			if ("DOCTOR_PREVIOUS_ORDERS".equals(action)) {
 
 				List<List<String>> list = patientDao.getDoctorPreviousData(ipNo, "DOCTORE_PREVIOUS_ORDERS");
 				List<String> col = list.get(0);

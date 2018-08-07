@@ -329,7 +329,6 @@ public class PatientDaoImpl implements PatientDao {
 		StringBuilder sql = new StringBuilder();
 
 		if ("DOCTOR_PREVIOUS_NOTES".equals(action)) {
-
 			sql.append(" SELECT MAX(DECODE(B.EHR_ATTRB_CODE, 'DN001',B.EHR_ATTRB_VALUE,'')) DOCTOR_NAME ");
 			sql.append(" , MAX(DECODE(B.EHR_ATTRB_CODE, 'DN004',B.EHR_ATTRB_VALUE,'')) DOCTOR_NOTE ");
 			sql.append(" , B.EHR_DTL_CODE, B.EHR_CRT_DT ");
@@ -338,18 +337,29 @@ public class PatientDaoImpl implements PatientDao {
 			sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
 			sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
 			sql.append(" ORDER BY EHR_DTL_CODE DESC ");
-		} else if ("DOCTORE_PREVIOUS_ORDERS".equals(action)) {
-			sql.append(" select  b.EHR_CRT_DT, b.EHR_DTL_CODE, max(decode(b.ehr_attrb_code,'DO007' , b.EHR_ATTRB_VALUE, '')) DOCTOR_NAME, ");
-			sql.append(" max(decode(b.ehr_attrb_code,'DO003' , b.EHR_ATTRB_VALUE, '')) MEDICINE, ");
-			//sql.append(" max(decode(b.ehr_attrb_code,'DO008' , b.EHR_ATTRB_VALUE, '')) VISITING_DOCTOR, ");
-			sql.append(" max(decode(b.ehr_attrb_code,'DO002' , b.EHR_ATTRB_VALUE, '')) TREATMENT, ");
-			sql.append(" max(decode(b.ehr_attrb_code,'DO005' , b.EHR_ATTRB_VALUE, '')) DIET, ");
-			sql.append(" max(decode(b.ehr_attrb_code,'DO004' , b.EHR_ATTRB_VALUE, '')) LABORATORY ");
-			sql.append(" from  EMR_CLINICAL_DETAIL a, EMR_HEALTH_RECORD b ");
-			sql.append(" where b.EHR_ATTRB_CODE in ( 'DO007', 'DO003', 'DO002', 'DO005', 'DO004', 'DO008') ");
-			sql.append(" and a.ECD_EM_NUM = b.EHR_EMR_NUM and a.ECD_PAT_NUM = ? ");
-			sql.append(" group by   b.EHR_CRT_DT , b.EHR_DTL_CODE ");
-			sql.append(" order by b.EHR_DTL_CODE desc ");
+		} else if ("DOCTOR_PREVIOUS_ORDERS".equals(action)) {
+			sql.append(" SELECT  B.EHR_CRT_DT, B.EHR_DTL_CODE, MAX(DECODE(B.EHR_ATTRB_CODE,'DO007' , B.EHR_ATTRB_VALUE, '')) DOCTOR_NAME, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO003' , B.EHR_ATTRB_VALUE, '')) MEDICINE, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO002' , B.EHR_ATTRB_VALUE, '')) TREATMENT, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO005' , B.EHR_ATTRB_VALUE, '')) DIET, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO004' , B.EHR_ATTRB_VALUE, '')) LABORATORY ");
+			sql.append(" FROM  EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
+			sql.append(" WHERE B.EHR_ATTRB_CODE IN ( 'DO007', 'DO003', 'DO002', 'DO005', 'DO004', 'DO008') ");
+			sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
+			sql.append(" GROUP BY   B.EHR_CRT_DT , B.EHR_DTL_CODE ");
+			sql.append(" ORDER BY B.EHR_DTL_CODE DESC ");
+		} else if ("PREVIOUS_CONSULT_RECORDS".equals(action)) {
+			sql.append(" SELECT  B.EHR_CRT_DT, B.EHR_DTL_CODE, MAX(DECODE(B.EHR_ATTRB_CODE,'CR001' , B.EHR_ATTRB_VALUE, '')) REFER_BY_DOCTOR_NAME, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR003' , B.EHR_ATTRB_VALUE, '')) REF_BY_CONSULTANT, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR002' , B.EHR_ATTRB_VALUE, '')) REFER_TO_DOCTOR_NAME, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR004' , B.EHR_ATTRB_VALUE, '')) REF_TO_CONSULTANT, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR006' , B.EHR_ATTRB_VALUE, '')) CLINICAL_NOTES, ");
+			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR007' , B.EHR_ATTRB_VALUE, '')) CONSULT_OPINION ");
+			sql.append(" FROM  EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
+			sql.append(" WHERE B.EHR_ATTRB_CODE IN ( 'CR001', 'CR003', 'CR002', 'CR004', 'CR006', 'CR007') ");
+			sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
+			sql.append(" GROUP BY   B.EHR_CRT_DT , B.EHR_DTL_CODE ");
+			sql.append(" ORDER BY B.EHR_DTL_CODE DESC ");
 		}
 
 		System.out.println(sql.toString());
