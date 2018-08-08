@@ -2,6 +2,7 @@ package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,34 +57,49 @@ public class ConsultRecordServlet extends HttpServlet {
 				int i = 0;
 				int indexStart = 0;
 
+				out.println("<div class=\"pagination-container\" >");
+
 				while (i < rowCount) {
 
 					indexStart = i * col.size();
-					
-					out.println("<nav aria-label=\"Page navigation\">");
-					out.println("<ul class=\"pagination\">");
-					out.println("<li>");
-					out.println("<a href=\"#\" aria-label=\"Previous\">");
-					out.println("<span aria-hidden=\"true\">&laquo;</span>");
-					out.println("</a>");
-					out.println("</li>");
-					out.println("<li><a href=\"#\">1</a></li>");
-					out.println("<li><a href=\"#\">2</a></li>");
-					out.println("<li><a href=\"#\">3</a></li>");
-					out.println("<li>");
-					out.println("<a href=\"#\" aria-label=\"Next\">");
-					out.println("<span aria-hidden=\"true\">&raquo;</span>");
-					out.println("</a>");
-					out.println("</li>");
-					out.println("</ul>");
-					out.println("</nav>");
-					
+
+					if (i == 0) {
+						// out.println("<div class=\"text-center\">");
+						out.println("<div class=\"pagination pagination-centered\">");
+						out.println("<ul class=\"pagination \">");
+						out.println("<li data-page=\"-\" ><a href=\"#\" >&lt;</a></li>");
+
+						for (int k = 0; k < rowCount; k++) {
+							out.println("<li data-page=\"" + (k + 1) + "\"><a href=\"#\" >" + (k + 1) + "</a></li>");
+						}
+
+						out.println("<li data-page=\"+\"><a href=\"#\" >&gt;</a></li>");
+						out.println("</ul>");
+						out.println("</div>");
+						// out.println("</div>");
+					}
+
+					/*
+					 * Start of div data page
+					 */
+					if (i == 0) {
+						out.println("<div data-page=\"" + (i + 1) + "\">");
+					} else {
+						out.println("<div data-page=\"" + (i + 1) + "\" style=\"display:none;\">");
+					}
+					out.println("<p>");
+
+					/*
+					 * out.println("<p>"); out.println("Content for Div Number "+ i+1);
+					 * out.println("</p>");
+					 */
 
 					out.println("<div class=\"row\">");
 					out.println("<div class=\"column\">");
 
 					out.println("<div class=\"column-header clearfix\">");
 					out.println("<h5 class=\"pull-left\">" + row.get(indexStart + 2) + "</h5>");
+					out.println("<h5 class=\"pull-right\">" + row.get(indexStart) + "</h5>");
 					out.println("</div>");
 					out.println("<hr>");
 					out.println("<p>");
@@ -132,7 +148,7 @@ public class ConsultRecordServlet extends HttpServlet {
 
 					out.println("<div class=\"form-group\">");
 					out.println(
-							"<label class=\"control-label col-xs-3\" for=\"ref-by\"> <span class=\"required-label\" id=\"ref-by\"> Ref-by</span> :</label>");
+							"<label class=\"control-label col-xs-3\" for=\"ref-by\"> <span class=\"required-label\" id=\"ref-by\"> Ref-to</span> :</label>");
 					out.println("<div class=\"col-xs-6\">");
 					out.println("<input type=\"text\"	value=\"" + row.get(indexStart + 3)
 							+ "\" class=\"form-control input-sm ref-by\" placeholder=\"Date\" readonly>");
@@ -174,8 +190,21 @@ public class ConsultRecordServlet extends HttpServlet {
 
 					out.println("</div>");
 
+					/*
+					 * Show content in element <p>
+					 */
+					out.println("</p>");
+
+					/*
+					 * end div data-page
+					 */
+
+					out.println("</div>");
+
 					i++;
 				}
+
+				out.println("</div>");
 
 			} else {
 				request.setAttribute("token", token);
@@ -215,6 +244,9 @@ public class ConsultRecordServlet extends HttpServlet {
 			if ("DEL_CONSULTANT".equals(action)) {
 
 				System.out.println("EMD DET NO" + emr_det);
+				boolean status = deleteDoctorData(emr_det);
+				System.out.println("DELETE STATUS : " + status);
+				out.print(status);
 
 			} else {
 
@@ -233,8 +265,8 @@ public class ConsultRecordServlet extends HttpServlet {
 				keyValue.put("CR003", referByDoctor);
 				keyValue.put("CR004", referBySpeciality);
 				keyValue.put("CR005", date);
-				keyValue.put("CR007", clinicalNotes);
-				keyValue.put("CR008", consultantOpinion);
+				keyValue.put("CR006", clinicalNotes);
+				keyValue.put("CR007", consultantOpinion);
 
 				patient = Patient.getInstance();
 				emr = Emr.getInstance();
@@ -312,7 +344,10 @@ public class ConsultRecordServlet extends HttpServlet {
 			Throwable e) throws ServletException, IOException {
 		request.setAttribute("javax.servlet.jsp.jspException", e);
 		getServletConfig().getServletContext().getRequestDispatcher(errroPageURL).forward(request, response);
+	}
 
+	public boolean deleteDoctorData(String emrDetNumber) throws SQLException {
+		return patientDao.deleteDoctorData(emrDetNumber);
 	}
 
 }
