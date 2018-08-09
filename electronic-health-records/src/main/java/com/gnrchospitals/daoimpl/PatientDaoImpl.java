@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -338,7 +339,8 @@ public class PatientDaoImpl implements PatientDao {
 			sql.append(" GROUP BY B.EHR_DTL_CODE, B.EHR_CRT_DT ");
 			sql.append(" ORDER BY EHR_DTL_CODE DESC ");
 		} else if ("DOCTOR_PREVIOUS_ORDERS".equals(action)) {
-			sql.append(" SELECT  B.EHR_CRT_DT, B.EHR_DTL_CODE, MAX(DECODE(B.EHR_ATTRB_CODE,'DO007' , B.EHR_ATTRB_VALUE, '')) DOCTOR_NAME, ");
+			sql.append(
+					" SELECT  B.EHR_CRT_DT, B.EHR_DTL_CODE, MAX(DECODE(B.EHR_ATTRB_CODE,'DO007' , B.EHR_ATTRB_VALUE, '')) DOCTOR_NAME, ");
 			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO003' , B.EHR_ATTRB_VALUE, '')) MEDICINE, ");
 			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO002' , B.EHR_ATTRB_VALUE, '')) TREATMENT, ");
 			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'DO005' , B.EHR_ATTRB_VALUE, '')) DIET, ");
@@ -349,7 +351,8 @@ public class PatientDaoImpl implements PatientDao {
 			sql.append(" GROUP BY   B.EHR_CRT_DT , B.EHR_DTL_CODE ");
 			sql.append(" ORDER BY B.EHR_DTL_CODE DESC ");
 		} else if ("PREVIOUS_CONSULT_RECORDS".equals(action)) {
-			sql.append(" SELECT  TO_CHAR(B.EHR_CRT_DT, 'DD-MON-YYYY hh:mi AM') CREATE_DATE, B.EHR_DTL_CODE, MAX(DECODE(B.EHR_ATTRB_CODE,'CR001' , B.EHR_ATTRB_VALUE, '')) REFER_BY_DOCTOR_NAME, ");
+			sql.append(
+					" SELECT  TO_CHAR(B.EHR_CRT_DT, 'DD-MON-YYYY hh:mi AM') CREATE_DATE, B.EHR_DTL_CODE, MAX(DECODE(B.EHR_ATTRB_CODE,'CR001' , B.EHR_ATTRB_VALUE, '')) REFER_BY_DOCTOR_NAME, ");
 			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR003' , B.EHR_ATTRB_VALUE, '')) REF_BY_CONSULTANT, ");
 			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR002' , B.EHR_ATTRB_VALUE, '')) REFER_TO_DOCTOR_NAME, ");
 			sql.append(" MAX(DECODE(B.EHR_ATTRB_CODE,'CR004' , B.EHR_ATTRB_VALUE, '')) REF_TO_CONSULTANT, ");
@@ -521,6 +524,41 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 
 		ps.setString(1, edNo);
+
+		return ps;
+	}
+
+	@Override
+	public List<String> getParameterList(String paramaterType) throws SQLException {
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement9(con, paramaterType);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				do {
+					list.add(rs.getString(1));
+				} while (rs.next());
+			}
+		}
+		return list;
+	}
+
+	private PreparedStatement createPreparedStatement9(Connection con, String parameterType) throws SQLException {
+
+		String sql = "";
+
+		if ("BG".equals(parameterType)) {
+			sql = "SELECT GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER WHERE GPM_PARAMETER_TYPE = ?";
+		}
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, parameterType);
 
 		return ps;
 	}

@@ -2,6 +2,7 @@ package com.gnrchospitals.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.gnrchospitals.dto.Patient;
 
@@ -20,6 +21,8 @@ public interface PatientDao {
 	public abstract boolean insertEmrHealthData(Patient data) throws SQLException;
 	
 	public abstract List<List<String>> getDoctorPreviousData(String ipNumber, String action) throws SQLException;
+
+	public abstract List<String> getParameterList(String parameterType) throws SQLException;
 
 	public abstract boolean deleteDoctorData(String emrDetId) throws SQLException; 
 	

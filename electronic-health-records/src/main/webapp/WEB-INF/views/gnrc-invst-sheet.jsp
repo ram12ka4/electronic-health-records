@@ -15,7 +15,8 @@
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/gnrc-user-reg.css">
+<link rel="stylesheet" href="css/gnrc-forms.css">
+<link rel="stylesheet" href="css/invest-sheet.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -47,7 +48,7 @@
 		} else {
 			sessionID = session.getId();
 		}
-		
+
 		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
 				: (String) request.getAttribute("ipName");
 		System.out.println("Ip Name : " + ipNumber);
@@ -85,19 +86,22 @@
 									class="required-label" id="name"> Name</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm" name="name"
-										id="name" value="<%=patient.getPatientName()%>" placeholder="Name" readonly>
+										id="name" value="<%=patient.getPatientName()%>"
+										placeholder="Name" readonly>
 								</div>
 								<label class="control-label col-xs-1" for="age"><span
 									class="required-label" id="age"> Age</span> :</label>
 								<div class="col-xs-1">
 									<input type="text" class="form-control input-sm" id="age"
-										value="<%=patient.getAge()%>" name="age"  placeholder="Age" readonly>
+										value="<%=patient.getAge()%>" name="age" placeholder="Age"
+										readonly>
 								</div>
 								<label class="control-label col-xs-2" for="sex"><span
 									class="required-label" id="sex"> Sex</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm" id="sex"
-										name="sex" value="<%=patient.getSex()%>" placeholder="Sex" readonly>
+										name="sex" value="<%=patient.getSex()%>" placeholder="Sex"
+										readonly>
 								</div>
 							</div>
 							<div class="form-group">
@@ -111,32 +115,26 @@
 									class="required-label" id="ip-no"> IP No</span> :</label>
 								<div class="col-xs-2">
 									<input type="text" class="form-control input-sm" id="ip-no"
-										name="ip_no" value="<%=patient.getIpNumber()%>" placeholder="IP Number" readonly>
+										name="ip_no" value="<%=patient.getIpNumber()%>"
+										placeholder="IP Number" readonly>
 								</div>
 								<label class="control-label col-xs-2" for="bed-no"><span
 									class="required-label" id="bed-no"> Bed No</span> :</label>
 								<div class="col-xs-1">
 									<input type="text" id="bed-no" class="form-control input-sm"
-										value="<%=patient.getBedNo()%>" name="bed_no" placeholder="Bed No." readonly>
+										value="<%=patient.getBedNo()%>" name="bed_no"
+										placeholder="Bed No." readonly>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="from-Date"><span
 									class="required-label" id="from-Date"> Date</span> :</label>
 								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm text-readonly" id="fromDate"
-										name="from_date" placeholder="Date" readonly>
+									<input type="text" class="form-control input-sm text-readonly"
+										id="fromDate" name="from_date" placeholder="Date" readonly>
 								</div>
-								<label class="control-label col-xs-2" for="blood-group"><span
-									class="required-label" id="blood-group"> Blood Group</span> :</label>
-								<div class="col-xs-2">
-									<select class="form-control input-sm" id="blood-group"
-										name="blood_group">
-										<option value="A+">A+</option>
-										<option value="A-">A+</option>
-										<option value="B+">A+</option>
-									</select>
-								</div>
+
+
 							</div>
 						</div>
 					</div>
@@ -149,7 +147,9 @@
 					<div class="panel with-nav-tabs panel-default">
 						<div class="panel-heading">
 							<ul class="nav nav-tabs">
-								<li class="active"><a href="#tab1default" data-toggle="tab">HAEMATOLOGY</a></li>
+								<li class="active"><a href="#tab0default" data-toggle="tab">BLOOD
+										GROUP</a></li>
+								<li><a href="#tab1default" data-toggle="tab">HAEMATOLOGY</a></li>
 								<li><a href="#tab2default" data-toggle="tab">BIOCHEMISTRY</a></li>
 								<li><a href="#tab3default" data-toggle="tab">CLINICAL
 										PATHOLOGY</a></li>
@@ -158,7 +158,34 @@
 						</div>
 						<div class="panel-body">
 							<div class="tab-content">
-								<div class="tab-pane fade in active" id="tab1default">
+								<div class="tab-pane fade in active" id="tab0default">
+
+									<!--  <div class="row"> -->
+									<div class="col-md-12">
+										<div class="admin-content-con">
+											<header class="clearfix">
+												<h5 class="pull-left">BLOOD GROUP</h5>
+											</header>
+
+											<div class="form-horizontal">
+												<div class="form-group">
+													<label class="control-label col-xs-2" for="blood-group">Blood
+														Group:</label>
+													<div class="col-xs-2">
+														<select class="form-control input-sm" id="blood-group"
+															name="IS016">
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+
+
+								</div>
+								<div class="tab-pane fade" id="tab1default">
 
 									<!--  <div class="row"> -->
 									<div class="col-md-6 dashboard-left-cell">
@@ -169,56 +196,56 @@
 
 											<div class="form-horizontal">
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="speciality">
+													<label class="control-label col-xs-5" for="total-count">
 														Total Count:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="speciality" name="speciality"
+															id="total-count" name="IS001"
 															placeholder="Total Count">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="treatment">
+													<label class="control-label col-xs-5" for="leucocyte-count">
 														Differential Leucocyte Count:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment"
+															id="leucocyte-count" name="IS002"
 															placeholder="Leucocyte Count">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Neutrophils:</label>
+													<label class="control-label col-xs-5" for="neutrophils">Neutrophils:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="Neutrophils">
+															id="neutrophils" name="IS003" placeholder="Neutrophils">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Lymphocytes:</label>
+													<label class="control-label col-xs-5" for="lymphocytes">Lymphocytes:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="Lymphocytes">
+															id="Lymphocytes" name="IS004" placeholder="Lymphocytes">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Eosinophils:</label>
+													<label class="control-label col-xs-5" for="eosinophils">Eosinophils:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="Eosinophils">
+															id="eosinophils" name="IS005" placeholder="Eosinophils">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Monocytes:</label>
+													<label class="control-label col-xs-5" for="monocytes">Monocytes:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="Monocytes">
+															id="monocytes" name="IS006" placeholder="Monocytes">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Hb:</label>
+													<label class="control-label col-xs-5" for="hb">Hb:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="Hb">
+															id="hb" name="IS007" placeholder="Hb">
 													</div>
 												</div>
 
@@ -235,71 +262,71 @@
 
 											<div class="form-horizontal">
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="visit_no">PCV
+													<label class="control-label col-xs-5" for="pcv">PCV
 														:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="visit_no" name="dt_of_birth" placeholder="PCV">
+															id="pcv" name="IS008" placeholder="PCV">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="visit_date">ESR:</label>
+													<label class="control-label col-xs-5" for="esr">ESR:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															name="visit_date" id="visit_date" placeholder="ESR">
+															name="IS009" id="esr" placeholder="ESR">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="appt_no">INR:
+													<label class="control-label col-xs-5" for="inr">INR:
 													</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															name="appt_number" id="appt_number" placeholder="INR">
+															name="IS010" id="inr" placeholder="INR">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="doctor">Prothrombin
+													<label class="control-label col-xs-5" for="prothrombin">Prothrombin
 														Time: </label>
 													<div class="col-xs-3">
 														<input type="text" class="form-control input-sm"
-															name="doctor" id="doctor" placeholder="Test">
+															name="IS011" id="prothrombin-test" placeholder="Test">
 													</div>
 													<div class="col-xs-3">
 														<input type="text" class="form-control input-sm"
-															name="doctor" id="doctor" placeholder="Control">
+															name="IS065" id="prothrombin-control" placeholder="Control">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Total
+													<label class="control-label col-xs-5" for="pleteles-count">Total
 														Pleteles Count:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment"
+															id="pleteles-count" name="IS012"
 															placeholder="Total Pleteles Count">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">MP:</label>
+													<label class="control-label col-xs-5" for="mp">MP:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="MP">
+															id="mp" name="IS013" placeholder="MP">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Parasite
+													<label class="control-label col-xs-5" for="parasite-load">Parasite
 														Load:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment"
+															id="parasite-load" name="IS014"
 															placeholder="Parasite Load">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">Reticulocyte
+													<label class="control-label col-xs-5" for="reticulocyte-count">Reticulocyte
 														Count:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment"
+															id="reticulocyte-count" name="IS015"
 															placeholder="Reticulocyte Count">
 													</div>
 												</div>
@@ -317,28 +344,28 @@
 
 											<div class="form-horizontal">
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="speciality">
+													<label class="control-label col-xs-5" for="protein">
 														Protein:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="speciality" name="speciality"
+															id="Protein" name="IS017"
 															placeholder="Total Count">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="treatment">
+													<label class="control-label col-xs-5" for="albumin">
 														Albumin:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment"
+															id="albumin" name="IS018"
 															placeholder="Leucocyte Count">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="control-label col-xs-5" for="remark">SGOT:</label>
+													<label class="control-label col-xs-5" for="sgot">SGOT:</label>
 													<div class="col-xs-4">
 														<input type="text" class="form-control input-sm"
-															id="treatment" name="treatment" placeholder="Neutrophils">
+															id="sgot" name="IS019" placeholder="Neutrophils">
 													</div>
 												</div>
 												<div class="form-group">
@@ -780,6 +807,7 @@
 
 	<!-- Lower Layout -->
 	<%@include file="gnrc-page-lower-layout.jsp"%>
+	<%@include file="gnrc-modal.jsp"%>
 	<!-- End of Lower Layout -->
 
 
@@ -788,6 +816,7 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
+	<script type="text/javascript" src="js/invest-sheet.js"></script>
 	<!-- End of JS -->
 
 </body>

@@ -158,26 +158,24 @@ public class DoctorOrderServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
+		String ipNo = (String) session.getAttribute("ipNo") == null ? "" : (String) session.getAttribute("ipNo");
+		String emr_det = request.getParameter("emrDetNo") == null ? "" : request.getParameter("emrDetNo");
+		String userName = (String) session.getAttribute("user") == null ? "" : (String) session.getAttribute("user");
+		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
+
+		String occupation = request.getParameter("DO001") == null ? "" : request.getParameter("DO001");
+		String doctorName = request.getParameter("DO007") == null ? "" : request.getParameter("DO007");
+		String[] DO003 = request.getParameterValues("DO003") == null ? new String[] { "NO DATA" }
+				: request.getParameterValues("DO003");
+		String treatment = request.getParameter("DO002") == null ? "" : request.getParameter("DO002");
+		String diet = request.getParameter("DO005") == null ? "" : request.getParameter("DO005");
+		String[] DO004 = request.getParameterValues("DO004") == null ? new String[] { "NO DATA" }
+				: request.getParameterValues("DO004");
+		String visitDoctor = request.getParameter("DO008") == null ? "" : request.getParameter("DO008");
+
 		try {
-
-			HttpSession session = request.getSession();
-			PrintWriter out = response.getWriter();
-			String ipNo = (String) session.getAttribute("ipNo") == null ? "" : (String) session.getAttribute("ipNo");
-			String emr_det = request.getParameter("emrDetNo") == null ? "" : request.getParameter("emrDetNo");
-			String userName = (String) session.getAttribute("user") == null ? ""
-					: (String) session.getAttribute("user");
-			String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
-
-			String occupation = request.getParameter("DO001") == null ? "" : request.getParameter("DO001");
-			String doctorName = request.getParameter("DO007") == null ? "" : request.getParameter("DO007");
-			String[] DO003 = request.getParameterValues("DO003") == null ? new String[] { "NO DATA" }
-					: request.getParameterValues("DO003");
-			String treatment = request.getParameter("DO002") == null ? "" : request.getParameter("DO002");
-			String diet = request.getParameter("DO005") == null ? "" : request.getParameter("DO005");
-			String[] DO004 = request.getParameterValues("DO004") == null ? new String[] { "NO DATA" }
-					: request.getParameterValues("DO004");
-			String visitDoctor = request.getParameter("DO008") == null ? "" : request.getParameter("DO008");
-
 			if ("DEL_ORDER".equals(action)) {
 
 				System.out.println("EMD DET NO" + emr_det);

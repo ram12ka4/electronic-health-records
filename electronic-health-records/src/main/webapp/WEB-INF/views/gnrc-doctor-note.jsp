@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/gnrc-user-reg.css">
+<link rel="stylesheet" href="css/gnrc-forms.css">
 <link rel="stylesheet" href="css/circle.css">
 <link rel="stylesheet" href="css/doctor-note.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"

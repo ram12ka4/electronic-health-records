@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/gnrc-user-reg.css">
+<link rel="stylesheet" href="css/gnrc-forms.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
