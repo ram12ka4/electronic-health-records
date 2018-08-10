@@ -4,7 +4,10 @@ $(document)
 
 					var arr = new Array();
 					var select = $("#blood-group");
-					select.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+					select
+							.empty()
+							.append(
+									'<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
 
 					var req = $
 							.ajax({
@@ -29,17 +32,22 @@ $(document)
 											.replace("]", "").split(",");
 									// alert(arr.length);
 
-								
-									select.empty().append('<option selected="selected" value="0">Please select</option>');
+									select
+											.empty()
+											.append(
+													'<option selected="selected" value="0">Please select</option>');
 
 									var i;
 
 									for (i = 0; i < arr.length; i++) {
-										/*var option = document
-												.createElement("option");
-										option.text = option.value = arr[i];
-										select.add(option)*/
-										select.append($("<option></option>").val(arr[i]).html(arr[i])); 
+										/*
+										 * var option = document
+										 * .createElement("option"); option.text =
+										 * option.value = arr[i];
+										 * select.add(option)
+										 */
+										select.append($("<option></option>")
+												.val(arr[i]).html(arr[i]));
 									}
 
 								},
@@ -52,5 +60,37 @@ $(document)
 									alert(data.responseText);
 								}
 							});
+
+					$(document).on('click', '.submit-btn', function(e) {
+
+						alert('Submit Button');
+
+						e.preventDefault();
+
+						$('.confirmModal').modal();
+
+					});
+
+					$(document)
+							.on(
+									'click',
+									'.confirm-btn',
+									function() {
+
+										alert("Final confirm");
+
+										$('.circleModal').modal({
+											backdrop : 'static',
+											keyboard : false
+										});
+
+										$('.confirmModal').modal('hide');
+
+										document.getElementById("invest-frm").method = "post";
+										document.getElementById("invest-frm").action = "/invest.do";
+										document.getElementById("invest-frm")
+												.submit();
+
+									});
 
 				});
