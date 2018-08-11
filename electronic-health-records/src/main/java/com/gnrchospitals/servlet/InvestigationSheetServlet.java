@@ -39,7 +39,7 @@ public class InvestigationSheetServlet extends HttpServlet {
 		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
 
 		try {
-			
+
 			request.setAttribute("msg", msg);
 			request.setAttribute("token", token);
 			request.setAttribute("ipName", (String) session.getAttribute("ipNo"));
@@ -158,8 +158,6 @@ public class InvestigationSheetServlet extends HttpServlet {
 		String vdrl = request.getParameter("IS057") == null ? "" : keyValue.put("IS057", request.getParameter("IS057"));
 		String hsv = request.getParameter("IS058") == null ? "" : keyValue.put("IS058", request.getParameter("IS058"));
 		String je = request.getParameter("IS059") == null ? "" : keyValue.put("IS059", request.getParameter("IS059"));
-		String radiology = request.getParameter("IS060") == null ? ""
-				: keyValue.put("IS060", request.getParameter("IS060"));
 		String chestXRay = request.getParameter("IS061") == null ? ""
 				: keyValue.put("IS061", request.getParameter("IS061"));
 		String CTScan = request.getParameter("IS062") == null ? ""
@@ -208,7 +206,6 @@ public class InvestigationSheetServlet extends HttpServlet {
 				System.out.println("pcv : " + pcv);
 				System.out.println("esr : " + esr);
 				System.out.println("inr : " + inr);
-				
 
 				patient = Patient.getInstance();
 				emr = Emr.getInstance();

@@ -363,6 +363,8 @@ public class PatientDaoImpl implements PatientDao {
 			sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
 			sql.append(" GROUP BY   B.EHR_CRT_DT , B.EHR_DTL_CODE ");
 			sql.append(" ORDER BY B.EHR_DTL_CODE DESC ");
+		} else if ("PREVIOUS_INVESTIGATION_RECORDS".equals(action)) {
+			
 		}
 
 		System.out.println(sql.toString());

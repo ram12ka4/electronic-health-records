@@ -93,4 +93,52 @@ $(document)
 
 									});
 
+					$(document)
+							.on(
+									'click',
+									'.previous-btn',
+									function() {
+										
+										$('.form-control').each(function(){
+											
+											var value = $(this).attr('name');
+											alert("Input Element name " + value);
+											
+											if ()
+										});
+										
+										
+										
+
+										$('.circleModal').modal({
+											backdrop : 'static',
+											keyboard : false
+										});
+
+										// alert("previous Btn");
+
+										$('.myModal .modal-body')
+												.load(
+														'/invest.do?ACTION=PREVIOUS_INVEST_RECORDS',
+														function() {
+
+															$('.circleModal')
+																	.modal(
+																			'hide');
+															// alert("paginationHandler
+															// function
+															// called");
+															$(
+																	'.myModal .modal-title')
+																	.html(
+																			"Previous Investigation Record");
+															paginationHandler();
+															$('.myModal')
+																	.modal(
+																			{
+																				show : true
+																			});
+														});
+									});
+
 				});
