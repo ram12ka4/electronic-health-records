@@ -364,7 +364,7 @@ public class PatientDaoImpl implements PatientDao {
 			sql.append(" GROUP BY   B.EHR_CRT_DT , B.EHR_DTL_CODE ");
 			sql.append(" ORDER BY B.EHR_DTL_CODE DESC ");
 		} else if ("PREVIOUS_INVESTIGATION_RECORDS".equals(action)) {
-			
+
 		}
 
 		System.out.println(sql.toString());
@@ -561,6 +561,111 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 
 		ps.setString(1, parameterType);
+
+		return ps;
+	}
+
+
+
+	@Override
+	public List<List<String>> fetchGobalTempData(String ipnumber, String[] arr) throws SQLException {
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> col = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement10(con, arr)) {
+
+				int affectedRecords[] = ps.executeBatch();
+
+				if (affectedRecords.length != 0)
+					System.out.println("data inserted successfully");
+
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				throw e;
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+
+			try (PreparedStatement ps = createPreparedStatement11(con, arr, ipnumber);
+					ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					col.add(rsmd.getColumnName(i));
+				}
+
+				list.add(col);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+				}
+				list.add(row);
+			}
+
+		}
+
+		return list;
+
+	}
+
+	private PreparedStatement createPreparedStatement10(Connection con, String[] arr) throws SQLException {
+
+		System.out.println("PARAM VALUE : " + arr[0]);
+
+		String sql = "INSERT INTO GTT_EHR_ATTRB values(?)";
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		for (String paramName : arr) {
+			ps.setString(1, paramName);
+			ps.addBatch();
+		}
+
+		return ps;
+	}
+
+	private PreparedStatement createPreparedStatement11(Connection con, String[] arr, String ipNumber)
+			throws SQLException {
+
+		// String sql = "SELECT * FROM GTT_EHR_ATTRB";
+		int index = 0;
+		StringBuffer sql = new StringBuffer();
+		sql.append("select  b.EHR_CRT_DT, b.EHR_DTL_CODE, ");
+
+		for (String paramCode : arr) {
+			if (index + 1 == arr.length) {
+				sql.append("max(decode(b.ehr_attrb_code,'" + paramCode + "' , b.EHR_ATTRB_VALUE, ''))" + paramCode);
+			} else {
+				sql.append(
+						"max(decode(b.ehr_attrb_code,'" + paramCode + "' , b.EHR_ATTRB_VALUE, ''))" + paramCode + ",");
+			}
+			index++;
+		}
+		sql.append(" FROM  EMR_CLINICAL_DETAIL A, EMR_HEALTH_RECORD B ");
+		sql.append(" WHERE B.EHR_ATTRB_CODE IN (SELECT * FROM GTT_EHR_ATTRB) ");
+		sql.append(" AND A.ECD_EM_NUM = B.EHR_EMR_NUM AND A.ECD_PAT_NUM = ? ");
+		sql.append(" GROUP BY   B.EHR_CRT_DT , B.EHR_DTL_CODE ");
+		sql.append(" ORDER BY B.EHR_DTL_CODE DESC ");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, ipNumber);
 
 		return ps;
 	}

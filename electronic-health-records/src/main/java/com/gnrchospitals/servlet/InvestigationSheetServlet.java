@@ -165,8 +165,16 @@ public class InvestigationSheetServlet extends HttpServlet {
 		String mri = request.getParameter("IS063") == null ? "" : keyValue.put("IS063", request.getParameter("IS063"));
 		String others = request.getParameter("IS064") == null ? ""
 				: keyValue.put("IS064", request.getParameter("IS064"));
+		String paramList = request.getParameter("paramList") == null ? "" : request.getParameter("paramList");
 
 		List<String> list = new ArrayList<>();
+		
+		System.out.println("Parameter List : " + paramList);
+		String paramValue[] = paramList.replace("[", "").replace("]", "").replace("\"", "").split(",");
+		
+		for (String paramName : paramValue) {
+			System.out.println("param value " + paramName);
+		}
 
 		/*
 		 * BufferedReader br = new BufferedReader(new
@@ -183,7 +191,25 @@ public class InvestigationSheetServlet extends HttpServlet {
 
 		try {
 
-			if ("GET_BLOOD_GRP_DATA".equals(action.trim())) {
+			if ("FETCH_PARAM_NAME".equals(action.trim())) {
+				System.out.println("In INSERT_PARAM_VALUE");
+				List<List<String>> paramNamelist = patientDao.fetchGobalTempData(ipNo, paramValue);
+				System.out.println("result" + paramNamelist);
+				// ObjectMapper mapper = new ObjectMapper();
+				// response.setContentType("application/json");
+				// String json1 = mapper.writeValueAsString(keyValue);
+				// System.out.println("JSON DATA" + json);
+				out.println(paramNamelist);
+			} /*else 	if ("INSERT_PARAM_VALUE".equals(action.trim())) {
+				System.out.println("In INSERT_PARAM_VALUE");
+				boolean result = patientDao.insertGobalTempData(paramValue);
+				System.out.println("result" + result);
+				// ObjectMapper mapper = new ObjectMapper();
+				// response.setContentType("application/json");
+				// String json1 = mapper.writeValueAsString(keyValue);
+				// System.out.println("JSON DATA" + json);
+				out.println(result);
+			}*/ else if ("GET_BLOOD_GRP_DATA".equals(action.trim())) {
 				System.out.println("In if part");
 				list = patientDao.getParameterList(paramType);
 				System.out.println("KEY VALUE" + list);

@@ -98,28 +98,51 @@ $(document)
 									'click',
 									'.previous-btn',
 									function() {
-										
-										$('.form-control').each(function(){
-											
+
+										var myArr = new Array();
+
+										$('.form-control').each(function() {
+
 											var value = $(this).attr('name');
-											alert("Input Element name " + value);
-											
-											if ()
-										});
-										
-										
-										
+											// alert("Input Element name " +
+											// value);
 
-										$('.circleModal').modal({
-											backdrop : 'static',
-											keyboard : false
+											if (value.includes('IS')) {
+												myArr.push(value);
+											}
 										});
 
+										alert("Arry List is : " + myArr);
+
+										$
+
+										$.ajax({
+											url : '/invest.do',
+											type : 'post',
+											datatype : 'text',
+											data : {
+												paramList : JSON
+														.stringify(myArr),
+												ACTION : 'FETCH_PARAM_NAME'
+											},
+											success : function(data) {
+												alert(data);
+												alert('success');
+											},
+											error : function(data) {
+												alert(data);
+												alert('failed');
+											}
+										});
+
+										/*
+										 * $('.circleModal').modal({ backdrop :
+										 * 'static', keyboard : false });
+										 */
 										// alert("previous Btn");
-
 										$('.myModal .modal-body')
 												.load(
-														'/invest.do?ACTION=PREVIOUS_INVEST_RECORDS',
+														'/invest.do?ACTION=FETCH_PARAM_NAME&paramList='+,
 														function() {
 
 															$('.circleModal')
