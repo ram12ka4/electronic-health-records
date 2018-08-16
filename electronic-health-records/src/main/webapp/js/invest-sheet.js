@@ -93,6 +93,21 @@ $(document)
 
 									});
 
+					$('#fixedColumnExample').DataTable({
+						fixedColumns : {
+							leftColumns: 0
+						}, 
+						scrollY : 300,
+						scrollX : true,
+						scrollCollapse : true,
+						paging : false,
+						fixedColumns:   true
+					});
+
+
+					
+
+					
 					$(document)
 							.on(
 									'click',
@@ -104,8 +119,6 @@ $(document)
 										$('.form-control').each(function() {
 
 											var value = $(this).attr('name');
-											// alert("Input Element name " +
-											// value);
 
 											if (value.includes('IS')) {
 												myArr.push(value);
@@ -114,53 +127,45 @@ $(document)
 
 										alert("Arry List is : " + myArr);
 
-										$
-
-										$.ajax({
-											url : '/invest.do',
-											type : 'post',
-											datatype : 'text',
-											data : {
-												paramList : JSON
-														.stringify(myArr),
-												ACTION : 'FETCH_PARAM_NAME'
-											},
-											success : function(data) {
-												alert(data);
-												alert('success');
-											},
-											error : function(data) {
-												alert(data);
-												alert('failed');
-											}
-										});
-
-										/*
-										 * $('.circleModal').modal({ backdrop :
-										 * 'static', keyboard : false });
-										 */
-										// alert("previous Btn");
 										$('.myModal .modal-body')
 												.load(
-														'/invest.do?ACTION=FETCH_PARAM_NAME&paramList='+,
-														function() {
+														'/invest.do',
+														{
+															ACTION : 'FETCH_PARAM_NAME',
+															paramList : JSON
+																	.stringify(myArr)
+														},
+														function(response,
+																status, xhr) {
 
+															if (status === 'error') {
+																var msg = "Sorry but there was asn error: ";
+																alert(response);
+																swal(
+																		"Oh no!",
+																		msg
+																				+ xhr.status
+																				+ " "
+																				+ xhr.statusText,
+																		"error");
+															}
+															
+														
 															$('.circleModal')
 																	.modal(
 																			'hide');
-															// alert("paginationHandler
-															// function
-															// called");
+
 															$(
 																	'.myModal .modal-title')
 																	.html(
 																			"Previous Investigation Record");
-															paginationHandler();
+															
 															$('.myModal')
 																	.modal(
 																			{
 																				show : true
 																			});
+
 														});
 									});
 

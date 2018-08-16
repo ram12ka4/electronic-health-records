@@ -30,7 +30,6 @@ public interface PatientDao {
 	
 	public abstract boolean updateDoctorNote(String doctorNote, String emrDetId) throws SQLException;
 	
-	/*public abstract boolean insertGobalTempData(String [] arr) throws SQLException;*/
 	
 	public abstract List<List<String>> fetchGobalTempData(String ipNumber, String [] arr) throws SQLException;
 

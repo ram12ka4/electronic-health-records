@@ -565,14 +565,13 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-
-
 	@Override
 	public List<List<String>> fetchGobalTempData(String ipnumber, String[] arr) throws SQLException {
 
 		List<List<String>> list = new ArrayList<>();
 		List<String> col = new ArrayList<>();
 		List<String> row = new ArrayList<>();
+		List<String> paramNameList = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection()) {
 
@@ -594,7 +593,23 @@ public class PatientDaoImpl implements PatientDao {
 			con.commit();
 			con.setAutoCommit(true);
 
-			try (PreparedStatement ps = createPreparedStatement11(con, arr, ipnumber);
+			try (PreparedStatement ps = createPreparedStatement11(con);) {
+
+				for (String paramCode : arr) {
+
+					ps.setString(1, paramCode);
+
+					try (ResultSet rs = ps.executeQuery()) {
+
+						if (rs.next()) {
+							paramNameList.add(rs.getString(1));
+						}
+					}
+				}
+
+			}
+
+			try (PreparedStatement ps = createPreparedStatement12(con, arr, ipnumber, paramNameList);
 					ResultSet rs = ps.executeQuery()) {
 
 				ResultSetMetaData rsmd = rs.getMetaData();
@@ -639,20 +654,35 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	private PreparedStatement createPreparedStatement11(Connection con, String[] arr, String ipNumber)
-			throws SQLException {
+	private PreparedStatement createPreparedStatement11(Connection con) throws SQLException {
 
-		// String sql = "SELECT * FROM GTT_EHR_ATTRB";
+		String sql = "SELECT EAM_ATTRB_DESC FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_CODE = ?";
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		return ps;
+	}
+
+	private PreparedStatement createPreparedStatement12(Connection con, String[] arr, String ipNumber,
+			List<String> paramNameList) throws SQLException {
+
+		System.out.println("paramNameList Size : " + paramNameList);
+		System.out.println("paramNameList Size : " + paramNameList.size());
+		System.out.println("Arr Size : " + arr.length);
+
 		int index = 0;
 		StringBuffer sql = new StringBuffer();
 		sql.append("select  b.EHR_CRT_DT, b.EHR_DTL_CODE, ");
 
 		for (String paramCode : arr) {
 			if (index + 1 == arr.length) {
-				sql.append("max(decode(b.ehr_attrb_code,'" + paramCode + "' , b.EHR_ATTRB_VALUE, ''))" + paramCode);
+				sql.append("max(decode(b.ehr_attrb_code,'" + paramCode + "' , b.EHR_ATTRB_VALUE, '')) " + "\""
+						+ paramNameList.get(index) + "\"");
 			} else {
-				sql.append(
-						"max(decode(b.ehr_attrb_code,'" + paramCode + "' , b.EHR_ATTRB_VALUE, ''))" + paramCode + ",");
+				sql.append("max(decode(b.ehr_attrb_code,'" + paramCode + "' , b.EHR_ATTRB_VALUE, '')) " + "\""
+						+ paramNameList.get(index) + "\"" + ",");
 			}
 			index++;
 		}

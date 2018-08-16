@@ -168,13 +168,14 @@ public class InvestigationSheetServlet extends HttpServlet {
 		String paramList = request.getParameter("paramList") == null ? "" : request.getParameter("paramList");
 
 		List<String> list = new ArrayList<>();
-		
+
 		System.out.println("Parameter List : " + paramList);
 		String paramValue[] = paramList.replace("[", "").replace("]", "").replace("\"", "").split(",");
-		
-		for (String paramName : paramValue) {
-			System.out.println("param value " + paramName);
-		}
+
+		/*
+		 * for (String paramName : paramValue) { System.out.println("param value " +
+		 * paramName); }
+		 */
 
 		/*
 		 * BufferedReader br = new BufferedReader(new
@@ -194,22 +195,61 @@ public class InvestigationSheetServlet extends HttpServlet {
 			if ("FETCH_PARAM_NAME".equals(action.trim())) {
 				System.out.println("In INSERT_PARAM_VALUE");
 				List<List<String>> paramNamelist = patientDao.fetchGobalTempData(ipNo, paramValue);
-				System.out.println("result" + paramNamelist);
+				List<String> col = paramNamelist.get(0);
+				List<String> row = paramNamelist.get(1);
+
+				System.out.println("Column name size : " + paramNamelist.get(0).size());
+				System.out.println("Row value size : " + paramNamelist.get(1).size());
+				System.out.println("Row value : " + paramNamelist.get(1));
+
 				// ObjectMapper mapper = new ObjectMapper();
 				// response.setContentType("application/json");
 				// String json1 = mapper.writeValueAsString(keyValue);
 				// System.out.println("JSON DATA" + json);
-				out.println(paramNamelist);
-			} /*else 	if ("INSERT_PARAM_VALUE".equals(action.trim())) {
-				System.out.println("In INSERT_PARAM_VALUE");
-				boolean result = patientDao.insertGobalTempData(paramValue);
-				System.out.println("result" + result);
-				// ObjectMapper mapper = new ObjectMapper();
-				// response.setContentType("application/json");
-				// String json1 = mapper.writeValueAsString(keyValue);
-				// System.out.println("JSON DATA" + json);
-				out.println(result);
-			}*/ else if ("GET_BLOOD_GRP_DATA".equals(action.trim())) {
+
+				int colCount = row.size() / col.size();
+				System.out.println("Column Count : " +colCount);
+				int j = 2;
+				int index = 2;
+				int count = 0;
+
+				out.println(
+						"<table id=\"fixedColumnExample\" class=\"stripe row-border order-column\" style=\"width:100%\">");
+				out.println("<thead>");
+				out.println("<tr>");
+				out.println("<th>Parameter</th>");
+				for (int i = 0; i < row.size(); i += col.size()) {
+					out.println("<th>" + row.get(i) + "</th>");
+				}
+				out.println("</tr>");
+				out.println("</thead>");
+				out.println("<tbody>");
+				// problem in this section
+
+				while (j < col.size()) {
+					
+					out.println("<tr>");
+					
+					out.println("<td>" + col.get(j) + "</td>");
+					
+					for (int i = 0; i < row.size(); i += col.size()) {
+						System.out.println("Count : " + count++);
+						out.println("<td>" + row.get(i + index) + "</td>");
+					}
+					
+					out.println("</tr>");
+					index++;
+					j++;
+				}
+
+				// j++;
+
+				out.println("</tbody>");
+
+				out.println("</table>");
+
+				// out.println(paramNamelist);
+			} else if ("GET_BLOOD_GRP_DATA".equals(action.trim())) {
 				System.out.println("In if part");
 				list = patientDao.getParameterList(paramType);
 				System.out.println("KEY VALUE" + list);
