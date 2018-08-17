@@ -93,21 +93,24 @@ $(document)
 
 									});
 
-					$('#fixedColumnExample').DataTable({
-						fixedColumns : {
-							leftColumns: 0
-						}, 
-						scrollY : 300,
-						scrollX : true,
-						scrollCollapse : true,
-						paging : false,
-						fixedColumns:   true
-					});
+					/*
+					 * $('#fixedColumnExample').DataTable({ scrollY : "300px",
+					 * scrollX : true, scrollCollapse : true, paging : false,
+					 * fixedColumns : { leftColumns : 1 } });
+					 */
 
+					function CSSDone() {
+						alert("CSS loaded");
+						$("th, td").css({
+							"white-space" : "nowrap"
+						});
+						alert("next loaded");
+						$("div.dataTables_wrapper").css({
+							"width" : "800px",
+							"margin" : "0 auto"
+						});
+					}
 
-					
-
-					
 					$(document)
 							.on(
 									'click',
@@ -116,14 +119,33 @@ $(document)
 
 										var myArr = new Array();
 
-										$('.form-control').each(function() {
+										myArr = [];
 
-											var value = $(this).attr('name');
+										$('.form-control')
+												.each(
+														function() {
 
-											if (value.includes('IS')) {
-												myArr.push(value);
-											}
-										});
+															var string = $(this)
+																	.attr(
+																			'name');
+
+															// alert(string);
+
+															if (string !== undefined
+																	&& string !== null
+																	&& string.length) {
+
+																if (string
+																		.indexOf("IS") >= 0) {
+																	// var value
+																	// =
+																	// string.includes("IS");
+																	myArr
+																			.push(string);
+																}
+															}
+
+														});
 
 										alert("Arry List is : " + myArr);
 
@@ -149,17 +171,32 @@ $(document)
 																				+ xhr.statusText,
 																		"error");
 															}
-															
-														
+
 															$('.circleModal')
 																	.modal(
 																			'hide');
+
+															var table = $(
+																	'#fixedColumnExample')
+																	.DataTable(
+																			{
+																				scrollY : "50vh",
+																				scrollX : true,
+																				scrollCollapse : true,
+																				paging : false,
+																				fixedColumns : true
+
+																			});
+															/*
+															 * table
+															 * .fixedColumns(true);
+															 */
 
 															$(
 																	'.myModal .modal-title')
 																	.html(
 																			"Previous Investigation Record");
-															
+
 															$('.myModal')
 																	.modal(
 																			{
