@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-forms.css">
+<link rel="stylesheet" href="css/circle.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -125,56 +126,51 @@
 
 
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="status"><span
-									class="required-label" id="gender"> Provisional / Final
-										Diagnosis</span> :</label>
+								<label class="control-label col-xs-3" for="prov-final-diag"><span
+									id="gender"> Provisional / Final Diagnosis</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										id="prov-final-diag" name="TS001"
+										placeholder="Provisional/Final Diagnosis">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="status"><span
-									class="required-label" id="gender"> Transferred From</span> :</label>
+								<label class="control-label col-xs-3" for="transfer-from"><span
+									id="transfer-from">Transferred From</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										id="transfer-from" name="TS002" placeholder="Transferred From">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="status"><span
-									class="required-label" id="gender"> Transfer Date / Time</span>
-									:</label>
+								<label class="control-label col-xs-3" for="transfer-date-time"><span
+									id="transfer-date-time"> Transfer Date/Time</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										id="transfer-date-time" name="TS003"
+										placeholder="Transfer Date/Time">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="status"><span
-									class="required-label" id="gender"> Cause of Transfer</span> :</label>
+								<label class="control-label col-xs-3" for="transfer-cause"><span
+									id="transfer-cause"> Cause of Transfer</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+									<input type="text" class="form-control input-sm" name="TS004"
+										placeholder="Cause of Transfer">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="status"><span
-									class="required-label" id="gender"> Name of Transfer
-										Doctor</span> :</label>
+								<label class="control-label col-xs-3" for="transfer-doctor"><span
+									id="transfer-doctor"> Name of Transfer Doctor</span>:</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
+										id="transfer-doctor" name="TS005"
+										placeholder="Name of Transfer Doctor">
 								</div>
 							</div>
-
-
-
 						</div>
 					</div>
 				</div>
-
-
 			</div>
 
 
@@ -186,43 +182,41 @@
 						</header>
 						<div class="form-horizontal">
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="visit_no">Pulse
-									:</label>
+								<label class="control-label col-xs-5" for="pulse">Pulse:</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="visit_no"
-										name="dt_of_birth" placeholder="PCV">
+									<input type="text" class="form-control input-sm" id="pulse"
+										name="TS006" placeholder="Pulse">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="visit_date">Temp
-									:</label>
+								<label class="control-label col-xs-5" for="temp">Temp :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm"
-										name="visit_date" id="visit_date" placeholder="ESR">
+									<input type="text" class="form-control input-sm" name="TS007"
+										id="temp" placeholder="Temperature">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="appt_no">ITB/NITB
+								<label class="control-label col-xs-5" for="itb-nitb">ITB/NITB
 									: </label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm"
-										name="appt_number" id="appt_number" placeholder="INR">
+									<input type="text" class="form-control input-sm" name="TS008"
+										id="itb-nitb" placeholder="ITB/NITB">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="doctor">Chest
+								<label class="control-label col-xs-5" for="chest">Chest
 									: </label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" name="doctor"
-										id="doctor" placeholder="Test">
+									<input type="text" class="form-control input-sm" name="TS009"
+										id="chest" placeholder="Chest">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="remark">U.
+								<label class="control-label col-xs-5" for="u-cath">U.
 									Cath. :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="treatment"
-										name="treatment" placeholder="Total Pleteles Count">
+									<input type="text" class="form-control input-sm" id="u-cath"
+										name="TS010" placeholder="Urinary Catheter">
 								</div>
 							</div>
 						</div>
@@ -235,42 +229,41 @@
 						</header>
 						<div class="form-horizontal">
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="visit_no">B.
-									P. :</label>
-								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="visit_no"
-										name="dt_of_birth" placeholder="PCV">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-5" for="visit_date">R.
-									R. :</label>
+								<label class="control-label col-xs-5" for="blood-pressure">Blood
+									Pressure :</label>
 								<div class="col-xs-4">
 									<input type="text" class="form-control input-sm"
-										name="visit_date" id="visit_date" placeholder="ESR">
+										id="blood-pressure" name="TS011" placeholder="Blood Pressure">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="appt_no">V/NV
-									: </label>
+								<label class="control-label col-xs-5" for="r-rate">R.Rate
+									:</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm"
-										name="appt_number" id="appt_number" placeholder="INR">
+									<input type="text" class="form-control input-sm" name="TS012"
+										id="r-rate" placeholder="Respiratory Rate">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="doctor">CVS :
+								<label class="control-label col-xs-5" for="v-nv">V/NV :
 								</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" name="doctor"
-										id="doctor" placeholder="Test">
+									<input type="text" class="form-control input-sm" name="TS013"
+										id="v-nv" placeholder="V/NV">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-5" for="remark">GCS :</label>
+								<label class="control-label col-xs-5" for="cvs">CVS : </label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="treatment"
-										name="treatment" placeholder="Total Pleteles Count">
+									<input type="text" class="form-control input-sm" name="TS014"
+										id="cvs" placeholder="CVS">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-5" for="gcs">GCS :</label>
+								<div class="col-xs-4">
+									<input type="text" class="form-control input-sm" id="gcs"
+										name="TS015" placeholder="GCS">
 								</div>
 							</div>
 						</div>
@@ -287,15 +280,16 @@
 
 						<div class="form-horizontal">
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="visit_no">Important
-									previous medications :</label>
+								<label class="control-label col-xs-3" for="previous-medication">Important
+									Previous Medications :</label>
 								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="visit_no"
-										name="dt_of_birth" placeholder="PCV">
+									<input type="text" class="form-control input-sm"
+										id="previous-medication" name="TS016"
+										placeholder="Important	Previous Medications">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-3" for="visit_date">Other
+								<label class="control-label col-xs-3" for="medical-problem">Other
 									associated medical problems:</label>
 								<div class="col-xs-3">
 									<button class="btn btn-primary btn-sm add-field-button">Add</button>
@@ -306,7 +300,8 @@
 									<div class="col-xs-3"></div>
 									<div class="col-xs-3">
 										<input type="text" class="form-control input-sm"
-											id="speciality" name="lab[]" placeholder="Laboratory">
+											id="medical-problem" name="TS017"
+											placeholder="Medical Problems">
 									</div>
 								</div>
 							</div>
@@ -327,8 +322,11 @@
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div style="padding-right: 16px;" class="pull-right">
-									<input type="reset" class="btn btn-default" value="Reset">
-									<input type="submit" class="btn btn-primary" value="Submit">
+									<button type="button" class="btn btn-warning reset-btn">Reset</button>
+									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
+									<button type="button" class="btn btn-success previous-btn"
+										data-id='<%=ipNumber%>'>Previous Notes</button>
+									<button type="button" class="btn btn-primary submit-btn">Submit</button>
 								</div>
 							</div>
 						</div>
@@ -353,7 +351,11 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
+	<script type="text/javascript" src="js/transfer-sum.js"></script>
 	<!-- End of JS -->
+
+	<%@include file="gnrc-modal.jsp"%>
+	<%@include file="success-error-msg.jsp"%>
 
 	<script type="text/javascript">
 		$(document)
@@ -374,7 +376,7 @@
 													$(wrapper)
 															.append(
 
-																	'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" id="speciality" name="medicine[]" placeholder="Medicine"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
+																	'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
 												}
 											});
 

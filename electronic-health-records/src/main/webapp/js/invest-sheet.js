@@ -177,20 +177,25 @@ $(document)
 																			'hide');
 
 															var table = $(
-																	'#fixedColumnExample')
+																	'#fixedColumnExample').removeAttr('width')
 																	.DataTable(
 																			{
+																				fixedColumns: true,
 																				scrollY : "50vh",
 																				scrollX : true,
 																				scrollCollapse : true,
 																				paging : false,
-																				fixedColumns : true
-
-																			});
-															/*
-															 * table
-															 * .fixedColumns(true);
-															 */
+																				columnsDefs: [
+																					{
+																						width:200, targets: 0
+																					}
+																				],
+																				
+																				
+																			}).columns.adjust().draw();
+															
+															  
+															 
 
 															$(
 																	'.myModal .modal-title')
