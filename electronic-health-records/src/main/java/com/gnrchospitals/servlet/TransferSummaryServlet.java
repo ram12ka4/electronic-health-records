@@ -1,8 +1,10 @@
 package com.gnrchospitals.servlet;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +22,10 @@ import com.gnrchospitals.daoimpl.SequenceNumberDaoImpl;
 import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.SequenceNumber;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @WebServlet(urlPatterns = "/transfer.do")
 public class TransferSummaryServlet extends HttpServlet {
@@ -40,12 +46,10 @@ public class TransferSummaryServlet extends HttpServlet {
 		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
 
 		try {
-
 			request.setAttribute("msg", msg);
 			request.setAttribute("token", token);
 			request.setAttribute("ipName", (String) session.getAttribute("ipNo"));
 			request.getRequestDispatcher("/WEB-INF/views/gnrc-transfer-sum.jsp").forward(request, response);
-
 		} catch (Exception ex) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", ex);
 		}
@@ -66,42 +70,51 @@ public class TransferSummaryServlet extends HttpServlet {
 		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
 		String paramType = request.getParameter("paramType") == null ? "" : request.getParameter("paramType");
 
-		String finalDiagnosis = request.getParameter("TS001") != null && !request.getParameter("TS001").isEmpty() ? ""
+		String finalDiagnosis = request.getParameter("TS001") == null || request.getParameter("TS001").isEmpty() ? ""
 				: keyValue.put("TS001", request.getParameter("TS001"));
-		String transferReport = request.getParameter("TS002") == null && !request.getParameter("TS002").isEmpty() ? ""
+		String transferReport = request.getParameter("TS002") == null || request.getParameter("TS002").isEmpty() ? ""
 				: keyValue.put("TS002", request.getParameter("TS002"));
-		String transferDateTime = request.getParameter("TS003") == null && !request.getParameter("TS003").isEmpty() ? ""
+		String transferDateTime = request.getParameter("TS003") == null || request.getParameter("TS003").isEmpty() ? ""
 				: keyValue.put("TS003", request.getParameter("TS003"));
-		String causeTransfer = request.getParameter("TS004") == null && !request.getParameter("TS004").isEmpty() ? ""
+		String causeTransfer = request.getParameter("TS004") == null || request.getParameter("TS004").isEmpty() ? ""
 				: keyValue.put("TS004", request.getParameter("TS004"));
-		String transferDoctorName = request.getParameter("TS005") == null && !request.getParameter("TS005").isEmpty()
+		String transferDoctorName = request.getParameter("TS005") == null || request.getParameter("TS005").isEmpty()
 				? ""
 				: keyValue.put("TS005", request.getParameter("TS005"));
-		String pulse = request.getParameter("TS006") == null && !request.getParameter("TS006").isEmpty() ? ""
-				: request.getParameter("TS006");
-		String temp = request.getParameter("TS007") == null && !request.getParameter("TS007").isEmpty() ? ""
-				: request.getParameter("TS007");
-		String itbNitb = request.getParameter("TS008") == null && !request.getParameter("TS008").isEmpty() ? ""
-				: request.getParameter("TS008");
-		String chest = request.getParameter("TS009") == null && !request.getParameter("TS009").isEmpty() ? ""
-				: request.getParameter("TS009");
-		String uCath = request.getParameter("TS010") == null && !request.getParameter("TS010").isEmpty() ? ""
-				: request.getParameter("TS010");
-		String bloodPressure = request.getParameter("TS011") == null && !request.getParameter("TS011").isEmpty() ? ""
-				: request.getParameter("TS011");
-		String rRate = request.getParameter("TS012") == null && !request.getParameter("TS012").isEmpty() ? ""
-				: request.getParameter("TS012");
-		String vNv = request.getParameter("TS013") == null && !request.getParameter("TS013").isEmpty() ? ""
-				: request.getParameter("TS013");
-		String cvs = request.getParameter("TS014") == null && !request.getParameter("TS014").isEmpty() ? ""
-				: request.getParameter("TS014");
-		String gcs = request.getParameter("TS015") == null && !request.getParameter("TS015").isEmpty() ? ""
-				: request.getParameter("TS015");
-		String ipm = request.getParameter("TS016") == null && !request.getParameter("TS016").isEmpty() ? ""
-				: request.getParameter("TS016");
+		String pulse = request.getParameter("TS006") == null || request.getParameter("TS006").isEmpty() ? ""
+				: keyValue.put("TS006", request.getParameter("TS006"));
+		String temp = request.getParameter("TS007") == null || request.getParameter("TS007").isEmpty() ? ""
+				: keyValue.put("TS007", request.getParameter("TS007"));
+		String itbNitb = request.getParameter("TS008") == null || request.getParameter("TS008").isEmpty() ? ""
+				: keyValue.put("TS008", request.getParameter("TS008"));
+		String chest = request.getParameter("TS009") == null || request.getParameter("TS009").isEmpty() ? ""
+				: keyValue.put("TS009", request.getParameter("TS009"));
+		String uCath = request.getParameter("TS010") == null || request.getParameter("TS010").isEmpty() ? ""
+				: keyValue.put("TS010", request.getParameter("TS010"));
+		String bloodPressure = request.getParameter("TS011") == null || request.getParameter("TS011").isEmpty() ? ""
+				: keyValue.put("TS011", request.getParameter("TS011"));
+		String rRate = request.getParameter("TS012") == null || request.getParameter("TS012").isEmpty() ? ""
+				: keyValue.put("TS012", request.getParameter("TS012"));
+		String vNv = request.getParameter("TS013") == null || request.getParameter("TS013").isEmpty() ? ""
+				: keyValue.put("TS013", request.getParameter("TS013"));
+		String cvs = request.getParameter("TS014") == null || request.getParameter("TS014").isEmpty() ? ""
+				: keyValue.put("TS014", request.getParameter("TS014"));
+		String gcs = request.getParameter("TS015") == null || request.getParameter("TS015").isEmpty() ? ""
+				: keyValue.put("TS015", request.getParameter("TS015"));
+		String ipm = request.getParameter("TS016") == null || request.getParameter("TS016").isEmpty() ? ""
+				: keyValue.put("TS016", request.getParameter("TS016"));
 		String[] TS017 = request.getParameterValues("TS017");
 
-		String amp = Arrays.toString(TS017);
+		System.out.println("Array is : " + TS017[0]);
+
+		if (TS017 != null) {
+			for (String value : TS017) {
+				if (!value.equals("")) {
+					String amp = Arrays.toString(TS017);
+					keyValue.put("TS017", amp);
+				}
+			}
+		}
 
 		try {
 
@@ -123,7 +136,7 @@ public class TransferSummaryServlet extends HttpServlet {
 			System.out.println("cvs : " + cvs);
 			System.out.println("gcs : " + gcs);
 			System.out.println("ipm : " + ipm);
-			System.out.println("amp : " + amp);
+			// System.out.println("amp : " + amp);
 
 			patient = Patient.getInstance();
 			emr = Emr.getInstance();

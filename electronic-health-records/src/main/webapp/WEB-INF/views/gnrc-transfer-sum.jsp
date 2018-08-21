@@ -65,7 +65,7 @@
 
 
 	<!-- User Registration Form -->
-	<form action="" method="post">
+	<form id="transfer-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -73,8 +73,7 @@
 				<div class="col-md-12">
 					<div class="admin-content-con">
 						<header class="clearfix">
-							<h5 class="pull-left">TRANSFER SUMMARY (Neuro Intensive Care
-								Unit)</h5>
+							<h5 class="pull-left">TRANSFER SUMMARY</h5>
 							<h5 class="pull-right">QR/28-1</h5>
 						</header>
 
@@ -147,7 +146,7 @@
 									id="transfer-date-time"> Transfer Date/Time</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm"
-										id="transfer-date-time" name="TS003"
+										id="fromDate" name="TS003"
 										placeholder="Transfer Date/Time">
 								</div>
 							</div>
@@ -325,7 +324,7 @@
 									<button type="button" class="btn btn-warning reset-btn">Reset</button>
 									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
 									<button type="button" class="btn btn-success previous-btn"
-										data-id='<%=ipNumber%>'>Previous Notes</button>
+										data-id='<%=ipNumber%>'>Previous Summary</button>
 									<button type="button" class="btn btn-primary submit-btn">Submit</button>
 								</div>
 							</div>
