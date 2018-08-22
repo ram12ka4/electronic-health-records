@@ -3,7 +3,9 @@ package com.gnrchospitals.report;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +27,14 @@ public class TransferSummaryReport extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		List<String> list = new ArrayList<>();
+		
+		list.add("Ram");
+		list.add("Banajit Da");
+		list.add("debashis Da");
+		list.add("Bidyout da");
+		
+		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		try {
@@ -36,8 +46,10 @@ public class TransferSummaryReport extends HttpServlet {
 
 			document.open();
 
-			document.add(new Paragraph("Hello World"));
-			document.add(new Paragraph(new Date().toString()));
+			PDFCreator.addMetaData(document, "Transfer Summary");
+			PDFCreator.addtitlePage(document, "Transfer Summary");
+			PDFCreator.addContent(document, list);
+			//document.add(new Paragraph(new Date().toString()));
 
 			document.close();
 

@@ -1,10 +1,8 @@
 package com.gnrchospitals.servlet;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,10 +20,6 @@ import com.gnrchospitals.daoimpl.SequenceNumberDaoImpl;
 import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.SequenceNumber;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 
 @WebServlet(urlPatterns = "/transfer.do")
 public class TransferSummaryServlet extends HttpServlet {

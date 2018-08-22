@@ -3,6 +3,9 @@ package com.gnrchospitals.report;
 import java.io.IOException;
 import java.nio.charset.MalformedInputException;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.gnrchospitals.context.Context;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -92,9 +95,13 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			header.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
 
 			System.out.println(HeaderFooterPageEvent.class);
-			
+
+			HttpServletRequest request = Context.getCurrentinstance().getRequest();
+			String path = request.getServletContext().getRealPath("/images");
+
 			// add image
-			Image logo = Image.getInstance("/images/sort_asc.png");
+			System.out.println("Absolute Path is : " + path);
+			Image logo = Image.getInstance(path + "/favicon.jpg");
 			header.addCell(logo);
 
 			// add text
