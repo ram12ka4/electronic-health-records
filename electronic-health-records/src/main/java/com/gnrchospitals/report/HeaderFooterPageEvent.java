@@ -110,8 +110,8 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			text.setPaddingLeft(10);
 			text.setBorder(Rectangle.BOTTOM);
 			text.setBorderColor(BaseColor.LIGHT_GRAY);
-			text.addElement(new Phrase("iText PDF Header Footer Example", new Font(Font.FontFamily.HELVETICA, 12)));
-			text.addElement(new Phrase("https://memorynotfound.com", new Font(Font.FontFamily.HELVETICA, 8)));
+			text.addElement(new Phrase("GNRC Ltd.", new Font(Font.FontFamily.HELVETICA, 12)));
+			text.addElement(new Phrase("https://gnrchospitals.com", new Font(Font.FontFamily.HELVETICA, 8)));
 			header.addCell(text);
 
 			// write content

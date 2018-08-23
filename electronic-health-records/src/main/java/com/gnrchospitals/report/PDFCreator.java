@@ -58,61 +58,47 @@ public class PDFCreator {
 		nameMRDTable.addCell(getCell("Name : NAOREM SURAJ KUMAR", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
 		nameMRDTable.addCell(getCell("IP : IP/171222/000013", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
 		nameMRDTable.addCell(getCell("MRD No : SM/171222/000074", PdfPCell.ALIGN_RIGHT, PDFCreator.SMALL_BOLD));
-		nameMRDTable.setSpacingAfter(30f);
+		nameMRDTable.setSpacingAfter(50f);
 		document.add(nameMRDTable);
 
+		PdfPTable table3 = new PdfPTable(2);
+		table3.setWidthPercentage(100);
+		table3.addCell(getCell3("Provisional / Final Diagnosis : \t\t", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("NAOREM SURAJ KUMAR", PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
+		table3.addCell(getCell3("Transferred form\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("ICU", PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
+		table3.addCell(getCell3("Transfer Date/Time\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3(new Date().toString(), PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
+		table3.addCell(getCell3("Cause of Transfer\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3(new Date().toString(), PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
+		table3.addCell(getCell3("Name of Trasfer Doctor\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3(new Date().toString(), PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
+		table3.setSpacingAfter(50f);
+		document.add(table3);
 
-		PdfPTable table3 = new PdfPTable(1);
-		PdfPCell cell3 = new PdfPCell();
-		Chunk reportTitle = new Chunk("Provisional / Final Diagnosis : \t\t", PDFCreator.SMALL_BOLD);
-		Chunk reportValue = new Chunk("NAOREM SURAJ KUMAR", PDFCreator.NORMAL_FONT);
-		
-		Phrase phrase = new Phrase();
-		phrase.add(reportTitle);
-		phrase.add(reportValue);
-
-		paragraph.add(phrase);
-		paragraph.setAlignment(Element.ALIGN_LEFT);
-		
-		table3.addCell(paragraph);
-		
-		/*preface.add(new Phrase("Provisional / Final Diagnosis : \t\t", PDFCreator.SMALL_BOLD));
-		preface.add(new Phrase("NAOREM SURAJ KUMAR", PDFCreator.NORMAL_FONT));
-		*///addEmptyLine(paragraph, 1);
-		paragraph.add(new Phrase("Transferred form\t\t: ", PDFCreator.SMALL_BOLD));
-		paragraph.add(new Phrase("ICU", PDFCreator.NORMAL_FONT));
-		addEmptyLine(paragraph, 1);
-		paragraph.add(new Phrase("Transfer Date/Time\t\t: ", PDFCreator.SMALL_BOLD));
-		paragraph.add(new Phrase(new Date().toString(), PDFCreator.NORMAL_FONT));
-		addEmptyLine(paragraph, 1);
-		paragraph.add(new Phrase("Cause of Transfer\t\t: ", PDFCreator.SMALL_BOLD));
-		paragraph.add(new Phrase(new Date().toString(), PDFCreator.NORMAL_FONT));
-		addEmptyLine(paragraph, 1);
-		paragraph.add(new Phrase("Name of Trasfer Doctor\t\t: ", PDFCreator.SMALL_BOLD));
-		paragraph.add(new Phrase(new Date().toString(), PDFCreator.NORMAL_FONT));
-		
-		
 		PdfPTable vitals = new PdfPTable(2);
 		vitals.setWidthPercentage(100);
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		vitals.addCell(getCell("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
+		PdfPCell vitalCell = new PdfPCell(new Phrase("Vital", PDFCreator.HEADER_FONT));
+		vitalCell.setColspan(2);
+		vitalCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		vitalCell.setPadding(10);
+		vitals.addCell(vitalCell);
+		vitals.addCell(getCell3("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("Temp	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("ITB/NITB : 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("Chest	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("U. Cath	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("B. P.	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("R. R.	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("V/NB	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("CVS	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("GCS	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
 		vitals.setSpacingAfter(30f);
 		document.add(vitals);
 
-		
-		
-		
-		document.add(paragraph);
+		//document.add(paragraph);
 
-		document.newPage();
+		//document.newPage();
 	}
 
 	private static void addEmptyLine(Paragraph paragraph, int number) {
@@ -130,11 +116,11 @@ public class PDFCreator {
 		return cell;
 	}
 
-	public static PdfPCell getCell(Paragraph paragraph) {
-		PdfPCell cell = new PdfPCell(paragraph);
-		cell.setPadding(0);
-		//cell.setHorizontalAlignment(alignment);
-		cell.setBorder(PdfPCell.NO_BORDER);
+	public static PdfPCell getCell3(String text, int alignment, Font font) {
+		PdfPCell cell = new PdfPCell(new Phrase(text, font));
+		cell.setPadding(10);
+		cell.setVerticalAlignment(alignment);
+		cell.setBorder(PdfPCell.BOX);
 		return cell;
 	}
 }
