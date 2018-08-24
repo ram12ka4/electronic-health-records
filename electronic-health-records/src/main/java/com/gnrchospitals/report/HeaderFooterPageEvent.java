@@ -30,7 +30,8 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 	private Image total;
 
 	public void onOpenDocument(PdfWriter writer, Document document) {
-		t = writer.getDirectContent().createTemplate(30, 16);
+		//t = writer.getDirectContent().createTemplate(30, 16);
+		t = writer.getDirectContent().createTemplate(30, 1);
 		try {
 			total = Image.getInstance(t);
 			total.setRole(PdfName.ARTIFACT);
@@ -84,14 +85,14 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
 	private void addHeader(PdfWriter writer) {
 		// TODO Auto-generated method stub
-		PdfPTable header = new PdfPTable(2);
+		PdfPTable header = new PdfPTable(1);
 
 		try {
-			header.setWidths(new int[] { 2, 24 });
+			//header.setWidths(new int[] { 2, 24 });
 			header.setTotalWidth(527);
 			header.setLockedWidth(true);
-			header.getDefaultCell().setFixedHeight(40);
-			header.getDefaultCell().setBorder(Rectangle.BOTTOM);
+			header.getDefaultCell().setFixedHeight(100);
+			header.getDefaultCell().setBorder(Rectangle.BOX);
 			header.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
 
 			System.out.println(HeaderFooterPageEvent.class);
@@ -99,20 +100,35 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			HttpServletRequest request = Context.getCurrentinstance().getRequest();
 			String path = request.getServletContext().getRealPath("/images");
 
-			// add image
-			System.out.println("Absolute Path is : " + path);
-			Image logo = Image.getInstance(path + "/favicon.jpg");
-			header.addCell(logo);
-
 			// add text
-			PdfPCell text = new PdfPCell();
+			/*PdfPCell text = new PdfPCell();
 			text.setPaddingBottom(15);
 			text.setPaddingLeft(10);
 			text.setBorder(Rectangle.BOTTOM);
 			text.setBorderColor(BaseColor.LIGHT_GRAY);
 			text.addElement(new Phrase("GNRC Ltd.", new Font(Font.FontFamily.HELVETICA, 12)));
 			text.addElement(new Phrase("https://gnrchospitals.com", new Font(Font.FontFamily.HELVETICA, 8)));
-			header.addCell(text);
+			header.addCell(text);*/
+			
+			
+			// add image
+			
+			header.setPaddingTop(0);
+			
+		
+			System.out.println("Absolute Path is : " + path);
+			Image logo = Image.getInstance(path + "/favicon.jpg");
+			PdfPCell cell = new PdfPCell(logo, true);
+			//cell.setPadding(2);
+			cell.setPadding(0);
+			cell.setFixedHeight(90f);
+			
+			cell.setBorder(PdfPCell.BOTTOM);
+			cell.setBorderColor(BaseColor.LIGHT_GRAY);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			header.addCell(cell);
+
+		
 
 			// write content
 			header.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());

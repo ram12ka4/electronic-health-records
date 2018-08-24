@@ -49,8 +49,10 @@ public class PDFCreator {
 
 		PdfPTable headerTable = new PdfPTable(1);
 		headerTable.setWidthPercentage(100);
+		//headerTable.setSpacingBefore(30);
+		headerTable.setSpacingAfter(30);
+		document.add(headerTable);
 		headerTable.addCell(getCell("TRANSFER SUMMARY", PdfPCell.ALIGN_CENTER, PDFCreator.HEADER_FONT));
-		headerTable.setSpacingAfter(30f);
 		document.add(headerTable);
 
 		PdfPTable nameMRDTable = new PdfPTable(3);
@@ -63,36 +65,36 @@ public class PDFCreator {
 
 		PdfPTable table3 = new PdfPTable(2);
 		table3.setWidthPercentage(100);
-		table3.addCell(getCell3("Provisional / Final Diagnosis : \t\t", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("Provisional / Final Diagnosis : \t\t", PdfPCell.ALIGN_LEFT, PDFCreator.NORMAL_FONT));
 		table3.addCell(getCell3("NAOREM SURAJ KUMAR", PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
-		table3.addCell(getCell3("Transferred form\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("Transferred form\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.NORMAL_FONT));
 		table3.addCell(getCell3("ICU", PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
-		table3.addCell(getCell3("Transfer Date/Time\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("Transfer Date/Time\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.NORMAL_FONT));
 		table3.addCell(getCell3(new Date().toString(), PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
-		table3.addCell(getCell3("Cause of Transfer\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("Cause of Transfer\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.NORMAL_FONT));
 		table3.addCell(getCell3(new Date().toString(), PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
-		table3.addCell(getCell3("Name of Trasfer Doctor\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.SMALL_BOLD));
+		table3.addCell(getCell3("Name of Trasfer Doctor\t\t : ", PdfPCell.ALIGN_LEFT, PDFCreator.NORMAL_FONT));
 		table3.addCell(getCell3(new Date().toString(), PdfPCell.ALIGN_MIDDLE, PDFCreator.NORMAL_FONT));
 		table3.setSpacingAfter(50f);
 		document.add(table3);
 
 		PdfPTable vitals = new PdfPTable(2);
 		vitals.setWidthPercentage(100);
-		PdfPCell vitalCell = new PdfPCell(new Phrase("Vital", PDFCreator.HEADER_FONT));
+		PdfPCell vitalCell = new PdfPCell(new Phrase("Vitals", PDFCreator.HEADER_FONT));
 		vitalCell.setColspan(2);
 		vitalCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		vitalCell.setPadding(10);
 		vitals.addCell(vitalCell);
-		vitals.addCell(getCell3("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("Temp	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("ITB/NITB : 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("Chest	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("U. Cath	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("B. P.	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("R. R.	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("V/NB	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("CVS	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
-		vitals.addCell(getCell3("GCS	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.SMALL_BOLD));
+		vitals.addCell(getCell3("Pulse	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("Temp	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("ITB/NITB : 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("Chest	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("U. Cath	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("B. P.	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("R. R.	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("V/NB	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("CVS	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
+		vitals.addCell(getCell3("GCS	: 234", PdfPCell.ALIGN_CENTER, PDFCreator.NORMAL_FONT));
 		vitals.setSpacingAfter(30f);
 		document.add(vitals);
 

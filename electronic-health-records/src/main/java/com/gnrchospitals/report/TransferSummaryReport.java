@@ -38,7 +38,7 @@ public class TransferSummaryReport extends HttpServlet {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		try {
-			Document document = new Document(PageSize.A4, 36, 36, 90, 36);
+			Document document = new Document(PageSize.A4, 36, 36, 125, 36);
 			PdfWriter writer = PdfWriter.getInstance(document, baos);
 			
 			HeaderFooterPageEvent event = new HeaderFooterPageEvent();
