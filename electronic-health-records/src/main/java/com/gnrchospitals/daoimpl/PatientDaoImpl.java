@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -696,6 +697,69 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, ipNumber);
 
+		return ps;
+	}
+
+	@Override
+	public List<String> getPreviousRecordNo(String paramaterType) throws SQLException {
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement13(con, paramaterType);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				do {
+					list.add(rs.getString(1));
+					list.add(rs.getString(2));
+					list.add(rs.getString(3));
+				} while (rs.next());
+			}
+		}
+		return list;
+	}
+
+	private PreparedStatement createPreparedStatement13(Connection con, String parameterType) throws SQLException {
+
+		String sql = "SELECT DISTINCT EHR_DTL_CODE, to_char(EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, EHR_CRT_DT FROM EMR_HEALTH_RECORD WHERE EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY EHR_CRT_DT DESC";
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, parameterType);
+
+		return ps;
+	}
+
+	@Override
+	public Map<String, String> getPreviousData(String edNumber, String attrType) throws SQLException {
+		System.out.println("In Get Previous Data");
+
+		Map<String, String> map = new HashMap<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement14(con, edNumber, attrType);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				do {
+					map.put(rs.getString(1), rs.getString(2));
+				} while (rs.next());
+			}
+		}
+
+		return map;
+	}
+
+	private PreparedStatement createPreparedStatement14(Connection con, String edNumber, String attrType)
+			throws SQLException {
+		String sql = "SELECT EHR_ATTRB_CODE, EHR_ATTRB_VALUE FROM EMR_HEALTH_RECORD WHERE  EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) AND EHR_DTL_CODE = ?";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, attrType);
+		ps.setString(2, edNumber);
 		return ps;
 	}
 

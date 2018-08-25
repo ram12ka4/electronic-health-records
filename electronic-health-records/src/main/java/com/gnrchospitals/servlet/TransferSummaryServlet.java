@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -63,7 +64,8 @@ public class TransferSummaryServlet extends HttpServlet {
 		String userName = (String) session.getAttribute("user") == null ? "" : (String) session.getAttribute("user");
 		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
 		String paramType = request.getParameter("paramType") == null ? "" : request.getParameter("paramType");
-
+		String edNo = request.getParameter("edNo") == null || request.getParameter("edNo").isEmpty() ? ""
+				: request.getParameter("edNo");
 		String finalDiagnosis = request.getParameter("TS001") == null || request.getParameter("TS001").isEmpty() ? ""
 				: keyValue.put("TS001", request.getParameter("TS001"));
 		String transferReport = request.getParameter("TS002") == null || request.getParameter("TS002").isEmpty() ? ""
@@ -99,12 +101,12 @@ public class TransferSummaryServlet extends HttpServlet {
 				: keyValue.put("TS016", request.getParameter("TS016"));
 		String[] TS017 = request.getParameterValues("TS017");
 
-		System.out.println("Array is : " + TS017[0]);
+		// System.out.println("Array is : " + TS017[0]);
 
 		if (TS017 != null) {
 			for (String value : TS017) {
 				if (!value.equals("")) {
-					String amp = Arrays.toString(TS017);
+					String amp = Arrays.toString(TS017).replace(",", "-");
 					keyValue.put("TS017", amp);
 				}
 			}
@@ -130,72 +132,89 @@ public class TransferSummaryServlet extends HttpServlet {
 			System.out.println("cvs : " + cvs);
 			System.out.println("gcs : " + gcs);
 			System.out.println("ipm : " + ipm);
-			// System.out.println("amp : " + amp);
+			System.out.println("ED No : " + edNo);
 
-			patient = Patient.getInstance();
-			emr = Emr.getInstance();
+			if ("GET_PREV_ED_NO".equals(action)) {
 
-			System.out.println("Patient Data" + patient);
-			System.out.println("EMR Data " + emr);
+				System.out.println("In if part");
+				List<String> list = patientDao.getPreviousRecordNo(paramType);
+				System.out.println("KEY VALUE" + list);
+				out.println(list);
+			} else if ("GET_PREV_TRANSFER_RECORD".equals(action)) {
 
-			boolean isIpPresent = patientDao.getValidatedIp(ipNo);
+				System.out.println("In if part");
+				Map<String, String> map = patientDao.getPreviousData(edNo, paramType);
+				System.out.println("KEY VALUE" + map);
+				out.println(map);
+			} else {
 
-			System.out.println("IS IP PRESENT : " + isIpPresent);
-
-			String emrNo = "";
-
-			// System.out.println("Sequence Number : " + emrSeqNum);
-
-			if (!isIpPresent) {
-
-				SequenceNumber emrSeqNum = new SequenceNumber("EMR", userName);
-				emrNo = sequenceNumberDao.getSequenceNumber(emrSeqNum);
+				patient = Patient.getInstance();
 				emr = Emr.getInstance();
-				System.out.println("EMR Instance ID before insertEmrClinicalData " + emr);
 
-				emr.setEmrNo(emrNo);
-				emr.setVisitNo("VT01");
-				emr.setEncounterNo("1");
-				emr.setCreateUser(userName);
-				emr.setUpdateUser(userName);
-				patient.setEmr(emr);
+				System.out.println("Patient Data" + patient);
+				System.out.println("EMR Data " + emr);
 
-				boolean isEmrClinicalDataInsert = patientDao.insertEmrClinicalData(patient);
+				boolean isIpPresent = patientDao.getValidatedIp(ipNo);
 
-				if (!isEmrClinicalDataInsert) {
-					response.sendRedirect("/WEB-INF/views/gnrc-transfer-sum.jsp?token=fail&msg=Something went wrong");
+				System.out.println("IS IP PRESENT : " + isIpPresent);
+
+				String emrNo = "";
+
+				// System.out.println("Sequence Number : " + emrSeqNum);
+
+				if (!isIpPresent) {
+
+					SequenceNumber emrSeqNum = new SequenceNumber("EMR", userName);
+					emrNo = sequenceNumberDao.getSequenceNumber(emrSeqNum);
+					emr = Emr.getInstance();
+					System.out.println("EMR Instance ID before insertEmrClinicalData " + emr);
+
+					emr.setEmrNo(emrNo);
+					emr.setVisitNo("VT01");
+					emr.setEncounterNo("1");
+					emr.setCreateUser(userName);
+					emr.setUpdateUser(userName);
+					patient.setEmr(emr);
+
+					boolean isEmrClinicalDataInsert = patientDao.insertEmrClinicalData(patient);
+
+					if (!isEmrClinicalDataInsert) {
+						response.sendRedirect(
+								"/WEB-INF/views/gnrc-transfer-sum.jsp?token=fail&msg=Something went wrong");
+					}
+
+				} else {
+					boolean emrStatus = patientDao.findEmrByIpNumber(ipNo);
+					System.out.println("Find Emr status : " + emrStatus);
+					emrNo = patient.getEmr().getEmrNo();
 				}
 
-			} else {
-				boolean emrStatus = patientDao.findEmrByIpNumber(ipNo);
-				System.out.println("Find Emr status : " + emrStatus);
-				emrNo = patient.getEmr().getEmrNo();
-			}
+				SequenceNumber emrDetSeqNum = new SequenceNumber("EMRDET", userName);
 
-			SequenceNumber emrDetSeqNum = new SequenceNumber("EMRDET", userName);
+				System.out.println("EMRDET Sequence Number : " + emrDetSeqNum);
 
-			System.out.println("EMRDET Sequence Number : " + emrDetSeqNum);
+				String emrDetNo = sequenceNumberDao.getSequenceNumber(emrDetSeqNum);
 
-			String emrDetNo = sequenceNumberDao.getSequenceNumber(emrDetSeqNum);
+				emr.setCreateUser(userName);
+				emr.setUpdateUser(userName);
+				emr.setKeyValue(keyValue);
+				emr.setEmrDetNo(emrDetNo);
+				patient.setEmr(emr);
 
-			emr.setCreateUser(userName);
-			emr.setUpdateUser(userName);
-			emr.setKeyValue(keyValue);
-			emr.setEmrDetNo(emrDetNo);
-			patient.setEmr(emr);
+				boolean isEmrHealthDataInsert = patientDao.insertEmrHealthData(patient);
 
-			boolean isEmrHealthDataInsert = patientDao.insertEmrHealthData(patient);
+				System.out.println("Emr Health Data : " + isEmrHealthDataInsert);
 
-			System.out.println("Emr Health Data : " + isEmrHealthDataInsert);
+				long end = System.currentTimeMillis();
 
-			long end = System.currentTimeMillis();
+				System.out.println("Time takes to process this : " + (end - start) + " ms");
 
-			System.out.println("Time takes to process this : " + (end - start) + " ms");
+				if (isEmrHealthDataInsert) {
+					response.sendRedirect("/transfer.do?token=success&msg=Data have been added successfully");
+				} else {
+					response.sendRedirect("/transfer.do?token=fail&msg=Something went wrong");
+				}
 
-			if (isEmrHealthDataInsert) {
-				response.sendRedirect("/transfer.do?token=success&msg=Data have been added successfully");
-			} else {
-				response.sendRedirect("/transfer.do?token=fail&msg=Something went wrong");
 			}
 
 		} catch (Exception ex) {

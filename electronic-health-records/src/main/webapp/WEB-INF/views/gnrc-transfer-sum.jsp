@@ -117,6 +117,10 @@
 					<div class="admin-content-con">
 						<header class="clearfix">
 							<h5 class="pull-left">TRANSFER SUMMARY</h5>
+							<div class="form-group pull-right">
+								<select class="form-control input-sm sel-prev-record"
+									style="display: none;"></select>
+							</div>
 
 						</header>
 
@@ -145,9 +149,8 @@
 								<label class="control-label col-xs-3" for="transfer-date-time"><span
 									id="transfer-date-time"> Transfer Date/Time</span> :</label>
 								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm"
-										id="fromDate" name="TS003"
-										placeholder="Transfer Date/Time">
+									<input type="text" class="form-control input-sm" id="fromDate"
+										name="TS003" placeholder="Transfer Date/Time">
 								</div>
 							</div>
 							<div class="form-group">

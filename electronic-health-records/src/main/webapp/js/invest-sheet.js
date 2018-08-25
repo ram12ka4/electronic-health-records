@@ -11,7 +11,7 @@ $(document)
 
 					var req = $
 							.ajax({
-								url : "/invest.do",
+								url : "invest.do",
 								type : "post",
 								datatype : "text",
 								/*
