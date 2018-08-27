@@ -96,7 +96,7 @@ $(function() {
 				
 				alert(data);
 				arr = data.replace("{","").replace("}", "").split(",");
-				alert("Length : " + arr.length);
+				//alert("Length : " + arr.length);
 				
 				$('.form-control')
 				.each(
@@ -129,23 +129,35 @@ $(function() {
 									//alert("Expr Value  : " + expr + " Key Value : " + key + " Result : " + key.localeCompare(expr));
 									
 									if (key.localeCompare(expr) == 0){
-										//alert("Compared : " + expr);
+										//alert("Compared Key : " + key);
 										
-										//var otherValue = new Array();
+										var otherValue = new Array();
 										
-										/*if (key.localeCompare("TS017")){
+										if (key.localeCompare("TS017") == 0){
+											//alert("In If clause");
 											otherValue = value.replace("[", "").replace("]", "").split("-");
 											var j;
+											
+											//$('.input-field-wrap .medical-problem').css('display', 'none');
+											//$('.remove_field').remove();
+											
+											$('.remove_field').trigger('click');
+											
+											
 											for (j=0; j<otherValue.length; j++){
-												$(".input-field-wrap")
+												alert("Counter : " + j);
+												/*$(".input-field-wrap")
 												.append(
 														
-												'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" value="ram" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
+												'<div class="form-group"><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm medical-problem" value=\"'+ otherValue[j] +'\" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box */
+											$('.add-field-button').trigger('click', [otherValue[j]]);
+												
 											}
 										} else {
+											//alert("In else clause");
 											$(this).val(value);
-										}*/
-										$(this).val(value);
+										}
+										//$(this).val(value);
 										
 									}
 								}
@@ -164,5 +176,27 @@ $(function() {
 		});
 
 	});
+	
+	var y =1;
+	
+	$('.add-field-button').on('click', function(e, value) { //on add input button click
+			alert("Value is : " + value);	
+			e.preventDefault();
+				if (y < 10) { //max input box allowed
+					y++; //text box increment
+					$('.input-field-wrap')
+							.append(
+
+									'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" value=\"'+ value +'\" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
+				}
+			});
+
+	
+	$('.input-field-wrap').on("click", function(e) { //user click on remove text
+		alert("remove done");
+				e.preventDefault();
+				$(this).parent('div').remove();
+				y--;
+			});
 
 });

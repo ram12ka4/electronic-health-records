@@ -301,7 +301,7 @@
 								<div class="form-group">
 									<div class="col-xs-3"></div>
 									<div class="col-xs-3">
-										<input type="text" class="form-control input-sm"
+										<input type="text" class="form-control input-sm medical-problem"
 											id="medical-problem" name="TS017"
 											placeholder="Medical Problems">
 									</div>
@@ -368,7 +368,7 @@
 							var wrapper = $(".input-field-wrap"); //Fields wrapper
 							var add_button = $(".add-field-button"); //Add button ID
 
-							var x = 1; //initlal text box count
+						/* 	var x = 1; //initlal text box count
 							$(add_button)
 									.click(
 											function(e) { //on add input button click
@@ -380,14 +380,14 @@
 
 																	'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
 												}
-											});
+											}); */
 
-							$(wrapper).on("click", ".remove_field",
+							/* $(wrapper).on("click", ".remove_field",
 									function(e) { //user click on remove text
 										e.preventDefault();
 										$(this).parent('div').remove();
 										x--;
-									});
+									}); */
 
 						});
 	</script>
