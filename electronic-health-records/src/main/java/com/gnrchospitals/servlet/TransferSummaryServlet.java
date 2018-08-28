@@ -134,7 +134,13 @@ public class TransferSummaryServlet extends HttpServlet {
 			System.out.println("ipm : " + ipm);
 			System.out.println("ED No : " + edNo);
 
-			if ("GET_PREV_ED_NO".equals(action)) {
+			if ("UPDATE_RECORD".equals(action)) {
+
+				System.out.println("In UPDATE_RECORD part");
+				List<String> list = patientDao.getPreviousRecordNo(paramType);
+				System.out.println("KEY VALUE" + list);
+				out.println(list);
+			} else if ("GET_PREV_ED_NO".equals(action)) {
 
 				System.out.println("In if part");
 				List<String> list = patientDao.getPreviousRecordNo(paramType);

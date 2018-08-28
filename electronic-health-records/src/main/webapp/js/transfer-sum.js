@@ -1,6 +1,7 @@
 $(function() {
 
 	var arr = new Array();
+	$('.update-btn').remove();
 
 	var req = $
 			.ajax({
@@ -32,6 +33,8 @@ $(function() {
 								arr[i] + " <------> " + arr[i + 1]));
 						i += 3;
 					}
+					
+					
 
 				},
 				failure : function(data) {
@@ -76,127 +79,220 @@ $(function() {
 
 	});
 
-	$(document).on('change', '.sel-prev-record', function() {
+	$(document)
+			.on(
+					'change',
+					'.sel-prev-record',
+					function() {
 
-		var edId = $.trim($(this).val());
-		var arr = new Array();
-		var index = 0;
+						var edId = $.trim($(this).val());
+						var arr = new Array();
+						var index = 0;
 
-		var req = $.ajax({
+						var req = $
+								.ajax({
 
-			url : 'transfer.do',
-			type : 'post',
-			datatype : 'json',
-			data : {
-				ACTION : 'GET_PREV_TRANSFER_RECORD',
-				paramType : 'TSNS',
-				edNo : edId
-			},
-			success : function(data) {
-				
-				alert(data);
-				arr = data.replace("{","").replace("}", "").split(",");
-				//alert("Length : " + arr.length);
-				
-				$('.form-control')
-				.each(
-						function() {
+									url : 'transfer.do',
+									type : 'post',
+									datatype : 'json',
+									data : {
+										ACTION : 'GET_PREV_TRANSFER_RECORD',
+										paramType : 'TSNS',
+										edNo : edId
+									},
+									success : function(data) {
 
-							var string = $(this)
-									.attr(
-											'name');
-
-							//alert(string);
-
-							if (string !== undefined
-									&& string !== null
-									&& string.length) {
-								
-								var i;
-								
-								for (i=0; i<arr.length; i++){
-									
-									var keyValue  = arr[i].split("="); 
-
-									var key = keyValue[0].trim();
-									var value = keyValue[1].trim();
-									
-									
-									
-									var expr = string.trim();
-									
-									//alert("Array Value length : " + value.length);
-									//alert("Expr Value  : " + expr + " Key Value : " + key + " Result : " + key.localeCompare(expr));
-									
-									if (key.localeCompare(expr) == 0){
-										//alert("Compared Key : " + key);
+										alert(data);
+										arr = data.replace("{", "").replace(
+												"}", "").split(",");
 										
-										var otherValue = new Array();
+										alert("Length : " + arr.length);
 										
-										if (key.localeCompare("TS017") == 0){
-											//alert("In If clause");
-											otherValue = value.replace("[", "").replace("]", "").split("-");
-											var j;
-											
-											//$('.input-field-wrap .medical-problem').css('display', 'none');
-											//$('.remove_field').remove();
-											
-											$('.remove_field').trigger('click');
-											
-											
-											for (j=0; j<otherValue.length; j++){
-												alert("Counter : " + j);
-												/*$(".input-field-wrap")
-												.append(
-														
-												'<div class="form-group"><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm medical-problem" value=\"'+ otherValue[j] +'\" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box */
-											$('.add-field-button').trigger('click', [otherValue[j]]);
+										if (arr.length === 1){
+
 												
-											}
+												resetValue();
+												$('.remove_field').trigger('click');
+											
+											
+												$('.update-btn').remove();
+												$('.add-btn').append('<button type="button" class="btn btn-primary submit-btn">Submit</button>');
+											
 										} else {
-											//alert("In else clause");
-											$(this).val(value);
-										}
-										//$(this).val(value);
+											
+											alert(" UPdate div exists : " + $(".update-btn").length);
+											
+											if ($(".update-btn").length === 0){
+												$('.submit-btn').remove();
+												$('.add-btn').append('<button type="button" class="btn btn-primary update-btn">Update</button>');
+											}
+											
+											
+
+										$('.form-control')
+												.each(
+														function() {
+
+															var string = $(this)
+																	.attr(
+																			'name');
+
+															// alert(string);
+
+															if (string !== undefined
+																	&& string !== null
+																	&& string.length) {
+
+																var i;
+
+																for (i = 0; i < arr.length; i++) {
+
+																	var keyValue = arr[i].split("=");
+
+																	var key = keyValue[0].trim();
+																	var value = keyValue[1].trim();
+
+																	var expr = string.trim();
+
+																
+
+																	if (key.localeCompare(expr) == 0) {
+																		// alert("Compared Key : " + key);
+
+																		var otherValue = new Array();
+
+																		if (key.localeCompare("TS017") == 0) {
+																			//alert("In If clause");
+																			otherValue = value.replace("[","").replace("]","").split("-");
+																			var j;
+
+																		
+
+																			$('.remove_field').trigger('click');
+
+																			for (j = 0; j < otherValue.length; j++) {
+																				// alert("Counter : " + j);
+																				
+																				$('.add-field-button').trigger('click',[otherValue[j]]);
+
+																			}
+																		} else {
+																			//alert("In else clause");
+																			$(this).val(value);
+																		}
+																		
+
+																	}
+																}
+															}
+														});
 										
+										}
+										
+										
+									},
+									failure : function(data) {
+										alert("failure");
+										alert(data.responseText);
+									},
+									error : function(data) {
+										alert("error");
+										alert(data.responseText);
 									}
-								}
+
+								});
+
+					});
+
+	var y = 1;
+
+	$('.add-field-button').on('click',function(e, value) {
+		//alert("Value is : " + value);
+		e.preventDefault();
+						if (y < 10) {
+							y++;
+							if (value != undefined) {
+								$('.input-field-wrap')
+										.append(
+
+												'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" value=\"'
+														+ value
+														+ '\" id="speciality" name="TS017" placeholder="Medical Problems"></div><a class="btn btn-warning btn-sm remove_field">Remove</a></div>');
+								
+								$('.remove_field').attr('disabled', true);
+
+							} else {
+								$('.input-field-wrap')
+										.append(
+
+												'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="btn btn-warning btn-sm remove_field">Remove</a></div>'); // add
+
 							}
-						});
-			},
-			failure : function(data) {
-				alert("failure");
-				alert(data.responseText);
-			},
-			error : function(data) {
-				alert("error");
-				alert(data.responseText);
-			}
+						}
+					});
 
-		});
-
+	$('.input-field-wrap').on("click", '.remove_field', function(e) {
+		// alert("remove done");
+		e.preventDefault();
+		$(this).parent('div').remove();
+		y--;
 	});
 	
-	var y =1;
+	function resetValue(){
+		$('#transfer-frm').trigger('reset');
+	}
 	
-	$('.add-field-button').on('click', function(e, value) { //on add input button click
-			alert("Value is : " + value);	
-			e.preventDefault();
-				if (y < 10) { //max input box allowed
-					y++; //text box increment
-					$('.input-field-wrap')
-							.append(
-
-									'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" value=\"'+ value +'\" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
-				}
-			});
+	$(document).on('click', '.reset-btn', function(e){
+		e.preventDefault();
+		resetValue();
+		
+		alert("No of submit button : " + $('.submit-btn').length);
+		
+		if ($('.submit-btn').length === 0){
+			$('.update-btn').remove();
+			$('.add-btn').append('<button type="button" class="btn btn-primary submit-btn">Submit</button>');
+		}
+		
+		$('.remove_field').trigger('click');
+	});
+	
+	$(document).on('click', '.update-btn', function(e){
+		
+		e.preventDefault();
+		
+		var selectVal = $.trim($('.sel-prev-record').val());
+		
+		alert(selectVal.trim());
+		
+		var req = $.ajax({
+			
+			url: 'transfer.do',
+			datatype: 'text',
+			type: 'post',
+			data: {
+				ACTION : 'UPDATE_RECORD',
+				edNo : selectVal
+			},
+			success: function(data){
+				
+			},
+			error: function(data){
+				
+			},
+			failure: function(data){
+				
+			}
+			
+			
+			
+		});
+		
+		
+		
+		
+	});
+	
 
 	
-	$('.input-field-wrap').on("click", function(e) { //user click on remove text
-		alert("remove done");
-				e.preventDefault();
-				$(this).parent('div').remove();
-				y--;
-			});
 
 });

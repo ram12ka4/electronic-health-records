@@ -48,8 +48,7 @@
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) request.getAttribute("ipName") == null
-				? ""
+		String ipNumber = (String) request.getAttribute("ipName") == null ? ""
 				: (String) request.getAttribute("ipName");
 		System.out.println("Ip Name : " + ipNumber);
 
@@ -298,14 +297,15 @@
 								</div>
 							</div>
 							<div class="form-horizontal input-field-wrap">
-								<div class="form-group">
+								 <div class="form-group">
 									<div class="col-xs-3"></div>
 									<div class="col-xs-3">
-										<input type="text" class="form-control input-sm medical-problem"
+										<input type="text"
+											class="form-control input-sm medical-problem"
 											id="medical-problem" name="TS017"
 											placeholder="Medical Problems">
 									</div>
-								</div>
+								</div>  
 							</div>
 
 
@@ -323,7 +323,7 @@
 					<div class="admin-content-con">
 						<div class="form-horizontal">
 							<div class="form-group">
-								<div style="padding-right: 16px;" class="pull-right">
+								<div style="padding-right: 16px;" class="pull-right add-btn">
 									<button type="button" class="btn btn-warning reset-btn">Reset</button>
 									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
 									<button type="button" class="btn btn-success previous-btn"
@@ -359,37 +359,6 @@
 	<%@include file="gnrc-modal.jsp"%>
 	<%@include file="success-error-msg.jsp"%>
 
-	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							var max_fields = 10; //maximum input boxes allowed
 
-							var wrapper = $(".input-field-wrap"); //Fields wrapper
-							var add_button = $(".add-field-button"); //Add button ID
-
-						/* 	var x = 1; //initlal text box count
-							$(add_button)
-									.click(
-											function(e) { //on add input button click
-												e.preventDefault();
-												if (x < max_fields) { //max input box allowed
-													x++; //text box increment
-													$(wrapper)
-															.append(
-
-																	'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" id="speciality" name="TS017" placeholder="Medical Problems"></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
-												}
-											}); */
-
-							/* $(wrapper).on("click", ".remove_field",
-									function(e) { //user click on remove text
-										e.preventDefault();
-										$(this).parent('div').remove();
-										x--;
-									}); */
-
-						});
-	</script>
 </body>
 </html>
