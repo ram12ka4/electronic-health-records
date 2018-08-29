@@ -33,16 +33,14 @@ $(function() {
 								arr[i] + " <------> " + arr[i + 1]));
 						i += 3;
 					}
-					
-					
 
 				},
 				failure : function(data) {
-					alert("failure");
+					//alert("failure");
 					alert(data.responseText);
 				},
 				error : function(data) {
-					alert("error");
+					//alert("error");
 					alert(data.responseText);
 				}
 
@@ -50,7 +48,7 @@ $(function() {
 
 	$(document).on('click', '.submit-btn', function(e) {
 
-		alert('Submit Button');
+		//alert('Submit Button');
 
 		e.preventDefault();
 
@@ -59,7 +57,7 @@ $(function() {
 	});
 
 	$(document).on('click', '.confirm-btn', function() {
-		alert("Final confirm");
+		//alert("Final confirm");
 		$('.circleModal').modal({
 			backdrop : 'static',
 			keyboard : false
@@ -102,101 +100,131 @@ $(function() {
 									},
 									success : function(data) {
 
-										alert(data);
+										//alert(data);
 										arr = data.replace("{", "").replace(
 												"}", "").split(",");
-										
-										alert("Length : " + arr.length);
-										
-										if (arr.length === 1){
 
-												
-												resetValue();
-												$('.remove_field').trigger('click');
-											
-											
-												$('.update-btn').remove();
-												$('.add-btn').append('<button type="button" class="btn btn-primary submit-btn">Submit</button>');
-											
+										//alert("Length : " + arr.length);
+
+										if (arr.length === 1) {
+
+											resetValue();
+											$('.remove_field').trigger('click');
+
+											$('.update-btn').remove();
+											$('.add-btn')
+													.append(
+															'<button type="button" class="btn btn-primary submit-btn">Submit</button>');
+
 										} else {
-											
-											alert(" UPdate div exists : " + $(".update-btn").length);
-											
-											if ($(".update-btn").length === 0){
+
+											//alert(" UPdate div exists : " + $(".update-btn").length);
+
+											if ($(".update-btn").length === 0) {
 												$('.submit-btn').remove();
-												$('.add-btn').append('<button type="button" class="btn btn-primary update-btn">Update</button>');
+												$('.add-btn')
+														.append(
+																'<button type="button" class="btn btn-primary update-btn">Update</button>');
 											}
-											
-											
 
-										$('.form-control')
-												.each(
-														function() {
+											$('.form-control')
+													.each(
+															function() {
 
-															var string = $(this)
-																	.attr(
-																			'name');
+																var string = $(
+																		this)
+																		.attr(
+																				'name');
 
-															// alert(string);
+																// alert(string);
 
-															if (string !== undefined
-																	&& string !== null
-																	&& string.length) {
+																if (string !== undefined
+																		&& string !== null
+																		&& string.length) {
 
-																var i;
+																	var i;
 
-																for (i = 0; i < arr.length; i++) {
+																	for (i = 0; i < arr.length; i++) {
 
-																	var keyValue = arr[i].split("=");
+																		var keyValue = arr[i]
+																				.split("=");
 
-																	var key = keyValue[0].trim();
-																	var value = keyValue[1].trim();
+																		var key = keyValue[0]
+																				.trim();
+																		var value = keyValue[1]
+																				.trim();
 
-																	var expr = string.trim();
+																		var expr = string
+																				.trim();
 
-																
+																		if (key
+																				.localeCompare(expr) == 0) {
+																			// alert("Compared
+																			// Key
+																			// : "
+																			// +
+																			// key);
 
-																	if (key.localeCompare(expr) == 0) {
-																		// alert("Compared Key : " + key);
+																			var otherValue = new Array();
 
-																		var otherValue = new Array();
+																			if (key
+																					.localeCompare("TS017") == 0) {
+																				// alert("In
+																				// If
+																				// clause");
+																				otherValue = value
+																						.replace(
+																								"[",
+																								"")
+																						.replace(
+																								"]",
+																								"")
+																						.split(
+																								"-");
+																				var j;
 
-																		if (key.localeCompare("TS017") == 0) {
-																			//alert("In If clause");
-																			otherValue = value.replace("[","").replace("]","").split("-");
-																			var j;
+																				$(
+																						'.remove_field')
+																						.trigger(
+																								'click');
 
-																		
+																				for (j = 0; j < otherValue.length; j++) {
+																					// alert("Counter
+																					// : "
+																					// +
+																					// j);
 
-																			$('.remove_field').trigger('click');
+																					$(
+																							'.add-field-button')
+																							.trigger(
+																									'click',
+																									[ otherValue[j] ]);
 
-																			for (j = 0; j < otherValue.length; j++) {
-																				// alert("Counter : " + j);
-																				
-																				$('.add-field-button').trigger('click',[otherValue[j]]);
-
+																				}
+																			} else {
+																				// alert("In
+																				// else
+																				// clause");
+																				$(
+																						this)
+																						.val(
+																								value);
 																			}
-																		} else {
-																			//alert("In else clause");
-																			$(this).val(value);
-																		}
-																		
 
+																		}
 																	}
 																}
-															}
-														});
-										
+															});
+
 										}
-										
-										
+
 									},
 									failure : function(data) {
-										alert("failure");
+										//alert("failure");
 										alert(data.responseText);
 									},
 									error : function(data) {
-										alert("error");
+										//alert("error");
 										alert(data.responseText);
 									}
 
@@ -206,9 +234,12 @@ $(function() {
 
 	var y = 1;
 
-	$('.add-field-button').on('click',function(e, value) {
-		//alert("Value is : " + value);
-		e.preventDefault();
+	$('.add-field-button')
+			.on(
+					'click',
+					function(e, value) {
+						// alert("Value is : " + value);
+						e.preventDefault();
 						if (y < 10) {
 							y++;
 							if (value != undefined) {
@@ -216,9 +247,9 @@ $(function() {
 										.append(
 
 												'<div class="form-group "><div class="col-xs-3"></div><div class="col-xs-3"><input type="text" class="form-control input-sm" value=\"'
-														+ value
+														+ value.trim()
 														+ '\" id="speciality" name="TS017" placeholder="Medical Problems"></div><a class="btn btn-warning btn-sm remove_field">Remove</a></div>');
-								
+
 								$('.remove_field').attr('disabled', true);
 
 							} else {
@@ -237,62 +268,97 @@ $(function() {
 		$(this).parent('div').remove();
 		y--;
 	});
-	
-	function resetValue(){
+
+	function resetValue() {
 		$('#transfer-frm').trigger('reset');
 	}
-	
-	$(document).on('click', '.reset-btn', function(e){
-		e.preventDefault();
-		resetValue();
-		
-		alert("No of submit button : " + $('.submit-btn').length);
-		
-		if ($('.submit-btn').length === 0){
-			$('.update-btn').remove();
-			$('.add-btn').append('<button type="button" class="btn btn-primary submit-btn">Submit</button>');
-		}
-		
-		$('.remove_field').trigger('click');
-	});
-	
-	$(document).on('click', '.update-btn', function(e){
-		
-		e.preventDefault();
-		
-		var selectVal = $.trim($('.sel-prev-record').val());
-		
-		alert(selectVal.trim());
-		
-		var req = $.ajax({
-			
-			url: 'transfer.do',
-			datatype: 'text',
-			type: 'post',
-			data: {
-				ACTION : 'UPDATE_RECORD',
-				edNo : selectVal
-			},
-			success: function(data){
-				
-			},
-			error: function(data){
-				
-			},
-			failure: function(data){
-				
-			}
-			
-			
-			
-		});
-		
-		
-		
-		
-	});
-	
 
-	
+	$(document)
+			.on(
+					'click',
+					'.reset-btn',
+					function(e) {
+						e.preventDefault();
+						resetValue();
+
+						//alert("No of submit button : " + $('.submit-btn').length);
+
+						if ($('.submit-btn').length === 0) {
+							$('.update-btn').remove();
+							$('.add-btn')
+									.append(
+											'<button type="button" class="btn btn-primary submit-btn">Submit</button>');
+						}
+
+						$('.remove_field').trigger('click');
+					});
+
+	$(document).on('click', '.update-btn', function(e) {
+		// transfer-frm
+		e.preventDefault();
+
+		var frm = $('#transfer-frm');
+		
+		//alert(frm);
+
+		var selectVal = $.trim($('.sel-prev-record').val());
+
+		//alert(selectVal.trim());
+
+		var container = document.getElementById("hidden-container");
+		var input1 = document.createElement("input");
+		var input2 = document.createElement("input");
+
+		input1.type = "hidden";
+		input1.name = "ACTION";
+		input1.setAttribute("value", "UPDATE_RECORD");
+
+		input2.type = "hidden";
+		input2.name = "edNo";
+		input2.setAttribute("value", selectVal);
+
+		container.appendChild(input1);
+		container.appendChild(input2);
+
+		var req = $.ajax({
+
+			url : 'transfer.do',
+			datatype : 'text',
+			type : 'post',
+			data : frm.serialize(),
+
+		}).done(function(data) {
+
+			// log data to the console
+			//alert(data);
+			
+			if ($.trim(data).localeCompare('true') == 0){
+				swal("Well done!", 'Data have been updated successfully', "success");
+				resetValue();
+				$('.remove_field').trigger(	'click');
+			} else {
+				swal("Oh no!", 'Something went wrong', "error");
+			}
+
+		});
+
+		/*
+		 * var container = document.getElementById("hidden-container"); var
+		 * input1 = document.createElement("input"); var input2 =
+		 * document.createElement("input"); input1.type = "hidden"; input1.name =
+		 * "ACTION"; input1.setAttribute("value", "UPDATE_RECORD");
+		 * 
+		 * input2.type = "hidden"; input2.name = "edNo";
+		 * input2.setAttribute("value", selectVal);
+		 * 
+		 * container.appendChild(input1); container.appendChild(input2);
+		 * 
+		 * 
+		 * document.getElementById("transfer-frm").method = "post";
+		 * document.getElementById("transfer-frm").action = "transfer.do";
+		 * document.getElementById("transfer-frm").submit();
+		 */
+
+	});
 
 });

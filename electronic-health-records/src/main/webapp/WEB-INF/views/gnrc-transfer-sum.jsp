@@ -316,6 +316,7 @@
 				</div>
 			</div>
 
+			<div id="hidden-container"></div>
 
 
 			<div class="row">

@@ -763,4 +763,59 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
+	@Override
+	public boolean updateNote(String edNo, Map<String, String> records) throws SQLException {
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (PreparedStatement ps = createPreparedStatement15(con, edNo, records)) {
+				
+				int affectedRecords [] = ps.executeBatch();
+				
+				System.out.println("Updated Records : " + affectedRecords);
+				
+
+			} catch (SQLException e) {
+				// TODO: handle exception
+				con.rollback();
+				con.setAutoCommit(true);
+				throw e;
+			}
+
+			con.commit();
+			con.setAutoCommit(true);
+
+			return true;
+
+		}
+
+		
+	}
+
+	private PreparedStatement createPreparedStatement15(Connection con, String edNumber, Map<String, String> records)
+			throws SQLException {
+
+		Set<Map.Entry<String, String>> set = records.entrySet();
+		
+		System.out.println("Updated List : " + set);
+
+		String sql = "UPDATE EMR_HEALTH_RECORD SET EHR_ATTRB_VALUE = ? WHERE EHR_DTL_CODE = ? AND EHR_ATTRB_CODE= ?";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		for (Map.Entry<String, String> keyValue : set) {
+			
+			System.out.println("Updated Key : " + keyValue.getKey()  + " Value :" + keyValue.getValue());
+			
+			ps.setString(1, keyValue.getValue());
+			ps.setString(2, edNumber);
+			ps.setString(3, keyValue.getKey());
+			ps.addBatch();
+		}
+
+		return ps;
+	}
+
 }

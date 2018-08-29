@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="transfer-summary-report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4ce85831-baf4-4613-b01c-b21b4052f201">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle"/>
+	<queryString language="SQL">
+		<![CDATA[select * from emr_health_record]]>
+	</queryString>
+	<field name="EHR_EMR_NUM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_EMR_NUM"/>
+	</field>
+	<field name="EHR_ATTRB_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_ATTRB_CODE"/>
+	</field>
+	<field name="EHR_ATTRB_VALUE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_ATTRB_VALUE"/>
+	</field>
+	<field name="EHR_REMARKS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_REMARKS"/>
+	</field>
+	<field name="EHR_CRT_UID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_CRT_UID"/>
+	</field>
+	<field name="EHR_CRT_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_CRT_DT"/>
+	</field>
+	<field name="EHR_LAST_UPD_UID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_LAST_UPD_UID"/>
+	</field>
+	<field name="EHR_LAST_UPD_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_LAST_UPD_DT"/>
+	</field>
+	<field name="EHR_DTL_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_DTL_CODE"/>
+	</field>
+	<group name="EHR_EMR_NUM">
+		<groupExpression><![CDATA[$F{EHR_EMR_NUM}]]></groupExpression>
+	</group>
+	<group name="EHR_ATTRB_CODE">
+		<groupExpression><![CDATA[$F{EHR_ATTRB_CODE}]]></groupExpression>
+	</group>
+	<group name="EHR_ATTRB_VALUE">
+		<groupExpression><![CDATA[$F{EHR_ATTRB_VALUE}]]></groupExpression>
+	</group>
+	<group name="EHR_REMARKS">
+		<groupExpression><![CDATA[$F{EHR_REMARKS}]]></groupExpression>
+	</group>
+	<group name="EHR_CRT_UID">
+		<groupExpression><![CDATA[$F{EHR_CRT_UID}]]></groupExpression>
+	</group>
+	<group name="EHR_CRT_DT">
+		<groupExpression><![CDATA[$F{EHR_CRT_DT}]]></groupExpression>
+	</group>
+	<group name="EHR_LAST_UPD_UID">
+		<groupExpression><![CDATA[$F{EHR_LAST_UPD_UID}]]></groupExpression>
+	</group>
+	<group name="EHR_LAST_UPD_DT">
+		<groupExpression><![CDATA[$F{EHR_LAST_UPD_DT}]]></groupExpression>
+	</group>
+	<group name="EHR_DTL_CODE">
+		<groupExpression><![CDATA[$F{EHR_DTL_CODE}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="113" splitType="Stretch">
+			<image>
+				<reportElement x="212" y="0" width="130" height="86" uuid="8144f34b-0da5-421d-ba63-4b19f9b57d7a"/>
+				<imageExpression><![CDATA["src/main/webapp/images/favicon.jpg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="104" width="550" height="1" uuid="1ee457b7-725c-4915-b7eb-63a4a26ed7a8"/>
+			</line>
+			<staticText>
+				<reportElement x="182" y="64" width="191" height="30" uuid="39f0929c-0289-4c33-a5ee-527d5e1d1bc0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(An ISO 14001: 2004 Organisation)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="120" y="0" width="300" height="30" uuid="0288a972-f118-4488-8a00-004f3ae9cce5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANSFER SUMMARY ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

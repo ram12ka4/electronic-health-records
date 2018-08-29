@@ -66,6 +66,8 @@ public class TransferSummaryServlet extends HttpServlet {
 		String paramType = request.getParameter("paramType") == null ? "" : request.getParameter("paramType");
 		String edNo = request.getParameter("edNo") == null || request.getParameter("edNo").isEmpty() ? ""
 				: request.getParameter("edNo");
+		
+		
 		String finalDiagnosis = request.getParameter("TS001") == null || request.getParameter("TS001").isEmpty() ? ""
 				: keyValue.put("TS001", request.getParameter("TS001"));
 		String transferReport = request.getParameter("TS002") == null || request.getParameter("TS002").isEmpty() ? ""
@@ -133,27 +135,36 @@ public class TransferSummaryServlet extends HttpServlet {
 			System.out.println("gcs : " + gcs);
 			System.out.println("ipm : " + ipm);
 			System.out.println("ED No : " + edNo);
+			System.out.println("ACTION : " + action);
 
 			if ("UPDATE_RECORD".equals(action)) {
-
 				System.out.println("In UPDATE_RECORD part");
-				List<String> list = patientDao.getPreviousRecordNo(paramType);
-				System.out.println("KEY VALUE" + list);
-				out.println(list);
+				boolean isUpdated = patientDao.updateNote(edNo, keyValue);
+				System.out.println("KEY VALUE " + isUpdated);
+				out.println(isUpdated);
+				
+				/*if (isUpdated) {
+					response.sendRedirect("/transfer.do?token=success&msg=Data have been updated successfully");
+				} else {
+					response.sendRedirect("/transfer.do?token=fail&msg=Something went wrong");
+				}*/
+				
+				
+				
 			} else if ("GET_PREV_ED_NO".equals(action)) {
-
-				System.out.println("In if part");
+				System.out.println("In GET_PREV_ED_NO part");
 				List<String> list = patientDao.getPreviousRecordNo(paramType);
-				System.out.println("KEY VALUE" + list);
+				System.out.println("LIST VALUE " + list);
 				out.println(list);
 			} else if ("GET_PREV_TRANSFER_RECORD".equals(action)) {
-
-				System.out.println("In if part");
+				System.out.println("In GET_PREV_TRANSFER_RECORD part");
 				Map<String, String> map = patientDao.getPreviousData(edNo, paramType);
-				System.out.println("KEY VALUE" + map);
+				System.out.println("MAP VALUE " + map);
 				out.println(map);
 			} else {
 
+				System.out.println("In Else part");
+				
 				patient = Patient.getInstance();
 				emr = Emr.getInstance();
 
