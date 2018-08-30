@@ -3,8 +3,6 @@ package com.gnrchospitals.report;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.plaf.SliderUI;
-
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -14,8 +12,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-
-import oracle.jdbc.proxy.annotation.GetCreator;
 
 public class PDFCreator {
 

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sample" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4596af89-2e3f-4d10-b3ef-db8b719aefed">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle"/>
+	<queryString language="SQL">
+		<![CDATA[select * from emr_health_record]]>
+	</queryString>
+	<field name="EHR_ATTRB_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_ATTRB_CODE"/>
+	</field>
+	<field name="EHR_ATTRB_VALUE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_ATTRB_VALUE"/>
+	</field>
+	<field name="EHR_REMARKS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_REMARKS"/>
+	</field>
+	<field name="EHR_CRT_UID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_CRT_UID"/>
+	</field>
+	<field name="EHR_CRT_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_CRT_DT"/>
+	</field>
+	<field name="EHR_LAST_UPD_UID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_LAST_UPD_UID"/>
+	</field>
+	<field name="EHR_LAST_UPD_DT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_LAST_UPD_DT"/>
+	</field>
+	<field name="EHR_DTL_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_DTL_CODE"/>
+	</field>
+	<field name="EHR_EMR_NUM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EHR_EMR_NUM"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="97" splitType="Stretch">
+			<image>
+				<reportElement x="212" y="0" width="130" height="79" uuid="a7e94466-c709-409c-9ca1-601e8feb4807"/>
+				<imageExpression><![CDATA["src/main/webapp/images/favicon.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="152" y="64" width="250" height="26" uuid="2cf211a1-7f28-41e8-938c-36811a8ca97c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(An ISO 14001: 2004 Organisation)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="32" y="96" width="490" height="1" uuid="e8b388a7-22e6-4527-a619-37607d8ea359"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="140" y="1" width="274" height="30" uuid="40b4a9ee-d3b9-4e57-94f6-70e79b1ca72a"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANSFER SUMMARY ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="32" y="9" width="40" height="20" uuid="4edd6168-f2da-42a3-a8a0-e7d7d0fb50b2"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="9" width="43" height="20" uuid="04d53181-ed5a-4ba8-a0cd-6f0b06874f49"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IP No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="9" width="55" height="20" uuid="542be8c7-6a75-49b2-a74c-858a836cdbc1"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MRD No.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="410" splitType="Stretch">
+			<rectangle>
+				<reportElement x="27" y="11" width="501" height="180" uuid="54924c70-d52e-488f-8e22-84727d7bbebb"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="32" y="28" width="179" height="20" uuid="fd2d32b3-b796-4d55-a244-d21ce63422db"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Provisional / Final Diagnosis :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="32" y="61" width="138" height="24" uuid="bbf51bde-c9d3-44de-9af0-ac1d2ca9d1e3"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Transfer from :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="101" width="138" height="20" uuid="948f1693-8ffb-41e3-ac6a-ea70d9bc6b85"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Transfer Date / Time :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="32" y="137" width="149" height="20" uuid="a19e4c1f-3a25-4fd3-b113-245e46ff24df"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Name of Transfer Doctor :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="171" width="119" height="20" uuid="98c7c457-4b8e-4d94-a348-f4c64bcef063"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Cause of Tansfer :]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="27" y="210" width="500" height="200" uuid="ed8a2c54-04c6-483d-9a15-f0c8873c4576"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="40" y="240" width="50" height="20" uuid="3ca7f353-dc35-464a-83e5-61bfd632fd2b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Vitals:-]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="268" width="60" height="20" uuid="3a328f34-a0f0-40f7-b544-05d7e6c67637"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Pulse	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="298" width="60" height="20" uuid="c503829b-e625-4e09-ade7-1147b0042775"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Temp	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="330" width="128" height="20" uuid="6d43f1e3-6089-4e45-bbcc-3ab71711b676"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ITB / NITB		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="360" width="58" height="20" uuid="a622e589-dc7e-455b-82ce-806473347a36"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Chest	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="390" width="58" height="20" uuid="20de1a29-ffff-478b-8ca6-32f651a9a6f6"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[U. Cath. 	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="389" width="100" height="20" uuid="9a51f511-ebf9-40f1-b541-7e9d65b7ef5a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[GCS		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="358" width="99" height="20" uuid="31d15701-f235-4af6-a7f8-bf1995106b6c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[C. V. S.	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="330" width="100" height="18" uuid="6efbe29a-627e-4486-80d9-c7003bb14071"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[V/NV	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="302" width="100" height="16" uuid="cb5e54e5-9f44-4c4e-8f45-4f644245372f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[R. R.		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="269" width="100" height="19" uuid="40c78976-c98a-4dcd-8f13-9111d8b6b23d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[B. P.		:]]></text>
+			</staticText>
+		</band>
+		<band height="70">
+			<staticText>
+				<reportElement x="27" y="0" width="203" height="30" uuid="97dcd8c9-1cf9-4693-b9fb-f47a2855a82c"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Important previous medications :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="40" width="213" height="30" uuid="fa4fdf76-4479-4751-81df-faa61288ce9e"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Other associated medical problems :]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="330" y="18" width="200" height="20" uuid="3c43d6d4-499e-49e4-a742-6686f3a01bc3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature of the receiving Doctor]]></text>
+			</staticText>
+			<line>
+				<reportElement x="300" y="12" width="226" height="1" uuid="159cc16c-9426-4cd2-8d2d-c15424e7995c"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<line>
+				<reportElement x="30" y="15" width="490" height="1" uuid="d78af2a4-f895-4dab-b028-0a9d235689ef"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

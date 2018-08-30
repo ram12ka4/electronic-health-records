@@ -1,11 +1,10 @@
 package com.gnrchospitals.report;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.gnrchospitals.util.LoginDBConnection;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @WebServlet(urlPatterns = { "/transfer.report" })
 public class TransferSummaryReport extends HttpServlet {
@@ -27,45 +28,25 @@ public class TransferSummaryReport extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		List<String> list = new ArrayList<>();
-		
-		list.add("Ram");
-		list.add("Banajit Da");
-		list.add("debashis Da");
-		list.add("Bidyout da");
-		
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
 		try {
-			Document document = new Document(PageSize.A4, 36, 36, 125, 36);
-			PdfWriter writer = PdfWriter.getInstance(document, baos);
-			
-			HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-			writer.setPageEvent(event);
+			Connection con = LoginDBConnection.getConnection();
+			JasperReport jasperReport = null;
+			JasperDesign jasperDesign = null;
+			Map<String, String> parameter = new HashMap<>();
 
-			document.open();
-
-			PDFCreator.addMetaData(document, "Transfer Summary");
-			PDFCreator.addtitlePage(document, "Transfer Summary");
-			PDFCreator.addContent(document, list);
-			//document.add(new Paragraph(new Date().toString()));
-
-			document.close();
-
-			response.setHeader("Expires", "0");
-			response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
-			response.setHeader("Pragma", "public");
+			String path = getServletContext().getRealPath("/WEB-INF/views/");
+			System.out.println("PDF path is" + path);
+			jasperDesign = JRXmlLoader.load(path + "/sample.jrxml");
+			jasperReport = JasperCompileManager.compileReport(jasperDesign);
+			byte[] byteStream = JasperRunManager.runReportToPdf(jasperReport, parameter, con);
+			OutputStream out = response.getOutputStream();
 			response.setContentType("application/pdf");
-			response.setContentLength(baos.size());
-			// write ByteArrayOutputStream to the ServletOutputStream
-			OutputStream os = response.getOutputStream();
-			baos.writeTo(os);
-			os.flush();
-			os.close();
+			response.setContentLength(byteStream.length);
+			out.write(byteStream, 0, byteStream.length);
 
-		} catch (DocumentException de) {
-			throw new IOException(de.getMessage());
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
 
 	}
