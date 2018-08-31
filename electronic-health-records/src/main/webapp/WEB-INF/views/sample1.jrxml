@@ -5,6 +5,7 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="211"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="782"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle"/>
+	<parameter name="ip_param" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select d.EHR_DTL_CODE,  d.EHR_CRT_DT, a.RRH_FIRST_NAME||' '||a.RRH_MIDDLE_NAME||' '||a.RRH_LAST_NAME name, b.WAT_IP_NUM IP_NUM, a.RRH_MR_NUM,
 
@@ -36,7 +37,7 @@
               where b.WAT_MR_NUM = a.RRH_MR_NUM
                     and WAT_pat_status = 'ADIP'
                     and c.ECD_PAT_NUM = b.WAT_IP_NUM
-                    and c.ECD_PAT_NUM = 'IP/171222/000013'
+                    and c.ECD_PAT_NUM =   $P{ip_param} 
                     and d.EHR_ATTRB_CODE in (select EAM_ATTRB_CODE from EMR_ATTRIBUTE_MASTER where EAM_ATTRB_TYPE = 'TSNS') 
                     and d.EHR_EMR_NUM = c.ECD_EM_NUM
                     group by    d.EHR_DTL_CODE,  d.EHR_CRT_DT, a.RRH_FIRST_NAME||' '||a.RRH_MIDDLE_NAME||' '||a.RRH_LAST_NAME , b.WAT_IP_NUM , a.RRH_MR_NUM]]>
