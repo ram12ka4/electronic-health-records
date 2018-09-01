@@ -701,12 +701,12 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public List<String> getPreviousRecordNo(String paramaterType) throws SQLException {
+	public List<String> getPreviousRecordNo(String ipNumber, String paramaterType) throws SQLException {
 
 		List<String> list = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection();
-				PreparedStatement ps = createPreparedStatement13(con, paramaterType);
+				PreparedStatement ps = createPreparedStatement13(con, ipNumber, paramaterType);
 				ResultSet rs = ps.executeQuery()) {
 
 			if (rs.next()) {
@@ -720,15 +720,26 @@ public class PatientDaoImpl implements PatientDao {
 		return list;
 	}
 
-	private PreparedStatement createPreparedStatement13(Connection con, String parameterType) throws SQLException {
+	private PreparedStatement createPreparedStatement13(Connection con, String ipNumber, String parameterType) throws SQLException {
 
-		String sql = "SELECT DISTINCT EHR_DTL_CODE, to_char(EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, EHR_CRT_DT FROM EMR_HEALTH_RECORD WHERE EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY EHR_CRT_DT DESC";
+		//String sql = "SELECT DISTINCT EHR_DTL_CODE, to_char(EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, EHR_CRT_DT FROM EMR_HEALTH_RECORD WHERE EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY EHR_CRT_DT DESC";
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append(" SELECT distinct b.EHR_DTL_CODE, to_char(b.EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, b.EHR_CRT_DT ");
+		sql.append(" FROM EMR_CLINICAL_DETAIL a, ");
+		sql.append(" EMR_HEALTH_RECORD b ");
+		sql.append(" WHERE ");
+		sql.append(" a.ECD_PAT_NUM = ? ");
+		sql.append(" and a.ECD_EM_NUM = b.EHR_EMR_NUM ");
+		sql.append(" and b.EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY b.EHR_CRT_DT DESC ");
+		
 
 		System.out.println(sql.toString());
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 
-		ps.setString(1, parameterType);
+		ps.setString(1, ipNumber);
+		ps.setString(2, parameterType);
 
 		return ps;
 	}

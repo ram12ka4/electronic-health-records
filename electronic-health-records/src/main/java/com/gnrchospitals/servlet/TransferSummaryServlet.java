@@ -143,17 +143,9 @@ public class TransferSummaryServlet extends HttpServlet {
 				System.out.println("KEY VALUE " + isUpdated);
 				out.println(isUpdated);
 				
-				/*if (isUpdated) {
-					response.sendRedirect("/transfer.do?token=success&msg=Data have been updated successfully");
-				} else {
-					response.sendRedirect("/transfer.do?token=fail&msg=Something went wrong");
-				}*/
-				
-				
-				
 			} else if ("GET_PREV_ED_NO".equals(action)) {
 				System.out.println("In GET_PREV_ED_NO part");
-				List<String> list = patientDao.getPreviousRecordNo(paramType);
+				List<String> list = patientDao.getPreviousRecordNo(ipNo, paramType);
 				System.out.println("LIST VALUE " + list);
 				out.println(list);
 			} else if ("GET_PREV_TRANSFER_RECORD".equals(action)) {

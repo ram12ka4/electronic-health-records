@@ -1,7 +1,16 @@
 $(function() {
 
 	var arr = new Array();
+
+	var select = $(".sel-prev-record");
+	select.css("display", "inline");
+
 	$('.update-btn').remove();
+
+	select
+			.empty()
+			.append(
+					'<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
 
 	var req = $
 			.ajax({
@@ -10,37 +19,39 @@ $(function() {
 				datatype : 'text',
 				data : {
 					ACTION : 'GET_PREV_ED_NO',
-					paramType : "TSNS"
+					paramType : "TSNS",
+
 				},
 				success : function(data) {
-					var select = $(".sel-prev-record");
-					select.css("display", "inline");
+					
+					data = data.replace(/^\W+|\W+$/g, "");
+					//alert(data.length);
 
-					select
-							.empty()
-							.append(
-									'<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
-					arr = data.replace("[", "").replace("]", "").split(",");
-					select
-							.empty()
-							.append(
-									'<option selected="selected" value="0">Select Previous Record</option>');
-					var i = 0;
+					if (data.length !== 0) {
+						arr = data.replace("[", "").replace("]", "").split(",");
+						select
+								.empty()
+								.append(
+										'<option selected="selected" value="0">Select Previous Record</option>');
+						var i = 0;
 
-					while (i < arr.length) {
+						while (i < arr.length) {
 
-						select.append($("<option></option>").val(arr[i]).html(
-								arr[i] + " <------> " + arr[i + 1]));
-						i += 3;
+							select.append($("<option></option>").val(arr[i])
+									.html(arr[i] + " <------> " + arr[i + 1]));
+							i += 3;
+						}
+					} else {
+						select.css("display", "none");
 					}
 
 				},
 				failure : function(data) {
-					//alert("failure");
+					// alert("failure");
 					alert(data.responseText);
 				},
 				error : function(data) {
-					//alert("error");
+					// alert("error");
 					alert(data.responseText);
 				}
 
@@ -48,7 +59,7 @@ $(function() {
 
 	$(document).on('click', '.submit-btn', function(e) {
 
-		//alert('Submit Button');
+		// alert('Submit Button');
 
 		e.preventDefault();
 
@@ -57,7 +68,7 @@ $(function() {
 	});
 
 	$(document).on('click', '.confirm-btn', function() {
-		//alert("Final confirm");
+		// alert("Final confirm");
 		$('.circleModal').modal({
 			backdrop : 'static',
 			keyboard : false
@@ -100,11 +111,11 @@ $(function() {
 									},
 									success : function(data) {
 
-										//alert(data);
+										// alert(data);
 										arr = data.replace("{", "").replace(
 												"}", "").split(",");
 
-										//alert("Length : " + arr.length);
+										// alert("Length : " + arr.length);
 
 										if (arr.length === 1) {
 
@@ -118,7 +129,8 @@ $(function() {
 
 										} else {
 
-											//alert(" UPdate div exists : " + $(".update-btn").length);
+											// alert(" UPdate div exists : " +
+											// $(".update-btn").length);
 
 											if ($(".update-btn").length === 0) {
 												$('.submit-btn').remove();
@@ -220,11 +232,11 @@ $(function() {
 
 									},
 									failure : function(data) {
-										//alert("failure");
+										// alert("failure");
 										alert(data.responseText);
 									},
 									error : function(data) {
-										//alert("error");
+										// alert("error");
 										alert(data.responseText);
 									}
 
@@ -281,7 +293,8 @@ $(function() {
 						e.preventDefault();
 						resetValue();
 
-						//alert("No of submit button : " + $('.submit-btn').length);
+						// alert("No of submit button : " +
+						// $('.submit-btn').length);
 
 						if ($('.submit-btn').length === 0) {
 							$('.update-btn').remove();
@@ -293,72 +306,92 @@ $(function() {
 						$('.remove_field').trigger('click');
 					});
 
-	$(document).on('click', '.update-btn', function(e) {
-		// transfer-frm
-		e.preventDefault();
+	$(document)
+			.on(
+					'click',
+					'.update-btn',
+					function(e) {
+						// transfer-frm
+						e.preventDefault();
 
-		var frm = $('#transfer-frm');
-		
-		//alert(frm);
+						var frm = $('#transfer-frm');
 
-		var selectVal = $.trim($('.sel-prev-record').val());
+						// alert(frm);
 
-		//alert(selectVal.trim());
+						var selectVal = $.trim($('.sel-prev-record').val());
 
-		var container = document.getElementById("hidden-container");
-		var input1 = document.createElement("input");
-		var input2 = document.createElement("input");
+						// alert(selectVal.trim());
 
-		input1.type = "hidden";
-		input1.name = "ACTION";
-		input1.setAttribute("value", "UPDATE_RECORD");
+						var container = document
+								.getElementById("hidden-container");
+						var input1 = document.createElement("input");
+						var input2 = document.createElement("input");
 
-		input2.type = "hidden";
-		input2.name = "edNo";
-		input2.setAttribute("value", selectVal);
+						input1.type = "hidden";
+						input1.name = "ACTION";
+						input1.setAttribute("value", "UPDATE_RECORD");
 
-		container.appendChild(input1);
-		container.appendChild(input2);
+						input2.type = "hidden";
+						input2.name = "edNo";
+						input2.setAttribute("value", selectVal);
 
-		var req = $.ajax({
+						container.appendChild(input1);
+						container.appendChild(input2);
 
-			url : 'transfer.do',
-			datatype : 'text',
-			type : 'post',
-			data : frm.serialize(),
+						var req = $
+								.ajax({
 
-		}).done(function(data) {
+									url : 'transfer.do',
+									datatype : 'text',
+									type : 'post',
+									data : frm.serialize(),
 
-			// log data to the console
-			//alert(data);
-			
-			if ($.trim(data).localeCompare('true') == 0){
-				swal("Well done!", 'Data have been updated successfully', "success");
-				resetValue();
-				$('.remove_field').trigger(	'click');
-			} else {
-				swal("Oh no!", 'Something went wrong', "error");
-			}
+								})
+								.done(
+										function(data) {
 
-		});
+											// log data to the console
+											// alert(data);
 
-		/*
-		 * var container = document.getElementById("hidden-container"); var
-		 * input1 = document.createElement("input"); var input2 =
-		 * document.createElement("input"); input1.type = "hidden"; input1.name =
-		 * "ACTION"; input1.setAttribute("value", "UPDATE_RECORD");
-		 * 
-		 * input2.type = "hidden"; input2.name = "edNo";
-		 * input2.setAttribute("value", selectVal);
-		 * 
-		 * container.appendChild(input1); container.appendChild(input2);
-		 * 
-		 * 
-		 * document.getElementById("transfer-frm").method = "post";
-		 * document.getElementById("transfer-frm").action = "transfer.do";
-		 * document.getElementById("transfer-frm").submit();
-		 */
+											if ($.trim(data).localeCompare(
+													'true') == 0) {
+												swal(
+														"Well done!",
+														'Data have been updated successfully',
+														"success");
+												resetValue();
+												$('.remove_field').trigger(
+														'click');
+											} else {
+												swal("Oh no!",
+														'Something went wrong',
+														"error");
+											}
 
-	});
+										});
+
+						/*
+						 * var container =
+						 * document.getElementById("hidden-container"); var
+						 * input1 = document.createElement("input"); var input2 =
+						 * document.createElement("input"); input1.type =
+						 * "hidden"; input1.name = "ACTION";
+						 * input1.setAttribute("value", "UPDATE_RECORD");
+						 * 
+						 * input2.type = "hidden"; input2.name = "edNo";
+						 * input2.setAttribute("value", selectVal);
+						 * 
+						 * container.appendChild(input1);
+						 * container.appendChild(input2);
+						 * 
+						 * 
+						 * document.getElementById("transfer-frm").method =
+						 * "post";
+						 * document.getElementById("transfer-frm").action =
+						 * "transfer.do";
+						 * document.getElementById("transfer-frm").submit();
+						 */
+
+					});
 
 });

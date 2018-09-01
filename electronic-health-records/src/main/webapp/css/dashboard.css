@@ -19,9 +19,13 @@ html, body {
 	padding: 0px;
 }
 
+#side {
+	margin-left: 0;
+}
+
 .side-active #side-menu  {
 	left: 150px;
-	 width: 150px;
+	width: 150px;
     transition: all .4s ease 0s;
 }
 
@@ -118,6 +122,8 @@ html, body {
 	padding: 0px;
 	height: 100%;
 	width: 100%;
+	float: left;
+	
 }
 
 .display-table-row {
