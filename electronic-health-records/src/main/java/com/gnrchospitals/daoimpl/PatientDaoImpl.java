@@ -674,7 +674,7 @@ public class PatientDaoImpl implements PatientDao {
 
 		int index = 0;
 		StringBuffer sql = new StringBuffer();
-		sql.append("select  b.EHR_CRT_DT, b.EHR_DTL_CODE, ");
+		sql.append("select  to_char(b.EHR_CRT_DT, 'dd-MON-yyyy hh:mi'), b.EHR_DTL_CODE, ");
 
 		for (String paramCode : arr) {
 			if (index + 1 == arr.length) {

@@ -93,14 +93,12 @@ $(function() {
 					'change',
 					'.sel-prev-record',
 					function() {
-
 						var edId = $.trim($(this).val());
 						var arr = new Array();
 						var index = 0;
 
 						var req = $
 								.ajax({
-
 									url : 'transfer.do',
 									type : 'post',
 									datatype : 'json',
