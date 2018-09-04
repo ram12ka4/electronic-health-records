@@ -1,5 +1,6 @@
 package com.gnrchospitals.report;
 
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -22,7 +23,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @WebServlet(urlPatterns = { "/transfer.report" })
-public class TransferSummaryReport extends HttpServlet {
+public class InvestigationReport extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,7 +42,7 @@ public class TransferSummaryReport extends HttpServlet {
 			parameters.put("ip_param", (String) ipNumber);
 
 			String path = getServletContext().getRealPath("/WEB-INF/views/");
-			jasperDesign = JRXmlLoader.load(path + "/sample1.jrxml");
+			jasperDesign = JRXmlLoader.load(path + "/investigation-report.jrxml");
 
 			System.out.println("PDF path is" + path);
 			System.out.println("Parameter : " + parameters);
@@ -49,7 +50,7 @@ public class TransferSummaryReport extends HttpServlet {
 			jasperReport = JasperCompileManager.compileReport(jasperDesign);
 			byte[] byteStream = JasperRunManager.runReportToPdf(jasperReport, parameters, con);
 			OutputStream out = response.getOutputStream();
-			prepareDownload(response, "Transfer_Summary_Report");
+			prepareDownload(response, "Investigation_Sheet_Report");
 			response.setContentLength(byteStream.length);
 			out.write(byteStream, 0, byteStream.length);
 		} catch (Exception e) {

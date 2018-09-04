@@ -802,6 +802,7 @@
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div style="padding-right: 16px;" class="pull-right add-btn">
+									<div id="hidden-container"></div>
 									<button type="button" class="btn btn-warning reset-btn">Reset</button>
 									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
 									<button type="button" class="btn btn-success previous-btn"
