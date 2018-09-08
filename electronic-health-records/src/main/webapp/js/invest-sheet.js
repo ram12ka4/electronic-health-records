@@ -197,7 +197,7 @@ $(document)
 					$(document).on('click', '.previous-btn', function() {
 
 						
-						var myArr = new Array();
+						/*var myArr = new Array();
 						  
 						  myArr = [];
 						  
@@ -216,7 +216,15 @@ $(document)
 						
 						  var input = document.createElement("input");
 						  input.type = "hidden";
-						  input.name = ""
+						  input.name = ""*/
+						
+						alert('In previous Button');
+						
+						document.getElementById("invest-frm").method = "post";
+						document.getElementById("invest-frm").action = "invest.report";
+						document.getElementById("invest-frm").target = "_blank";
+						document.getElementById("invest-frm").submit();
+
 						
 					
 

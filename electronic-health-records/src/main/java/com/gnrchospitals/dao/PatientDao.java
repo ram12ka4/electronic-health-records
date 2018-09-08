@@ -37,6 +37,8 @@ public interface PatientDao {
 	public abstract boolean updateNote(String edNo, Map<String,String> records) throws SQLException;
 	
 	public abstract List<List<String>> fetchGobalTempData(String ipNumber, String [] arr) throws SQLException;
+	
+	public List<List<String>> getPreviousRecord(String ipNumber, String eamType) throws SQLException;
 
 
 }

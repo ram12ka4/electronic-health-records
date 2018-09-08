@@ -720,19 +720,24 @@ public class PatientDaoImpl implements PatientDao {
 		return list;
 	}
 
-	private PreparedStatement createPreparedStatement13(Connection con, String ipNumber, String parameterType) throws SQLException {
+	private PreparedStatement createPreparedStatement13(Connection con, String ipNumber, String parameterType)
+			throws SQLException {
 
-		//String sql = "SELECT DISTINCT EHR_DTL_CODE, to_char(EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, EHR_CRT_DT FROM EMR_HEALTH_RECORD WHERE EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY EHR_CRT_DT DESC";
+		// String sql = "SELECT DISTINCT EHR_DTL_CODE, to_char(EHR_CRT_DT, 'dd-MON-yyyy
+		// hh:mi AM') as previous_date, EHR_CRT_DT FROM EMR_HEALTH_RECORD WHERE
+		// EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE
+		// EAM_ATTRB_TYPE = ?) ORDER BY EHR_CRT_DT DESC";
 		StringBuilder sql = new StringBuilder();
-		
-		sql.append(" SELECT distinct b.EHR_DTL_CODE, to_char(b.EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, b.EHR_CRT_DT ");
+
+		sql.append(
+				" SELECT distinct b.EHR_DTL_CODE, to_char(b.EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') as previous_date, b.EHR_CRT_DT ");
 		sql.append(" FROM EMR_CLINICAL_DETAIL a, ");
 		sql.append(" EMR_HEALTH_RECORD b ");
 		sql.append(" WHERE ");
 		sql.append(" a.ECD_PAT_NUM = ? ");
 		sql.append(" and a.ECD_EM_NUM = b.EHR_EMR_NUM ");
-		sql.append(" and b.EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY b.EHR_CRT_DT DESC ");
-		
+		sql.append(
+				" and b.EHR_ATTRB_CODE IN (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ORDER BY b.EHR_CRT_DT DESC ");
 
 		System.out.println(sql.toString());
 
@@ -782,11 +787,10 @@ public class PatientDaoImpl implements PatientDao {
 			con.setAutoCommit(false);
 
 			try (PreparedStatement ps = createPreparedStatement15(con, edNo, records)) {
-				
-				int affectedRecords [] = ps.executeBatch();
-				
+
+				int affectedRecords[] = ps.executeBatch();
+
 				System.out.println("Updated Records : " + affectedRecords);
-				
 
 			} catch (SQLException e) {
 				// TODO: handle exception
@@ -802,14 +806,13 @@ public class PatientDaoImpl implements PatientDao {
 
 		}
 
-		
 	}
 
 	private PreparedStatement createPreparedStatement15(Connection con, String edNumber, Map<String, String> records)
 			throws SQLException {
 
 		Set<Map.Entry<String, String>> set = records.entrySet();
-		
+
 		System.out.println("Updated List : " + set);
 
 		String sql = "UPDATE EMR_HEALTH_RECORD SET EHR_ATTRB_VALUE = ? WHERE EHR_DTL_CODE = ? AND EHR_ATTRB_CODE= ?";
@@ -817,14 +820,134 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 
 		for (Map.Entry<String, String> keyValue : set) {
-			
-			System.out.println("Updated Key : " + keyValue.getKey()  + " Value :" + keyValue.getValue());
-			
+
+			System.out.println("Updated Key : " + keyValue.getKey() + " Value :" + keyValue.getValue());
+
 			ps.setString(1, keyValue.getValue());
 			ps.setString(2, edNumber);
 			ps.setString(3, keyValue.getKey());
 			ps.addBatch();
 		}
+
+		return ps;
+	}
+
+	public List<List<String>> getPreviousRecord(String ipNumber, String eamType) throws SQLException {
+
+		System.out.println("In getPreviousRecord method");
+		List<List<String>> list = new ArrayList<>();
+		List<String> col = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		Map<String, String> eamKeyValue = new HashMap<>();
+
+		String[] key = null;
+		String[] value = null;
+		int index = 0;
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+
+			try (PreparedStatement ps = createPreparedStatement16(con, eamType); ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+				
+				rs.getro
+
+				key = new String[rsmd.get];
+				value = new String[rsmd.getColumnCount()];
+				
+				System.out.println("Key Length : " + key.length);
+				System.out.println("Value Length : " + value.length);
+
+				if (rs.next()) {
+					do {
+						key[index] = rs.getString(1);
+						value[index] = rs.getString(2);
+						index++;
+					} while (rs.next());
+				}
+			}
+
+			try (PreparedStatement ps = createPreparedStatement17(con, ipNumber, eamType, key, value);
+					ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					col.add(rsmd.getColumnName(i));
+				}
+
+				list.add(col);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+				}
+				list.add(row);
+			}
+		}
+
+		return list;
+
+	}
+
+	private PreparedStatement createPreparedStatement16(Connection con, String eamType) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(
+				" SELECT EAM_ATTRB_DESC, EAM_ATTRB_DESC FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE=? AND EAM_ACTIVE_FLG = 'A' ORDER BY TO_NUMBER(EAM_ATTRB_SLNO) ");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, eamType);
+
+		return ps;
+	}
+
+	private PreparedStatement createPreparedStatement17(Connection con, String ipNumber, String eamType,
+			String [] keys, String [] values) throws SQLException {
+
+		
+
+		int index = 0;
+		StringBuffer sql = new StringBuffer();
+		sql.append("select  to_char(d.EHR_CRT_DT, 'dd-MON-yyyy hh:mi'), ");
+
+		for (String key : keys) {
+			if (index + 1 == keys.length) {
+				sql.append("max(decode(d.ehr_attrb_code,'" + key + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
+						+ values[index] + "\"");
+			} else {
+				sql.append("max(decode(d.ehr_attrb_code,'" + key + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
+						+ values[index] + "\"" + ",");
+			}
+			index++;
+		}
+		sql.append(" FROM ");
+		sql.append(" RE_REGISTRATION_HEADER a, ");
+		sql.append(" WA_ADMISSION_TXN b , ");
+		sql.append(" EMR_CLINICAL_DETAIL c , ");
+		sql.append(" EMR_HEALTH_RECORD d ");
+		sql.append(" WHERE ");
+		sql.append(" b.WAT_MR_NUM = a.RRH_MR_NUM ");
+		sql.append(" AND WAT_PAT_STATUS = 'ADIP' ");
+		sql.append(" AND c.ECD_PAT_NUM = b.WAT_IP_NUM ");
+		sql.append(" AND c.ECD_PAT_NUM = ? ");
+		sql.append(
+				" AND d.EHR_ATTRB_CODE in (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ");
+		sql.append(" AND d.EHR_EMR_NUM = c.ECD_EM_NUM ");
+		sql.append(" GROUP BY d.EHR_CRT_DT ");
+
+		System.out.println("Get Previous record Query : \r\n" + sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, ipNumber);
+		ps.setString(2, eamType);
 
 		return ps;
 	}
