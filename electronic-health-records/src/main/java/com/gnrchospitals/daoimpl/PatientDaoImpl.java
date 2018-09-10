@@ -838,36 +838,21 @@ public class PatientDaoImpl implements PatientDao {
 		List<List<String>> list = new ArrayList<>();
 		List<String> col = new ArrayList<>();
 		List<String> row = new ArrayList<>();
-		Map<String, String> eamKeyValue = new HashMap<>();
-
-		String[] key = null;
-		String[] value = null;
-		int index = 0;
+		List<String> keyValue = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection();) {
 
 			try (PreparedStatement ps = createPreparedStatement16(con, eamType); ResultSet rs = ps.executeQuery()) {
 
-				ResultSetMetaData rsmd = rs.getMetaData();
-				
-				rs.getro
-
-				key = new String[rsmd.get];
-				value = new String[rsmd.getColumnCount()];
-				
-				System.out.println("Key Length : " + key.length);
-				System.out.println("Value Length : " + value.length);
-
 				if (rs.next()) {
 					do {
-						key[index] = rs.getString(1);
-						value[index] = rs.getString(2);
-						index++;
+						keyValue.add(rs.getString(1));
+						keyValue.add(rs.getString(2));
 					} while (rs.next());
 				}
 			}
 
-			try (PreparedStatement ps = createPreparedStatement17(con, ipNumber, eamType, key, value);
+			try (PreparedStatement ps = createPreparedStatement17(con, ipNumber, eamType, keyValue);
 					ResultSet rs = ps.executeQuery()) {
 
 				ResultSetMetaData rsmd = rs.getMetaData();
@@ -898,7 +883,7 @@ public class PatientDaoImpl implements PatientDao {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(
-				" SELECT EAM_ATTRB_DESC, EAM_ATTRB_DESC FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE=? AND EAM_ACTIVE_FLG = 'A' ORDER BY TO_NUMBER(EAM_ATTRB_SLNO) ");
+				" SELECT EAM_ATTRB_CODE, EAM_ATTRB_DESC FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE=? AND EAM_ACTIVE_FLG = 'A' ORDER BY TO_NUMBER(EAM_ATTRB_SLNO) ");
 
 		System.out.println(sql.toString());
 
@@ -910,23 +895,24 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement17(Connection con, String ipNumber, String eamType,
-			String [] keys, String [] values) throws SQLException {
+			List<String> keyValue) throws SQLException {
 
-		
-
-		int index = 0;
+		int i = 0;
 		StringBuffer sql = new StringBuffer();
-		sql.append("select  to_char(d.EHR_CRT_DT, 'dd-MON-yyyy hh:mi'), ");
+		sql.append("select  to_char(d.EHR_CRT_DT, 'dd-MON-yyyy hh:mi') \"CREATE_DATE\", ");
+		
+		//System.out.println("KEYVALUE size : " + keyValue.size());
 
-		for (String key : keys) {
-			if (index + 1 == keys.length) {
-				sql.append("max(decode(d.ehr_attrb_code,'" + key + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
-						+ values[index] + "\"");
+		while (i < keyValue.size()) {
+			//System.out.println("Size of i " + i);
+			if (i + 2 == keyValue.size()) {
+				sql.append("max(decode(d.ehr_attrb_code,'" + keyValue.get(i) + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
+						+ keyValue.get(i + 1) + "\"");
 			} else {
-				sql.append("max(decode(d.ehr_attrb_code,'" + key + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
-						+ values[index] + "\"" + ",");
+				sql.append("max(decode(d.ehr_attrb_code,'" + keyValue.get(i) + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
+						+ keyValue.get(i + 1) + "\"" + ",");
 			}
-			index++;
+			i += 2;
 		}
 		sql.append(" FROM ");
 		sql.append(" RE_REGISTRATION_HEADER a, ");
