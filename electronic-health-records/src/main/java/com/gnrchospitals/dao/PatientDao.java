@@ -39,6 +39,8 @@ public interface PatientDao {
 	public abstract List<List<String>> fetchGobalTempData(String ipNumber, String [] arr) throws SQLException;
 	
 	public List<List<String>> getPreviousRecord(String ipNumber, String eamType) throws SQLException;
+	
+	public List<List<String>> getExcelHeaderRange(String eamType) throws SQLException;
 
 
 }

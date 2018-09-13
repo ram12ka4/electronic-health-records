@@ -38,6 +38,7 @@ public class InvestigationReport extends HttpServlet {
 
 		try {
 			List<List<String>> list = patientDao.getPreviousRecord(ipNumber, "IS");
+			List<List<String>> excelHeanderRangeList = patientDao.getExcelHeaderRange("IS");
 
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition", "attachment;filename=sample.xlsx");
@@ -45,7 +46,7 @@ public class InvestigationReport extends HttpServlet {
 			response.setHeader("Pragma", "cache");
 			response.setHeader("Cache-Control", "private");
 
-			investExcel.writeDataToExcelFile(name, age, sex, service, ipNumber, bedNumber, list,
+			investExcel.writeDataToExcelFile(name, age, sex, service, ipNumber, bedNumber, list, excelHeanderRangeList, 
 					response.getOutputStream());
 
 		} catch (Exception e) {

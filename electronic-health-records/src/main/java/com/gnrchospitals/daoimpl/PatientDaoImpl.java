@@ -883,13 +883,14 @@ public class PatientDaoImpl implements PatientDao {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(
-				" SELECT EAM_ATTRB_CODE, EAM_ATTRB_DESC FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE=? AND EAM_ACTIVE_FLG = 'A' ORDER BY TO_NUMBER(EAM_ATTRB_SLNO) ");
+				" SELECT EAM_ATTRB_CODE, EAM_ATTRB_DESC FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE=? AND EAM_ACTIVE_FLG = 'A' AND EAM_REMARKS <> ? ORDER BY TO_NUMBER(EAM_ATTRB_SLNO) ");
 
 		System.out.println(sql.toString());
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 
 		ps.setString(1, eamType);
+		ps.setString(2, eamType);
 
 		return ps;
 	}
@@ -899,12 +900,12 @@ public class PatientDaoImpl implements PatientDao {
 
 		int i = 0;
 		StringBuffer sql = new StringBuffer();
-		sql.append("select  to_char(d.EHR_CRT_DT, 'dd-MON-yyyy hh:mi') \"CREATE_DATE\", ");
-		
-		//System.out.println("KEYVALUE size : " + keyValue.size());
+		sql.append("select  to_char(d.EHR_CRT_DT, 'dd-MON-yyyy hh:mi AM') \"CREATE_DATE\", ");
+
+		// System.out.println("KEYVALUE size : " + keyValue.size());
 
 		while (i < keyValue.size()) {
-			//System.out.println("Size of i " + i);
+			// System.out.println("Size of i " + i);
 			if (i + 2 == keyValue.size()) {
 				sql.append("max(decode(d.ehr_attrb_code,'" + keyValue.get(i) + "' , d.EHR_ATTRB_VALUE, '')) " + "\""
 						+ keyValue.get(i + 1) + "\"");
@@ -925,7 +926,7 @@ public class PatientDaoImpl implements PatientDao {
 		sql.append(" AND c.ECD_PAT_NUM = b.WAT_IP_NUM ");
 		sql.append(" AND c.ECD_PAT_NUM = ? ");
 		sql.append(
-				" AND d.EHR_ATTRB_CODE in (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ?) ");
+				" AND d.EHR_ATTRB_CODE in (SELECT EAM_ATTRB_CODE FROM EMR_ATTRIBUTE_MASTER WHERE EAM_ATTRB_TYPE = ? and EAM_REMARKS <> ? ) ");
 		sql.append(" AND d.EHR_EMR_NUM = c.ECD_EM_NUM ");
 		sql.append(" GROUP BY d.EHR_CRT_DT ");
 
@@ -934,6 +935,56 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, ipNumber);
 		ps.setString(2, eamType);
+		ps.setString(3, eamType);
+
+		return ps;
+	}
+
+	public List<List<String>> getExcelHeaderRange(String eamType) throws SQLException {
+
+		System.out.println("In getPreviousRecord method");
+		List<List<String>> list = new ArrayList<>();
+		List<String> col = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+
+			try (PreparedStatement ps = createPreparedStatement18(con, eamType); ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					col.add(rsmd.getColumnName(i));
+				}
+
+				list.add(col);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+				}
+				list.add(row);
+			}
+		}
+
+		return list;
+
+	}
+
+	private PreparedStatement createPreparedStatement18(Connection con, String eamType) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(
+				" SELECT EAM_ATTRB_DESC, (SELECT COUNT(*) FROM EMR_ATTRIBUTE_MASTER WHERE EAM_REMARKS = A.EAM_ATTRB_CODE) RANGE FROM EMR_ATTRIBUTE_MASTER A WHERE EAM_REMARKS = ? ");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, eamType);
 
 		return ps;
 	}
