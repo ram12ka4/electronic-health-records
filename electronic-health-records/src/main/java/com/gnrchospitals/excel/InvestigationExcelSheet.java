@@ -21,16 +21,15 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
 public class InvestigationExcelSheet {
 
 	public void writeDataToExcelFile(String name, String age, String sex, String service, String ipNumber,
-			String bedNumber, List<List<String>> list, List<List<String>> excelHeanderRangeList,  OutputStream out) {
+			String bedNumber, List<List<String>> list, List<List<String>> excelHeanderRangeList, OutputStream out) {
 
 		List<String> colData = list.get(0);
 		List<String> rowData = list.get(1);
-		
-		List<String> colHeaderName = excelHeanderRangeList.get(0); 
+
+		List<String> colHeaderName = excelHeanderRangeList.get(0);
 		List<String> rowHeaderNameRange = excelHeanderRangeList.get(1);
 
 		System.out.println("Column Data : " + colData);
@@ -40,24 +39,52 @@ public class InvestigationExcelSheet {
 
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet("Investigation Sheet");
-		
-		
-	
 		Row row = null;
 		Cell cell = null;
-		
-		sheet.protectSheet("Ram@");
-		
-		Font font = workbook.createFont();
-		font.setFontHeightInPoints((short)10);
-		font.setFontName("Calibri");
-		font.setColor(IndexedColors.BLACK.getIndex());;
-		
-		
-		CellStyle fontStyle = workbook.createCellStyle();
-		fontStyle.setFillBackgroundColor(IndexedColors.PINK.getIndex());
-		fontStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		fontStyle.setFont(font);
+
+		sheet.protectSheet("gnrc@123");
+
+		Font logoFont = workbook.createFont();
+		logoFont.setFontHeightInPoints((short) 28);
+		logoFont.setFontName("Arial Black");
+		logoFont.setBold(true);
+		logoFont.setColor(IndexedColors.PINK.getIndex());
+
+		// Cell Border Style
+		CellStyle logoBorderStyle = workbook.createCellStyle();
+		logoBorderStyle.setWrapText(true);
+		logoBorderStyle.setAlignment(HorizontalAlignment.CENTER);
+		logoBorderStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		logoBorderStyle.setFont(logoFont);
+
+		Font titleFont = workbook.createFont();
+		titleFont.setFontHeightInPoints((short) 16);
+		titleFont.setFontName("Calibri");
+		titleFont.setColor(IndexedColors.BLACK.getIndex());
+
+		// Cell Border Style
+		CellStyle titleBorderStyle = workbook.createCellStyle();
+		titleBorderStyle.setWrapText(true);
+		titleBorderStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		titleBorderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		titleBorderStyle.setAlignment(HorizontalAlignment.CENTER);
+		titleBorderStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		titleBorderStyle.setFont(titleFont);
+
+		Font diagnosFont = workbook.createFont();
+		diagnosFont.setFontHeightInPoints((short) 12);
+		diagnosFont.setBold(true);
+		diagnosFont.setFontName("Calibri");
+		diagnosFont.setColor(IndexedColors.BLACK.getIndex());
+
+		// Cell Border Style
+		CellStyle diagnosBorderStyle = workbook.createCellStyle();
+		diagnosBorderStyle.setWrapText(true);
+		diagnosBorderStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		diagnosBorderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		diagnosBorderStyle.setAlignment(HorizontalAlignment.CENTER);
+		diagnosBorderStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		diagnosBorderStyle.setFont(diagnosFont);
 
 		// Cell Border Style
 		CellStyle cellBorderStyle = workbook.createCellStyle();
@@ -84,34 +111,93 @@ public class InvestigationExcelSheet {
 		cellAlignStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		cellAlignStyle.setAlignment(HorizontalAlignment.CENTER);
 		cellAlignStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		
-		
-		
-
-		row = sheet.createRow(1);
 
 		System.out.println("First step");
 
 		int dateRange = rowData.size() / colData.size();
-		int headerCount = rowHeaderNameRange.size() / colHeaderName.size(); 
+		int headerCount = rowHeaderNameRange.size() / colHeaderName.size();
 
-		System.out.println("Cell range : " + dateRange);
 		System.out.println("Header  : " + headerCount);
+		System.out.println("Cell range : " + dateRange);
+
+		row = sheet.createRow(0);
+		cell = row.createCell(0);
+		cell.setCellValue("GNRC");
+		CellRangeAddress logoRange = new CellRangeAddress(row.getRowNum(), row.getRowNum() + 1, cell.getColumnIndex(), dateRange);
+		sheet.addMergedRegion(logoRange);
+		cell.setCellStyle(logoBorderStyle);
+		RegionUtil.setBorderRight(BorderStyle.THIN, logoRange, sheet);
+		RegionUtil.setBorderBottom(BorderStyle.THIN, logoRange, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.THIN, logoRange, sheet);
+		RegionUtil.setBorderTop(BorderStyle.THIN, logoRange, sheet);
+
+		row = sheet.createRow(2);
+		cell = row.createCell(0);
+		cell.setCellValue("INVESTIGATION REPORT");
+		CellRangeAddress titleRange = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), dateRange);
+		sheet.addMergedRegion(titleRange);
+		cell.setCellStyle(titleBorderStyle);
+		RegionUtil.setBorderRight(BorderStyle.THIN, titleRange, sheet);
+		RegionUtil.setBorderBottom(BorderStyle.THIN, titleRange, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.THIN, titleRange, sheet);
+		RegionUtil.setBorderTop(BorderStyle.THIN, titleRange, sheet);
+
+		row = sheet.createRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("NAME : " + name);
+		CellRangeAddress nameRnge = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), 1);
+		sheet.addMergedRegion(nameRnge);
+		RegionUtil.setBorderRight(BorderStyle.THIN, nameRnge, sheet);
+		RegionUtil.setBorderBottom(BorderStyle.THIN, nameRnge, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.THIN, nameRnge, sheet);
+		RegionUtil.setBorderTop(BorderStyle.THIN, nameRnge, sheet);
+
+		cell = row.createCell(2);
+		cell.setCellValue("AGE : " + age);
+		cell.setCellStyle(cellBorderStyle);
+
+		cell = row.createCell(3);
+		cell.setCellValue("SEX : " + sex);
+		cell.setCellStyle(cellBorderStyle);
+
+		cell = row.createCell(4);
+		cell.setCellValue("BED NO. : " + bedNumber);
+		cell.setCellStyle(cellBorderStyle);
+
+		row = sheet.createRow(4);
+		cell = row.createCell(0);
+		cell.setCellValue("SERVICE & UNIT : " + service);
+		CellRangeAddress serviceRnge = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), 2);
+		sheet.addMergedRegion(serviceRnge);
+		RegionUtil.setBorderRight(BorderStyle.THIN, serviceRnge, sheet);
+		RegionUtil.setBorderBottom(BorderStyle.THIN, serviceRnge, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.THIN, serviceRnge, sheet);
+		RegionUtil.setBorderTop(BorderStyle.THIN, serviceRnge, sheet);
+
+		cell = row.createCell(3);
+		cell.setCellValue("IP No. : " + ipNumber);
+		CellRangeAddress ipRange = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), 4);
+		sheet.addMergedRegion(ipRange);
+		RegionUtil.setBorderRight(BorderStyle.THIN, ipRange, sheet);
+		RegionUtil.setBorderBottom(BorderStyle.THIN, ipRange, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.THIN, ipRange, sheet);
+		RegionUtil.setBorderTop(BorderStyle.THIN, ipRange, sheet);
+		cell.setCellStyle(cellBorderStyle);
 
 		int i = 0;
-		int j = 2;
-		row = sheet.createRow(2);
-		cell = row.createCell(1);
-		sheet.setColumnWidth(1, 5000);
+		int j = 1;
+		row = sheet.createRow(5);
+		cell = row.createCell(0);
+		sheet.setColumnWidth(0, 5000);
 		cell.setCellValue("Parameters");
-		//cell.setCellStyle(fontStyle);
+		// cell.setCellStyle(fontStyle);
 		cell.setCellStyle(cellBorderStyle);
 
 		while (i < rowData.size()) {
 			cell = row.createCell(j++);
-			sheet.setColumnWidth(j-1, 5500);
+			sheet.setColumnWidth(j - 1, 3800);
 			cell.setCellValue(rowData.get(i));
-			//cell.setCellStyle(fontStyle);
+			// cell.setCellStyle(fontStyle);
 			cell.setCellStyle(cellBorderStyle);
 			i += colData.size();
 		}
@@ -123,70 +209,83 @@ public class InvestigationExcelSheet {
 		int headerIndex = 0;
 		int paramIndex = 0;
 		int tempIndex = 0;
-		
-		System.out.println("Row Count : " + ((colData.size() -1) + headerCount));
 
-		while (rowIndex < ((colData.size() -1) + headerCount)) {
+		System.out.println("Row Count : " + ((colData.size() - 1) + headerCount));
+
+		while (rowIndex < ((colData.size() - 1) + headerCount)) {
+
+			System.out.println("Step 1");
 
 			if (count == 0) {
-				row = sheet.createRow(rowIndex + 3);
-				cell = row.createCell(1);
+				row = sheet.createRow(rowIndex + 6);
+				cell = row.createCell(0);
 				cell.setCellValue(colData.get(rowIndex + 1));
 				cell.setCellStyle(cellBorderStyle);
 
-				cell = row.createCell(2);
+				cell = row.createCell(1);
 				cell.setCellValue(rowData.get(1));
 				cell.setCellStyle(cellAlignStyle);
-				CellRangeAddress mergedCell = new CellRangeAddress(3, 3, 2, dateRange + 1);
+				CellRangeAddress mergedCell = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), dateRange);
 				sheet.addMergedRegion(mergedCell);
 				RegionUtil.setBorderRight(BorderStyle.THIN, mergedCell, sheet);
 
 			} else {
 
+				System.out.println("step 2");
+
 				if (flag) {
-				/*	System.out.println("Row Index 1 : " + rowIndex);
-					System.out.println("Row Number : " + (rowIndex + 3) + "------> Header Name  : " + rowHeaderNameRange.get(headerIndex));*/
-					row = sheet.createRow(rowIndex + 3); // 21
-					cell = row.createCell(1);
+					/*
+					 * System.out.println("Row Index 1 : " + rowIndex);
+					 * System.out.println("Row Number : " + (rowIndex + 3) +
+					 * "------> Header Name  : " + rowHeaderNameRange.get(headerIndex));
+					 */
+					row = sheet.createRow(rowIndex + 6); // 21
+					cell = row.createCell(0);
 					cell.setCellValue(rowHeaderNameRange.get(headerIndex));
 					cell.setCellStyle(cellAlignStyle);
-					CellRangeAddress mergedCell = new CellRangeAddress(rowIndex + 3, rowIndex + 3, 1, dateRange + 1);
+					// CellRangeAddress mergedCell = new CellRangeAddress(rowIndex + 3, rowIndex +
+					// 3, 1, dateRange + 1);
+					CellRangeAddress mergedCell = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(),	dateRange);
 					sheet.addMergedRegion(mergedCell);
-					sheet.createFreezePane(2, 3);
+					cell.setCellStyle(diagnosBorderStyle);
+
+					sheet.createFreezePane(1, 6);
 					RegionUtil.setBorderRight(BorderStyle.THIN, mergedCell, sheet);
 					RegionUtil.setBorderTop(BorderStyle.THIN, mergedCell, sheet);
 					flag = false;
-					
 
 				} else {
 
+					System.out.println("step 3");
+
 					System.out.println("header range count : " + Integer.parseInt(rowHeaderNameRange.get(paramIndex + 1)));
-					
-					
+
 					if (hearderCount < Integer.parseInt(rowHeaderNameRange.get(paramIndex + 1))) {
 
-						/*System.out.println("Row Index 2 : " + rowIndex);
-						System.out.println("Temp Index : " + tempIndex);
-*/
-						row = sheet.createRow(rowIndex + 3);
-						cell = row.createCell(1);
+						/*
+						 * System.out.println("Row Index 2 : " + rowIndex);
+						 * System.out.println("Temp Index : " + tempIndex);
+						 */
+						row = sheet.createRow(rowIndex + 6);
+						cell = row.createCell(0);
 						cell.setCellValue(colData.get(tempIndex + 2));
 						cell.setCellStyle(cellBorderStyle);
 
 						int colIndex = 0;
 
 						for (int k = 0; k < dateRange; k++) {
-							cell = row.createCell(k + 2);
+							cell = row.createCell(k + 1);
 							cell.setCellValue(rowData.get(tempIndex + 2 + colIndex));
 							cell.setCellStyle(cellAlignStyle);
 							colIndex += colData.size();
 						}
 
 						tempIndex++;
-						
 
-						/*System.out.println("Header Count : " + hearderCount + "----> Row Number : "
-								+ (row.getRowNum() + 1) + "------->  Column Name : " + colData.get(tempIndex));*/
+						/*
+						 * System.out.println("Header Count : " + hearderCount + "----> Row Number : " +
+						 * (row.getRowNum() + 1) + "------->  Column Name : " + colData.get(tempIndex));
+						 */
 
 						hearderCount++;
 
