@@ -66,7 +66,7 @@ public class LoginServlet extends HttpServlet {
 			response.addCookie(userName);
 			// Get the encoded URL string
 			//String encodeURL = response.encodeRedirectURL("/WEB-INF/views/dashboard.jsp");
-			String encodeURL = response.encodeRedirectURL("/dashboard.do");
+			String encodeURL = response.encodeRedirectURL("/patient.portal");
 			 response.sendRedirect(encodeURL);
 			//request.getRequestDispatcher(encodeURL).forward(request, response);
 

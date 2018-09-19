@@ -98,18 +98,18 @@ $(document)
 
 								},
 								failure : function(data) {
-									alert("failure");
+									//alert("failure");
 									alert(data.responseText);
 								},
 								error : function(data) {
-									alert("error");
+									//alert("error");
 									alert(data.responseText);
 								}
 							});
 
 					$(document).on('click', '.submit-btn', function(e) {
 
-						alert('Submit Button');
+						//alert('Submit Button');
 
 						e.preventDefault();
 
@@ -123,7 +123,7 @@ $(document)
 									'.confirm-btn',
 									function() {
 
-										alert("Final confirm");
+										//alert("Final confirm");
 
 										$('.circleModal').modal({
 											backdrop : 'static',
@@ -218,7 +218,7 @@ $(document)
 						  input.type = "hidden";
 						  input.name = ""*/
 						
-						alert('In previous Button');
+						//alert('In previous Button');
 						
 						document.getElementById("invest-frm").method = "post";
 						document.getElementById("invest-frm").action = "invest.report";
@@ -237,7 +237,7 @@ $(document)
 									function() {
 
 										var edNumber = $.trim($(this).val());
-										alert(edNumber);
+										//alert(edNumber);
 
 										var req = $
 												.ajax({
@@ -251,7 +251,7 @@ $(document)
 														edNo : edNumber
 													},
 													success : function(data) {
-														alert(data);
+														//alert(data);
 														arr = data.replace("{",
 																"").replace(
 																"}", "").split(
@@ -323,16 +323,14 @@ $(document)
 
 																							if (key
 																									.localeCompare("IS016") == 0) {
-																								alert("In If clause");
+																								//alert("In If clause");
 																								var value1 = value
 																										.trim()
 																										.replace(
 																												/^\W+|\W+$/g,
 																												"");
-																								alert("Value : "
-																										+ value1);
-																								alert("Value length : "
-																										+ value1.length);
+																								//alert("Value : " + value1);
+																								//alert("Value length : "+ value1.length);
 
 																								$(
 																										'select[name="IS016"] option[value="'

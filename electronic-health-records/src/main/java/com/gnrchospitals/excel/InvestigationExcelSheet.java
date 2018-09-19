@@ -32,10 +32,10 @@ public class InvestigationExcelSheet {
 		List<String> colHeaderName = excelHeanderRangeList.get(0);
 		List<String> rowHeaderNameRange = excelHeanderRangeList.get(1);
 
-		System.out.println("Column Data : " + colData);
-		System.out.println("Row Data : " + rowData);
-		System.out.println("colHeaderName Data : " + colHeaderName);
-		System.out.println("rowHeaderNameRange Data : " + rowHeaderNameRange);
+		//System.out.println("Column Data : " + colData);
+		//System.out.println("Row Data : " + rowData);
+		//System.out.println("colHeaderName Data : " + colHeaderName);
+		//System.out.println("rowHeaderNameRange Data : " + rowHeaderNameRange);
 
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet("Investigation Sheet");
@@ -112,13 +112,13 @@ public class InvestigationExcelSheet {
 		cellAlignStyle.setAlignment(HorizontalAlignment.CENTER);
 		cellAlignStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
-		System.out.println("First step");
+		//System.out.println("First step");
 
 		int dateRange = rowData.size() / colData.size();
 		int headerCount = rowHeaderNameRange.size() / colHeaderName.size();
 
-		System.out.println("Header  : " + headerCount);
-		System.out.println("Cell range : " + dateRange);
+		//System.out.println("Header  : " + headerCount);
+		//System.out.println("Cell range : " + dateRange);
 
 		row = sheet.createRow(0);
 		cell = row.createCell(0);
@@ -190,14 +190,12 @@ public class InvestigationExcelSheet {
 		cell = row.createCell(0);
 		sheet.setColumnWidth(0, 5000);
 		cell.setCellValue("Parameters");
-		// cell.setCellStyle(fontStyle);
 		cell.setCellStyle(cellBorderStyle);
 
 		while (i < rowData.size()) {
 			cell = row.createCell(j++);
 			sheet.setColumnWidth(j - 1, 3800);
 			cell.setCellValue(rowData.get(i));
-			// cell.setCellStyle(fontStyle);
 			cell.setCellStyle(cellBorderStyle);
 			i += colData.size();
 		}
@@ -210,11 +208,11 @@ public class InvestigationExcelSheet {
 		int paramIndex = 0;
 		int tempIndex = 0;
 
-		System.out.println("Row Count : " + ((colData.size() - 1) + headerCount));
+		//System.out.println("Row Count : " + ((colData.size() - 1) + headerCount));
 
 		while (rowIndex < ((colData.size() - 1) + headerCount)) {
 
-			System.out.println("Step 1");
+			//System.out.println("Step 1");
 
 			if (count == 0) {
 				row = sheet.createRow(rowIndex + 6);
@@ -222,12 +220,21 @@ public class InvestigationExcelSheet {
 				cell.setCellValue(colData.get(rowIndex + 1));
 				cell.setCellStyle(cellBorderStyle);
 
+			//	System.out.println("Step 1.1");
+				
 				cell = row.createCell(1);
 				cell.setCellValue(rowData.get(1));
 				cell.setCellStyle(cellAlignStyle);
-				CellRangeAddress mergedCell = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), dateRange);
-				sheet.addMergedRegion(mergedCell);
-				RegionUtil.setBorderRight(BorderStyle.THIN, mergedCell, sheet);
+			//	System.out.println("Step 1.2");
+			//	System.out.println("Row Number : " + row.getRowNum());
+			//	System.out.println("Cell Number : " + cell.getColumnIndex());
+				if (dateRange != 1) {
+					CellRangeAddress mergedCell = new CellRangeAddress(row.getRowNum(), row.getRowNum(), cell.getColumnIndex(), dateRange);
+					sheet.addMergedRegion(mergedCell);
+					RegionUtil.setBorderRight(BorderStyle.THIN, mergedCell, sheet);
+				}
+			//	System.out.println("Step 1.3");
+			//	System.out.println("Step 1.4");
 
 			} else {
 
@@ -256,9 +263,9 @@ public class InvestigationExcelSheet {
 
 				} else {
 
-					System.out.println("step 3");
+				//	System.out.println("step 3");
 
-					System.out.println("header range count : " + Integer.parseInt(rowHeaderNameRange.get(paramIndex + 1)));
+				//	System.out.println("header range count : " + Integer.parseInt(rowHeaderNameRange.get(paramIndex + 1)));
 
 					if (hearderCount < Integer.parseInt(rowHeaderNameRange.get(paramIndex + 1))) {
 
