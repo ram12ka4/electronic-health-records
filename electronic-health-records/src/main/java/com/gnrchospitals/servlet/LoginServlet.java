@@ -1,6 +1,10 @@
 package com.gnrchospitals.servlet;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,10 +39,22 @@ public class LoginServlet extends HttpServlet {
 		String id = request.getParameter("user") == null ? "" : request.getParameter("user");
 		String password = request.getParameter("password") == null ? "" : request.getParameter("password");
 		String location = request.getParameter("location") == null ? "" : request.getParameter("location");
+		
+		// Fetch login date and time
+		DateFormat df = new SimpleDateFormat("d-M-yyyy h:m a");
+		Date date =new Date();
+		String today = df.format(date);
+		
+		// Fetch ip address
+		InetAddress localhost = InetAddress.getLocalHost();
+		
+		
 
 		System.out.println("User ID : " + id);
 		System.out.println("Password : " + password);
 		System.out.println("Location : " + location);
+		System.out.println("Login Time : " + today);
+		System.out.println("Login From : " + localhost);
 
 		DatabaseDao databaseDo = new DatabaseDaoImpl();
 		boolean loginDatabaseValidate = databaseDo.findByLocation(location);
@@ -60,6 +76,9 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", id);
 			session.setAttribute("username", userBean);
+			session.setAttribute("location", location);
+			session.setAttribute("loginFrom", localhost);
+			session.setAttribute("loginTime", today);
 			// setting session to expiry in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
 			Cookie userName = new Cookie("user", id);

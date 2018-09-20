@@ -18,103 +18,8 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700"
 	rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/patient-portal.css">
 
-<style type="text/css">
-.wrapper {
-	display: block;
-	border: 20px solid #bdc3c7;
-	max-width: 800px;
-	width: 80%;
-	margin: 20px auto;
-	padding: 20px;
-	font-family: Source Sans Pro;
-}
-
-.child-wrapper {
-	overflow: hidden;
-}
-
-.item {
-	position: inherit;
-	outline: none;
-	pointer: cursor;
-	float: left;
-	width: 15%;
-	margin: 1% 5%;
-	text-align: center;
-	font-family: Source Sans Pro;
-	font-size: 11px;
-	font-weight: 700;
-}
-
-.item img {
-	width: 100%;
-	cursor: pointer;
-	outline: none;
-	border-radius: 10px;
-	box-shadow: 0 2px black;
-}
-
-.item:hover {
-	top: 4px;
-}
-
-.item img:hover {
-	box-shadow: 0 1px black;
-}
-
-.item:active {
-	top: 6px;
-}
-
-.item img:active {
-	box-shadow: none;
-}
-
-
-
-img {
-	 float : left;
-	position: relative;
-	width: 30%;
-	float: left;
-}
-
-.title {
-	float: left;
-	position: relative;
-	width: 70%;
-	top: 33px;
-	font-size: 3.5em;
-	font-weight: 700;
-	letter-spacing: 1px;
-	line-height: 30px;
-	padding: 5px;
-}
-
-.sub-title {
-	
-	position : relative;
-	width: 50%;
-	clear: left;
-	top: -55px;
-	left: 31%;
-	font-size: 1.2em;
-	font-weight: 400;
-	position: relative;
-}
-
-.myhr {
-	clear: left;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	background-image: linear-gradient(to right, rgba(0, 0, 0, 0),
-		rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-}
-</style>
 </head>
 
 <body>
@@ -138,16 +43,21 @@ hr {
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+					<li><a href="#">User Id : 50729</a></li>
+					<li><a href="#">Name : Ram Kumar Basak</a></li>
+					<li><a href="#">Login Time : 18-09-2018 12:24 PM</a></li>
+					<li><a href="#">Login From : 172.16.12.200</a></li>
+					<li><a href="#">Location : Dispur</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#" data-toggle="modal"
-								data-target="#logoutModal">Logout</a></li>
+							<li><a href="#" data-toggle="modal"	data-target="#logoutModal">Logout</a></li>
 							<li><a href="#">Change Password</a></li>
-						</ul></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
