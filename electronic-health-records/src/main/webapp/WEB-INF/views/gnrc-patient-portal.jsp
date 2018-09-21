@@ -23,7 +23,7 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-inverse">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -43,18 +43,18 @@
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li><a href="#">User Id : 50729</a></li>
-					<li><a href="#">Name : Ram Kumar Basak</a></li>
-					<li><a href="#">Login Time : 18-09-2018 12:24 PM</a></li>
-					<li><a href="#">Login From : 172.16.12.200</a></li>
-					<li><a href="#">Location : Dispur</a></li>
+					<li><a href="#">User Id : ${sessionScope.user}</a></li>
+					<li><a href="#">Name : ${sessionScope.userName}</a></li>
+					<li><a href="#">Login Time : ${sessionScope.loginTime}</a></li>
+					<li><a href="#">Login From : ${sessionScope.loginFrom}</a></li>
+					<li><a href="#">Location : ${sessionScope.location}</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#" data-toggle="modal"	data-target="#logoutModal">Logout</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
 							<li><a href="#">Change Password</a></li>
 						</ul>
 					</li>
@@ -111,7 +111,7 @@
 			</div>
 
 			<div class="item">
-				<a href="#"> <img alt=""
+				<a href="dashboard.do"> <img alt="nurshing_workbench"
 					src="https://images.unsplash.com/photo-1537278917244-20d2027b22a4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5cc337d3abb07920a0cc130e53550043&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>Nursing Workbench</p>

@@ -47,14 +47,14 @@ public class LoginServlet extends HttpServlet {
 		
 		// Fetch ip address
 		InetAddress localhost = InetAddress.getLocalHost();
-		
+		String ipAddress = localhost.getHostAddress();
 		
 
 		System.out.println("User ID : " + id);
 		System.out.println("Password : " + password);
 		System.out.println("Location : " + location);
 		System.out.println("Login Time : " + today);
-		System.out.println("Login From : " + localhost);
+		System.out.println("Login From : " + ipAddress);
 
 		DatabaseDao databaseDo = new DatabaseDaoImpl();
 		boolean loginDatabaseValidate = databaseDo.findByLocation(location);
@@ -66,19 +66,19 @@ public class LoginServlet extends HttpServlet {
 		userBean.setPassword(password);
 
 		UserDao userdao = new UserDaoImpl();
-		boolean userValidate = userdao.authenticateUser(userBean);
+		boolean userValidation = userdao.authenticateUser(userBean);
 
-		System.out.println("User Valid : " + userValidate);
+		System.out.println("User Valid : " + userValidation);
 		System.out.println("User Name : " + userBean.getUsername());
 		
 
-		if (userValidate) {
+		if (userValidation) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", id);
-			session.setAttribute("username", userBean);
-			session.setAttribute("location", location);
-			session.setAttribute("loginFrom", localhost);
+			session.setAttribute("userName", userBean.getUsername());
 			session.setAttribute("loginTime", today);
+			session.setAttribute("loginFrom", ipAddress);
+			session.setAttribute("location", location);
 			// setting session to expiry in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
 			Cookie userName = new Cookie("user", id);

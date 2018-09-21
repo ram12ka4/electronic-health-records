@@ -1,4 +1,15 @@
 $(document).ready(function() {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/*
 	 * Toggle side navigation bar

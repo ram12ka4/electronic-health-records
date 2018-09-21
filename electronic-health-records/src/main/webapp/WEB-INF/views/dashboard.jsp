@@ -74,7 +74,7 @@ tr, tbody tr {
 		}
 	%>
 
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-inverse">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -93,16 +93,21 @@ tr, tbody tr {
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li><a href="#">About</a></li>
-					<li><a href="#">Contact</a></li>
+					<li class="active"><a href="patient.portal">Home <span
+							class="sr-only">(current)</span></a></li>
+					<li><a href="#">User Id : ${sessionScope.user}</a></li>
+					<li><a href="#">Name : ${sessionScope.userName}</a></li>
+					<li><a href="#">Login Time : ${sessionScope.loginTime}</a></li>
+					<li><a href="#">Login From : ${sessionScope.loginFrom}</a></li>
+					<li><a href="#">Location : ${sessionScope.location}</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+							<li><a href="#" data-toggle="modal"
+								data-target="#logoutModal">Logout</a></li>
 							<li><a href="#">Change Password</a></li>
 						</ul></li>
 				</ul>
@@ -114,8 +119,20 @@ tr, tbody tr {
 
 
 	<div class="container">
+
+		
+
+		<header class="clearfix">
+			<h5 class="pull-right">
+				<select class="form-control input-sm sel-ward" style="display: none;">
+					
+				</select>
+			</h5>
+		</header>
+
 		<table class="table table-striped table-bordered table-hover"
 			id="myTable" style="width: 100%">
+
 
 
 			<thead>
@@ -186,12 +203,10 @@ tr, tbody tr {
 
 	</div>
 
-
+	<input type="hidden" name="user_id" value="${sessionScope.user}">
 	<%@include file="logout-modal.html"%>
-
-
-
 	<%@include file="gnrc-common-include-js.html"%>
+	<script type="text/javascript" src="js/ip-list.js"></script>
 	<script>
 		$(document).ready(function() {
 
@@ -252,6 +267,9 @@ tr, tbody tr {
 			        } );
 			    }
 			} );  */
+
+
+			
 
 		});
 	</script>
