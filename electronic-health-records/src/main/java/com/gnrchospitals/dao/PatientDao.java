@@ -1,6 +1,7 @@
 package com.gnrchospitals.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ public interface PatientDao {
 	public List<List<String>> getPreviousRecord(String ipNumber, String eamType) throws SQLException;
 	
 	public List<List<String>> getExcelHeaderRange(String eamType) throws SQLException;
+	
+	public ArrayList<ArrayList<String>> getPatientList(String empCode) throws SQLException;
+	
+	public ArrayList<String> getWardList(String empCode) throws SQLException;
 
 
 }

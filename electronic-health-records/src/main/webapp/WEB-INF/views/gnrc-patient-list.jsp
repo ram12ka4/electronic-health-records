@@ -206,7 +206,7 @@ tr, tbody tr {
 	<input type="hidden" name="user_id" value="${sessionScope.user}">
 	<%@include file="logout-modal.html"%>
 	<%@include file="gnrc-common-include-js.html"%>
-	<script type="text/javascript" src="js/ip-list.js"></script>
+	<script type="text/javascript" src="js/patient-list.js"></script>
 	<script>
 		$(document).ready(function() {
 

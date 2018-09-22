@@ -111,7 +111,7 @@
 			</div>
 
 			<div class="item">
-				<a href="dashboard.do"> <img alt="nurshing_workbench"
+				<a href="patient.list"> <img alt="nurshing_workbench"
 					src="https://images.unsplash.com/photo-1537278917244-20d2027b22a4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5cc337d3abb07920a0cc130e53550043&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>Nursing Workbench</p>

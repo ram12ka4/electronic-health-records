@@ -989,4 +989,125 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
+	public ArrayList<String> getWardList(String empCode) throws SQLException {
+
+		int doctorCount = 0;
+		ArrayList<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+
+			try (PreparedStatement ps = createPreparedStatement19(con, empCode); ResultSet rs = ps.executeQuery()) {
+
+				if (rs.next()) {
+					do {
+						doctorCount = Integer.valueOf(rs.getString(1));
+					} while (rs.next());
+				}
+			}
+
+			try (PreparedStatement ps = createPreparedStatement20(con, doctorCount, empCode); ResultSet rs = ps.executeQuery()) {
+
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement19(Connection con, String empCode) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM AS_USER_ROLES WHERE HUR_USER_ID = ? AND HUR_ROLE_CD = 'DOC1'";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, empCode);
+		return ps;
+	}
+
+	private PreparedStatement createPreparedStatement20(Connection con, int doctorCount, String empCode) throws SQLException {
+
+		StringBuilder sql = new StringBuilder();
+
+		System.out.println("Doctor Count : " + doctorCount);
+
+		if (doctorCount == 0) {
+			sql.append("select distinct a.WAT_CURR_WARD_CD, b.WWM_WARD_DESC from   wa_admission_txn a,"
+					+ "  wa_ward_master b  where a.WAT_CURR_WARD_CD = b.WWM_WARD_CD");
+		} else {
+			sql.append("select distinct a.WAT_CURR_WARD_CD, b.WWM_WARD_DESC from  wa_admission_txn a, "
+					+ "    wa_ward_master b  where  a.WAT_CURR_WARD_CD = b.WWM_WARD_CD and a.WAT_DOCTOR_INCHARGE = ?");
+		}
+
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		
+		if (doctorCount != 0) {
+			ps.setString(1, empCode);
+		}
+		
+		return ps;
+	}
+
+	public ArrayList<ArrayList<String>> getPatientList(String empCode) throws SQLException {
+
+		ArrayList<String> row = new ArrayList<>();
+		ArrayList<String> column = new ArrayList<>();
+		ArrayList<ArrayList<String>> list = new ArrayList<>();
+		int rowCount = 0;
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement21(con);
+				ResultSet rs = ps.executeQuery()) {
+
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				column.add(rsmd.getColumnName(i));
+			}
+
+			list.add(column);
+
+			if (rs.next()) {
+				do {
+					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+						row.add(rs.getString(rsmd.getColumnName(i)));
+					}
+					rowCount++;
+				} while (rs.next());
+			}
+
+			list.add(row);
+
+		}
+
+		System.out.println("Row Count + " + rowCount);
+		System.out.println("Indoor Patient List : " + list);
+		System.out.println("Indoor Patient List size : " + list.get(1).size());
+		return list;
+
+	}
+
+	private PreparedStatement createPreparedStatement21(Connection con) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(
+				"select a.WAT_IP_NUM \"IP NUMBER\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, ");
+		sql.append(
+				"d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED NUMBER\", c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMITTING DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\" ");
+		sql.append(" from wa_admission_txn a " + " ,RE_REGISTRATION_HEADER b " + " ,hr_employee_master c"
+				+ " ,wa_ward_master d" + " ,ga_department_master e");
+		sql.append(" where a.WAT_MR_NUM = b.RRH_MR_NUM " + "  and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
+				+ "  and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM " + "  and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
+				+ "  and WAT_pat_status = 'ADIP' order by name");
+
+		System.out.println(sql.toString());
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		return ps;
+	}
+
 }

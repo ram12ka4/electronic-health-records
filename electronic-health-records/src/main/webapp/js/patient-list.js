@@ -3,7 +3,10 @@ $(function() {
 	var arr = new Array();
 
 	var select = $(".sel-ward");
+	var id = $('input[name=user_id]').val();
 	select.css("display", "inline");
+
+	// alert(id);
 
 	select
 			.empty()
@@ -12,13 +15,12 @@ $(function() {
 
 	var req = $
 			.ajax({
-				url : 'dashboard.do',
+				url : 'patient.list',
 				type : 'post',
 				datatype : 'text',
 				data : {
-					ACTION : 'GET_PREV_ED_NO',
-					paramType : "TSNS",
-
+					ACTION : 'GET_WARD',
+					empId : id,
 				},
 				success : function(data) {
 
@@ -30,14 +32,14 @@ $(function() {
 						select
 								.empty()
 								.append(
-										'<option selected="selected" value="0">Select Previous Record</option>');
+										'<option selected="selected" value="0">Select Ward</option>');
 						var i = 0;
 
 						while (i < arr.length) {
 
-							select.append($("<option></option>").val(arr[i])
-									.html(arr[i] + " <------> " + arr[i + 1]));
-							i += 3;
+							select.append($("<option></option>").val($.trim(arr[i]))
+									.html($.trim(arr[i + 1])));
+							i += 2;
 						}
 					} else {
 						select.css("display", "none");
