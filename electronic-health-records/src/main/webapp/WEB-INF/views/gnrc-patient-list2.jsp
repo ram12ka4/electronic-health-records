@@ -177,8 +177,8 @@ tr, tbody tr {
 					%>
 
 
-					<td style="text-align: center;"><a href="/pat_panel.do?ip_no=<%=ipNo%>"
-						class="btn btn-info btn-xs">Click</a></td>
+					<td><a href="/pat_panel.do?ip_no=<%=ipNo%>"
+						class="btn btn-info btn-xs">EMR</a></td>
 				</tr>
 				<%
 					ipIndex += col.size();

@@ -13,6 +13,7 @@ import java.util.Set;
 
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.dto.Emr;
+import com.gnrchospitals.dto.IndoorPatient;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.util.LoginDBConnection;
 
@@ -1005,7 +1006,8 @@ public class PatientDaoImpl implements PatientDao {
 				}
 			}
 
-			try (PreparedStatement ps = createPreparedStatement20(con, doctorCount, empCode); ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = createPreparedStatement20(con, doctorCount, empCode);
+					ResultSet rs = ps.executeQuery()) {
 
 				if (rs.next()) {
 					do {
@@ -1028,7 +1030,8 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	private PreparedStatement createPreparedStatement20(Connection con, int doctorCount, String empCode) throws SQLException {
+	private PreparedStatement createPreparedStatement20(Connection con, int doctorCount, String empCode)
+			throws SQLException {
 
 		StringBuilder sql = new StringBuilder();
 
@@ -1044,15 +1047,15 @@ public class PatientDaoImpl implements PatientDao {
 
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-		
+
 		if (doctorCount != 0) {
 			ps.setString(1, empCode);
 		}
-		
+
 		return ps;
 	}
 
-	public ArrayList<ArrayList<String>> getPatientList(String empCode) throws SQLException {
+	public ArrayList<ArrayList<String>> getPatientList(String empCode, String wardId) throws SQLException {
 
 		ArrayList<String> row = new ArrayList<>();
 		ArrayList<String> column = new ArrayList<>();
@@ -1060,7 +1063,7 @@ public class PatientDaoImpl implements PatientDao {
 		int rowCount = 0;
 
 		try (Connection con = LoginDBConnection.getConnection();
-				PreparedStatement ps = createPreparedStatement21(con);
+				PreparedStatement ps = createPreparedStatement21(con, empCode, wardId);
 				ResultSet rs = ps.executeQuery()) {
 
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -1091,23 +1094,79 @@ public class PatientDaoImpl implements PatientDao {
 
 	}
 
-	private PreparedStatement createPreparedStatement21(Connection con) throws SQLException {
+	private PreparedStatement createPreparedStatement21(Connection con, String empCode, String wardId)
+			throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(
-				"select a.WAT_IP_NUM \"IP NUMBER\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, ");
-		sql.append(
-				"d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED NUMBER\", c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMITTING DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\" ");
-		sql.append(" from wa_admission_txn a " + " ,RE_REGISTRATION_HEADER b " + " ,hr_employee_master c"
-				+ " ,wa_ward_master d" + " ,ga_department_master e");
-		sql.append(" where a.WAT_MR_NUM = b.RRH_MR_NUM " + "  and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
-				+ "  and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM " + "  and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
-				+ "  and WAT_pat_status = 'ADIP' order by name");
+				" select a.WAT_IP_NUM \"IP\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, "
+						+ "						                           d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED\", a.WAT_ADMN_DT \"ADMN DATE\",  c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMN DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\", f.gps_patient_subctgry_desc \"CATEGORY\""
+						+ "                                                    	  from "
+						+ "                                                         wa_admission_txn a, "
+						+ "                                                         RE_REGISTRATION_HEADER b, "
+						+ "                                                         hr_employee_master c, "
+						+ "                                                         wa_ward_master d, "
+						+ "                                                         ga_department_master e,"
+						+ "                                                         ga_patient_subcategory_master f"
+						+ "                                                         where "
+						+ "                                                         a.WAT_MR_NUM = b.RRH_MR_NUM "
+						+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
+						+ "                                                         and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM"
+						+ "                                                         and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
+						+ "                                                         and WAT_pat_status = 'ADIP' "
+						+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD ");
+
+		if (!"0".equals(wardId)) {
+			sql.append(" and a.WAT_CURR_WARD_CD = ? ");
+		}
+
+		sql.append("                                                         and a.WAT_DOCTOR_INCHARGE = ? "
+				+ "                                                         and f.GPS_PATIENT_CTGRY_CD = a.WAT_PATIENT_CATEGORY_CD"
+				+ "                                                         and f.GPS_PATIENT_SUBCTGRY_CD = a.WAT_PATIENT_SUBCATEGORY_CD"
+				+ "                                                         order by name");
 
 		System.out.println(sql.toString());
-
 		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		if (!"0".equals(wardId)) {
+			ps.setString(1, wardId);
+			ps.setString(2, empCode);
+		} else {
+			ps.setString(1, empCode);
+		}
+
 		return ps;
+	}
+
+	public List<IndoorPatient> getPatientList1(String empCode, String wardId) throws SQLException {
+
+		List<IndoorPatient> list = new ArrayList<>();
+		int rowCount = 0;
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement21(con, empCode, wardId);
+				ResultSet rs = ps.executeQuery()) {
+
+			while (rs.next()) {
+				IndoorPatient patient = new IndoorPatient();
+				patient.setIpNumber(rs.getString(1));
+				patient.setIpName(rs.getString(2));
+				patient.setWard(rs.getString(3));
+				patient.setBedNumber(rs.getString(4));
+				patient.setAdmissionDate(rs.getString(5));
+				patient.setAdmittingDoctor(rs.getString(6));
+				patient.setSpeciality(rs.getString(7));
+				patient.setSubCategory(rs.getString(8));
+				list.add(patient);
+			}
+
+		}
+
+		System.out.println("Row Count + " + rowCount);
+		System.out.println("Indoor Patient List : " + list);
+
+		return list;
+
 	}
 
 }

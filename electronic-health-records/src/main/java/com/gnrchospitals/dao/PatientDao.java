@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.gnrchospitals.dto.IndoorPatient;
 import com.gnrchospitals.dto.Patient;
 
 public interface PatientDao {
@@ -43,7 +44,8 @@ public interface PatientDao {
 	
 	public List<List<String>> getExcelHeaderRange(String eamType) throws SQLException;
 	
-	public ArrayList<ArrayList<String>> getPatientList(String empCode) throws SQLException;
+	public ArrayList<ArrayList<String>> getPatientList(String empCode, String wardId) throws SQLException;
+	public List<IndoorPatient> getPatientList1(String empCode, String wardId) throws SQLException;
 	
 	public ArrayList<String> getWardList(String empCode) throws SQLException;
 
