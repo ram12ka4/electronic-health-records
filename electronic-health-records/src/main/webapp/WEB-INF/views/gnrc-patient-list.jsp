@@ -1,7 +1,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; utf-8"
 	pageEncoding="utf-8"%>
-<jsp:useBean id="patientDao" class="com.gnrchospitals.daoimpl.PatientDaoImpl" scope="request"></jsp:useBean>
+<jsp:useBean id="patientDao"
+	class="com.gnrchospitals.daoimpl.PatientDaoImpl" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,16 +31,37 @@ div.dataTables_wrapper {
 	margin: 0 auto;
 }
 
-tr, tbody tr {
-	height: 10px;
+tr  {
+	height: 5px;
 }
+
+table {
+	outline: none;
+}
+
+th {
+	
+	border-radius: 2px;
+	background: #A90D82;
+	color: #fff;
+	text-align: center;
+}
+
+thead tr {
+	font-size: 14px;
+}
+
+tbody tr {
+	font-size: 11px;
+}
+
 </style>
 
 </head>
 
 <%
-	String empCode = (String)session.getAttribute("user");
-	
+	String empCode = (String) session.getAttribute("user");
+
 	ArrayList<ArrayList<String>> list = patientDao.getPatientList(empCode, "0");
 	ArrayList<String> col = list.get(0);
 	ArrayList<String> row = list.get(1);
@@ -121,12 +143,13 @@ tr, tbody tr {
 
 	<div class="container">
 
-		
+
 
 		<header class="clearfix">
 			<h5 class="pull-right">
-				<select class="form-control input-sm sel-ward" style="display: none;">
-					
+				<select class="form-control input-sm sel-ward"
+					style="display: none;">
+
 				</select>
 			</h5>
 		</header>
@@ -137,56 +160,21 @@ tr, tbody tr {
 
 
 			<thead>
-				<tr style="font-size: 14px;">
-					<%
-						for (int i = 0; i < col.size(); i++) {
-					%>
-					<th
-						style="background-color: #A90D82; color: #fff; text-align: center;"><%=col.get(i)%></th>
-
-					<%
-						}
-					%>
-					<th
-						style="background-color: #A90D82; color: #fff; text-align: center;">Action</th>
+				<tr>
+					<th>IP</th>
+					<th>NAME</th>
+					<th>WARD</th>
+					<th>BED</th>
+					<th>ADMN DATE</th>
+					<th>ADMN DOCTOR</th>
+					<th>SPECIALITY</th>
+					<th>CATEGORY</th>
+					<th>STATUS</th>
+					<th>ACTION</th>
 				</tr>
 			</thead>
-		
-			<tbody>
+			
 
-				<%
-					int rowSize = row.size() / col.size();
-					int i = 0;
-					int index = 0;
-					int ipIndex = 0;
-					String ipNo = "";
-					while (i < rowSize) {
-						ipNo = (String) row.get(ipIndex);
-				%>
-
-				<tr style="font-size: 11px;">
-					<%
-						for (int j = 0; j < col.size(); j++) {
-					%>
-
-					<td><%=row.get(index)%></td>
-
-					<%
-						index++;
-							}
-					%>
-
-
-					<td style="text-align: center;"><a href="/pat_panel.do?ip_no=<%=ipNo%>"
-						class="btn btn-info btn-xs">Click</a></td>
-				</tr>
-				<%
-					ipIndex += col.size();
-						i++;
-					}
-				%>
-
-			</tbody>
 		</table>
 
 	</div>
@@ -255,9 +243,6 @@ tr, tbody tr {
 			        } );
 			    }
 			} );  */
-
-
-			
 
 		});
 	</script>

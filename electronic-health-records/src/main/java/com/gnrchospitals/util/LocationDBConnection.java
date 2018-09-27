@@ -4,6 +4,7 @@ import static java.lang.System.out;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class LocationDBConnection {
 
@@ -14,7 +15,7 @@ public class LocationDBConnection {
 	private static String PASSWORD = "gnrc_global";
 	private static String URL = "jdbc:oracle:thin:@" + HOST + ":" + PORT + ":" + DB_NAME;
 
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException {
 
 		out.println("------------------ Oracle JDBC Connection Testing ------------");
 
@@ -22,8 +23,7 @@ public class LocationDBConnection {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
 			out.println("Where is your Oracle JDBC Driver");
-			e.printStackTrace();
-			return null;
+			throw new SQLException("Where is your Oracle JDBC Driver");
 		}
 
 		out.println("Oracle JDBC Driver Registered");
@@ -34,15 +34,14 @@ public class LocationDBConnection {
 			con = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
 		} catch (Exception e) {
 			out.println("Connection Failed! check output console");
-			e.printStackTrace();
-			return null;
+			throw new SQLException("Database Connection failed");
 		}
 
 		if (con != null) {
 			out.println("You made it! take control your database now! ");
 		} else {
-			out.println("Failed yo make connection");
-			return null;
+			out.println("Failed to make connection");
+			throw new SQLException("Failed to make connection");
 		}
 		
 		System.out.println("Location Connection object ID : " + con);

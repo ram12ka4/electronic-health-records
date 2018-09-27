@@ -42,30 +42,44 @@ public class PatientListServlet extends HttpServlet {
 
 		try {
 
-			if ("GET_WARD".equals(action)) {
+			if ("GET_PAT_DET".equals(action)) {
+
+				List<IndoorPatient> list = patientDao.getPatientList1(empCode, wardId);
+
+				ObjectMapper mapper = new ObjectMapper();
+
+				String jsonMapper = mapper.writeValueAsString(list);
+
+				System.out.println("JSON MAPPER : " + jsonMapper);
+
+				jsonMapper = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+
+				System.out.println("JSON MAPPER : " + jsonMapper);
+
+				out.print(jsonMapper);
+
+			} else if ("GET_WARD".equals(action)) {
 
 				List<String> list = patientDao.getWardList(empCode);
 
 				out.print(list);
 
 			} else if ("GET_PAT_DET_BY_WARD".equals(action)) {
-				
+
 				List<IndoorPatient> list = patientDao.getPatientList1(empCode, wardId);
-				
+
 				ObjectMapper mapper = new ObjectMapper();
-				
+
 				String jsonMapper = mapper.writeValueAsString(list);
-				
+
 				System.out.println("JSON MAPPER : " + jsonMapper);
-				
+
 				jsonMapper = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-				
+
 				System.out.println("JSON MAPPER : " + jsonMapper);
-				
-				
+
 				out.print(jsonMapper);
-				
-				
+
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-list.jsp").forward(request, response);
 			}

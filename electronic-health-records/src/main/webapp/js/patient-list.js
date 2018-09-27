@@ -56,6 +56,151 @@ $(function() {
 				}
 
 			});
+	
+	
+	/* $('#myTable').DataTable( {
+		 
+	        ajax: {
+	            url: "patient.list",
+	            method:   'post',
+	            dataType: 'json',
+	            data: {
+	            	ACTION : 'GET_PAT_DET',
+					empId : id,
+					wardId : '0'
+	            },
+	        
+	            success: function(data){
+	            	alert(data);
+	            }
+	        },
+	        deferRender: true,
+	        
+	        columns: [
+	            { 'data': "ipNumber" },
+	            { 'data': "ipName" },
+	            { 'data': "ward"},
+	            { 'data': "bedNumber" },
+	            { 'data': "admissionDate" },
+	            { 'data': "admittingDoctor" },
+	            { 'data' : "speciality" }, 
+	            { 'data' : "subCategory"},
+	            {
+					'render' : function(oObj){
+						return 'Bed Allocated'; 
+					}
+				},
+				{
+					'data': "ipNumber",
+					"render" : function(jsonIpNumber){ 
+						return '<a href="/pat_panel.do?ip_no='+ jsonIpNumber +'"class="context-menu-one btn btn-info btn-xs">Click</a>';
+				}
+				}
+	        ],
+	        rowId: 'extn',
+	        select: true,
+	        dom: 'Bfrtip',
+	        scrollY: 500,
+			paging: true,
+	        buttons: [
+	            {
+	                text: 'Reload table',
+	                action: function () {
+	                    table.ajax.reload();
+	                }
+	            }
+	        ]
+	    } );*/
+	
+	var req = $.ajax({
+		url : 'patient.list',
+		method : 'post',
+		dataType : 'json',
+		data : {
+			ACTION : 'GET_PAT_DET',
+			empId : id,
+			wardId : '0'
+
+		},
+		success : function(data) {
+
+			//alert(data);
+
+			if ($.fn.dataTable.isDataTable('#myTable')) {
+				//alert('object already exists');
+				table = $('#myTable').DataTable();
+				table.clear().destroy();
+			} 
+			
+				//alert('object not exists');
+				
+				table = $('#myTable').DataTable({
+					
+					data : data,
+					 //deferRender: true,
+					columns : [ {
+						'data': "ipNumber"
+					}, {
+						'data' : 'ipName'
+					}, {
+						'data' : 'ward'
+					}, {
+						'data' : 'bedNumber'
+					}, {
+						'data' : 'admissionDate'
+					}, {
+						'data' : 'admittingDoctor'
+					}, {
+						'data' : 'speciality'
+					}, {
+						'data' : 'subCategory'
+					},
+					 {
+						'render' : function(oObj){
+							return 'Bed Allocated'; 
+						}
+					},
+					{
+						'data': "ipNumber",
+						"render" : function(jsonIpNumber){ 
+							return '<a href="/pat_panel.do?ip_no='+ jsonIpNumber +'"class="context-menu-one btn btn-info btn-xs">Click</a>';
+					}
+					}
+
+					],
+					/*rowId: 'extn',
+			        select: true,
+			        dom: 'Bfrtip',
+			        scrollY: 500,
+					paging: false,
+					buttons: [
+			            {
+			                text: 'Reload Table',
+			                action: function () {
+			                    table.ajax.reload(null, false);
+			                }
+			            }
+			        ]*/
+					
+					
+				});
+
+			
+
+		},
+		failure : function(data) {
+			// alert("failure");
+			alert(data.responseText);
+		},
+		error : function(data) {
+			// alert("error");
+			alert(data.responseText);
+		}
+
+	});
+	
+	
+	
 
 	$(document).on('change', '.sel-ward', function() {
 
@@ -105,15 +250,21 @@ $(function() {
 						}, {
 							'data' : 'subCategory'
 						},
+						 {
+							'render' : function(oObj){
+								return 'Bed Allocated'; 
+							}
+						},
 						{
 							'data': "ipNumber",
 							"render" : function(jsonIpNumber){ 
-								return '<a href="/pat_panel.do?ip_no='+ jsonIpNumber +'"class="btn btn-info btn-xs">Click</a>';
+								return '<a href="/pat_panel.do?ip_no='+ jsonIpNumber +'"class="context-menu-one btn btn-info btn-xs">Click</a>';
 						}
 						}
 
-						]
-					}).cloumns.adjust().draw();
+						],
+						//paging: false
+					});
 
 				
 
@@ -130,5 +281,40 @@ $(function() {
 		});
 
 	});
+	
+	  $.contextMenu({
+		  
+          selector: '.context-menu-one', 
+          callback: function(key, options) {
+              var m = "clicked: " + key;
+              window.console && console.log(m) || alert(m); 
+          },
+          items: {
+              "receivePatient": {
+            	  name: "Receive Patient", 
+            	  icon: "edit",
+            	  // superseeds "global" callback
+                  callback: function(itemKey, opt, e) {
+                  var m = $(this).attr('href');
+                  window.location.href = m;
+                  //window.console && console.log(m) || alert(m); 
+            		  }
+              },
+              "vitalEntry": {name: "Vital Entry", icon: "cut"},
+              "bedPosition": {name: "Bed Position", icon: "copy"},
+              "nurseNotes": {name: "Nurse Notes", icon: "paste"},
+              "bedTransfer": {name: "Bed Transfer", icon: "delete"},
+              "dischargeRequest": {name: "Discharge Request", icon: "delete"},
+              "deathPosting": {name: "Death Posting", icon: "delete"},
+              "drugReturn": {name: "Drug Return", icon: "delete"},
+              "dischargeSummary": {name: "Discharge Summary", icon: "delete"},
+              "sep1": "---------",
+              "quit": {name: "Quit", icon: function(){
+                  return 'context-menu-icon context-menu-icon-quit';
+              }}
+          }
+      });
+
+    
 
 });

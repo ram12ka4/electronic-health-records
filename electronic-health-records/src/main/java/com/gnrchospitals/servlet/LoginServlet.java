@@ -40,6 +40,8 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password") == null ? "" : request.getParameter("password");
 		String location = request.getParameter("location") == null ? "" : request.getParameter("location");
 		
+		try {
+		
 		// Fetch login date and time
 		DateFormat df = new SimpleDateFormat("d-M-yyyy h:m a");
 		Date date =new Date();
@@ -97,6 +99,17 @@ public class LoginServlet extends HttpServlet {
 			rd.include(request, response);
 
 		}
+		
+		}catch(Exception ex) {
+			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", ex);
+		}
+
+	}
+	
+	protected void sendErrorReirect(HttpServletRequest request, HttpServletResponse response, String errroPageURL,
+			Throwable e) throws ServletException, IOException {
+		request.setAttribute("javax.servlet.jsp.jspException", e);
+		getServletConfig().getServletContext().getRequestDispatcher(errroPageURL).forward(request, response);
 
 	}
 

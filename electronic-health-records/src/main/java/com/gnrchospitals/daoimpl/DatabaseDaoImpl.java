@@ -53,7 +53,7 @@ public class DatabaseDaoImpl implements DatabaseDao {
 	 */
 
 	@Override
-	public boolean findByLocation(String location) {
+	public boolean findByLocation(String location) throws SQLException{
 
 		try (Connection con = LocationDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, location);
@@ -70,8 +70,6 @@ public class DatabaseDaoImpl implements DatabaseDao {
 				database.setDbPassword(rs.getString(5));
 				return true;
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
 		return false;
