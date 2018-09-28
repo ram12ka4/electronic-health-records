@@ -131,7 +131,7 @@ tr, tbody tr {
 			</h5>
 		</header>
 
-		<table class="table table-striped table-bordered table-hover"
+		<table class="table table-striped table-bordered nowrap"
 			id="myTable" style="width: 100%">
 
 

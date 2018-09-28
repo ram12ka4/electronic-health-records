@@ -14,6 +14,7 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="stylesheet" type="text/css" href="css/patient-list.css" />
 <%@include file="gnrc-common-include-css.html"%>
 <style>
 
@@ -140,12 +141,33 @@ tbody tr {
 		<!--  /.container-fluid -->
 	</nav>
 
+	<div id="content" style="float: left;">
+		
+		<div id="menu" class="nav1">
+			<a href="#" class="close" onclick="closeSlideMenu()">
+				<i class="fas fa-times"></i>
+			</a>
+			
+			<a href="#">Home</a>
+			<a href="#">Home</a>
+			<a href="#">Home</a> <a href="#">Home</a>
 
-	<div class="container">
+		</div>
+	
+	</div>
+
+
+
+	<div id="container" style="float: left;">
 
 
 
 		<header class="clearfix">
+			<span class="slide pull-left">
+			<a href="#" onclick="openSlideMenu()"><i class="fas fa-bars"></i></a>
+			</span>
+			
+		
 			<h5 class="pull-right">
 				<select class="form-control input-sm sel-ward"
 					style="display: none;">

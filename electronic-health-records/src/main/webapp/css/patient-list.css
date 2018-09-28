@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+body {
+	overflow-x: hidden; 
+}
+
+.nav1 {
+	position: fixed;
+	height: 100%;
+	width: 0;
+	z-index: 1;
+	top: 50px;
+	left: 0;
+	background-color: #111;
+}
+
+#container {
+	margin-left: 250px;
+}
+

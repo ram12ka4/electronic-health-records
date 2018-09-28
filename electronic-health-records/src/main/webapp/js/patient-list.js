@@ -168,6 +168,19 @@ $(function() {
 					}
 
 					],
+					 responsive: {
+				            details: {
+				                display: $.fn.dataTable.Responsive.display.modal( {
+				                    header: function ( row ) {
+				                        var data = row.data();
+				                        return 'Details for '+data[0]+' '+data[1];
+				                    }
+				                } ),
+				                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+				                    tableClass: 'table'
+				                } )
+				            }
+				        }
 					/*rowId: 'extn',
 			        select: true,
 			        dom: 'Bfrtip',
@@ -263,6 +276,19 @@ $(function() {
 						}
 
 						],
+						  responsive: {
+					            details: {
+					                display: $.fn.dataTable.Responsive.display.modal( {
+					                    header: function ( row ) {
+					                        var data = row.data();
+					                        return 'Details for '+data[0]+' '+data[1];
+					                    }
+					                } ),
+					                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+					                    tableClass: 'table'
+					                } )
+					            }
+					        }
 						//paging: false
 					});
 
@@ -315,6 +341,17 @@ $(function() {
           }
       });
 
-    
+   
 
 });
+
+function openSlideMenu(){
+	document.getElementById('menu').style.width = "250px";
+	document.getElementById('container').style.marginLeft = "250px";
+}
+
+function closeSlideMenu(){
+	document.getElementById('menu').style.width = "0";
+	document.getElementById('container').style.marginLeft = "250px";
+}
+
