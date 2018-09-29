@@ -32,7 +32,7 @@ div.dataTables_wrapper {
 	margin: 0 auto;
 }
 
-tr  {
+tr {
 	height: 5px;
 }
 
@@ -41,7 +41,6 @@ table {
 }
 
 th {
-	
 	border-radius: 2px;
 	background: #A90D82;
 	color: #fff;
@@ -55,7 +54,6 @@ thead tr {
 tbody tr {
 	font-size: 11px;
 }
-
 </style>
 
 </head>
@@ -141,33 +139,51 @@ tbody tr {
 		<!--  /.container-fluid -->
 	</nav>
 
-	<div id="content" style="float: left;">
-		
-		<div id="menu" class="nav1">
-			<a href="#" class="close" onclick="closeSlideMenu()">
-				<i class="fas fa-times"></i>
-			</a>
-			
-			<a href="#">Home</a>
-			<a href="#">Home</a>
-			<a href="#">Home</a> <a href="#">Home</a>
+	<div id="content">
 
+		<div id="menu" class="my-nav">
+			<a href="#" class="close" onclick="closeSlideMenu()"> <i
+				class="fas fa-times"></i>
+			</a>
+			<ul>
+				<li><a href="#" class="active">Home</a></li>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">Works <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li><a href="#">Separated link</a></li>
+						<li><a href="#">One more separated link</a></li>
+					</ul></li>
+				<li><a href="#">Home</a></li>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">Works <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li><a href="#">Separated link</a></li>
+						<li><a href="#">One more separated link</a></li>
+					</ul></li>
+			</ul>
 		</div>
-	
 	</div>
 
 
 
-	<div id="container" style="float: left;">
+	<div class="container">
 
 
 
 		<header class="clearfix">
-			<span class="slide pull-left">
-			<a href="#" onclick="openSlideMenu()"><i class="fas fa-bars"></i></a>
+			<span class="slide pull-left"> <a href="#"
+				onclick="openSlideMenu()"><i class="fas fa-bars"></i></a>
 			</span>
-			
-		
+
+
 			<h5 class="pull-right">
 				<select class="form-control input-sm sel-ward"
 					style="display: none;">
@@ -195,7 +211,7 @@ tbody tr {
 					<th>ACTION</th>
 				</tr>
 			</thead>
-			
+
 
 		</table>
 

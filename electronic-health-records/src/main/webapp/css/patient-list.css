@@ -1,10 +1,12 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans:400,800');
 
 body {
 	overflow-x: hidden; 
+	font-family: 'Alegreya Sans', sans-serif;
 }
 
-.nav1 {
+.my-nav {
 	position: fixed;
 	height: 100%;
 	width: 0;
@@ -12,9 +14,70 @@ body {
 	top: 50px;
 	left: 0;
 	background-color: #111;
+	opacity: .9;
+	overflow-x: hidden; 
+	padding-top: 60px; 
+	transition: 0.7s;
+	border-radius: 5px;
+	
 }
 
-#container {
-	margin-left: 250px;
+ .my-nav a {
+	display: block;
+	padding: 20px 30px;
+	font-size: 20px;
+	text-decoration: none;
+	color: #ccc;
+	
+} 
+
+.my-nav a:hover {
+	color: #fff;
+	trasition: 0.4s;
+	text-decoration: none;
 }
+
+.my-nav .close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-left: 10px;
+	font-size: 36px;
+}
+
+.slide a{
+	color: #000;
+	font-size: 36px;
+}
+
+#content {
+	padding: 10px;
+	transition: margin-left 0.7s;
+	overflow: hidden;
+}
+
+.my-nav .dropdown-menu {
+	position: relative;
+	background-color: #111;
+	color: #ccc;
+	width: 100%;
+	padding: 0;
+	margin-left: 25px;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	transition: margin-bottom 0.7s;
+	
+}
+
+.dropdown-menu > li > a {
+	font-size: 15px;
+	border-left: 1px solid white;
+}
+
+
+
+
+
+
 
