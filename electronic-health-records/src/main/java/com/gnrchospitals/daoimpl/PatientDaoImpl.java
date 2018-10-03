@@ -1098,23 +1098,22 @@ public class PatientDaoImpl implements PatientDao {
 			throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(
-				" select a.WAT_IP_NUM \"IP\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, "
-						+ "						                           d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED\", a.WAT_ADMN_DT \"ADMN DATE\",  c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMN DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\", f.gps_patient_subctgry_desc \"CATEGORY\""
-						+ "                                                    	  from "
-						+ "                                                         wa_admission_txn a, "
-						+ "                                                         RE_REGISTRATION_HEADER b, "
-						+ "                                                         hr_employee_master c, "
-						+ "                                                         wa_ward_master d, "
-						+ "                                                         ga_department_master e,"
-						+ "                                                         ga_patient_subcategory_master f"
-						+ "                                                         where "
-						+ "                                                         a.WAT_MR_NUM = b.RRH_MR_NUM "
-						+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
-						+ "                                                         and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM"
-						+ "                                                         and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
-						+ "                                                         and WAT_pat_status = 'ADIP' "
-						+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD ");
+		sql.append(" select a.WAT_IP_NUM \"IP\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, "
+				+ "						                           d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED\", a.WAT_ADMN_DT \"ADMN DATE\",  c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMN DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\", f.gps_patient_subctgry_desc \"CATEGORY\""
+				+ "                                                    	  from "
+				+ "                                                         wa_admission_txn a, "
+				+ "                                                         RE_REGISTRATION_HEADER b, "
+				+ "                                                         hr_employee_master c, "
+				+ "                                                         wa_ward_master d, "
+				+ "                                                         ga_department_master e,"
+				+ "                                                         ga_patient_subcategory_master f"
+				+ "                                                         where "
+				+ "                                                         a.WAT_MR_NUM = b.RRH_MR_NUM "
+				+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
+				+ "                                                         and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM"
+				+ "                                                         and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
+				+ "                                                         and WAT_pat_status = 'ADIP' "
+				+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD ");
 
 		if (!"0".equals(wardId)) {
 			sql.append(" and a.WAT_CURR_WARD_CD = ? ");
@@ -1167,6 +1166,90 @@ public class PatientDaoImpl implements PatientDao {
 
 		return list;
 
+	}
+
+	public List<String> getParentLink(String userRole) throws SQLException {
+
+		ArrayList<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement22(con, userRole);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				do {
+					list.add(rs.getString(1));
+					list.add(rs.getString(2));
+					list.add(rs.getString(3));
+				} while (rs.next());
+			}
+
+			System.out.println("User Link List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement22(Connection con, String userRole) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(" select  a.HCM_CATG_CD, a.HCM_CATG_DESC, count(*) ");
+		sql.append(" from ");
+		sql.append(" as_catg_master a,");
+		sql.append(" as_role_form_access b ");
+		sql.append(" where ");
+		sql.append(" a.HCM_CATG_CD = b.HFA_CATG_CD ");
+		sql.append(" and b.hfa_role_cd = ? ");
+		sql.append(" group by a.HCM_CATG_CD, a.HCM_CATG_DESC ");
+
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		ps.setString(1, userRole.trim());
+
+		return ps;
+	}
+	
+	public List<String> getChildLink(String userRole, String catCode) throws SQLException {
+
+		ArrayList<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();
+				PreparedStatement ps = createPreparedStatement23(con, userRole, catCode);
+				ResultSet rs = ps.executeQuery()) {
+
+			if (rs.next()) {
+				do {
+					list.add(rs.getString(1));
+					list.add(rs.getString(2));
+				} while (rs.next());
+			}
+
+			System.out.println("User Link List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement23(Connection con, String userRole, String catCode) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(" select b.HFD_FORM_DESC, b.HFD_FORM_PATH from  ");
+		sql.append(" as_catg_master a, ");
+		sql.append(" as_form_details b, ");
+		sql.append(" as_catg_form c, ");
+		sql.append(" as_role_form_access d ");
+		sql.append(" where ");
+		sql.append(" a.HCM_CATG_CD = c.HCF_CATG_CD ");
+		sql.append(" and b.HFD_FORM_CD = c.HCF_FORM_CD ");
+		sql.append(" and d.HFA_FORM_CD = b.HFD_FORM_CD ");
+		sql.append(" and a.HCM_CATG_CD = ? ");
+		sql.append(" and d.HFA_ROLE_CD = ? order by c.HCF_SEQ_NO ");
+
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, catCode.trim());
+		ps.setString(2, userRole.trim());
+
+		return ps;
 	}
 
 }

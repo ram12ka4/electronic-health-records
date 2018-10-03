@@ -48,6 +48,10 @@ public interface PatientDao {
 	public List<IndoorPatient> getPatientList1(String empCode, String wardId) throws SQLException;
 	
 	public ArrayList<String> getWardList(String empCode) throws SQLException;
+	
+	public List<String> getParentLink(String userRole) throws SQLException;
+	
+	public List<String> getChildLink(String userRole, String catCode) throws SQLException;
 
 
 }

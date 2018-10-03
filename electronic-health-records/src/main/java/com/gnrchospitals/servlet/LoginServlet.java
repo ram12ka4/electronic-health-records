@@ -81,6 +81,7 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("loginTime", today);
 			session.setAttribute("loginFrom", ipAddress);
 			session.setAttribute("location", location);
+			session.setAttribute("userRole", userBean.getUserRole());
 			// setting session to expiry in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
 			Cookie userName = new Cookie("user", id);

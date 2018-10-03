@@ -1,4 +1,4 @@
-<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; utf-8"
 	pageEncoding="utf-8"%>
 <jsp:useBean id="patientDao"
@@ -60,10 +60,15 @@ tbody tr {
 
 <%
 	String empCode = (String) session.getAttribute("user");
+	String userRole = (String) session.getAttribute("userRole");
 
-	ArrayList<ArrayList<String>> list = patientDao.getPatientList(empCode, "0");
+	/* ArrayList<ArrayList<String>> list = patientDao.getPatientList(empCode, "0");
 	ArrayList<String> col = list.get(0);
-	ArrayList<String> row = list.get(1);
+	ArrayList<String> row = list.get(1); */
+
+	List<String> linkList = patientDao.getParentLink(userRole);
+
+	System.out.println(linkList);
 %>
 
 
@@ -140,17 +145,80 @@ tbody tr {
 	</nav>
 
 	<div id="content">
-
 		<div id="menu" class="my-nav">
 			<a href="#" class="close" onclick="closeSlideMenu()"> <i
 				class="fas fa-times"></i>
 			</a>
 			<ul>
 				<li><a href="#" class="active">Home</a></li>
+
+				<%
+					int i = 0;
+					while (i < linkList.size()) {
+
+						String categoryCode = linkList.get(i);
+						String categoryName = linkList.get(i + 1);
+
+						List<String> subLinkList = patientDao.getChildLink(userRole, categoryCode);
+
+						int j = 0;
+						int count = 0;
+						while (j < subLinkList.size()) {
+
+							String subLinkName = subLinkList.get(j);
+							String subLinkPath = subLinkList.get(j + 1);
+
+							if (categoryName.equals(subLinkName)) {
+				%>
+				<li><a href="<%=subLinkPath%>"><%=subLinkName%></a></li>
+				<%
+					} else {
+
+								if (count == 0) {
+				%>
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown"><%=categoryName%><span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+
+						<%
+							}
+						%>
+
+						<li><a href="<%=subLinkPath%>"><%=subLinkName%></a></li>
+
+
+
+
+						<%
+							}
+
+									j += 2;
+									count += 2;
+								}
+						%>
+
+						<%
+							if (count == subLinkList.size()) {
+						%>
+					</ul></li>
+				<%
+					}
+				%>
+
+				<%
+					System.out.println("Child link list : " + subLinkList);
+
+						i += 3;
+					}
+				%>
+
+
+
+
+				<!-- <li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Works <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						
+
 						<li><a href="#">Action</a></li>
 						<li><a href="#">Another action</a></li>
 						<li><a href="#">Something else here</a></li>
@@ -161,13 +229,12 @@ tbody tr {
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Works <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						
 						<li><a href="#">Action</a></li>
 						<li><a href="#">Another action</a></li>
 						<li><a href="#">Something else here</a></li>
 						<li><a href="#">Separated link</a></li>
 						<li><a href="#">One more separated link</a></li>
-					</ul></li>
+					</ul></li> -->
 			</ul>
 		</div>
 	</div>
