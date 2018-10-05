@@ -6,6 +6,13 @@ body {
 	font-family: 'Alegreya Sans', sans-serif;
 }
 
+#content {
+	position: relative;
+	padding: 10px;
+	transition: margin-left 0.7s;
+	overflow: hidden;
+}
+
 .my-nav {
 	position: fixed;
 	height: 100%;
@@ -15,7 +22,7 @@ body {
 	left: 0;
 	background-color: #111;
 	opacity: .9;
-	overflow-x: hidden; 
+	overflow-x: hidden;  
 	padding-top: 60px; 
 	transition: 0.7s;
 	border-radius: 5px;
@@ -24,10 +31,11 @@ body {
 
  .my-nav a {
 	display: block;
-	padding: 20px 30px;
+	padding: 5px 30px;
 	font-size: 20px;
 	text-decoration: none;
 	color: #ccc;
+	
 	
 } 
 
@@ -50,10 +58,10 @@ body {
 	font-size: 36px;
 }
 
-#content {
-	padding: 10px;
-	transition: margin-left 0.7s;
-	overflow: hidden;
+
+
+.drop-down {
+	overflow-y: scroll; 
 }
 
 .my-nav .dropdown-menu {
@@ -67,6 +75,7 @@ body {
 	border-radius: 0;
 	box-shadow: none;
 	transition: margin-bottom 0.7s;
+	
 	
 }
 

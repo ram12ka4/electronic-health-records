@@ -1225,6 +1225,7 @@ public class PatientDaoImpl implements PatientDao {
 			}
 
 			System.out.println("User Link List : " + list);
+			
 			return list;
 		}
 	}
