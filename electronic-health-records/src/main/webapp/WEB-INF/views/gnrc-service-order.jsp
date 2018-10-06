@@ -18,7 +18,6 @@
 <link rel="stylesheet" href="css/create-user.css">
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-forms.css">
-<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="css/circle.css">
 <link rel="stylesheet" href="css/nurse-note.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
@@ -75,36 +74,55 @@
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
+
+
 			<div class="row">
-			
-				<div class="col-lg-8">
+				<div class="col-lg-6">
 					<div class="admin-content-con">
 						<header class="clearfix">
-							<h5 class="pull-left">NURSE'S NOTES</h5>
-							<h5 class="pull-right">QR/14-4</h5>
+							<h5 class="pull-left">SERVICE ORDER</h5>
 						</header>
-						<textarea id="txtEditor"></textarea>
 					</div>
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="control-label col-xs-4" for="sex">Order No
+								:</label>
+							<div class="col-xs-8">
+								<input type="text" class="form-control input-sm" id="sex"
+									value="<%=patient.getSex()%>" name="sex" placeholder="Y"
+									readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-2" for="bed">Bed :</label>
+							<div class="col-xs-4">
+								<input type="text" class="form-control input-sm" id="bed"
+									value="<%=patient.getBedNo()%>" name="bed"
+									placeholder="Date of Birth" readonly>
+							</div>
+						</div>
+
+					</div>
+
+
 				</div>
-			
-				<div class="col-lg-4">
+
+				<div class="col-lg-6">
 					<div class="admin-content-con">
 						<header class="clearfix">
-							<h5 class="pull-left">NURSE'S NOTES</h5>
-							<h5 class="pull-right">QR/14-4</h5>
+							<h5 class="pull-left">SERVICE ORDER</h5>
 						</header>
 
 						<div class="form-group">
-							<label class="control-label" for="name">Name :</label>
-							
-								<input type="text" class="form-control input-sm" id="name"
-									value="<%=patient.getPatientName()%>" name="name"
-									placeholder="Name" readonly>
+							<label class="control-label" for="name">Name :</label> <input
+								type="text" class="form-control input-sm" id="name"
+								value="<%=patient.getPatientName()%>" name="name"
+								placeholder="Name" readonly>
 						</div>
 
 
 						<div class="form-horizontal">
-
 							<div class="form-group">
 								<label class="control-label col-xs-2" for="sex">Sex :</label>
 								<div class="col-xs-4">
@@ -150,14 +168,14 @@
 								<label class="control-label col-xs-3" for="note-date"><span
 									class="required-label" id="note-date"> Time</span> :</label>
 								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="timepicker"
-										name="DN003" placeholder="Date of Birth">
+									<input type="text" class="form-control input-sm"
+										id="timepicker" name="DN003" placeholder="Date of Birth">
 								</div>
 							</div>
-						
+
 							<div class="form-group">
 								<div class="col-lg-10 col-lg-offset-7">
-										<button type="submit" class="btn btn-primary btn-sm">Reset</button>
+									<button type="submit" class="btn btn-primary btn-sm">Reset</button>
 									<button type="submit" class="btn btn-success btn-sm">Submit</button>
 								</div>
 							</div>
@@ -167,7 +185,7 @@
 
 
 
-			
+
 			</div>
 
 

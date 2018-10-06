@@ -75,86 +75,21 @@
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
 			<div class="row">
-				<div class="col-md-4">
-					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">NEURO VITAL CHART</h5>
-							<h5 class="pull-right">QR/14-12</h5>
-						</header>
-						<div class="form-group">
-							<label class="control-label" for="name">Name :</label> <input
-								type="text" class="form-control input-sm" id="name"
-								value="<%=patient.getPatientName()%>" name="name"
-								placeholder="Name" readonly>
-						</div>
 
 
-						<div class="form-horizontal">
 
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="sex">Sex :</label>
-								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="sex"
-										value="<%=patient.getSex()%>" name="sex" placeholder="Y"
-										readonly>
-								</div>
-								<label class="control-label col-xs-2" for="bed">Bed :</label>
-								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="bed"
-										value="<%=patient.getBedNo()%>" name="bed"
-										placeholder="Date of Birth" readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="mrd"><span
-									class="required-label" id="mrd"> MRD No.</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="mrd"
-										id="mrd" value="<%=patient.getMrdNumber()%>" name="mrd_no"
-										placeholder="Date of Birth" readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="ip-no"><span
-									class="required-label" id="ip-no"> IP No.</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="ip-no"
-										value="<%=patient.getIpNumber()%>" name="ip_no"
-										placeholder="IP Number" readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="note-date"><span
-									class="required-label" id="note-date"> Date</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="DN003" placeholder="Date of Birth">
-								</div>
-							</div>
 
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="note-date"><span
-									class="required-label" id="note-date"> Time</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm"
-										id="timepicker" name="DN003" placeholder="Date of Birth">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-8">
+				<div class="col-md-9">
 					<div class="admin-content-con">
 						<div class="panel with-nav-tabs panel-default">
 							<div class="panel-heading">
 								<ul class="nav nav-tabs">
 									<li class="active"><a href="#tab1default"
 										data-toggle="tab">EYES OPEN</a></li>
-									<li><a href="#tab2default" data-toggle="tab">BEST
-											VERBAL RESPONSE</a></li>
-									<li><a href="#tab3default" data-toggle="tab">BEST
-											MOTOR RESPONSE</a></li>
+									<li><a href="#tab2default" data-toggle="tab">VERBAL
+											RESPONSE</a></li>
+									<li><a href="#tab3default" data-toggle="tab">MOTOR
+											RESPONSE</a></li>
 									<li><a href="#tab4default" data-toggle="tab">BLOOD
 											PRESSURE</a></li>
 									<li><a href="#tab5default" data-toggle="tab">PUPILS</a></li>
@@ -430,18 +365,21 @@
 															<select class="form-control selectpicker">
 																<option value="+">&plus;</option>
 																<option value="-">&minus;</option>
+																<option value="s">S</option>
 															</select>
 														</div>
 														<div class="col-xs-4">
 															<select class="form-control selectpicker">
 																<option value="+">&plus;</option>
 																<option value="-">&minus;</option>
+																<option value="s">S</option>
 															</select>
 														</div>
 													</div>
 													<div class="form-group">
 														<div class="col-xs-6">
 															<select class="form-control selectpicker">
+																<option value="c">C</option>
 																<option
 																	data-content="<i class='fas fa-circle' aria-hidden='true' style='font-size: 5px;'></i>&nbsp;1"
 																	value="1">1</option>
@@ -470,7 +408,7 @@
 														</div>
 														<div class="col-xs-6">
 															<select class="form-control selectpicker input-sm">
-
+																<option value="c">C</option>
 																<option
 																	data-content="<i class='fas fa-circle' aria-hidden='true' style='font-size: 5px;'></i>&nbsp;1"
 																	value="1">1</option>
@@ -507,12 +445,91 @@
 						</div>
 					</div>
 				</div>
+
+
+				<div class="col-md-3">
+					<div class="admin-content-con">
+						<header class="clearfix">
+							<h5 class="pull-left">NEURO VITAL CHART</h5>
+							<h5 class="pull-right">QR/14-12</h5>
+						</header>
+						<div class="form-group">
+							<label class="control-label" for="name">Name :</label> <input
+								type="text" class="form-control input-sm" id="name"
+								value="<%=patient.getPatientName()%>" name="name"
+								placeholder="Name">
+						</div>
+
+
+						<div class="form-horizontal">
+
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="sex">Sex</label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control input-sm" id="sex"
+										value="<%=patient.getSex()%>" name="sex" placeholder="Sex">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="bed">Bed</label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control input-sm" id="bed"
+										value="<%=patient.getBedNo()%>" name="bed" placeholder="Bed No">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="mrd"><span
+									class="" id="mrd">MRD</span></label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control input-sm" id="mrd"
+										id="mrd" value="<%=patient.getMrdNumber()%>" name="mrd_no"
+										placeholder="MRD">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="ip-no"><span
+									class="" id="ip-no"> IP</span></label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control input-sm" id="ip-no"
+										value="<%=patient.getIpNumber()%>" name="ip_no"
+										placeholder="IP Number">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="note-date"><span
+									class="" id="note-date"> Date</span></label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control input-sm" id="fromDate"
+										name="DN003" placeholder="Date of Birth" >
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-xs-3" for="note-date"><span
+									class="" id="note-date"> Time</span></label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control input-sm"
+										id="timepicker" name="DN003" placeholder="Time">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-9  col-xs-offset-5">
+									<button type="reset" class="btn btn-primary btn-sm">Reset</button>
+									<button type="submit" class="btn btn-success btn-sm">Submit</button>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
 			</div>
 
 
 
 
-			
+
 
 
 		</div>
