@@ -23,6 +23,15 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
+
+
+<style type="text/css">
+.margin-bottom {
+	margin-bottom: 15px;
+}
+</style>
+
+
 </head>
 <body>
 
@@ -77,106 +86,45 @@
 
 
 			<div class="row">
-				<div class="col-lg-6">
-					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">SERVICE ORDER</h5>
-						</header>
-					</div>
-
-					<div class="form-horizontal">
-						<div class="form-group">
-							<label class="control-label col-xs-4" for="sex">Order No
-								:</label>
-							<div class="col-xs-8">
-								<input type="text" class="form-control input-sm" id="sex"
-									value="<%=patient.getSex()%>" name="sex" placeholder="Y"
-									readonly>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-xs-2" for="bed">Bed :</label>
-							<div class="col-xs-4">
-								<input type="text" class="form-control input-sm" id="bed"
-									value="<%=patient.getBedNo()%>" name="bed"
-									placeholder="Date of Birth" readonly>
-							</div>
-						</div>
-
-					</div>
 
 
-				</div>
-
-				<div class="col-lg-6">
+				<div class="col-md-6">
 					<div class="admin-content-con">
 						<header class="clearfix">
 							<h5 class="pull-left">SERVICE ORDER</h5>
 						</header>
 
-						<div class="form-group">
-							<label class="control-label" for="name">Name :</label> <input
-								type="text" class="form-control input-sm" id="name"
-								value="<%=patient.getPatientName()%>" name="name"
-								placeholder="Name" readonly>
+						<div class="row">
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="sex">Order No</label> <input
+										type="text" class="form-control margin-bottom input-sm" id="sex" value=""
+										name="sex" placeholder="Order No">
+								</div>
+							</div>
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="pat-type">Patient
+										Type</label> <input type="text" class="form-control margin-bottom" id="pat-type"
+										value="" name="bed" placeholder="Patient Type">
+								</div>
+							</div>
 						</div>
 
-
-						<div class="form-horizontal">
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="sex">Sex :</label>
-								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="sex"
-										value="<%=patient.getSex()%>" name="sex" placeholder="Y"
-										readonly>
-								</div>
-								<label class="control-label col-xs-2" for="bed">Bed :</label>
-								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm" id="bed"
-										value="<%=patient.getBedNo()%>" name="bed"
-										placeholder="Date of Birth" readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="mrd"><span
-									class="required-label" id="mrd"> MRD No.</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="mrd"
-										id="mrd" value="<%=patient.getMrdNumber()%>" name="mrd_no"
-										placeholder="Date of Birth" readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="ip-no"><span
-									class="required-label" id="ip-no"> IP No.</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="ip-no"
-										value="<%=patient.getIpNumber()%>" name="ip_no"
-										placeholder="IP Number" readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="note-date"><span
-									class="required-label" id="note-date"> Date</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="DN003" placeholder="Date of Birth">
+						<div class="row">
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="sex">MRD</label> <input
+										type="text" class="form-control" id="sex" value="" name="sex"
+										placeholder="Order No">
 								</div>
 							</div>
 
-							<div class="form-group">
-								<label class="control-label col-xs-3" for="note-date"><span
-									class="required-label" id="note-date"> Time</span> :</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control input-sm"
-										id="timepicker" name="DN003" placeholder="Date of Birth">
-								</div>
-							</div>
-
-							<div class="form-group">
-								<div class="col-lg-10 col-lg-offset-7">
-									<button type="submit" class="btn btn-primary btn-sm">Reset</button>
-									<button type="submit" class="btn btn-success btn-sm">Submit</button>
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="pat-type">IP</label> <input
+										type="text" class="form-control margin-bottom" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
 								</div>
 							</div>
 						</div>
@@ -184,12 +132,89 @@
 				</div>
 
 
+				<div class="col-md-6">
+					<div class="admin-content-con">
+						<header class="clearfix">
+							<h5 class="pull-left">SERVICE ORDER</h5>
+						</header>
 
 
+						<div class="row">
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="pat-name">Patient
+										Name</label> <input type="text" class="form-control input-sm"
+										id="pat-name" value="" name="sex" placeholder="Name">
+								</div>
+							</div>
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="pat-type">Age</label> <input
+										type="text" class="form-control" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="sex">Sex</label> <input
+										type="text" class="form-control" id="sex" value="" name="sex"
+										placeholder="Order No">
+								</div>
+							</div>
+
+							<div class="form-group-sm">
+								<div class="col-md-6">
+									<label class="control-label" for="pat-type">Referred
+										Doctor</label> <input type="text" class="form-control" id="pat-type"
+										value="" name="bed" placeholder="Patient Type">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 
+			<div class="row">
+				<div class="col-md-12">
+					<div class="admin-content-con">
+						<div class="pull-right select-div">
+							<select class="form-control input-sm">
+								<option value="0">Select Request</option>
+							</select>
+						</div>
+
+						<table class="table table-striped table-bordered table-hover"
+							id="myTable" style="width: 100%">
+							<thead>
+								<tr>
+									<th>Sl. No.</th>
+									<th>Service Description</th>
+									<th>Qty.</th>
+									<th>Rate</th>
+									<th>Type</th>
+									<th>Discount</th>
+									<th>Discount Amount</th>
+									<th>Net Amount</th>
+									<th>Specimen Description</th>
+								</tr>
+							</thead>
+
+
+						</table>
+
+					</div>
+				</div>
+			</div>
+
+
+
 		</div>
+
+
 
 		<!-- End of Dashboard -->
 	</form>
