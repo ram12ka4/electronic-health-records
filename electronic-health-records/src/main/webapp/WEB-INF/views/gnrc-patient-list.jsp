@@ -239,9 +239,6 @@ tbody tr {
 
 		<table class="table table-striped table-bordered table-hover"
 			id="myTable" style="width: 100%">
-
-
-
 			<thead>
 				<tr>
 					<th>IP</th>
@@ -256,10 +253,7 @@ tbody tr {
 					<th>ACTION</th>
 				</tr>
 			</thead>
-
-
 		</table>
-
 	</div>
 
 	<input type="hidden" name="user_id" value="${sessionScope.user}">

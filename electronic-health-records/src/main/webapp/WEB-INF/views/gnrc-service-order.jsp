@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-forms.css">
 <link rel="stylesheet" href="css/circle.css">
-<link rel="stylesheet" href="css/nurse-note.css">
+<link rel="stylesheet" href="css/service-order.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -28,6 +28,20 @@
 <style type="text/css">
 .margin-bottom {
 	margin-bottom: 15px;
+}
+
+.form-inline .form-control.dis-auto-width {
+	width: 100%;
+	height: 25px;
+	padding: 3px 3px;
+	
+}
+
+input[type="text"].dis-bottom-margin {
+	margin-bottom: 0;
+	width: 100%;
+	height: 25px;
+	padding: 3px 3px;
 }
 </style>
 
@@ -89,41 +103,49 @@
 
 
 				<div class="col-md-6">
+
 					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">SERVICE ORDER</h5>
-						</header>
 
 						<div class="row">
+
 							<div class="form-group-sm">
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<label class="control-label" for="sex">Order No</label> <input
-										type="text" class="form-control margin-bottom input-sm" id="sex" value=""
-										name="sex" placeholder="Order No">
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="sex" value="" name="sex"
+										placeholder="Order No">
 								</div>
-							</div>
-							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="pat-type">Patient
-										Type</label> <input type="text" class="form-control margin-bottom" id="pat-type"
+
+								<div class="col-md-4">
+									<label class="control-label" for="sex">Patient Type</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="sex" value="" name="sex"
+										placeholder="Order No">
+								</div>
+								<div class="col-md-4">
+									<label class="control-label" for="pat-type">Referred
+										Doctor</label> <input type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type"
 										value="" name="bed" placeholder="Patient Type">
 								</div>
 							</div>
+
 						</div>
 
 						<div class="row">
 							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="sex">MRD</label> <input
-										type="text" class="form-control" id="sex" value="" name="sex"
-										placeholder="Order No">
+								<div class="col-md-3">
+									<label class="control-label" for="pat-type">Odering
+										Date</label> <input type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type"
+										value="" name="bed" placeholder="Patient Type">
 								</div>
-							</div>
 
-							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="pat-type">IP</label> <input
-										type="text" class="form-control margin-bottom" id="pat-type" value=""
+								<div class="col-md-5">
+									<label class="control-label" for="pat-name">Ward</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-name" value=""
+										name="sex" placeholder="Name">
+								</div>
+
+								<div class="col-md-4">
+									<label class="control-label" for="pat-type">Bed</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
 										name="bed" placeholder="Patient Type">
 								</div>
 							</div>
@@ -134,44 +156,59 @@
 
 				<div class="col-md-6">
 					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">SERVICE ORDER</h5>
-						</header>
-
-
 						<div class="row">
 							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="pat-name">Patient
-										Name</label> <input type="text" class="form-control input-sm"
-										id="pat-name" value="" name="sex" placeholder="Name">
+								<div class="col-md-4">
+									<label class="control-label">Patient Name</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin input-sm" id="pat-name"
+										value="" name="sex" placeholder="Name">
 								</div>
-							</div>
-							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="pat-type">Age</label> <input
-										type="text" class="form-control" id="pat-type" value=""
+
+								<div class="col-md-4">
+									<label class="control-label" for="pat-type">Adm Dept.</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
 										name="bed" placeholder="Patient Type">
+								</div>
+
+
+								<div class="col-md-4">
+									<label class="control-label" for="sex">Adm Doctor</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="sex" value="" name="sex"
+										placeholder="Order No">
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="sex">Sex</label> <input
-										type="text" class="form-control" id="sex" value="" name="sex"
-										placeholder="Order No">
+								<div class="col-md-3">
+									<label class="control-label" for="pat-type">MR No.</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
+								</div>
+
+								<div class="col-md-3">
+									<label class="control-label" for="pat-type">Pat. No.</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="pat-type">Visit No.</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="pat-type">Sex</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="pat-type">Age</label> <input
+										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
+										name="bed" placeholder="Patient Type">
 								</div>
 							</div>
 
-							<div class="form-group-sm">
-								<div class="col-md-6">
-									<label class="control-label" for="pat-type">Referred
-										Doctor</label> <input type="text" class="form-control" id="pat-type"
-										value="" name="bed" placeholder="Patient Type">
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -181,30 +218,155 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="admin-content-con">
-						<div class="pull-right select-div">
-							<select class="form-control input-sm">
-								<option value="0">Select Request</option>
-							</select>
+
+
+					<!-- 	<div class="row">
+
+
+							<div class="form-horizontal">
+								<div class="form-group-sm">
+									<label class="control-label col-md-1" for="pat-category">Patient
+										Cat</label>
+									<div class="col-md-3">
+										<input type="text" class="form-control input-sm">
+									</div>
+									<label class="control-label col-md-1" for="pat-category">Pat
+										Sub Cat</label>
+									<div class="col-md-3">
+										<input type="text" class="form-control input-sm">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control input-sm">
+											<option value="0">Select Request</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+
+
 						</div>
+ -->
+					<!-- 	<div class="row">
 
-						<table class="table table-striped table-bordered table-hover"
-							id="myTable" style="width: 100%">
-							<thead>
-								<tr>
-									<th>Sl. No.</th>
-									<th>Service Description</th>
-									<th>Qty.</th>
-									<th>Rate</th>
-									<th>Type</th>
-									<th>Discount</th>
-									<th>Discount Amount</th>
-									<th>Net Amount</th>
-									<th>Specimen Description</th>
-								</tr>
-							</thead>
+							<div class="col-md-12">
+ -->
+							
+
+									<table class="table" id="myTable" style="width: 100%">
+										<thead>
+											<tr>
+												<th>Sl. No.</th>
+												<th>Service Description</th>
+												<th>Qty.</th>
+												<th>Rate</th>
+												<th>Dis</th>
+												<th>Dis Amnt</th>
+												<th>Net Amnt</th>
+												<th>Spec Desc</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="form-group-sm">
+												<td>1</td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+											</tr>
+											<tr class="form-group-sm">
+												<td>2</td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+											</tr>
+											<tr class="form-group-sm">
+												<td>3</td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+											</tr>
+											<tr class="form-group-sm">
+												<td>4</td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+											</tr>
+											<tr class="form-group-sm">
+												<td>5</td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+												<td><input type="text"
+													class="form-control dis-auto-width dis-bottom-margin"></td>
+											</tr>
 
 
-						</table>
+
+										</tbody>
+
+
+
+									</table>
+
+								
+
+						<!-- 	</div>
+						</div> -->
+
+
 
 					</div>
 				</div>
@@ -244,7 +406,7 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
-	<script type="text/javascript" src="js/nurse-note.js"></script>
+	<script type="text/javascript" src="js/service-order.js"></script>
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 

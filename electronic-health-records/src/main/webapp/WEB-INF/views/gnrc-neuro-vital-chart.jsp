@@ -352,7 +352,7 @@
 												</header>
 
 												<div class="form-horizontal">
-													<div class="form-group">
+													<div class="form-group-sm">
 														<label class="control-label col-xs-5" for="name"><span
 															class="required-label" id="name">Right Pupil</span> </label> <label
 															class="control-label col-xs-5" for="name"><span
@@ -361,14 +361,14 @@
 													<div class="form-group">
 														<label class="control-label col-xs-2" for="name"><span
 															class="required-label" id="name"></span> </label>
-														<div class="col-xs-4">
+														<div class="col-xs-6">
 															<select class="form-control selectpicker">
 																<option value="+">&plus;</option>
 																<option value="-">&minus;</option>
 																<option value="s">S</option>
 															</select>
 														</div>
-														<div class="col-xs-4">
+														<div class="col-xs-6">
 															<select class="form-control selectpicker">
 																<option value="+">&plus;</option>
 																<option value="-">&minus;</option>
@@ -407,7 +407,7 @@
 															</select>
 														</div>
 														<div class="col-xs-6">
-															<select class="form-control selectpicker input-sm">
+															<select class="form-control selectpicker">
 																<option value="c">C</option>
 																<option
 																	data-content="<i class='fas fa-circle' aria-hidden='true' style='font-size: 5px;'></i>&nbsp;1"
@@ -453,7 +453,7 @@
 							<h5 class="pull-left">NEURO VITAL CHART</h5>
 							<h5 class="pull-right">QR/14-12</h5>
 						</header>
-						<div class="form-group">
+						<div class="form-group-sm">
 							<label class="control-label" for="name">Name :</label> <input
 								type="text" class="form-control input-sm" id="name"
 								value="<%=patient.getPatientName()%>" name="name"
@@ -463,21 +463,21 @@
 
 						<div class="form-horizontal">
 
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<label class="control-label col-xs-3" for="sex">Sex</label>
 								<div class="col-xs-9">
 									<input type="text" class="form-control input-sm" id="sex"
 										value="<%=patient.getSex()%>" name="sex" placeholder="Sex">
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<label class="control-label col-xs-3" for="bed">Bed</label>
 								<div class="col-xs-9">
 									<input type="text" class="form-control input-sm" id="bed"
 										value="<%=patient.getBedNo()%>" name="bed" placeholder="Bed No">
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<label class="control-label col-xs-3" for="mrd"><span
 									class="" id="mrd">MRD</span></label>
 								<div class="col-xs-9">
@@ -486,7 +486,7 @@
 										placeholder="MRD">
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<label class="control-label col-xs-3" for="ip-no"><span
 									class="" id="ip-no"> IP</span></label>
 								<div class="col-xs-9">
@@ -495,7 +495,7 @@
 										placeholder="IP Number">
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<label class="control-label col-xs-3" for="note-date"><span
 									class="" id="note-date"> Date</span></label>
 								<div class="col-xs-9">
@@ -504,7 +504,7 @@
 								</div>
 							</div>
 
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<label class="control-label col-xs-3" for="note-date"><span
 									class="" id="note-date"> Time</span></label>
 								<div class="col-xs-9">
@@ -513,7 +513,7 @@
 								</div>
 							</div>
 
-							<div class="form-group">
+							<div class="form-group form-group-sm">
 								<div class="col-xs-9  col-xs-offset-5">
 									<button type="reset" class="btn btn-primary btn-sm">Reset</button>
 									<button type="submit" class="btn btn-success btn-sm">Submit</button>

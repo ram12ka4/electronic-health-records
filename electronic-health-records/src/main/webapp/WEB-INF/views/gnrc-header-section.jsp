@@ -2,7 +2,12 @@
 
 					<header id="nav-header" class="clearfix">
 						<div class="col-md-5">
-
+						
+						<div class="form-header-name">
+							
+							<h3>SERVICE ORDERING</h3>
+													
+						</div>
 							<!-- NAV BAR -->
 							<nav class="navbar-default pull-left">
 								<button type="button" class="navbar-toggle collapsed"
@@ -13,16 +18,16 @@
 										class="icon-bar"></span>
 								</button>
 
-							</nav>
+							</nav> 
 
-
-							<input type="text" class="hidden-sm hidden-xs"
-								id="header-search-field" placeholder="Search for something....">
+		
+							<!-- <input type="text" class="hidden-sm hidden-xs"
+								id="header-search-field" placeholder="Search for something...."> -->
 						</div>
 						<div class="col-md-7">
 							<ul>
-								<li id="welcome" class="hidden-xs">Welcome to GNRC
-									Administration Panel</li>
+								<li id="welcome" class="hidden-xs">Welcome to GNRC !!! Ram</li>
+								<li id="welcome" class="hidden-xs">Login ip : 172.16.20.112</li>
 								<li class="fixed-width"><a href="#"> <span
 										class="glyphicon glyphicon-bell" aria-hidden="true"></span> <span
 										class="label label-warning">3</span>

@@ -151,7 +151,7 @@ html, body {
 	border-bottom: 1px solid #e7eaec;
 }
 
-#nav-header #header-search-field {
+#nav-header .header-search-field {
 	padding-top: 17px;
 	vertical-align: center;
 	border: none;
@@ -271,7 +271,7 @@ label {
 	margin-bottom: 0;
 }
 
- .form-multiline .form-group {
+/*  .form-multiline .form-group {
 	margin-bottom: 15px;
 	margin-right: 30px;
 }
@@ -305,6 +305,10 @@ input:required:valid {
 
 textarea:required {
 	border: 1px solid red;
+}
+
+.form-control {
+    padding: 0px;
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
@@ -342,4 +346,4 @@ textarea:required {
 @media (min-width: 1200px)
 .container {
     width: 1170px;
-} 
+}  */
