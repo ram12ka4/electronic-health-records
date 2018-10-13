@@ -34,7 +34,6 @@
 	width: 100%;
 	height: 25px;
 	padding: 3px 3px;
-	
 }
 
 input[type="text"].dis-bottom-margin {
@@ -43,6 +42,23 @@ input[type="text"].dis-bottom-margin {
 	height: 25px;
 	padding: 3px 3px;
 }
+
+.form-group-sm select.form-control.select-box {
+	height: 25px;
+	line-height: 25px;
+	padding: 2px 10px;
+}
+
+.col-xs-offset-10.button-right-offset {
+	margin-left: 88.33333333%;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 </style>
 
 
@@ -111,19 +127,22 @@ input[type="text"].dis-bottom-margin {
 							<div class="form-group-sm">
 								<div class="col-md-4">
 									<label class="control-label" for="sex">Order No</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="sex" value="" name="sex"
-										placeholder="Order No">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="sex"
+										value="" name="sex" placeholder="Order No">
 								</div>
 
 								<div class="col-md-4">
 									<label class="control-label" for="sex">Patient Type</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="sex" value="" name="sex"
-										placeholder="Order No">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="sex"
+										value="" name="sex" placeholder="Order No">
 								</div>
 								<div class="col-md-4">
 									<label class="control-label" for="pat-type">Referred
-										Doctor</label> <input type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type"
-										value="" name="bed" placeholder="Patient Type">
+										Doctor</label> <input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 							</div>
 
@@ -133,20 +152,23 @@ input[type="text"].dis-bottom-margin {
 							<div class="form-group-sm">
 								<div class="col-md-3">
 									<label class="control-label" for="pat-type">Odering
-										Date</label> <input type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type"
-										value="" name="bed" placeholder="Patient Type">
+										Date</label> <input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 
 								<div class="col-md-5">
 									<label class="control-label" for="pat-name">Ward</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-name" value=""
-										name="sex" placeholder="Name">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-name" value="" name="sex" placeholder="Name">
 								</div>
 
 								<div class="col-md-4">
 									<label class="control-label" for="pat-type">Bed</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 							</div>
 						</div>
@@ -160,21 +182,24 @@ input[type="text"].dis-bottom-margin {
 							<div class="form-group-sm">
 								<div class="col-md-4">
 									<label class="control-label">Patient Name</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin input-sm" id="pat-name"
-										value="" name="sex" placeholder="Name">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin input-sm"
+										id="pat-name" value="" name="sex" placeholder="Name">
 								</div>
 
 								<div class="col-md-4">
 									<label class="control-label" for="pat-type">Adm Dept.</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 
 
 								<div class="col-md-4">
 									<label class="control-label" for="sex">Adm Doctor</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="sex" value="" name="sex"
-										placeholder="Order No">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="sex"
+										value="" name="sex" placeholder="Order No">
 								</div>
 							</div>
 						</div>
@@ -183,29 +208,34 @@ input[type="text"].dis-bottom-margin {
 							<div class="form-group-sm">
 								<div class="col-md-3">
 									<label class="control-label" for="pat-type">MR No.</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 
 								<div class="col-md-3">
 									<label class="control-label" for="pat-type">Pat. No.</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="pat-type">Visit No.</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="pat-type">Sex</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="pat-type">Age</label> <input
-										type="text" class="form-control dis-auto-width dis-bottom-margin" id="pat-type" value=""
-										name="bed" placeholder="Patient Type">
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="pat-type" value="" name="bed" placeholder="Patient Type">
 								</div>
 							</div>
 
@@ -220,7 +250,7 @@ input[type="text"].dis-bottom-margin {
 					<div class="admin-content-con">
 
 
-					<!-- 	<div class="row">
+						<div class="row">
 
 
 							<div class="form-horizontal">
@@ -228,17 +258,22 @@ input[type="text"].dis-bottom-margin {
 									<label class="control-label col-md-1" for="pat-category">Patient
 										Cat</label>
 									<div class="col-md-3">
-										<input type="text" class="form-control input-sm">
+										<input type="text"
+											class="form-control dis-auto-width dis-bottom-margin">
 									</div>
 									<label class="control-label col-md-1" for="pat-category">Pat
 										Sub Cat</label>
 									<div class="col-md-3">
-										<input type="text" class="form-control input-sm">
+										<input type="text"
+											class="form-control dis-auto-width dis-bottom-margin input-sm">
 									</div>
-									<div class="col-md-4">
-										<select class="form-control input-sm">
+									<div class="col-md-3">
+										<select class="form-control select-box">
 											<option value="0">Select Request</option>
 										</select>
+									</div>
+									<div class="col-md-1">
+										<button type="reset" class="btn btn-primary btn-sm pull-right row-add">Add Row</button>
 									</div>
 								</div>
 							</div>
@@ -246,126 +281,59 @@ input[type="text"].dis-bottom-margin {
 
 
 						</div>
- -->
-					<!-- 	<div class="row">
-
-							<div class="col-md-12">
- -->
-							
-
-									<table class="table" id="myTable" style="width: 100%">
-										<thead>
-											<tr>
-												<th>Sl. No.</th>
-												<th>Service Description</th>
-												<th>Qty.</th>
-												<th>Rate</th>
-												<th>Dis</th>
-												<th>Dis Amnt</th>
-												<th>Net Amnt</th>
-												<th>Spec Desc</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr class="form-group-sm">
-												<td>1</td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-											</tr>
-											<tr class="form-group-sm">
-												<td>2</td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-											</tr>
-											<tr class="form-group-sm">
-												<td>3</td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-											</tr>
-											<tr class="form-group-sm">
-												<td>4</td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-											</tr>
-											<tr class="form-group-sm">
-												<td>5</td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-												<td><input type="text"
-													class="form-control dis-auto-width dis-bottom-margin"></td>
-											</tr>
 
 
 
-										</tbody>
+						<table class="table" id="myTable" style="width: 100%">
+							<thead>
+								<tr>
+									<th>S/N</th>
+									<th>Service Description</th>
+									<th>Qty.</th>
+									<th>Rate</th>
+									<th>Dis</th>
+									<th>Dis Amnt</th>
+									<th>Net Amnt</th>
+									<th>Spec Desc</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+						</table>
 
+						<div class="row">
+							<div class="form-horizontal">
+								<div class="form-group-sm">
+									<label class="control-label col-md-2" for="pat-category">Gross
+										Amount</label>
+									<div class="col-md-2">
+										<input type="text"
+											class="form-control dis-auto-width dis-bottom-margin">
+									</div>
+									<label class="control-label col-md-1" for="pat-category">Discount</label>
+									<div class="col-md-1">
+										<input type="text"
+											class="form-control dis-auto-width dis-bottom-margin input-sm">
+									</div>
+									<label class="control-label col-md-2" for="pat-category">Net
+										Amount</label>
+									<div class="col-md-2">
+										<input type="text"
+											class="form-control dis-auto-width dis-bottom-margin input-sm">
+									</div>
 
+								</div>
+							</div>
+						</div>
+						<div class="row">
 
-									</table>
+							<div class="col-xs-offset-10 button-right-offset">
+								<button type="reset" class="btn btn-primary btn-sm">Reset</button>
+								<button type="submit" class="btn btn-success btn-sm">Submit</button>
+							</div>
 
-								
+						</div>
 
-						<!-- 	</div>
-						</div> -->
-
+					
 
 
 					</div>
