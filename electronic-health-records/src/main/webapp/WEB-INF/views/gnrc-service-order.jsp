@@ -54,11 +54,10 @@ input[type="text"].dis-bottom-margin {
 }
 
 .center-block {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
-
 </style>
 
 
@@ -257,7 +256,7 @@ input[type="text"].dis-bottom-margin {
 								<div class="form-group-sm">
 									<label class="control-label col-md-1" for="pat-category">Patient
 										Cat</label>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<input type="text"
 											class="form-control dis-auto-width dis-bottom-margin">
 									</div>
@@ -273,7 +272,12 @@ input[type="text"].dis-bottom-margin {
 										</select>
 									</div>
 									<div class="col-md-1">
-										<button type="reset" class="btn btn-primary btn-sm pull-right row-add">Add Row</button>
+										<button type="button" class="btn btn-primary btn-xs">Add Service</button>
+									</div>
+									<div class="col-md-1">
+										<button type="button"
+											class="btn btn-primary btn-xs pull-right row-add">Add
+											Row</button>
 									</div>
 								</div>
 							</div>
@@ -333,7 +337,7 @@ input[type="text"].dis-bottom-margin {
 
 						</div>
 
-					
+
 
 
 					</div>

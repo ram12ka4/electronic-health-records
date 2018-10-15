@@ -990,10 +990,10 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	public ArrayList<String> getWardList(String empCode) throws SQLException {
+	public List<String> getWardList(String empCode) throws SQLException {
 
 		int doctorCount = 0;
-		ArrayList<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection();) {
 
@@ -1027,6 +1027,40 @@ public class PatientDaoImpl implements PatientDao {
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, empCode);
+		return ps;
+	}
+	
+	public List<String> getServiceList() throws SQLException {
+		
+		List<String> list = new ArrayList<>();
+		
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement24(con);
+					ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+			
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+	
+	private PreparedStatement createPreparedStatement24(Connection con) throws SQLException {
+		String sql = "SELECT DISTINCT b.BMH_MAJOR_CD, UPPER(b.BMH_MAJOR_DESC) FROM " + 
+				"        BI_SERVICE_MASTER a," + 
+				"        BI_MAJORMINOR_HEADER b" + 
+				"        WHERE " + 
+				"        a.BSM_SERVICE_STATUS = 'A' " + 
+				"        AND a.BSM_MAJOR_CD = b.BMH_MAJOR_CD " + 
+				"        AND b.BMH_MAJOR_CD <> 'DKMJ' ORDER BY UPPER(b.BMH_MAJOR_DESC)";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		
 		return ps;
 	}
 

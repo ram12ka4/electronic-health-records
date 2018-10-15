@@ -47,7 +47,9 @@ public interface PatientDao {
 	public ArrayList<ArrayList<String>> getPatientList(String empCode, String wardId) throws SQLException;
 	public List<IndoorPatient> getPatientList1(String empCode, String wardId) throws SQLException;
 	
-	public ArrayList<String> getWardList(String empCode) throws SQLException;
+	public List<String> getWardList(String empCode) throws SQLException;
+
+	public List<String> getServiceList() throws SQLException;
 	
 	public List<String> getParentLink(String userRole) throws SQLException;
 	

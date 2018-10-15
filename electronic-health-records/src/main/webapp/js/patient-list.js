@@ -323,7 +323,7 @@ $(function() {
                   callback: function(itemKey, opt, e) {
                   var m = $(this).attr('href');
                   window.location.href = m;
-                  //window.console && console.log(m) || alert(m); 
+                  window.console && console.log(m) || alert(m); 
             		  }
               },
               "vitalEntry": {name: "Vital Entry", icon: "cut"},
