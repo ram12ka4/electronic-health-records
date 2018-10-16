@@ -1,5 +1,6 @@
 $(function() {
 	
+	$('#fromDate').datepicker().datepicker("setDate", new Date());
 	var select = $(".select-box");
 	//select.css("display", "inline");
 
@@ -183,6 +184,17 @@ $(function() {
 		]).draw();
 		
 		
+	});
+	
+	$(document).on('click', '.previousBtn', function(){
+		
+		var id = $(this).data('id');
+		//alert(id);
+		
+		$('.myModal .modal-body').load('/patient.transfer?ACTION=FETCH_SERVICE_ORDER&ip_no='+id, function(){
+			
+			$('.myModal').modal({show:true});
+		});
 	});
 	
 	

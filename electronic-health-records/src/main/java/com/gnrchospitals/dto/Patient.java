@@ -13,11 +13,13 @@ public class Patient {
 	private String bedNo;
 	private String wardNo;
 	private String maritalStatus;
+	private String patientCategory;
+	private String patientSubCategory;
+	private String visit;
 	private Emr emr;
 	private static Patient patient;
 
 	private Patient() {
-
 	}
 
 	static {
@@ -26,6 +28,33 @@ public class Patient {
 		} catch (Exception ex) {
 			throw new RuntimeException("Exception occured in creating singleton instance");
 		}
+	}
+	
+	
+	
+
+	public String getVisit() {
+		return visit;
+	}
+
+	public void setVisit(String visit) {
+		this.visit = visit;
+	}
+
+	public String getPatientCategory() {
+		return patientCategory;
+	}
+
+	public void setPatientCategory(String patientCategory) {
+		this.patientCategory = patientCategory;
+	}
+
+	public String getPatientSubCategory() {
+		return patientSubCategory;
+	}
+
+	public void setPatientSubCategory(String patientSubCategory) {
+		this.patientSubCategory = patientSubCategory;
 	}
 
 	public static Patient getInstance() {
@@ -133,7 +162,10 @@ public class Patient {
 		return "Patient [mrdNumber=" + mrdNumber + ", ipNumber=" + ipNumber + ", patientName=" + patientName + ", sex="
 				+ sex + ", age=" + age + ", admissionDate=" + admissionDate + ", doctorIncharge=" + doctorIncharge
 				+ ", speciality=" + speciality + ", bedNo=" + bedNo + ", wardNo=" + wardNo + ", maritalStatus="
-				+ maritalStatus + ", emr=" + emr + "]";
+				+ maritalStatus + ", patientCategory=" + patientCategory + ", patientSubCategory=" + patientSubCategory
+				+ ", visit=" + visit + ", emr=" + emr + "]";
 	}
+
+	
 
 }

@@ -117,31 +117,58 @@ input[type="text"].dis-bottom-margin {
 			<div class="row">
 
 
-				<div class="col-md-6">
+				<div class="col-md-12">
 
 					<div class="admin-content-con">
 
 						<div class="row">
 
 							<div class="form-group-sm">
-								<div class="col-md-4">
-									<label class="control-label" for="sex">Order No</label> <input
+								<div class="col-md-2">
+									<label class="control-label" for="order-id">Order No</label> <input
 										type="text"
-										class="form-control dis-auto-width dis-bottom-margin" id="sex"
-										value="" name="sex" placeholder="Order No">
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="order-id" value="" name="order" placeholder="Order No"
+										readonly="readonly">
 								</div>
 
-								<div class="col-md-4">
-									<label class="control-label" for="sex">Patient Type</label> <input
+								<!-- <div class="col-md-1">
+									<label class="control-label" for="patient-type">Pat Type</label> <input
 										type="text"
-										class="form-control dis-auto-width dis-bottom-margin" id="sex"
-										value="" name="sex" placeholder="Order No">
-								</div>
-								<div class="col-md-4">
-									<label class="control-label" for="pat-type">Referred
+										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
+										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
+								</div> -->
+								<div class="col-md-3">
+									<label class="control-label" for="refer-doctor">Referred
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
+										id="refer-doctor" value="" name="referDoctor"
+										placeholder="Refer Doctor" readonly="readonly">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="patient-name">Patient
+										Name</label> <input type="text"
+										class="form-control dis-auto-width dis-bottom-margin input-sm"
+										id="patient-name" value="<%=patient.getPatientName()%>"
+										name="patientName" placeholder="Name" readonly="readonly">
+								</div>
+
+								<div class="col-md-2">
+									<label class="control-label" for="admin-dept">Speciality</label>
+									<input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="admin-dept" value="<%=patient.getSpeciality()%>"
+										name="adminDept" placeholder="Admin Dept" readonly="readonly">
+								</div>
+
+
+								<div class="col-md-3">
+									<label class="control-label" for="admin-doctor">Consultant</label>
+									<input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="admin-doctor" value="<%=patient.getDoctorIncharge()%>"
+										name="adminDoctor" placeholder="Adm Doctor"
+										readonly="readonly">
 								</div>
 							</div>
 
@@ -149,95 +176,66 @@ input[type="text"].dis-bottom-margin {
 
 						<div class="row">
 							<div class="form-group-sm">
-								<div class="col-md-3">
-									<label class="control-label" for="pat-type">Odering
+								<div class="col-md-2">
+									<label class="control-label" for="order-date">Order
 										Date</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
+										id="fromDate" value="" name="orderDate"
+										placeholder="Ordering Date" readonly="readonly">
 								</div>
 
-								<div class="col-md-5">
-									<label class="control-label" for="pat-name">Ward</label> <input
+								<div class="col-md-2">
+									<label class="control-label" for="ward">Ward</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-name" value="" name="sex" placeholder="Name">
+										id="ward" value="<%=patient.getWardNo()%>" name="ward"
+										placeholder="Ward" readonly="readonly">
 								</div>
 
-								<div class="col-md-4">
-									<label class="control-label" for="pat-type">Bed</label> <input
+								<div class="col-md-1">
+									<label class="control-label" for="bed">Bed</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="bed"
+										value="<%=patient.getBedNo()%>" name="bed" placeholder="Bed"
+										readonly="readonly">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="mrd">MR No.</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="mrd"
+										value="<%=patient.getMrdNumber()%>" name="mrd"
+										placeholder="Mrd" readonly="readonly">
+								</div>
+
+								<div class="col-md-2">
+									<label class="control-label" for="patient-no">Pat. No.</label>
+									<input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="patient-no" value="<%=patient.getIpNumber()%>"
+										name="patientNo" placeholder="Patient No" readonly="readonly">
+								</div>
+								<div class="col-md-1">
+									<label class="control-label" for="visit-no">Visit No.</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
+										id="visit-no" value="" name="visitNo" placeholder="Visit No"
+										readonly="readonly">
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="col-md-6">
-					<div class="admin-content-con">
-						<div class="row">
-							<div class="form-group-sm">
-								<div class="col-md-4">
-									<label class="control-label">Patient Name</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin input-sm"
-										id="pat-name" value="" name="sex" placeholder="Name">
-								</div>
-
-								<div class="col-md-4">
-									<label class="control-label" for="pat-type">Adm Dept.</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
-								</div>
-
-
-								<div class="col-md-4">
-									<label class="control-label" for="sex">Adm Doctor</label> <input
+								<div class="col-md-1">
+									<label class="control-label" for="sex">Sex</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin" id="sex"
-										value="" name="sex" placeholder="Order No">
+										value="<%=patient.getSex()%>" name="sex" placeholder="Sex"
+										readonly="readonly">
+								</div>
+								<div class="col-md-1">
+									<label class="control-label" for="age">Age</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="age"
+										value="<%=patient.getAge()%>" name="age" placeholder="Age"
+										readonly="readonly">
 								</div>
 							</div>
-						</div>
-
-						<div class="row">
-							<div class="form-group-sm">
-								<div class="col-md-3">
-									<label class="control-label" for="pat-type">MR No.</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
-								</div>
-
-								<div class="col-md-3">
-									<label class="control-label" for="pat-type">Pat. No.</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
-								</div>
-								<div class="col-md-2">
-									<label class="control-label" for="pat-type">Visit No.</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
-								</div>
-								<div class="col-md-2">
-									<label class="control-label" for="pat-type">Sex</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
-								</div>
-								<div class="col-md-2">
-									<label class="control-label" for="pat-type">Age</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin"
-										id="pat-type" value="" name="bed" placeholder="Patient Type">
-								</div>
-							</div>
-
 						</div>
 					</div>
 				</div>
@@ -257,28 +255,27 @@ input[type="text"].dis-bottom-margin {
 									<label class="control-label col-md-1" for="pat-category">Patient
 										Cat</label>
 									<div class="col-md-2">
-										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin">
+										<input type="text" value="<%=patient.getPatientCategory()%>"
+											class="form-control dis-auto-width dis-bottom-margin" readonly="readonly">
 									</div>
 									<label class="control-label col-md-1" for="pat-category">Pat
 										Sub Cat</label>
-									<div class="col-md-3">
-										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin input-sm">
+									<div class="col-md-2">
+										<input type="text" value="<%=patient.getPatientSubCategory()%>"
+											class="form-control dis-auto-width dis-bottom-margin input-sm" readonly="readonly">
 									</div>
 									<div class="col-md-3">
 										<select class="form-control select-box">
 											<option value="0">Select Request</option>
 										</select>
 									</div>
-									<div class="col-md-1">
-										<button type="button" class="btn btn-primary btn-xs">Add Service</button>
+									<div class="col-md-3">
+										<button type="button" class="btn btn-primary btn-sm">Add Service</button>
+										<button type="button" class="btn btn-primary btn-sm row-add">Add Row</button>
+										<button type="button" class="btn btn-primary btn-sm previousBtn"
+										data-id='<%=ipNumber%>'>Prev Order</button>
 									</div>
-									<div class="col-md-1">
-										<button type="button"
-											class="btn btn-primary btn-xs pull-right row-add">Add
-											Row</button>
-									</div>
+									
 								</div>
 							</div>
 

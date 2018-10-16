@@ -41,6 +41,8 @@ public class PatientDaoImpl implements PatientDao {
 					patient.setBedNo(rs.getString(9));
 					patient.setWardNo(rs.getString(10));
 					patient.setMaritalStatus(rs.getString(11));
+					patient.setPatientCategory(rs.getString(12));
+					patient.setPatientSubCategory(rs.getString(13));
 
 				} while (rs.next());
 			}
@@ -62,13 +64,13 @@ public class PatientDaoImpl implements PatientDao {
 		sql.append(
 				" , A.WAT_ADMN_DT \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
 		sql.append(
-				" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\" ");
+				" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\", h.GPC_PATIENT_CTGRY_DESC, i.GPS_PATIENT_SUBCTGRY_DESC ");
 		sql.append(
-				" from wa_admission_txn a, RE_REGISTRATION_HEADER b,  hr_employee_master d, WA_WARD_MASTER e, ga_parameter_master f, ga_department_master g ");
+				" from wa_admission_txn a, RE_REGISTRATION_HEADER b,  hr_employee_master d, WA_WARD_MASTER e, ga_parameter_master f, ga_department_master g,  ga_patient_category_master h, ga_patient_subcategory_master i");
 		sql.append(
 				" WHERE a.WAT_MR_NUM = b.RRH_MR_NUM and d.EEM_EMP_NUM = a.WAT_DOCTOR_INCHARGE and a.WAT_WARD_CD = e.WWM_WARD_CD and ");
 		sql.append(
-				" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD and a.WAT_IP_NUM = ? ");
+				" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD  and a.WAT_PATIENT_CATEGORY_CD  = h.GPC_PATIENT_CTGRY_CD and a.WAT_PATIENT_SUBCATEGORY_CD = i.GPS_PATIENT_SUBCTGRY_CD and a.WAT_IP_NUM = ? ");
 
 		System.out.println(sql.toString());
 
