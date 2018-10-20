@@ -24,6 +24,8 @@ public class PatientListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		request.setAttribute("ipName", request.getParameter("ip_no"));
+
 		request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-list.jsp").forward(request, response);
 
 	}

@@ -21,9 +21,8 @@ public class ServiceOrderServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		request.setAttribute("ipNumber", request.getParameter("ip_no"));
 		request.getRequestDispatcher("/WEB-INF/views/gnrc-service-order.jsp").forward(request, response);
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,6 +31,7 @@ public class ServiceOrderServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		String action = request.getParameter("ACTION") == null || request.getParameter("ACTION").isEmpty() ? ""
 				: request.getParameter("ACTION");
+		String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
 
 		try {
 

@@ -41,8 +41,10 @@ public class PatientDaoImpl implements PatientDao {
 					patient.setBedNo(rs.getString(9));
 					patient.setWardNo(rs.getString(10));
 					patient.setMaritalStatus(rs.getString(11));
-					patient.setPatientCategory(rs.getString(12));
-					patient.setPatientSubCategory(rs.getString(13));
+					patient.setPatientCategoryCode(rs.getString(12));
+					patient.setPatientCategory(rs.getString(13));
+					patient.setPatientSubCategoryCode(rs.getString(14));
+					patient.setPatientSubCategory(rs.getString(15));
 
 				} while (rs.next());
 			}
@@ -54,23 +56,19 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement(Connection con, String ipNumber) throws SQLException {
+		
 		StringBuilder sql = new StringBuilder();
+		
+		System.out.println("IP Number : " + ipNumber);
 
-		sql.append(
-				" SELECT  B.RRH_MR_NUM \"MRD NO\", A.WAT_IP_NUM \"IP NO\", B.RRH_FIRST_NAME||' '||B.RRH_MIDDLE_NAME||' '||B.RRH_LAST_NAME NAME ");
-		sql.append(
-				" , (SELECT C.GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER C WHERE C.GPM_PARAMETER_CD = B.RRH_PAT_SEX AND C.GPM_PARAMETER_TYPE = 'SEX') SEX");
+		sql.append(" SELECT  B.RRH_MR_NUM \"MRD NO\", A.WAT_IP_NUM \"IP NO\", B.RRH_FIRST_NAME||' '||B.RRH_MIDDLE_NAME||' '||B.RRH_LAST_NAME NAME ");
+		sql.append(" , (SELECT C.GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER C WHERE C.GPM_PARAMETER_CD = B.RRH_PAT_SEX AND C.GPM_PARAMETER_TYPE = 'SEX') SEX");
 		sql.append(" , ROUND((trunc(SYSDATE) - B.RRH_PAT_DOB) / 365) AGE");
-		sql.append(
-				" , A.WAT_ADMN_DT \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
-		sql.append(
-				" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\", h.GPC_PATIENT_CTGRY_DESC, i.GPS_PATIENT_SUBCTGRY_DESC ");
-		sql.append(
-				" from wa_admission_txn a, RE_REGISTRATION_HEADER b,  hr_employee_master d, WA_WARD_MASTER e, ga_parameter_master f, ga_department_master g,  ga_patient_category_master h, ga_patient_subcategory_master i");
-		sql.append(
-				" WHERE a.WAT_MR_NUM = b.RRH_MR_NUM and d.EEM_EMP_NUM = a.WAT_DOCTOR_INCHARGE and a.WAT_WARD_CD = e.WWM_WARD_CD and ");
-		sql.append(
-				" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD  and a.WAT_PATIENT_CATEGORY_CD  = h.GPC_PATIENT_CTGRY_CD and a.WAT_PATIENT_SUBCATEGORY_CD = i.GPS_PATIENT_SUBCTGRY_CD and a.WAT_IP_NUM = ? ");
+		sql.append(" , A.WAT_ADMN_DT \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
+		sql.append(" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\", h.GPC_PATIENT_CTGRY_CD, h.GPC_PATIENT_CTGRY_DESC, i.GPS_PATIENT_SUBCTGRY_CD, i.GPS_PATIENT_SUBCTGRY_DESC ");
+		sql.append(" from wa_admission_txn a, RE_REGISTRATION_HEADER b,  hr_employee_master d, WA_WARD_MASTER e, ga_parameter_master f, ga_department_master g,  GA_PATIENT_CATEGORY_MASTER h, GA_PATIENT_SUBCATEGORY_MASTER i");
+		sql.append(" WHERE a.WAT_MR_NUM = b.RRH_MR_NUM and d.EEM_EMP_NUM = a.WAT_DOCTOR_INCHARGE and a.WAT_WARD_CD = e.WWM_WARD_CD and ");
+		sql.append(" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD  and a.WAT_PATIENT_CATEGORY_CD  = h.GPC_PATIENT_CTGRY_CD and a.WAT_PATIENT_SUBCATEGORY_CD = i.GPS_PATIENT_SUBCTGRY_CD and a.WAT_IP_NUM = ? ");
 
 		System.out.println(sql.toString());
 

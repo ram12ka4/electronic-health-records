@@ -89,10 +89,9 @@ input[type="text"].dis-bottom-margin {
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) session.getAttribute("ipNo") == null ? ""
-				: (String) session.getAttribute("ipNo");
+		String ipNumber = (String)request.getAttribute("ipNumber") == null ? "" : (String)request.getAttribute("ipNumber");
 
-		System.out.println("Ip Name : " + ipNumber);
+		System.out.println("Patient Number  : " + ipNumber);
 
 		Enumeration<String> noteDate = request.getParameterNames();
 
@@ -255,12 +254,14 @@ input[type="text"].dis-bottom-margin {
 									<label class="control-label col-md-1" for="pat-category">Patient
 										Cat</label>
 									<div class="col-md-2">
+										<input type="hidden" name="patCategoryCode" value="<%=patient.getPatientCategoryCode()%>">
 										<input type="text" value="<%=patient.getPatientCategory()%>"
 											class="form-control dis-auto-width dis-bottom-margin" readonly="readonly">
 									</div>
 									<label class="control-label col-md-1" for="pat-category">Pat
 										Sub Cat</label>
 									<div class="col-md-2">
+										<input type="hidden" name="patSubCategoryCode" value="<%=patient.getPatientSubCategoryCode()%>">
 										<input type="text" value="<%=patient.getPatientSubCategory()%>"
 											class="form-control dis-auto-width dis-bottom-margin input-sm" readonly="readonly">
 									</div>

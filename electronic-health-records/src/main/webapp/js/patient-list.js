@@ -338,9 +338,8 @@ $(function() {
 					var m = $(this).attr('href');
 
 					window.location.href = m.replace('pat_panel.do', 'patient.transfer');
-					window.console
-							&& console.log(m.replace('pat_panel.do', 'patient.transfer'))
-							|| alert(m);
+					
+					window.console	&& console.log(m.replace('pat_panel.do', 'patient.transfer')) || alert(m);
 				}
 			},
 			"vitalEntry" : {
