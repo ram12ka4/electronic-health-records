@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
+import com.gnrchospitals.dto.IndoorPatient;
+import com.gnrchospitals.dto.ServiceOrder;
 
 @WebServlet(urlPatterns = "/patient.transfer")
 public class ServiceOrderServlet extends HttpServlet {
@@ -32,6 +35,8 @@ public class ServiceOrderServlet extends HttpServlet {
 		String action = request.getParameter("ACTION") == null || request.getParameter("ACTION").isEmpty() ? ""
 				: request.getParameter("ACTION");
 		String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
+		
+		String serviceId = request.getParameter("serviceId") == null ? "" : request.getParameter("serviceId");
 
 		try {
 
@@ -40,6 +45,22 @@ public class ServiceOrderServlet extends HttpServlet {
 				List<String> list = patientDao.getServiceList();
 
 				out.print(list);
+
+			} else	if ("GET_SERVICE_RATE_LIST".equals(action)) {
+
+				List<ServiceOrder> list = patientDao.getServiceRateList(serviceId);
+
+				ObjectMapper mapper = new ObjectMapper();
+
+				String jsonMapper = mapper.writeValueAsString(list);
+
+				System.out.println("JSON MAPPER : " + jsonMapper);
+
+				jsonMapper = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+
+				System.out.println("JSON MAPPER : " + jsonMapper);
+
+				out.print(jsonMapper.toString());
 
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-service-order.jsp").forward(request, response);

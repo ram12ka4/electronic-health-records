@@ -15,6 +15,7 @@ import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.IndoorPatient;
 import com.gnrchospitals.dto.Patient;
+import com.gnrchospitals.dto.ServiceOrder;
 import com.gnrchospitals.util.LoginDBConnection;
 
 public class PatientDaoImpl implements PatientDao {
@@ -56,19 +57,26 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement(Connection con, String ipNumber) throws SQLException {
-		
+
 		StringBuilder sql = new StringBuilder();
-		
+
 		System.out.println("IP Number : " + ipNumber);
 
-		sql.append(" SELECT  B.RRH_MR_NUM \"MRD NO\", A.WAT_IP_NUM \"IP NO\", B.RRH_FIRST_NAME||' '||B.RRH_MIDDLE_NAME||' '||B.RRH_LAST_NAME NAME ");
-		sql.append(" , (SELECT C.GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER C WHERE C.GPM_PARAMETER_CD = B.RRH_PAT_SEX AND C.GPM_PARAMETER_TYPE = 'SEX') SEX");
+		sql.append(
+				" SELECT  B.RRH_MR_NUM \"MRD NO\", A.WAT_IP_NUM \"IP NO\", B.RRH_FIRST_NAME||' '||B.RRH_MIDDLE_NAME||' '||B.RRH_LAST_NAME NAME ");
+		sql.append(
+				" , (SELECT C.GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER C WHERE C.GPM_PARAMETER_CD = B.RRH_PAT_SEX AND C.GPM_PARAMETER_TYPE = 'SEX') SEX");
 		sql.append(" , ROUND((trunc(SYSDATE) - B.RRH_PAT_DOB) / 365) AGE");
-		sql.append(" , A.WAT_ADMN_DT \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
-		sql.append(" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\", h.GPC_PATIENT_CTGRY_CD, h.GPC_PATIENT_CTGRY_DESC, i.GPS_PATIENT_SUBCTGRY_CD, i.GPS_PATIENT_SUBCTGRY_DESC ");
-		sql.append(" from wa_admission_txn a, RE_REGISTRATION_HEADER b,  hr_employee_master d, WA_WARD_MASTER e, ga_parameter_master f, ga_department_master g,  GA_PATIENT_CATEGORY_MASTER h, GA_PATIENT_SUBCATEGORY_MASTER i");
-		sql.append(" WHERE a.WAT_MR_NUM = b.RRH_MR_NUM and d.EEM_EMP_NUM = a.WAT_DOCTOR_INCHARGE and a.WAT_WARD_CD = e.WWM_WARD_CD and ");
-		sql.append(" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD  and a.WAT_PATIENT_CATEGORY_CD  = h.GPC_PATIENT_CTGRY_CD and a.WAT_PATIENT_SUBCATEGORY_CD = i.GPS_PATIENT_SUBCTGRY_CD and a.WAT_IP_NUM = ? ");
+		sql.append(
+				" , A.WAT_ADMN_DT \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
+		sql.append(
+				" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\", h.GPC_PATIENT_CTGRY_CD, h.GPC_PATIENT_CTGRY_DESC, i.GPS_PATIENT_SUBCTGRY_CD, i.GPS_PATIENT_SUBCTGRY_DESC ");
+		sql.append(
+				" from wa_admission_txn a, RE_REGISTRATION_HEADER b,  hr_employee_master d, WA_WARD_MASTER e, ga_parameter_master f, ga_department_master g,  GA_PATIENT_CATEGORY_MASTER h, GA_PATIENT_SUBCATEGORY_MASTER i");
+		sql.append(
+				" WHERE a.WAT_MR_NUM = b.RRH_MR_NUM and d.EEM_EMP_NUM = a.WAT_DOCTOR_INCHARGE and a.WAT_WARD_CD = e.WWM_WARD_CD and ");
+		sql.append(
+				" b.RRH_MARITAL_STATUS =  f.GPM_PARAMETER_CD and a.WAT_ADMM_DEPT = g.GDM_DEPT_CD  and a.WAT_PATIENT_CATEGORY_CD  = h.GPC_PATIENT_CTGRY_CD and a.WAT_PATIENT_SUBCATEGORY_CD = i.GPS_PATIENT_SUBCTGRY_CD and a.WAT_IP_NUM = ? ");
 
 		System.out.println(sql.toString());
 
@@ -1029,14 +1037,13 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(1, empCode);
 		return ps;
 	}
-	
+
 	public List<String> getServiceList() throws SQLException {
-		
+
 		List<String> list = new ArrayList<>();
-		
+
 		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement24(con);
-					ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = createPreparedStatement24(con); ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					do {
 						list.add(rs.getString(1));
@@ -1044,23 +1051,55 @@ public class PatientDaoImpl implements PatientDao {
 					} while (rs.next());
 				}
 			}
-			
+
 			System.out.println("Indoor Patient List : " + list);
 			return list;
 		}
 	}
-	
+
 	private PreparedStatement createPreparedStatement24(Connection con) throws SQLException {
-		String sql = "SELECT DISTINCT b.BMH_MAJOR_CD, UPPER(b.BMH_MAJOR_DESC) FROM " + 
-				"        BI_SERVICE_MASTER a," + 
-				"        BI_MAJORMINOR_HEADER b" + 
-				"        WHERE " + 
-				"        a.BSM_SERVICE_STATUS = 'A' " + 
-				"        AND a.BSM_MAJOR_CD = b.BMH_MAJOR_CD " + 
-				"        AND b.BMH_MAJOR_CD <> 'DKMJ' ORDER BY UPPER(b.BMH_MAJOR_DESC)";
+		String sql = "SELECT DISTINCT b.BMH_MAJOR_CD, UPPER(b.BMH_MAJOR_DESC) FROM " + "        BI_SERVICE_MASTER a,"
+				+ "        BI_MAJORMINOR_HEADER b" + "        WHERE " + "        a.BSM_SERVICE_STATUS = 'A' "
+				+ "        AND a.BSM_MAJOR_CD = b.BMH_MAJOR_CD "
+				+ "        AND b.BMH_MAJOR_CD <> 'DKMJ' ORDER BY UPPER(b.BMH_MAJOR_DESC)";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-		
+
+		return ps;
+	}
+
+	public List<ServiceOrder> getServiceRateList(String serviceId) throws SQLException {
+
+		List<ServiceOrder> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement25(con, serviceId); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						ServiceOrder serviceOrder = new ServiceOrder();
+						serviceOrder.setServiceName(rs.getString(1));
+						serviceOrder.setRate(rs.getString(2));
+						serviceOrder.setDiscount(rs.getString(3));
+						serviceOrder.setQty("1");
+						list.add(serviceOrder);
+					} while (rs.next());
+				}
+			}
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement25(Connection con, String serviceId) throws SQLException {
+		String sql = "select s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
+				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
+				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
+				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
+				+ "  and  h.bcr_bill_class_cd = 'NORMAL' " + "  and  d.brd_ssrvc_cd      = s.bsm_service_id "
+				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 " + "  and s.BSM_MAJOR_CD = ?";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, serviceId.trim());
 		return ps;
 	}
 
@@ -1242,7 +1281,7 @@ public class PatientDaoImpl implements PatientDao {
 
 		return ps;
 	}
-	
+
 	public List<String> getChildLink(String userRole, String catCode) throws SQLException {
 
 		ArrayList<String> list = new ArrayList<>();
@@ -1259,12 +1298,13 @@ public class PatientDaoImpl implements PatientDao {
 			}
 
 			System.out.println("User Link List : " + list);
-			
+
 			return list;
 		}
 	}
 
-	private PreparedStatement createPreparedStatement23(Connection con, String userRole, String catCode) throws SQLException {
+	private PreparedStatement createPreparedStatement23(Connection con, String userRole, String catCode)
+			throws SQLException {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(" select b.HFD_FORM_DESC, b.HFD_FORM_PATH from  ");

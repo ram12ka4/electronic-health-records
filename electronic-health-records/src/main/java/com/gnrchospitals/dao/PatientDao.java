@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.gnrchospitals.dto.IndoorPatient;
 import com.gnrchospitals.dto.Patient;
+import com.gnrchospitals.dto.ServiceOrder;
 
 public interface PatientDao {
 
@@ -51,9 +52,12 @@ public interface PatientDao {
 
 	public List<String> getServiceList() throws SQLException;
 	
+	public List<ServiceOrder> getServiceRateList(String serviceId) throws SQLException;
+	
 	public List<String> getParentLink(String userRole) throws SQLException;
 	
 	public List<String> getChildLink(String userRole, String catCode) throws SQLException;
+	
 
 
 }
