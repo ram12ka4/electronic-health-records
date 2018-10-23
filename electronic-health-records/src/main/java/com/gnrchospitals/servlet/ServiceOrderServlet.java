@@ -36,7 +36,9 @@ public class ServiceOrderServlet extends HttpServlet {
 				: request.getParameter("ACTION");
 		String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
 		
-		String serviceId = request.getParameter("serviceId") == null ? "" : request.getParameter("serviceId");
+		String serviceCat = request.getParameter("serviceCat") == null ? "" : request.getParameter("serviceCat");
+
+		String serviceDesc = request.getParameter("serviceDesc") == null ? "" : request.getParameter("serviceDesc");
 
 		try {
 
@@ -48,19 +50,21 @@ public class ServiceOrderServlet extends HttpServlet {
 
 			} else	if ("GET_SERVICE_RATE_LIST".equals(action)) {
 
-				List<ServiceOrder> list = patientDao.getServiceRateList(serviceId);
+				List<ServiceOrder> list = patientDao.getServiceRateList(serviceCat, serviceDesc);
 
 				ObjectMapper mapper = new ObjectMapper();
 
 				String jsonMapper = mapper.writeValueAsString(list);
 
-				System.out.println("JSON MAPPER : " + jsonMapper);
+				//System.out.println("JSON MAPPER : " + jsonMapper);
 
-				jsonMapper = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+				//String jsonMapper = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 
-				System.out.println("JSON MAPPER : " + jsonMapper);
+				//System.out.println("JSON MAPPER : " + jsonMapper);
+				
+				System.out.println("Service Rate List : " + jsonMapper);
 
-				out.print(jsonMapper.toString());
+				out.println(jsonMapper);
 
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-service-order.jsp").forward(request, response);

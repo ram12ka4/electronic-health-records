@@ -52,7 +52,7 @@ public interface PatientDao {
 
 	public List<String> getServiceList() throws SQLException;
 	
-	public List<ServiceOrder> getServiceRateList(String serviceId) throws SQLException;
+	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException;
 	
 	public List<String> getParentLink(String userRole) throws SQLException;
 	

@@ -118,16 +118,14 @@ $(function() {
 						[
 								'<div class="pull-right row-order" id="'
 										+ (i + 1) + '">' + (i + 1) + '</div>',
-								'<input type="text"	id="serviceDesc"  name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin" tabindex="'
+								'<input type="text"	name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin" tabindex="'
 										+ (i + 1) + '">',
-								'<input type="text"	name="qty" value="'
-										+ (i + 1)
-										+ '" class="qty form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="rate" value="2" class="rate form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="discount" value="3" class="discount form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="disAmount" value="4" class="disAmount form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="netAmount" value="5" class="netAmount form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="specDesc" value="6" class="specDesc form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="qty" class="qty form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="rate"  class="rate form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="discount"  class="discount form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="disAmount"  class="disAmount form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="netAmount"  class="netAmount form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="specDesc"  class="specDesc form-control dis-auto-width dis-bottom-margin">',
 								'<button class="btn btn-warning btn-sm pull-right row-delete">X</button>' ])
 				.draw();
 	}
@@ -165,15 +163,15 @@ $(function() {
 														+ '">'
 														+ (parseInt(lastRowId) + 1)
 														+ '</div>',
-												'<input type="text"	name="serviceDesc" class="form-control dis-auto-width dis-bottom-margin" tabidex="'
+												'<input autocomplete="off" type="text"	name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin ui-autocomplete-input" tabindex="'
 														+ (parseInt(lastRowId) + 1)
 														+ '">',
-												'<input type="text"	name="qty" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="rate" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="discount" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="disAmount" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="netAmount" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="specDesc" class="form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="qty" class="qty form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="rate" class="rate form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="discount" class="discount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="disAmount" class="disAmount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="netAmount" class="netAmount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin">',
 												'<button class="btn btn-warning btn-sm pull-right row-delete">X</button>' ])
 								.draw();
 
@@ -194,15 +192,15 @@ $(function() {
 														+ '">'
 														+ (parseInt(lastRowId) + 1)
 														+ '</div>',
-												'<input type="text"	name="serviceDesc" class="form-control dis-auto-width dis-bottom-margin" tabidex="'
+												'<input type="text"	name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin ui-autocomplete-input" tabidex="'
 														+ (parseInt(lastRowId) + 1)
 														+ '">',
-												'<input type="text"	name="qty" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="rate" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="discount" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="disAmount" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="netAmount" class="form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="specDesc" class="form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="qty" class="qty form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="rate" class="rate form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="discount" class="discount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="disAmount" class="disAmount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="netAmount" class="netAmount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin">',
 												'<button class="btn btn-warning btn-sm pull-right row-delete">X</button>' ])
 								.draw();
 
@@ -227,78 +225,69 @@ $(function() {
 			});
 
 	var projects = [ {
-		value : "java",
-		label : "Java",
-		desc : "write once run anywhere",
+		"value" : "java",
+		"label" : "Java",
+		"desc" : "write once run anywhere",
 	}, {
-		value : "jquery-ui",
-		label : "jQuery UI",
-		desc : "the official user interface library for jQuery",
+		"value" : "jquery-ui",
+		"label" : "jQuery UI",
+		"desc" : "the official user interface library for jQuery",
 	}, {
-		value : "Bootstrap",
-		label : "Twitter Bootstrap",
-		desc : "popular front end frameworks ",
+		"value" : "Bootstrap",
+		"label" : "Twitter Bootstrap",
+		"desc" : "popular front end frameworks ",
 	} ];
 
-	/* Service Description autocomple features */
-	$('.serviceDesc')
-			.autocomplete(
-					{
-						minLength : 0,
-						/* source: projects, */
-						source : function(request, response) {
-							
-							var patNumber = $('#patient-no').val(); 
-							alert(patNumber);
-							  var serviceId = $('.select-box').val(); 
-							  alert(serviceId);
+	var serviceList = [];
 
-							$.ajax({
+	$(document)
+			.on(
+					'keyup',
+					'.serviceDesc',
+					function() {
 
+						var serviceDesc = $(this).val();
+						var patNumber = $('#patient-no').val();
+						// alert(patNumber);
+						var serviceCat = $('.select-box').val();
+						// alert(serviceCat);
+
+						if (serviceDesc.length > 2) {
+
+							$
+									.ajax({
 										url : 'patient.transfer',
 										type : 'post',
 										dataType : 'json',
-										/*contentType: "application/json;charset=utf-8",*/
 										data : {
 											ACTION : 'GET_SERVICE_RATE_LIST',
-											serviceDesc : request.term,
+											serviceDesc : serviceDesc,
 											ip_no : patNumber,
-											serviceId : serviceId
+											serviceCat : serviceCat
 										},
 										success : function(data) {
-											
-											//var eventlist = JSON.stringify(data);
-											
-											//alert(eventlist);
-											
-											/*alert("JSON data : " + data);
-											
-											var eventlist = JSON.stringify(data);
+											// alert(data);
+											// alert(JSON.stringify(data));
+											// serviceList.push(data);
+											// alert(serviceList);
 
-											var eventstring = new String();
+											// alert(data[0]["serviceName"]);
 
-											eventstring = eventlist.toString().replace(/"/g, "");
+											for (var i = 0; i < data.length; i++) {
 
-											alert("After filtering JSON data : " + eval(eventstring));*/
-											
-											response($.map(data, function(item){
-												
-												//alert(item.rate);
-												
-												return {
-													label: item.serviceName,
-													//serviceId : item.serviceId,
-													value : item.qty,
-													rate : item.rate,
-													discount: item.discount,
-													discountAmount: item.discountAmount,
-													netAmount:  item.netAmount
-												}
-												
-											}));
-											//response(data.d);
-											
-											
+												serviceList
+														.push({
+															label : String(data[i]["serviceName"]),
+															value : String(data[i]["serviceName"]),
+															qty : String(data[i]["qty"]),
+															rate : String(data[i]["rate"]),
+															discount : String(data[i]["discount"]),
+															discountAmount : String(data[i]["discountAmount"]),
+															netAmount : String(data[i]["netAmount"])
+														});
+											}
+
+											// alert("Data" + serviceList);
 										},
 										error : function(data) {
 											var errorMsg = "There is a problem processing your request";
@@ -307,97 +296,48 @@ $(function() {
 										}
 
 									});
-
-						},
-						focus : function(event, ui) {
-
-							var currentRow = $(this).closest('tr');
-
-							currentRow.find('.qty').val(ui.item.label);
-							currentRow.find('.rate').val(ui.item.value);
-						/*	currentRow.find('.discount').val(ui.item.discount);
-							currentRow.find('.disAmount').val(ui.item.discountAmount);*/
-
-							// alert(col1);
-
-							return false;
-						},
-						/*response : function(event, ui) {
-
-							alert("Items are " + ui.item.label);
-							
-							var currentRow = $(this).closest('tr');
-
-							currentRow.find('.qty').val("5");
-							currentRow.find('.rate').val(ui.item.serviceName);
-							currentRow.find('.discount').val(ui.item.discount);
-							currentRow.find('.disAmount').val(ui.item.discountAmount);
-
-							// alert(col1);
-
-							return false;
 						}
-*/
-					/*
-					 * source: function(request, response){
-					 * 
-					 * var patNumber = $('#patient-no').val(); alert(patNumber);
-					 * var serviceId = $('.select-box').val() alert(serviceId);
-					 * var counter =0;
-					 * 
-					 * 
-					 * 
-					 * var currentRow = $('#serviceDesc').closest('tr');
-					 * 
-					 * var col1 = currentRow.find('.qty').val();
-					 * 
-					 * alert(col1);
-					 * 
-					 * 
-					 * 
-					 * 
-					 * 
-					 * $.ajax({ url: 'patient.transfer', type: 'post', dataType:
-					 * 'json', data: { ACTION : 'GET_SERVICE_DESC', serviceDesc :
-					 * request.term, ip_no: patNumber, serviceId: serviceId },
-					 * success: function(data){
-					 * 
-					 * 
-					 * 
-					 * 
-					 * 
-					 *  }
-					 * 
-					 * 
-					 * });
-					 * 
-					 * 
-					 *  }
-					 */
-						response : function(event, ui) {
-							
-							alert('ui ' + JSON.stringify(ui));
-							//alert("item : " + ui.item.label);
-							
-							
-							
-							
-					            
-						/*	alert("Items are " + ui.item.label);
-							
-							var currentRow = $(this).closest('tr');
 
-							currentRow.find('.qty').val("5");
-							currentRow.find('.rate').val(ui.item.serviceName);
-							currentRow.find('.discount').val(ui.item.discount);
-							currentRow.find('.disAmount').val(ui.item.discountAmount);
-
-							// alert(col1);
-
-							return false;*/
-						}
 					});
-	
-	
+
+	/* Service Description autocomple features */
+	$('body').on('focus', '.serviceDesc', function() {
+
+		$(this).autocomplete({
+			autoFocus : true,
+			maxShowItems : 5,
+			minLength : 3,
+			source : serviceList,
+			focus : function(event, ui) {
+				var currentRow = $(this).closest('tr');
+				currentRow.find('.qty').val(ui.item.qty);
+				currentRow.find('.rate').val(ui.item.rate);
+				currentRow.find('.discount').val(ui.item.discount);
+				currentRow.find('.disAmount').val(ui.item.disAmount);
+				currentRow.find('.netAmount').val(ui.item.netAmount);
+				return false;
+			}
+		});
+
+	});
+	$('body').on('click', '.serviceDesc', function() {
+
+		$(this).autocomplete({
+			autoFocus : true,
+			maxShowItems : 5,
+			minLength : 3,
+			source : serviceList,
+			focus : function(event, ui) {
+				var currentRow = $(this).closest('tr');
+				currentRow.find('.qty').val(ui.item.qty);
+				currentRow.find('.rate').val(ui.item.rate);
+				currentRow.find('.discount').val(ui.item.discount);
+				currentRow.find('.disAmount').val(ui.item.disAmount);
+				currentRow.find('.netAmount').val(ui.item.netAmount);
+				return false;
+			}
+		});
+
+	});
 
 });

@@ -1068,18 +1068,19 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	public List<ServiceOrder> getServiceRateList(String serviceId) throws SQLException {
+	public List<ServiceOrder> getServiceRateList(String serviceCat , String serviceDesc) throws SQLException {
 
 		List<ServiceOrder> list = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement25(con, serviceId); ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = createPreparedStatement25(con, serviceCat, serviceDesc); ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					do {
 						ServiceOrder serviceOrder = new ServiceOrder();
-						serviceOrder.setServiceName(rs.getString(1));
-						serviceOrder.setRate(rs.getString(2));
-						serviceOrder.setDiscount(rs.getString(3));
+						serviceOrder.setServiceId(rs.getString(1));
+						serviceOrder.setServiceName(rs.getString(2));
+						serviceOrder.setRate(rs.getString(3));
+						serviceOrder.setDiscount(rs.getString(4));
 						serviceOrder.setQty("1");
 						list.add(serviceOrder);
 					} while (rs.next());
@@ -1090,16 +1091,17 @@ public class PatientDaoImpl implements PatientDao {
 		}
 	}
 
-	private PreparedStatement createPreparedStatement25(Connection con, String serviceId) throws SQLException {
-		String sql = "select s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
+	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc) throws SQLException {
+		String sql = "select s.BSM_SERVICE_ID, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
 				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
 				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
 				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
 				+ "  and  h.bcr_bill_class_cd = 'NORMAL' " + "  and  d.brd_ssrvc_cd      = s.bsm_service_id "
-				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 " + "  and s.BSM_MAJOR_CD = ?";
+				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 " + "  and s.BSM_MAJOR_CD = ? and upper(s.bsm_service_desc) like upper('%'|| ? ||'%')";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, serviceId.trim());
+		ps.setString(1, serviceCat.trim());
+		ps.setString(2, serviceDesc.trim());
 		return ps;
 	}
 

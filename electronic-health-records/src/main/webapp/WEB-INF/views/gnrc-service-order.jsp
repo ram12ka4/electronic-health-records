@@ -58,6 +58,16 @@ input[type="text"].dis-bottom-margin {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+ .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            /* add padding to account for vertical scrollbar */
+            padding-right: 20px;
+        } 
+        
 </style>
 
 
