@@ -59,15 +59,44 @@ input[type="text"].dis-bottom-margin {
 	margin-right: auto;
 }
 
- .ui-autocomplete {
-            max-height: 200px;
-            overflow-y: auto;
-            /* prevent horizontal scrollbar */
-            overflow-x: hidden;
-            /* add padding to account for vertical scrollbar */
-            padding-right: 20px;
-        } 
-        
+.ui-autocomplete {
+	max-height: 100px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+	font-size: 10px;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th,
+	.table>thead>tr>td, .table>thead>tr>th {
+	padding: 1px;
+	vertical-align: middle;
+}
+
+.row-order {
+	text-align: center;
+}
+
+.delete-btn {
+	text-align: center;
+}
+
+.form-inline .form-control.text-align-right {
+	background-image: url(http://i.imgur.com/Fd7NROx.png);
+	border: 1px solid #aaa;
+	padding: 5px;
+	padding-left: 20px;
+	background-size: 10px 15px;
+	background-repeat: no-repeat;
+	background-position: 8px 6px;
+	text-align: right;
+}
+
+.form-inline .form-control.text-align-center {
+	text-align: center;
+}
 </style>
 
 
@@ -99,7 +128,8 @@ input[type="text"].dis-bottom-margin {
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String)request.getAttribute("ipNumber") == null ? "" : (String)request.getAttribute("ipNumber");
+		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
+				: (String) request.getAttribute("ipNumber");
 
 		System.out.println("Patient Number  : " + ipNumber);
 
@@ -264,16 +294,20 @@ input[type="text"].dis-bottom-margin {
 									<label class="control-label col-md-1" for="pat-category">Patient
 										Cat</label>
 									<div class="col-md-2">
-										<input type="hidden" name="patCategoryCode" value="<%=patient.getPatientCategoryCode()%>">
-										<input type="text" value="<%=patient.getPatientCategory()%>"
-											class="form-control dis-auto-width dis-bottom-margin" readonly="readonly">
+										<input type="hidden" name="patCategoryCode"
+											value="<%=patient.getPatientCategoryCode()%>"> <input
+											type="text" value="<%=patient.getPatientCategory()%>"
+											class="form-control dis-auto-width dis-bottom-margin"
+											readonly="readonly">
 									</div>
 									<label class="control-label col-md-1" for="pat-category">Pat
 										Sub Cat</label>
 									<div class="col-md-2">
-										<input type="hidden" name="patSubCategoryCode" value="<%=patient.getPatientSubCategoryCode()%>">
-										<input type="text" value="<%=patient.getPatientSubCategory()%>"
-											class="form-control dis-auto-width dis-bottom-margin input-sm" readonly="readonly">
+										<input type="hidden" name="patSubCategoryCode"
+											value="<%=patient.getPatientSubCategoryCode()%>"> <input
+											type="text" value="<%=patient.getPatientSubCategory()%>"
+											class="form-control dis-auto-width dis-bottom-margin input-sm"
+											readonly="readonly">
 									</div>
 									<div class="col-md-3">
 										<select class="form-control select-box">
@@ -281,12 +315,15 @@ input[type="text"].dis-bottom-margin {
 										</select>
 									</div>
 									<div class="col-md-3">
-										<button type="button" class="btn btn-primary btn-sm">Add Service</button>
-										<button type="button" class="btn btn-primary btn-sm row-add">Add Row</button>
-										<button type="button" class="btn btn-primary btn-sm previousBtn"
-										data-id='<%=ipNumber%>'>Prev Order</button>
+										<button type="button" class="btn btn-primary btn-sm">Add
+											Service</button>
+										<button type="button" class="btn btn-primary btn-sm row-add">Add
+											Row</button>
+										<button type="button"
+											class="btn btn-primary btn-sm previousBtn"
+											data-id='<%=ipNumber%>'>Prev Order</button>
 									</div>
-									
+
 								</div>
 							</div>
 
@@ -303,7 +340,7 @@ input[type="text"].dis-bottom-margin {
 									<th>Service Description</th>
 									<th>Qty.</th>
 									<th>Rate</th>
-									<th>Dis</th>
+									<th>Dis(%)</th>
 									<th>Dis Amnt</th>
 									<th>Net Amnt</th>
 									<th>Spec Desc</th>
@@ -315,22 +352,22 @@ input[type="text"].dis-bottom-margin {
 						<div class="row">
 							<div class="form-horizontal">
 								<div class="form-group-sm">
-									<label class="control-label col-md-2" for="pat-category">Gross
+									<label class="control-label col-md-2" for="gross-amount">Gross
 										Amount</label>
 									<div class="col-md-2">
 										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin">
+											class="form-control dis-auto-width dis-bottom-margin" id="sum-gross-amount">
 									</div>
-									<label class="control-label col-md-1" for="pat-category">Discount</label>
+									<label class="control-label col-md-1" for="discount">Discount</label>
 									<div class="col-md-1">
 										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin input-sm">
+											class="form-control dis-auto-width dis-bottom-margin input-sm" id="sum-discount-amount">
 									</div>
-									<label class="control-label col-md-2" for="pat-category">Net
+									<label class="control-label col-md-2" for="net-amount">Net
 										Amount</label>
 									<div class="col-md-2">
 										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin input-sm">
+											class="form-control dis-auto-width dis-bottom-margin input-sm" id="sum-net-amount">
 									</div>
 
 								</div>

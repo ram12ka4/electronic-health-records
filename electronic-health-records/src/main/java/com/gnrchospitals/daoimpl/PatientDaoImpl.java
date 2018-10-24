@@ -1082,6 +1082,8 @@ public class PatientDaoImpl implements PatientDao {
 						serviceOrder.setRate(rs.getString(3));
 						serviceOrder.setDiscount(rs.getString(4));
 						serviceOrder.setQty("1");
+						serviceOrder.setDiscountAmount("0");
+						serviceOrder.setNetAmount("0");
 						list.add(serviceOrder);
 					} while (rs.next());
 				}
