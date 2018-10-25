@@ -94,8 +94,31 @@ input[type="text"].dis-bottom-margin {
 	text-align: right;
 }
 
+
+
 .form-inline .form-control.text-align-center {
 	text-align: center;
+}
+
+hr {
+	margin-top: 1px;
+	margin-bottom: 3px;
+	overflow: visible; /* For IE */
+	padding: 0;
+	border: none;
+	border-top: medium double #333;
+	color: #333;
+	text-align: center;
+}
+
+hr:after {
+	/* content: "§"; */
+	display: inline-block;
+	position: relative;
+	top: -0.7em;
+	font-size: 1.5em;
+	padding: 0 0.25em;
+	background: white;
 }
 </style>
 
@@ -331,7 +354,7 @@ input[type="text"].dis-bottom-margin {
 
 						</div>
 
-
+						<hr>
 
 						<table class="table" id="myTable" style="width: 100%">
 							<thead>
@@ -349,38 +372,45 @@ input[type="text"].dis-bottom-margin {
 							</thead>
 						</table>
 
+						<hr>
+
 						<div class="row">
 							<div class="form-horizontal">
 								<div class="form-group-sm">
-									<label class="control-label col-md-2" for="gross-amount">Gross
-										Amount</label>
+									<label class="control-label col-md-1" for="gross-amount">Gross</label>
 									<div class="col-md-2">
 										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin" id="sum-gross-amount">
+											class="form-control dis-auto-width dis-bottom-margin text-align-right"
+											id="sum-gross-amount">
 									</div>
 									<label class="control-label col-md-1" for="discount">Discount</label>
-									<div class="col-md-1">
-										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin input-sm" id="sum-discount-amount">
-									</div>
-									<label class="control-label col-md-2" for="net-amount">Net
-										Amount</label>
 									<div class="col-md-2">
 										<input type="text"
-											class="form-control dis-auto-width dis-bottom-margin input-sm" id="sum-net-amount">
+											class="form-control dis-auto-width dis-bottom-margin text-align-right"
+											id="sum-discount-amount">
+									</div>
+									<label class="control-label col-md-1" for="net-amount">Net</label>
+									<div class="col-md-2">
+										<input type="text"
+											class="form-control dis-auto-width dis-bottom-margin text-align-right"
+											id="sum-net-amount">
+									</div>
+									<div class="col-xs-offset-10 button-right-offset">
+										<button type="reset" class="btn btn-primary btn-sm">Reset</button>
+										<button type="submit" class="btn btn-success btn-sm">Submit</button>
 									</div>
 
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<!-- 	<div class="row">
 
 							<div class="col-xs-offset-10 button-right-offset">
 								<button type="reset" class="btn btn-primary btn-sm">Reset</button>
 								<button type="submit" class="btn btn-success btn-sm">Submit</button>
 							</div>
 
-						</div>
+						</div> -->
 
 
 

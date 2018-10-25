@@ -132,19 +132,18 @@ $(function() {
 								'<input type="text"	name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin" tabindex="'
 										+ (i + 1) + '">',
 								'<input type="text"	name="qty" class="text-align-center qty form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="rate"  class="text-align-right rate form-control dis-auto-width dis-bottom-margin"></div>',
+								'<input type="text"	name="rate"  class="text-align-right rate form-control dis-auto-width dis-bottom-margin" readonly>',
 								'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin">',
+								'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
+								'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 								'<input type="text"	name="specDesc"  class="specDesc form-control dis-auto-width dis-bottom-margin">',
 								'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 				.draw();
 	}
 
-	$('#myTable tbody').on(
-			'click',
-			'.row-delete',
-			function() {
+	$('.delete-btn').on('click',function(e) {
+		
+				e.preventDefault();
 
 				var row = $(this).closest('tr')
 				var id = row.find('.row-order').attr('id');
@@ -153,9 +152,11 @@ $(function() {
 				table.row($(this).parents('tr')).remove().draw();
 				// row.remove(id).draw();
 				siblings.each(function(index) {
-					$(this).children().first().addClass('pull-right row-order')
-							.attr('id', index + 1).text(index + 1);
+					$(this).children().first().addClass('row-order').attr('id', index + 1).text(index + 1);
+					//var html = "<div class='row-order' id='"+ (index + 1) +"'>" + (index + 1) + "</div>";
+					//$(this).children().append(html);
 				});
+				calculateGrossSummary();
 
 			});
 
@@ -178,10 +179,10 @@ $(function() {
 														+ (parseInt(lastRowId) + 1)
 														+ '">',
 												'<input type="text" name="qty" class="text-align-center qty form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text" name="rate" class="text-align-right rate form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text" name="rate" class="text-align-right rate form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
+												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin">',
 												'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 								.draw();
@@ -207,10 +208,10 @@ $(function() {
 														+ (parseInt(lastRowId) + 1)
 														+ '">',
 												'<input type="text"	name="qty" class="text-align-center qty form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="rate" class="text-align-right rate form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="rate" class="text-align-right rate form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin">',
-												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
+												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin">',
 												'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 								.draw();
@@ -285,6 +286,8 @@ $(function() {
 											// alert(data[0]["serviceName"]);
 											
 											//serviceList.length = 0;
+											
+											serviceList.length = 0;
 
 											for (var i = 0; i < data.length; i++) {
 
@@ -300,7 +303,7 @@ $(function() {
 														});
 											}
 
-											// alert("Data" + serviceList);
+										//console.log("Data" + serviceList.length);
 										},
 										error : function(data) {
 											var errorMsg = "There is a problem processing your request";
@@ -314,7 +317,7 @@ $(function() {
 					});
 
 	/* Service Description autocomple features */
-	$('body').on('click', '.serviceDesc', function() {
+/*	$('body').on('click', '.serviceDesc', function() {
 
 		$(this).autocomplete({
 			autoFocus : true,
@@ -348,9 +351,9 @@ $(function() {
 			}
 		});
 
-	});
+	});*/
 
-	$('.serviceDesc').autocomplete({
+	/*$('.serviceDesc').autocomplete({
 		autoFocus : true,
 		maxShowItems : 5,
 		minLength : 3,
@@ -375,15 +378,51 @@ $(function() {
 			var itemNetAmount = parseFloat(Math.round(totalNetAmount * 100) / 100).toFixed(2);
 			currentRow.find('.netAmount').val(itemNetAmount);
 			calculateGrossSummary();
+			return false;
 		},
 		select : function(event, ui) {
 			$(this).val(ui.item.label);
 			return false;
 		}
-	});
+	});*/
 
-	$('body').on('keydown','.serviceDesc',	function() {
-				$(this).autocomplete('option', 'delay',	1000 / ($(this).val().length + 1));
+	$('body').on('keyup','.serviceDesc',	function(e) {
+				//$(this).autocomplete('option', 'delay',	1000 / ($(this).val().length + 1));
+		
+		$(this).autocomplete({
+			autoFocus : true,
+			maxShowItems : 5,
+			minLength : 3,
+			source : serviceList,
+			delay : 500,
+			focus : function(event, ui) {
+				$(this).val(ui.item.label);
+				var currentRow = $(this).closest('tr');
+				var quatity = ui.item.qty;
+				currentRow.find('.qty').val(quatity);
+				var baseRate = ui.item.rate;
+				var totalRateAsQuantity = (quatity * baseRate);
+				var itemRate = parseFloat(Math.round(baseRate * 100) / 100).toFixed(2);
+				currentRow.find('.rate').val(itemRate);
+				var baseDiscount = ui.item.discount;
+				currentRow.find('.discount').val(baseDiscount);
+				var discountInDec = baseDiscount / 100;
+				var totalDiscountAmount =   totalRateAsQuantity * discountInDec;
+				var itemDiscountAmount = parseFloat(Math.round(totalDiscountAmount * 100) / 100).toFixed(2);
+				currentRow.find('.disAmount').val(itemDiscountAmount);
+				var totalNetAmount = totalRateAsQuantity - totalDiscountAmount;
+				var itemNetAmount = parseFloat(Math.round(totalNetAmount * 100) / 100).toFixed(2);
+				currentRow.find('.netAmount').val(itemNetAmount);
+				duplicateCheck(ui.item.label, currentRow);
+				calculateGrossSummary();
+				
+				return false;
+			},
+			select : function(event, ui) {
+				$(this).val(ui.item.label);
+				return false;
+			}
+		});
 
 			});
 	
@@ -437,17 +476,49 @@ $(function() {
 			sumNetAmount += parseFloat(netAmt);
 		});
 		
-		//alert(sumDisAmount);
-		//alert(sumNetAmount);
-		//sumGrossAmount = (parseFloat(sumDisAmount) + parseFloat(sumNetAmount));
 		sumGrossAmount = (parseFloat(sumDisAmount) + parseFloat(sumNetAmount));
-		
-		
 		
 		$('#sum-gross-amount').val(parseFloat(Math.round(sumGrossAmount * 100) / 100).toFixed(2));
 		$('#sum-discount-amount').val(sumDisAmount);
 		$('#sum-net-amount').val(sumNetAmount);
-		 
+	}
+	
+	function duplicateCheck(serviceName, currentRow){
+		
+		var serviceNameArr = [];
+		var count = 0;
+		
+		$('.serviceDesc').each(function(e){
+			if ($(this).val() !== ''){
+				serviceNameArr.push($(this).val());
+			}
+		});
+		
+		
+		console.log('Row Object : ' + currentRow);
+		console.log('Service Name : ' + serviceName);
+		console.log(serviceNameArr);
+		
+		for (var i =0; i<serviceNameArr.length; i++){
+			if (serviceName == serviceNameArr[i]){
+				
+				if (count === 1){
+					//alert('This item already exists');
+					currentRow.find('.serviceDesc').val('');
+					currentRow.find('.qty').val('');
+					currentRow.find('.rate').val('');
+					currentRow.find('.discount').val('');
+					currentRow.find('.disAmount').val('');
+					currentRow.find('.netAmount').val('');
+					calculateGrossSummary();
+					return true;
+				}
+				count++;
+			}
+		}
+		
+		
+		
 		
 		
 	}
