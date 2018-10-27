@@ -4,11 +4,31 @@ public class ServiceOrder {
 
 	private String serviceName;
 	private String serviceId;
+	private String minorCode;
+	private String serviceCode;
 	private String qty;
 	private String rate;
 	private String discount;
 	private String discountAmount;
 	private String netAmount;
+	
+	
+
+	public String getMinorCode() {
+		return minorCode;
+	}
+
+	public void setMinorCode(String minorCode) {
+		this.minorCode = minorCode;
+	}
+
+	public String getServiceCode() {
+		return serviceCode;
+	}
+
+	public void setServiceCode(String serviceCode) {
+		this.serviceCode = serviceCode;
+	}
 
 	public String getServiceId() {
 		return serviceId;
@@ -68,9 +88,11 @@ public class ServiceOrder {
 
 	@Override
 	public String toString() {
-		return "ServiceOrder [serviceId=" + serviceId + ", serviceName=" + serviceName + ", qty=" + qty + ", rate="
-				+ rate + ", discount=" + discount + ", discountAmount=" + discountAmount + ", netAmount=" + netAmount
-				+ "]";
+		return "ServiceOrder [serviceName=" + serviceName + ", serviceId=" + serviceId + ", minorCode=" + minorCode
+				+ ", serviceCode=" + serviceCode + ", qty=" + qty + ", rate=" + rate + ", discount=" + discount
+				+ ", discountAmount=" + discountAmount + ", netAmount=" + netAmount + "]";
 	}
+
+	
 
 }

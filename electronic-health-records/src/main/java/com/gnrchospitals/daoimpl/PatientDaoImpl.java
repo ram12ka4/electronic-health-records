@@ -1067,6 +1067,8 @@ public class PatientDaoImpl implements PatientDao {
 
 		return ps;
 	}
+	
+	
 
 	public List<ServiceOrder> getServiceRateList(String serviceCat , String serviceDesc) throws SQLException {
 
@@ -1078,9 +1080,11 @@ public class PatientDaoImpl implements PatientDao {
 					do {
 						ServiceOrder serviceOrder = new ServiceOrder();
 						serviceOrder.setServiceId(rs.getString(1));
-						serviceOrder.setServiceName(rs.getString(2));
-						serviceOrder.setRate(rs.getString(3));
-						serviceOrder.setDiscount(rs.getString(4));
+						serviceOrder.setMinorCode(rs.getString(2));
+						serviceOrder.setServiceCode(rs.getString(3));
+						serviceOrder.setServiceName(rs.getString(4));
+						serviceOrder.setRate(rs.getString(5));
+						serviceOrder.setDiscount(rs.getString(6));
 						serviceOrder.setQty("1");
 						serviceOrder.setDiscountAmount("0");
 						serviceOrder.setNetAmount("0");
@@ -1094,7 +1098,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc) throws SQLException {
-		String sql = "select s.BSM_SERVICE_ID, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
+		String sql = "select s.BSM_SERVICE_ID,s.BSM_MINOR_CD, s.BSM_SERVICE_CD, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
 				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
 				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
 				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
@@ -1104,6 +1108,31 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, serviceCat.trim());
 		ps.setString(2, serviceDesc.trim());
+		return ps;
+	}
+	
+	public List<String> getPanelServiceCodeList(String serviceCode) throws SQLException {
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement26(con, serviceCode); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+					} while (rs.next());
+				}
+			}
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement26(Connection con, String serviceCode) throws SQLException {
+		String sql = " select LAT_TEST_CD from ls_panel_test where LAT_PANEL_CD = ?";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, serviceCode);
 		return ps;
 	}
 

@@ -32,19 +32,23 @@ public class ServiceOrderServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		PrintWriter out = response.getWriter();
-		String action = request.getParameter("ACTION") == null || request.getParameter("ACTION").isEmpty() ? ""
-				: request.getParameter("ACTION");
+		String action = request.getParameter("ACTION") == null || request.getParameter("ACTION").isEmpty() ? "" : request.getParameter("ACTION");
 		String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
-		
 		String serviceCat = request.getParameter("serviceCat") == null ? "" : request.getParameter("serviceCat");
-
 		String serviceDesc = request.getParameter("serviceDesc") == null ? "" : request.getParameter("serviceDesc");
+		String serviceCode = request.getParameter("serviceCode") == null ? "" : request.getParameter("serviceCode");
 
 		try {
 
 			if ("GET_SERVICE_LIST".equals(action)) {
 
 				List<String> list = patientDao.getServiceList();
+
+				out.print(list);
+
+			} else if ("GET_PANEL_SERVICE_CODE".equals(action)) {
+
+				List<String> list = patientDao.getPanelServiceCodeList(serviceCode);
 
 				out.print(list);
 
