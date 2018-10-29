@@ -1,16 +1,17 @@
 $(function() {
+	
+	var serviceList = [];
+	var serviceCodeList = [];
+	var tempArr = [];
+	var panelServiceCode = [];
 
 	$('#fromDate').datepicker().datepicker("setDate", new Date());
 	var select = $(".select-box");
 	// select.css("display", "inline");
 
-	select
-			.empty()
-			.append(
-					'<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+	select.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
 
-	var req = $
-			.ajax({
+	var req = $.ajax({
 				url : 'patient.transfer',
 				type : 'post',
 				datatype : 'text',
@@ -132,6 +133,36 @@ $(function() {
 	  $('.delete-btn').on( 'click', function(e) {
 	  e.preventDefault();
 	  var row = $(this).closest('tr');
+	  
+	  var serviceId = row.find('.serviceCode').val();
+	  var minorCode = row.find('.minorCode').val();
+	  var serviceCode = row.find('.serviceCode').val();
+	  
+	  console.log('Service Id -> ' + serviceId);
+	  console.log('minor Code -> ' + minorCode);
+	  console.log('Service Code -> ' + serviceCode);
+	  
+	  
+	  
+	 
+	  for (var i=0; i<serviceCodeList.length; i++){
+		  console.log('Before serviceCodeList : ' + serviceCodeList[i]);
+	  }
+	  
+	  if (minorCode.localeCompare("PANMIN") === 0){
+		  console.log('If part');
+		  fetchDeletedPanelServiceCode(serviceCode);
+		  serviceCodeList.splice(serviceCodeList.indexOf(serviceCode), 1);
+	  } else {
+		  console.log('Else part');
+		  serviceCodeList.splice(serviceCodeList.indexOf(serviceCode), 1);
+	  }
+	  
+	 
+	
+	  
+	  
+	  
 	  var id =  row.find('.row-order').attr('id'); alert('ID : ' + id); 
 	  var siblings =  row.siblings(); 
 	  table.row($(this).parents('tr')).remove().draw(); 
@@ -143,6 +174,10 @@ $(function() {
 	  alignTabIndex();
 	  
 	  });
+	  
+	
+	  
+	
 	 
 
 	$(document)
@@ -177,7 +212,7 @@ $(function() {
 
 	
 	  $(document) .on( 'keyup', 'tr:last', function() { 
-		  console.log('ram');
+		 // console.log('ram');
 		  var x = event.which || event.keyCode;
 		  var lastRowId =  $('.row-order:last').attr('id'); 
 		  alert(lastRowId); 
@@ -225,8 +260,7 @@ $(function() {
 		"desc" : "popular front end frameworks ",
 	} ];
 
-	var serviceList = [];
-	var serviceCodeList = [];
+
 
 	$(document)
 			.on(
@@ -324,13 +358,14 @@ $(function() {
 											},
 											select : function(event, ui) {
 												$(this).val(ui.item.label);
+												var serviceDesc = ui.item.label;
 												var currentRow = $(this).closest('tr');
 												currentRow.find('.serviceId').val(ui.item.serviceId);
 												var serviceCode = ui.item.serviceCode;
 												currentRow.find('.serviceCode').val(serviceCode);
 												var minorCode = ui.item.minorCode;
 												currentRow.find('.minorCode').val(minorCode);
-												duplicateCheckServiceCode(minorCode, serviceCode, currentRow, e);
+												duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, e);
 												return false;
 											}
 										});
@@ -375,7 +410,7 @@ $(function() {
 	 */
 
 	function calculateGrossSummary() {
-		console.log('ram');
+		//console.log('ram');
 		var sumDisAmount = 0.0;
 		var sumNetAmount = 0.0;
 		var sumGrossAmount = 0.0;
@@ -452,41 +487,36 @@ $(function() {
 	
 	
 	/*
-	 * 
+	 * Duplicate check with service code 
 	 */
-	function duplicateCheckServiceCode(minorCode, serviceCode, currentRow, event) {
+	function duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, event) {
 		
 		
 		console.log('Minor Code : ' + minorCode);
 		console.log('Service Code : ' + serviceCode);
 		
+		  tempArr.length = 0;
+		
 		for (var i =0; i<serviceCodeList.length; i++){
 			console.log('ServiceCode List : ' + serviceCodeList[i]);
 		}
-		
-			for (var i = 0; i < serviceCodeList.length; i++) {
-				
-				if (serviceCode == serviceCodeList[i]) {
-						currentRow.find('.qty').val('');
-						currentRow.find('.rate').val('');
-						currentRow.find('.discount').val('');
-						currentRow.find('.disAmount').val('');
-						currentRow.find('.netAmount').val('');
-						calculateGrossSummary();
-						alert("This service code already exists");
-						currentRow.find('.serviceDesc').val('');
-						return false;
-				}
-			}
-	
 			
-			console.log('Else Section');
+			/*
+			 * Three stages duplicate checking 
+			 * 	1.	panel code with panel code.
+			 * 	2.  panel code's sub service code with individual service code.
+			 *  3.  individual service code first then compare with panel's sub service code.
+			 */
+			var x  = parentChildServiceCodeCheck(serviceDesc, serviceCode, "", currentRow, 1);
+			
+			if (x === false){
+				return false;
+			} 
+		
+			//console.log('Else Section');
 			
 			if (minorCode.localeCompare("PANMIN") === 0){
-				
-				serviceCodeList.push(serviceCode);
-				
-				
+		
 				$.ajax({
 					url : 'patient.transfer',
 					type : 'post',
@@ -504,13 +534,35 @@ $(function() {
 							
 							var arr = data.replace("[", "").replace("]", "").split(",");
 							
-							console.log('Array data : ' + arr[0]);
-							
 							var i = 0;
 							while (i < arr.length) {
-								serviceCodeList.push($.trim(arr[i]));
-								i += 1;
+								
+								console.log('Array data : ' + arr[i]);
+								
+								var childServiceCode = $.trim(arr[i]);
+								var childServiceDesc = $.trim(arr[i+1]);
+								
+								
+								var x = parentChildServiceCodeCheck(serviceDesc, childServiceCode, childServiceDesc, currentRow, 2);
+								
+								if (x === false){
+									console.log('step false');
+									return false;
+								} else {
+									console.log('step true');
+									tempArr.push(childServiceCode);
+								}
+								i += 2;
 							}
+							
+							serviceCodeList.push.apply(serviceCodeList, tempArr);
+							serviceCodeList.push(serviceCode);
+							
+							for (var i=0; i<serviceCodeList.length; i++){
+								console.log('After Service List : ' + serviceCodeList[i]);
+							}
+							
+							
 						}
 					},
 					error : function(data) {
@@ -523,8 +575,84 @@ $(function() {
 			} else {
 				serviceCodeList.push(serviceCode);
 			}
-		
 		}
+	
+  function fetchDeletedPanelServiceCode(serviceCode){
+		  
+		  console.log('In fetchDeletedPanelServiceCode');
+		  //panelServiceCode.length = 0;
+		
+		  
+		  $.ajax({
+				url : 'patient.transfer',
+				type : 'post',
+				dataType : 'text',
+				data : {
+					ACTION : 'GET_PANEL_SERVICE_CODE',
+					serviceCode : serviceCode
+				},
+				success : function(data) {
+					
+					data = data.replace(/^\W+|\W+$/g, "");
+					//console.log(data);
+
+					if (data.length !== 0) {
+						var arr = data.replace("[", "").replace("]", "").split(",");
+						var i = 0;
+						while (i < arr.length) {
+									console.log('Data to be deleted : ' + arr[i]);
+								  serviceCodeList.splice(serviceCodeList.indexOf($.trim(arr[i])), 1);
+							i += 2;
+						}
+					}
+						
+						console.log('step 1');
+						
+						console.log('Service Code List Length : ' + serviceCodeList.length);
+					  
+					  for (var i=0; i<serviceCodeList.length; i++){
+						  console.log('After serviceCodeList : ' + serviceCodeList[i]);
+					  }
+				  
+					  console.log('step 2');
+					
+					
+				},
+				error : function(data) {
+					var errorMsg = "There is a problem processing your request";
+					alert(errorMsg);
+					alert(data.responseText);
+				}
+			});
+		  
+	  }
+	
+	function parentChildServiceCodeCheck(serviceDesc, serviceCode, childServiceDesc, currentRow, token) {
+		
+		for (var i = 0; i < serviceCodeList.length; i++) {
+			
+			if (serviceCode === serviceCodeList[i]) {
+					currentRow.find('.qty').val('');
+					currentRow.find('.rate').val('');
+					currentRow.find('.discount').val('');
+					currentRow.find('.disAmount').val('');
+					currentRow.find('.netAmount').val('');
+					currentRow.find('.serviceDesc').val('');
+					currentRow.find('.serviceId').val('');
+					currentRow.find('.minorCode').val('');
+					currentRow.find('.serviceCode').val('');
+					if (token === 1){
+						alert("\"" + serviceDesc + "\" service name already exists");
+					} else {
+						alert("......................................Duplicate Service Name..............................\n\r\"" + childServiceDesc + "\" is present in \""+ serviceDesc +"\" service name.\n\r Please check");
+					}
+					calculateGrossSummary();
+					return false;
+			}
+		}
+
+		//return true;
+	}
 	
 
 

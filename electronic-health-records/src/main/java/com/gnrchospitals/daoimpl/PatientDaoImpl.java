@@ -1120,6 +1120,7 @@ public class PatientDaoImpl implements PatientDao {
 				if (rs.next()) {
 					do {
 						list.add(rs.getString(1));
+						list.add(rs.getString(2));
 					} while (rs.next());
 				}
 			}
@@ -1129,7 +1130,13 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement26(Connection con, String serviceCode) throws SQLException {
-		String sql = " select LAT_TEST_CD from ls_panel_test where LAT_PANEL_CD = ?";
+		//String sql = " select LAT_TEST_CD from ls_panel_test where LAT_PANEL_CD = ?";
+		String sql = " select b.LAT_TEST_CD, a.LTM_TEST_DESC  from " + 
+					"       ls_test_master a, " + 
+					"       ls_panel_test b " + 
+					"  		where " + 
+					"       a.LTM_TEST_CD = b.LAT_TEST_CD " + 
+					"       and b.LAT_PANEL_CD = ?";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, serviceCode);
