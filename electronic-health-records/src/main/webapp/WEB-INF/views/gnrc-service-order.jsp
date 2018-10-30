@@ -23,106 +23,6 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
-
-
-<style type="text/css">
-.margin-bottom {
-	margin-bottom: 15px;
-}
-
-.form-inline .form-control.dis-auto-width {
-	width: 100%;
-	height: 25px;
-	padding: 3px 3px;
-}
-
-input[type="text"].dis-bottom-margin {
-	margin-bottom: 0;
-	width: 100%;
-	height: 25px;
-	padding: 3px 3px;
-}
-
-.form-group-sm select.form-control.select-box {
-	height: 25px;
-	line-height: 25px;
-	padding: 2px 10px;
-}
-
-.col-xs-offset-10.button-right-offset {
-	margin-left: 88.33333333%;
-}
-
-.center-block {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.ui-autocomplete {
-	max-height: 100px;
-	overflow-y: auto;
-	/* prevent horizontal scrollbar */
-	overflow-x: hidden;
-	/* add padding to account for vertical scrollbar */
-	padding-right: 20px;
-	font-size: 10px;
-}
-
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th,
-	.table>thead>tr>td, .table>thead>tr>th {
-	padding: 1px;
-	vertical-align: middle;
-}
-
-.row-order {
-	text-align: center;
-}
-
-.delete-btn {
-	text-align: center;
-}
-
-.form-inline .form-control.text-align-right {
-	background-image: url(http://i.imgur.com/Fd7NROx.png);
-	border: 1px solid #aaa;
-	padding: 5px;
-	padding-left: 20px;
-	background-size: 10px 15px;
-	background-repeat: no-repeat;
-	background-position: 8px 6px;
-	text-align: right;
-}
-
-
-
-.form-inline .form-control.text-align-center {
-	text-align: center;
-}
-
-hr {
-	margin-top: 1px;
-	margin-bottom: 3px;
-	overflow: visible; /* For IE */
-	padding: 0;
-	border: none;
-	border-top: medium double #333;
-	color: #333;
-	text-align: center;
-}
-
-hr:after {
-	/* content: "§"; */
-	display: inline-block;
-	position: relative;
-	top: -0.7em;
-	font-size: 1.5em;
-	padding: 0 0.25em;
-	background: white;
-}
-</style>
-
-
 </head>
 <body>
 
@@ -170,7 +70,7 @@ hr:after {
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form id="doctor-note-frm">
+	<form id="service-order-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -190,7 +90,7 @@ hr:after {
 									<label class="control-label" for="order-id">Order No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="order-id" value="" name="order" placeholder="Order No"
+										id="order-id" value="" name="orderNo" placeholder="Order No"
 										readonly="readonly">
 								</div>
 
@@ -216,21 +116,22 @@ hr:after {
 								</div>
 
 								<div class="col-md-2">
-									<label class="control-label" for="admin-dept">Speciality</label>
+									<label class="control-label" for="speciality">Speciality</label>
 									<input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="admin-dept" value="<%=patient.getSpeciality()%>"
-										name="adminDept" placeholder="Admin Dept" readonly="readonly">
+										name="speciality" placeholder="Speciality" readonly="readonly">
 								</div>
 
 
 								<div class="col-md-3">
-									<label class="control-label" for="admin-doctor">Consultant</label>
+									<label class="control-label" for="consultant">Consultant</label>
 									<input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="admin-doctor" value="<%=patient.getDoctorIncharge()%>"
-										name="adminDoctor" placeholder="Adm Doctor"
+										name="consultant" placeholder="Consultant"
 										readonly="readonly">
+										<input type="hidden" value="<%=patient.getDoctorId()%>" name="doctorId">
 								</div>
 							</div>
 
@@ -333,7 +234,7 @@ hr:after {
 											readonly="readonly">
 									</div>
 									<div class="col-md-3">
-										<select class="form-control select-box">
+										<select class="form-control select-box" name="serviceCategory">
 											<option value="0">Select Request</option>
 										</select>
 									</div>
@@ -396,8 +297,8 @@ hr:after {
 											id="sum-net-amount">
 									</div>
 									<div class="col-xs-offset-10 button-right-offset">
-										<button type="reset" class="btn btn-primary btn-sm">Reset</button>
-										<button type="submit" class="btn btn-success btn-sm">Submit</button>
+										<button type="button" id="btn-reset" class="btn btn-primary btn-sm">Reset</button>
+										<button type="button" id="btn-submit" class="btn btn-success btn-sm">Submit</button>
 									</div>
 
 								</div>

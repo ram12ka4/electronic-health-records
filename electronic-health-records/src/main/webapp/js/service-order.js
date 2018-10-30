@@ -4,6 +4,7 @@ $(function() {
 	var serviceCodeList = [];
 	var tempArr = [];
 	var panelServiceCode = [];
+	var serviceOrderNo = 0;
 
 	$('#fromDate').datepicker().datepicker("setDate", new Date());
 	var select = $(".select-box");
@@ -87,19 +88,19 @@ $(function() {
 			"width" : "5%",
 			"targets" : 2
 		}, {
-			"width" : "10%",
+			"width" : "8%",
 			"targets" : 3
 		}, {
 			"width" : "5%",
 			"targets" : 4
 		}, {
-			"width" : "10%",
+			"width" : "8%",
 			"targets" : 5
 		}, {
-			"width" : "10%",
+			"width" : "8%",
 			"targets" : 6
 		}, {
-			"width" : "10%",
+			"width" : "16%",
 			"targets" : 7
 		}, {
 			"width" : "5%",
@@ -138,23 +139,24 @@ $(function() {
 	  var minorCode = row.find('.minorCode').val();
 	  var serviceCode = row.find('.serviceCode').val();
 	  
-	  console.log('Service Id -> ' + serviceId);
-	  console.log('minor Code -> ' + minorCode);
-	  console.log('Service Code -> ' + serviceCode);
+	  // console.log('Service Id -> ' + serviceId);
+	  // console.log('minor Code -> ' + minorCode);
+	  // console.log('Service Code -> ' + serviceCode);
 	  
 	  
 	  
 	 
-	  for (var i=0; i<serviceCodeList.length; i++){
-		  console.log('Before serviceCodeList : ' + serviceCodeList[i]);
-	  }
+	 /*
+		 * for (var i=0; i<serviceCodeList.length; i++){ console.log('Before
+		 * serviceCodeList : ' + serviceCodeList[i]); }
+		 */
 	  
 	  if (minorCode.localeCompare("PANMIN") === 0){
-		  console.log('If part');
+		  // console.log('If part');
 		  fetchDeletedPanelServiceCode(serviceCode);
 		  serviceCodeList.splice(serviceCodeList.indexOf(serviceCode), 1);
 	  } else {
-		  console.log('Else part');
+		  // console.log('Else part');
 		  serviceCodeList.splice(serviceCodeList.indexOf(serviceCode), 1);
 	  }
 	  
@@ -167,7 +169,7 @@ $(function() {
 	  var siblings =  row.siblings(); 
 	  table.row($(this).parents('tr')).remove().draw(); 
 	  siblings.each(function(index) {
-		  console.log('Tab Index : ' + index);
+		  // console.log('Tab Index : ' + index);
 	  $(this).children().first().addClass('row-order').attr('id', index + 1).text(index + 1); 
 	  });
 	  calculateGrossSummary();
@@ -315,7 +317,7 @@ $(function() {
 
 					});
 
-	
+	previousValue = "";
 
 	$('body')
 			.on(
@@ -357,6 +359,19 @@ $(function() {
 												return false;
 											},
 											select : function(event, ui) {
+												
+											  /*  var isValid = false;
+											    for (i in serviceList) {
+											        if (serviceList[i]["serviceName"].toLowerCase().match(this.value.toLowerCase())) {
+											            isValid = true;
+											        }
+											    }
+											    if (!isValid) {
+											        this.value = previousValue
+											    } else {
+											        previousValue = this.value;
+											    }*/
+												
 												$(this).val(ui.item.label);
 												var serviceDesc = ui.item.label;
 												var currentRow = $(this).closest('tr');
@@ -406,11 +421,11 @@ $(function() {
 					});
 	
 	/*
-	 * Calculate Gross Amount, Discount Amount and Net Amount 
+	 * Calculate Gross Amount, Discount Amount and Net Amount
 	 */
 
 	function calculateGrossSummary() {
-		//console.log('ram');
+		// console.log('ram');
 		var sumDisAmount = 0.0;
 		var sumNetAmount = 0.0;
 		var sumGrossAmount = 0.0;
@@ -453,9 +468,9 @@ $(function() {
 				serviceNameArr.push($(this).val());
 			}
 		});
-		console.log('Row Object : ' + currentRow);
-		console.log('Service Name : ' + serviceName);
-		console.log(serviceNameArr);
+		// console.log('Row Object : ' + currentRow);
+		// console.log('Service Name : ' + serviceName);
+		// console.log(serviceNameArr);
 		for (var i = 0; i < serviceNameArr.length; i++) {
 			if (serviceName == serviceNameArr[i]) {
 				if (count === 1) {
@@ -487,25 +502,26 @@ $(function() {
 	
 	
 	/*
-	 * Duplicate check with service code 
+	 * Duplicate check with service code
 	 */
 	function duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, event) {
 		
 		
-		console.log('Minor Code : ' + minorCode);
-		console.log('Service Code : ' + serviceCode);
+		// console.log('Minor Code : ' + minorCode);
+		// console.log('Service Code : ' + serviceCode);
 		
 		  tempArr.length = 0;
 		
-		for (var i =0; i<serviceCodeList.length; i++){
-			console.log('ServiceCode List : ' + serviceCodeList[i]);
-		}
+		/*
+		 * for (var i =0; i<serviceCodeList.length; i++){
+		 * console.log('ServiceCode List : ' + serviceCodeList[i]); }
+		 */
 			
 			/*
-			 * Three stages duplicate checking 
-			 * 	1.	panel code with panel code.
-			 * 	2.  panel code's sub service code with individual service code.
-			 *  3.  individual service code first then compare with panel's sub service code.
+			 * Three stages duplicate checking 1. panel code with panel code. 2.
+			 * panel code's sub service code with individual service code. 3.
+			 * individual service code first then compare with panel's sub
+			 * service code.
 			 */
 			var x  = parentChildServiceCodeCheck(serviceDesc, serviceCode, "", currentRow, 1);
 			
@@ -513,8 +529,6 @@ $(function() {
 				return false;
 			} 
 		
-			//console.log('Else Section');
-			
 			if (minorCode.localeCompare("PANMIN") === 0){
 		
 				$.ajax({
@@ -528,7 +542,7 @@ $(function() {
 					success : function(data) {
 						
 						data = data.replace(/^\W+|\W+$/g, "");
-						console.log(data);
+						// console.log(data);
 
 						if (data.length !== 0) {
 							
@@ -537,7 +551,7 @@ $(function() {
 							var i = 0;
 							while (i < arr.length) {
 								
-								console.log('Array data : ' + arr[i]);
+								// console.log('Array data : ' + arr[i]);
 								
 								var childServiceCode = $.trim(arr[i]);
 								var childServiceDesc = $.trim(arr[i+1]);
@@ -546,10 +560,10 @@ $(function() {
 								var x = parentChildServiceCodeCheck(serviceDesc, childServiceCode, childServiceDesc, currentRow, 2);
 								
 								if (x === false){
-									console.log('step false');
+									// console.log('step false');
 									return false;
 								} else {
-									console.log('step true');
+									// console.log('step true');
 									tempArr.push(childServiceCode);
 								}
 								i += 2;
@@ -558,9 +572,11 @@ $(function() {
 							serviceCodeList.push.apply(serviceCodeList, tempArr);
 							serviceCodeList.push(serviceCode);
 							
-							for (var i=0; i<serviceCodeList.length; i++){
-								console.log('After Service List : ' + serviceCodeList[i]);
-							}
+							/*
+							 * for (var i=0; i<serviceCodeList.length; i++){
+							 * console.log('After Service List : ' +
+							 * serviceCodeList[i]); }
+							 */
 							
 							
 						}
@@ -579,9 +595,7 @@ $(function() {
 	
   function fetchDeletedPanelServiceCode(serviceCode){
 		  
-		  console.log('In fetchDeletedPanelServiceCode');
-		  //panelServiceCode.length = 0;
-		
+		  // console.log('In fetchDeletedPanelServiceCode');
 		  
 		  $.ajax({
 				url : 'patient.transfer',
@@ -594,27 +608,30 @@ $(function() {
 				success : function(data) {
 					
 					data = data.replace(/^\W+|\W+$/g, "");
-					//console.log(data);
 
 					if (data.length !== 0) {
 						var arr = data.replace("[", "").replace("]", "").split(",");
 						var i = 0;
 						while (i < arr.length) {
-									console.log('Data to be deleted : ' + arr[i]);
+									// console.log('Data to be deleted : ' +
+									// arr[i]);
 								  serviceCodeList.splice(serviceCodeList.indexOf($.trim(arr[i])), 1);
 							i += 2;
 						}
 					}
 						
-						console.log('step 1');
+					// console.log('step 1');
 						
-						console.log('Service Code List Length : ' + serviceCodeList.length);
+						// console.log('Service Code List Length : ' +
+						// serviceCodeList.length);
 					  
-					  for (var i=0; i<serviceCodeList.length; i++){
-						  console.log('After serviceCodeList : ' + serviceCodeList[i]);
-					  }
+					/*
+					 * for (var i=0; i<serviceCodeList.length; i++){
+					 * console.log('After serviceCodeList : ' +
+					 * serviceCodeList[i]); }
+					 */
 				  
-					  console.log('step 2');
+					 // console.log('step 2');
 					
 					
 				},
@@ -642,22 +659,22 @@ $(function() {
 					currentRow.find('.minorCode').val('');
 					currentRow.find('.serviceCode').val('');
 					if (token === 1){
-						alert("\"" + serviceDesc + "\" service name already exists");
+						swal("Duplicate Service", "\"" + serviceDesc + "\" service name already exists", "info");
 					} else {
-						alert("......................................Duplicate Service Name..............................\n\r\"" + childServiceDesc + "\" is present in \""+ serviceDesc +"\" service name.\n\r Please check");
+						swal("Duplicate Service", "\"" + childServiceDesc + "\" is present in \""+ serviceDesc +"\" service name.\n\r Please check", "info");
 					}
 					calculateGrossSummary();
 					return false;
 			}
 		}
 
-		//return true;
+		return true;
 	}
 	
 
 
 	/*
-	 * Disable default Enter keypress form submit event 
+	 * Disable default Enter keypress form submit event
 	 */
 
 	$('.serviceDesc').on('keypress', function(event) {
@@ -691,5 +708,66 @@ $(function() {
 			counter++;
 		});
 	}
+	
+	$(document).on('click', '#btn-submit', function(e){
+		
+		var frm = $('#service-order-frm');
+		
+		const swalWithBootstrapButtons = swal.mixin({
+			  confirmButtonClass: 'btn btn-success',
+			  cancelButtonClass: 'btn btn-danger',
+			  buttonsStyling: false,
+			})
+		
+		swal({
+			  title: 'Are you sure?',
+			  text: "You won't be able to revert this!",
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'Yes, Save it!'
+			}).then((result) => {
+			  if (result.value) {
+				  
+				  $.ajax({
+				        type: "POST",
+				        url: "patient.transfer",
+				        data:  frm.serialize() + "&key=SERORD&ACTION=GET_SERVICE_ORDER_NO",
+				        cache: false,
+				        success: function(response) {
+				        	
+				        	serviceOrderNo = response;
+				        	
+				            
+				        },
+				        failure: function (response) {
+				            swal(
+				            "Internal Error",
+				            "Oops, your note was not saved.", // had a missing comma
+				            "error"
+				            )
+				        }
+				    });
+				  
+				/*  swalWithBootstrapButtons(
+			      'Well done!',
+			      'Your Data have been saved.',
+			      'success'
+			    )*/
+			  }else if (
+					    // Read more about handling dismissals
+					    result.dismiss === swal.DismissReason.cancel
+					  ) {
+					    swalWithBootstrapButtons(
+					      'Cancelled',
+					      'Your imaginary file is safe :)',
+					      'error'
+					    )
+			  }
+			})
+		
+		
+	});
 
 });

@@ -29,23 +29,26 @@ public class PatientDaoImpl implements PatientDao {
 				PreparedStatement ps = createPreparedStatement(con, ipNumber);
 				ResultSet rs = ps.executeQuery()) {
 
+			int i =0;
+			
 			if (rs.next()) {
 				do {
-					patient.setMrdNumber(rs.getString(1));
-					patient.setIpNumber(rs.getString(2));
-					patient.setPatientName(rs.getString(3));
-					patient.setSex(rs.getString(4));
-					patient.setAge(rs.getString(5));
-					patient.setAdmissionDate(rs.getString(6));
-					patient.setDoctorIncharge(rs.getString(7));
-					patient.setSpeciality(rs.getString(8));
-					patient.setBedNo(rs.getString(9));
-					patient.setWardNo(rs.getString(10));
-					patient.setMaritalStatus(rs.getString(11));
-					patient.setPatientCategoryCode(rs.getString(12));
-					patient.setPatientCategory(rs.getString(13));
-					patient.setPatientSubCategoryCode(rs.getString(14));
-					patient.setPatientSubCategory(rs.getString(15));
+					patient.setMrdNumber(rs.getString(++i));
+					patient.setIpNumber(rs.getString(++i));
+					patient.setPatientName(rs.getString(++i));
+					patient.setSex(rs.getString(++i));
+					patient.setAge(rs.getString(++i));
+					patient.setAdmissionDate(rs.getString(++i));
+					patient.setDoctorId(rs.getString(++i));
+					patient.setDoctorIncharge(rs.getString(++i));
+					patient.setSpeciality(rs.getString(++i));
+					patient.setBedNo(rs.getString(++i));
+					patient.setWardNo(rs.getString(++i));
+					patient.setMaritalStatus(rs.getString(++i));
+					patient.setPatientCategoryCode(rs.getString(++i));
+					patient.setPatientCategory(rs.getString(++i));
+					patient.setPatientSubCategoryCode(rs.getString(++i));
+					patient.setPatientSubCategory(rs.getString(++i));
 
 				} while (rs.next());
 			}
@@ -68,7 +71,7 @@ public class PatientDaoImpl implements PatientDao {
 				" , (SELECT C.GPM_PARAMETER_VALUE FROM GA_PARAMETER_MASTER C WHERE C.GPM_PARAMETER_CD = B.RRH_PAT_SEX AND C.GPM_PARAMETER_TYPE = 'SEX') SEX");
 		sql.append(" , ROUND((trunc(SYSDATE) - B.RRH_PAT_DOB) / 365) AGE");
 		sql.append(
-				" , A.WAT_ADMN_DT \"ADMISSION DATE\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
+				" , A.WAT_ADMN_DT \"ADMISSION DATE\", a.WAT_DOCTOR_INCHARGE \"DOCTOR ID\", 'DR. ' || D.EEM_FIRST_NAME||' '|| D.EEM_MIDDLE_NAME||''|| D.EEM_LAST_NAME \"DOCTOR INCHARGE\"");
 		sql.append(
 				" , g.GDM_DEPT_DESC speciality , a.WAT_BED_CD \"BED NO\" , e.WWM_WARD_DESC ward , f.GPM_PARAMETER_VALUE \"MARITAL STATUS\", h.GPC_PATIENT_CTGRY_CD, h.GPC_PATIENT_CTGRY_DESC, i.GPS_PATIENT_SUBCTGRY_CD, i.GPS_PATIENT_SUBCTGRY_DESC ");
 		sql.append(
@@ -1130,7 +1133,6 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement26(Connection con, String serviceCode) throws SQLException {
-		//String sql = " select LAT_TEST_CD from ls_panel_test where LAT_PANEL_CD = ?";
 		String sql = " select b.LAT_TEST_CD, a.LTM_TEST_DESC  from " + 
 					"       ls_test_master a, " + 
 					"       ls_panel_test b " + 
@@ -1366,5 +1368,7 @@ public class PatientDaoImpl implements PatientDao {
 
 		return ps;
 	}
+	
+	
 
 }

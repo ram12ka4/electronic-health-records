@@ -37,7 +37,29 @@ public class ServiceOrderServlet extends HttpServlet {
 		String serviceCat = request.getParameter("serviceCat") == null ? "" : request.getParameter("serviceCat");
 		String serviceDesc = request.getParameter("serviceDesc") == null ? "" : request.getParameter("serviceDesc");
 		String serviceCode = request.getParameter("serviceCode") == null ? "" : request.getParameter("serviceCode");
-
+		
+		String orderNo = request.getParameter("orderNo") == null || request.getParameter("orderNo").isEmpty() ? "": request.getParameter("orderNo");
+		String referDoctor = request.getParameter("referDoctor") == null || request.getParameter("referDoctor").isEmpty() ? "": request.getParameter("referDoctor");
+		String patientName = request.getParameter("patientName") == null || request.getParameter("patientName").isEmpty() ? "": request.getParameter("patientName");
+		String speciality = request.getParameter("speciality") == null || request.getParameter("speciality").isEmpty() ? "": request.getParameter("speciality");
+		String consultant = request.getParameter("consultant") == null || request.getParameter("consultant").isEmpty() ? "": request.getParameter("consultant");
+		String doctorId = request.getParameter("doctorId") == null || request.getParameter("doctorId").isEmpty() ? "": request.getParameter("doctorId");
+		String orderDate = request.getParameter("orderDate") == null || request.getParameter("orderDate").isEmpty() ? "": request.getParameter("orderDate");
+		String ward = request.getParameter("ward") == null || request.getParameter("ward").isEmpty() ? "": request.getParameter("ward");
+		String bed = request.getParameter("bed") == null || request.getParameter("bed").isEmpty() ? "": request.getParameter("bed");
+		String mrd = request.getParameter("mrd") == null || request.getParameter("mrd").isEmpty() ? "": request.getParameter("mrd");
+		String visitNo = request.getParameter("visitNo") == null || request.getParameter("visitNo").isEmpty() ? "": request.getParameter("visitNo");
+		String sex = request.getParameter("sex") == null || request.getParameter("sex").isEmpty() ? "": request.getParameter("sex");
+		String age = request.getParameter("age") == null || request.getParameter("age").isEmpty() ? "": request.getParameter("age");
+		String patCategoryCode = request.getParameter("patCategoryCode") == null || request.getParameter("patCategoryCode").isEmpty() ? "": request.getParameter("patCategoryCode");
+		String patSubCategoryCode = request.getParameter("patSubCategoryCode") == null || request.getParameter("patSubCategoryCode").isEmpty() ? "": request.getParameter("patSubCategoryCode");
+		String serviceCategory = request.getParameter("serviceCategory") == null || request.getParameter("serviceCategory").isEmpty() ? "": request.getParameter("serviceCategory");
+		String serviceId = request.getParameter("serviceId") == null || request.getParameter("serviceId").isEmpty() ? "": request.getParameter("serviceId");
+		String qty = request.getParameter("qty") == null || request.getParameter("qty").isEmpty() ? "": request.getParameter("qty");
+		String rate = request.getParameter("rate") == null || request.getParameter("rate").isEmpty() ? "": request.getParameter("rate");
+		String discount = request.getParameter("discount") == null || request.getParameter("discount").isEmpty() ? "": request.getParameter("discount");
+		//String serviceCategory = request.getParameter("serviceCategory") == null || request.getParameter("serviceCategory").isEmpty() ? "": request.getParameter("serviceCategory");
+		
 		try {
 
 			if ("GET_SERVICE_LIST".equals(action)) {

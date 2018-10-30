@@ -46,6 +46,7 @@ public interface PatientDao {
 	public List<List<String>> getExcelHeaderRange(String eamType) throws SQLException;
 	
 	public ArrayList<ArrayList<String>> getPatientList(String empCode, String wardId) throws SQLException;
+	
 	public List<IndoorPatient> getPatientList1(String empCode, String wardId) throws SQLException;
 	
 	public List<String> getWardList(String empCode) throws SQLException;

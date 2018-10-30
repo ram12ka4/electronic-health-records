@@ -8,6 +8,7 @@ public class Patient {
 	private String sex;
 	private String age;
 	private String admissionDate;
+	private String doctorId;
 	private String doctorIncharge;
 	private String speciality;
 	private String bedNo;
@@ -30,6 +31,16 @@ public class Patient {
 		} catch (Exception ex) {
 			throw new RuntimeException("Exception occured in creating singleton instance");
 		}
+	}
+	
+	
+
+	public String getDoctorId() {
+		return doctorId;
+	}
+
+	public void setDoctorId(String doctorId) {
+		this.doctorId = doctorId;
 	}
 
 	public String getPatientCategoryCode() {
@@ -175,11 +186,13 @@ public class Patient {
 	@Override
 	public String toString() {
 		return "Patient [mrdNumber=" + mrdNumber + ", ipNumber=" + ipNumber + ", patientName=" + patientName + ", sex="
-				+ sex + ", age=" + age + ", admissionDate=" + admissionDate + ", doctorIncharge=" + doctorIncharge
-				+ ", speciality=" + speciality + ", bedNo=" + bedNo + ", wardNo=" + wardNo + ", maritalStatus="
-				+ maritalStatus + ", patientCategoryCode=" + patientCategoryCode + ", patientSubCategoryCode="
-				+ patientSubCategoryCode + ", patientCategory=" + patientCategory + ", patientSubCategory="
-				+ patientSubCategory + ", visit=" + visit + ", emr=" + emr + "]";
+				+ sex + ", age=" + age + ", admissionDate=" + admissionDate + ", doctorId=" + doctorId
+				+ ", doctorIncharge=" + doctorIncharge + ", speciality=" + speciality + ", bedNo=" + bedNo + ", wardNo="
+				+ wardNo + ", maritalStatus=" + maritalStatus + ", patientCategoryCode=" + patientCategoryCode
+				+ ", patientSubCategoryCode=" + patientSubCategoryCode + ", patientCategory=" + patientCategory
+				+ ", patientSubCategory=" + patientSubCategory + ", visit=" + visit + ", emr=" + emr + "]";
 	}
+
+	
 
 }
