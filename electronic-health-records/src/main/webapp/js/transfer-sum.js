@@ -320,8 +320,7 @@ $(function() {
 
 						// alert(selectVal.trim());
 
-						var container = document
-								.getElementById("hidden-container");
+						var container = document.getElementById("hidden-container");
 						var input1 = document.createElement("input");
 						var input2 = document.createElement("input");
 

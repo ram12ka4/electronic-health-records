@@ -1,5 +1,6 @@
 package com.gnrchospitals.daoimpl;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,9 @@ import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.ServiceOrder;
 import com.gnrchospitals.util.LoginDBConnection;
 
+import oracle.jdbc.internal.OracleCallableStatement;
+import oracle.sql.ARRAY;
+
 public class PatientDaoImpl implements PatientDao {
 
 	private Patient patient = Patient.getInstance();
@@ -29,8 +33,8 @@ public class PatientDaoImpl implements PatientDao {
 				PreparedStatement ps = createPreparedStatement(con, ipNumber);
 				ResultSet rs = ps.executeQuery()) {
 
-			int i =0;
-			
+			int i = 0;
+
 			if (rs.next()) {
 				do {
 					patient.setMrdNumber(rs.getString(++i));
@@ -1070,15 +1074,68 @@ public class PatientDaoImpl implements PatientDao {
 
 		return ps;
 	}
-	
-	
 
-	public List<ServiceOrder> getServiceRateList(String serviceCat , String serviceDesc) throws SQLException {
+	public List<String> getSpecimenList(String serviceCode) throws SQLException {
+
+		System.out.println("In getSpecimenList");
+		System.out.println("Service Code : " + serviceCode);
+
+		List<String> list = new ArrayList<>();
+		String[] specimanCodeArray = null;
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+
+			/*CallableStatement callableStatement = con
+					.prepareCall("{call PKGMM_BI_SERVICE_ORDER.PKG_POPULATE_SPECIMAN(?,?,?,?)}");
+
+			callableStatement.setString(1, serviceCode);
+			callableStatement.registerOutParameter(2, oracle.jdbc.internal.OracleTypes.ARRAY, "PKGMM_BI_SERVICE_ORDER.VAR_TEST_CODE_T");
+			callableStatement.registerOutParameter(3, oracle.jdbc.internal.OracleTypes.ARRAY, "PKGMM_BI_SERVICE_ORDER.VAR_SPECIMAN_CODE_T");
+			callableStatement.registerOutParameter(4, oracle.jdbc.internal.OracleTypes.ARRAY, "PKGMM_BI_SERVICE_ORDER.VAR_SPECIMAN_DESC_T");
+
+			callableStatement.execute();
+
+			ARRAY arr = ((OracleCallableStatement) callableStatement).getARRAY(3);
+			if (arr != null) {
+				specimanCodeArray = (String[]) arr.getArray();
+			} else {
+				System.out.println("Data is null");
+			}
+
+			ARRAY arr1 = ((OracleCallableStatement) callableStatement).getARRAY(4);
+			String[] specimanValueArray = (String[]) arr1.getArray();
+
+			for (int i = 0; i < specimanCodeArray.length; i++) {
+				list.add(specimanCodeArray[i]);
+				list.add(specimanValueArray[i]);
+			}*/
+			
+			list.add("1");
+			list.add("Ram2");
+			list.add("2");
+			list.add("Ram4");
+			list.add("3");
+			list.add("Ram1");
+			list.add("4");
+			list.add("Ram3");
+			list.add("5");
+			list.add("Banajit Da");
+			
+			
+
+			System.out.println("Specimen List : " + list);
+			return list;
+		}
+
+	}
+
+	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException {
 
 		List<ServiceOrder> list = new ArrayList<>();
 
 		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement25(con, serviceCat, serviceDesc); ResultSet rs = ps.executeQuery()) {
+			try (PreparedStatement ps = createPreparedStatement25(con, serviceCat, serviceDesc);
+					ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					do {
 						ServiceOrder serviceOrder = new ServiceOrder();
@@ -1100,20 +1157,22 @@ public class PatientDaoImpl implements PatientDao {
 		}
 	}
 
-	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc) throws SQLException {
+	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc)
+			throws SQLException {
 		String sql = "select s.BSM_SERVICE_ID,s.BSM_MINOR_CD, s.BSM_SERVICE_CD, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
 				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
 				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
 				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
 				+ "  and  h.bcr_bill_class_cd = 'NORMAL' " + "  and  d.brd_ssrvc_cd      = s.bsm_service_id "
-				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 " + "  and s.BSM_MAJOR_CD = ? and upper(s.bsm_service_desc) like upper('%'|| ? ||'%')";
+				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 "
+				+ "  and s.BSM_MAJOR_CD = ? and upper(s.bsm_service_desc) like upper('%'|| ? ||'%')";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, serviceCat.trim());
 		ps.setString(2, serviceDesc.trim());
 		return ps;
 	}
-	
+
 	public List<String> getPanelServiceCodeList(String serviceCode) throws SQLException {
 
 		List<String> list = new ArrayList<>();
@@ -1133,12 +1192,9 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement26(Connection con, String serviceCode) throws SQLException {
-		String sql = " select b.LAT_TEST_CD, a.LTM_TEST_DESC  from " + 
-					"       ls_test_master a, " + 
-					"       ls_panel_test b " + 
-					"  		where " + 
-					"       a.LTM_TEST_CD = b.LAT_TEST_CD " + 
-					"       and b.LAT_PANEL_CD = ?";
+		String sql = " select b.LAT_TEST_CD, a.LTM_TEST_DESC  from " + "       ls_test_master a, "
+				+ "       ls_panel_test b " + "  		where " + "       a.LTM_TEST_CD = b.LAT_TEST_CD "
+				+ "       and b.LAT_PANEL_CD = ?";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, serviceCode);
@@ -1368,7 +1424,5 @@ public class PatientDaoImpl implements PatientDao {
 
 		return ps;
 	}
-	
-	
 
 }

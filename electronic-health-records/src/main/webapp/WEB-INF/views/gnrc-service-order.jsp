@@ -23,6 +23,21 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
+
+<style type="text/css">
+
+input::-webkit-calendar-picker-indicator {
+  display: none;/* remove default arrow */
+}
+.myarrow:after {
+    content: url(https://i.stack.imgur.com/i9WFO.png);
+    margin-left: -20px; 
+    padding: .1em;
+    pointer-events:none;
+}
+
+</style>
+
 </head>
 <body>
 

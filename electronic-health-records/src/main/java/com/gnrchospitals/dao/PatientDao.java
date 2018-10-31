@@ -52,6 +52,8 @@ public interface PatientDao {
 	public List<String> getWardList(String empCode) throws SQLException;
 
 	public List<String> getServiceList() throws SQLException;
+
+	public List<String> getSpecimenList(String serviceCode) throws SQLException;
 	
 	public List<String> getPanelServiceCodeList(String serviceCode) throws SQLException;
 	

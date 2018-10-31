@@ -60,20 +60,20 @@ public class ServiceOrderServlet extends HttpServlet {
 		String discount = request.getParameter("discount") == null || request.getParameter("discount").isEmpty() ? "": request.getParameter("discount");
 		//String serviceCategory = request.getParameter("serviceCategory") == null || request.getParameter("serviceCategory").isEmpty() ? "": request.getParameter("serviceCategory");
 		
+		System.out.println("ACTION : " + action);
+		
 		try {
 
 			if ("GET_SERVICE_LIST".equals(action)) {
-
 				List<String> list = patientDao.getServiceList();
-
 				out.print(list);
-
+			} else if ("FETCH_SPECIMEN_LIST".equals(action)) {
+				List<String> list = patientDao.getSpecimenList(serviceCode);
+				System.out.println("Specimen List : " + list);
+				out.print(list);
 			} else if ("GET_PANEL_SERVICE_CODE".equals(action)) {
-
 				List<String> list = patientDao.getPanelServiceCodeList(serviceCode);
-
 				out.print(list);
-
 			} else	if ("GET_SERVICE_RATE_LIST".equals(action)) {
 
 				List<ServiceOrder> list = patientDao.getServiceRateList(serviceCat, serviceDesc);

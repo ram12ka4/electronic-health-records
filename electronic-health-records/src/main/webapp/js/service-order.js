@@ -5,6 +5,7 @@ $(function() {
 	var tempArr = [];
 	var panelServiceCode = [];
 	var serviceOrderNo = 0;
+	var specimenDescList = [];
 
 	$('#fromDate').datepicker().datepicker("setDate", new Date());
 	var select = $(".select-box");
@@ -125,7 +126,7 @@ $(function() {
 								'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
 								'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 								'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text"	name="specDesc"  class="specDesc form-control dis-auto-width dis-bottom-margin">',
+								'<span id="addSpecDoctor"></span>',
 								'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 				.draw();
 	}
@@ -206,7 +207,7 @@ $(function() {
 												'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
 												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-												'<input type="text"	name="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin">',
+												'<input type="text"	name="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin"><datalist class="specList" id="specDesc"></datalist>',
 												'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 								.draw();
 
@@ -224,7 +225,7 @@ $(function() {
 			  '<input type="text" name="discount"  class="text-align-center discount form-control dis-auto-width  dis-bottom-margin">', 
 			  '<input type="text" name="disAmount"  class="text-align-right disAmount form-control dis-auto-width  dis-bottom-margin" readonly>', 
 			  '<input type="text" name="netAmount"  class="text-align-right netAmount form-control dis-auto-width  dis-bottom-margin" readonly>', 
-			  '<input type="text" name="specDesc"  class="specDesc form-control dis-auto-width dis-bottom-margin">', 
+			  '<input type="text" name="specDesc"  class="specDesc form-control dis-auto-width dis-bottom-margin"><datalist class="specList" id="specDesc"></datalist>', 
 			  '<div  class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ]).draw();
 	  });
 	 
@@ -360,17 +361,15 @@ $(function() {
 											},
 											select : function(event, ui) {
 												
-											  /*  var isValid = false;
-											    for (i in serviceList) {
-											        if (serviceList[i]["serviceName"].toLowerCase().match(this.value.toLowerCase())) {
-											            isValid = true;
-											        }
-											    }
-											    if (!isValid) {
-											        this.value = previousValue
-											    } else {
-											        previousValue = this.value;
-											    }*/
+											  /*
+												 * var isValid = false; for (i
+												 * in serviceList) { if
+												 * (serviceList[i]["serviceName"].toLowerCase().match(this.value.toLowerCase())) {
+												 * isValid = true; } } if
+												 * (!isValid) { this.value =
+												 * previousValue } else {
+												 * previousValue = this.value; }
+												 */
 												
 												$(this).val(ui.item.label);
 												var serviceDesc = ui.item.label;
@@ -378,14 +377,139 @@ $(function() {
 												currentRow.find('.serviceId').val(ui.item.serviceId);
 												var serviceCode = ui.item.serviceCode;
 												currentRow.find('.serviceCode').val(serviceCode);
+												var serviceId = ui.item.serviceId;
 												var minorCode = ui.item.minorCode;
 												currentRow.find('.minorCode').val(minorCode);
 												duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, e);
+												switchSpecimenDcotorName(serviceId, currentRow);
 												return false;
 											}
 										});
 
 					});
+	
+	
+	function switchSpecimenDcotorName(serviceCode, currentRow){
+		
+		var serviceCategory = $('.select-box').val();
+		
+		console.log('Service Category : ' + serviceCategory);
+		console.log('Service Code : ' + serviceCode);
+		
+		if (serviceCategory === "LABMAJ") {
+			
+			var req = $.ajax({
+					
+				type: 'post',
+				url: 'patient.transfer',
+				dataType : 'text',
+				data : {
+					ACTION : 'FETCH_SPECIMEN_LIST',
+					serviceCode : serviceCode
+				},
+				success: function(data){
+					
+					data = data.replace(/^\W+|\W+$/g, "");
+					console.log('Specimen List : ' + data);
+
+					if (data.length !== 0) {
+						arr = data.replace("[", "").replace("]", "").split(",");
+						
+						var i = 0;
+
+						while (i < arr.length) {
+
+							var dataListValue = $.trim(arr[i]);
+							var dataListText = $.trim(arr[i+1]);
+							
+							addListEntry(dataListValue, dataListText, currentRow);
+							
+							i += 2;
+						}
+					}
+					
+					
+					
+				},
+				error: function(data){
+					var errorMsg = "There is a problem processing your request";
+					//alert(errorMsg);
+					alert(data.responseText);
+				}
+				
+				
+				
+			});
+			
+			
+			
+		} else {
+			
+			console.log('else part');
+			
+		}
+		
+		
+	}
+	
+	  function addListEntry(value, text, currentRow) {
+		  
+		  
+			/*var container = document.getElementById("addSpecDoctor");
+			var select = document.createElement("select");
+			 select.setAttribute("name", "specDoctor");
+			var input2 = document.createElement("input");
+
+			input1.type = "text";
+			input1.name = "ACTION";
+			input1.setAttribute("value", "UPDATE_RECORD");
+
+			input2.type = "hidden";
+			input2.name = "edNo";
+			input2.setAttribute("value", selectVal);
+
+			container.appendChild(input1);
+			container.appendChild(input2);
+			
+			<input type="text"	name="specDesc" list="specDesc" class="specDesc form-control dis-auto-width dis-bottom-margin"></span><datalist class="specList" id="specDesc"></datalist>
+*/			
+			
+		  
+		  	var container = document.getElementById("addSpecDoctor");
+			var select = document.createElement("select");
+			select.setAttribute("name", "specDoctor");
+			select.setAttribute("id", "specDoctor1");
+			 
+			var optionNode =  document.createElement("option");
+			optionNode.value = value;
+			optionNode.appendChild(document.createTextNode(text));
+			select.appendChild(optionNode);
+			 
+			select1 = currentRow.find('#addSpecDoctor');
+			//container.appendChild(select);
+			select1.append(select);
+			
+			
+	        // Create a new option element.
+	    //    var optionNode =  document.createElement("option");
+
+	        // Set the value
+	   //     optionNode.value = value;
+
+	        // create a text node and append it to the option element
+	  //      optionNode.appendChild(document.createTextNode(text));
+
+	  //      select1 = currentRow.find('#specDesc');
+	        
+	        //select1.append($("<option></option>").val(value).html(value));
+	        	
+	        // Add the optionNode to the datalist
+	       // currentRow.find('.specList').appendChild(optionNode);
+
+	    }
+	
+	
+	
 
 	/*
 	 * Calculate updated Rate, Discount Amount, Net Amount Gross, Total Discount
@@ -419,6 +543,17 @@ $(function() {
 						currentRow.find('.netAmount').val(itemNetAmount);
 						calculateGrossSummary();
 					});
+	
+	
+	/*
+	 * Specimen Description
+	 */
+	
+	
+	
+	
+	
+	
 	
 	/*
 	 * Calculate Gross Amount, Discount Amount and Net Amount
@@ -744,17 +879,17 @@ $(function() {
 				        failure: function (response) {
 				            swal(
 				            "Internal Error",
-				            "Oops, your note was not saved.", // had a missing comma
+				            "Oops, your note was not saved.", // had a missing
+																// comma
 				            "error"
 				            )
 				        }
 				    });
 				  
-				/*  swalWithBootstrapButtons(
-			      'Well done!',
-			      'Your Data have been saved.',
-			      'success'
-			    )*/
+				/*
+				 * swalWithBootstrapButtons( 'Well done!', 'Your Data have been
+				 * saved.', 'success' )
+				 */
 			  }else if (
 					    // Read more about handling dismissals
 					    result.dismiss === swal.DismissReason.cancel
