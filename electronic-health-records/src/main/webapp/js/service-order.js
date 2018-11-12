@@ -143,7 +143,7 @@ $(function() {
 
 	
 	
-	  $(document).on('click', '.delete-btn', function(event) {
+	  $(document).on('click', '.row-delete', function(event) {
 	  event.preventDefault();
 	  
 	  var x = event.which || event.keyCode;
@@ -155,13 +155,14 @@ $(function() {
 	  var serviceId = row.find('.serviceCode').val();
 	  var minorCode = row.find('.minorCode').val();
 	  var serviceCode = row.find('.serviceCode').val();
+	  var serviceName = row.find('.serviceDesc').val();
 	  
 	  // console.log('Service Id -> ' + serviceId);
 	  // console.log('minor Code -> ' + minorCode);
 	  // console.log('Service Code -> ' + serviceCode);
 	  
 	  
-	  
+	  tempServiceNameList.splice(tempServiceNameList.indexOf(serviceName), 1);
 	 
 	
 	  if (minorCode.localeCompare("PANMIN") === 0){
@@ -270,7 +271,7 @@ $(function() {
 											//tempServiceNameList.length = 0;
 											for (var i = 0; i < data.length; i++) {
 
-												tempServiceNameList.push(String(data[i]["serviceName"]));
+												tempServiceNameList.push(String($.trim(data[i]["serviceName"])));
 												
 												serviceList
 														.push({
@@ -857,7 +858,7 @@ $(function() {
 		console.log('Service Desc event : ' + x);
 		
 		let unique = [...new Set(tempServiceNameList)];
-		console.log(unique);
+		console.log('Total Unique : ' + unique);
 		
 		var currentRow = $(this).closest('tr');
 	
@@ -871,10 +872,10 @@ $(function() {
 			
 			var count = 0;
 			
-			for (var i=0; i<tempServiceNameList.length; i++){
-				console.log('temp name :' + tempServiceNameList[i]);
+			for (var i=0; i<unique.length; i++){
+				console.log('temp name :' + unique[i]);
 				console.log('typed Value : ' + $(this).val());
-				if ($.trim($(this).val()).localeCompare($.trim(tempServiceNameList[i])) === 0){
+				if ($.trim($(this).val()).localeCompare($.trim(unique[i])) === 0){
 					count++;
 				} 
 			}
@@ -920,11 +921,11 @@ $(function() {
 			console.log('In else part');
 			var count = 0;
 			
-			for (var i=0; i<tempServiceNameList.length; i++){
-				console.log('temp name : ' + tempServiceNameList[i]);
+			for (var i=0; i<unique.length; i++){
+				console.log('temp name : ' + unique[i]);
 				console.log('typed Value : ' + $(this).val());
 				
-				if ($.trim($(this).val()).localeCompare($.trim(tempServiceNameList[i])) === 0){
+				if ($.trim($(this).val()).localeCompare($.trim(unique[i])) === 0){
 					//console.log('return false');
 					count++;
 				} 
@@ -1000,18 +1001,20 @@ $(function() {
 		var totalTrue = 0;
 		
 		let unique = [...new Set(tempServiceNameList)];
-		console.log(unique);
+		console.log('total Unique : ' + unique);
+		console.log('total Unique length : ' + unique.length);
 		
 		$('.serviceDesc').each(function(event){
 			
-			console.log('entered name :' + $(this).val());
+			
 			
 			if ($(this).val() !== ''){
 				for (var j=0; j<unique.length; j++){
-					console.log('previous typed Value : ' + unique[j]);
-					
+					//console.log('previous typed Value : ' + unique[j]);
+					console.log('entered name : ' + $(this).val());
 					if ($.trim($(this).val()).localeCompare($.trim(unique[j])) === 0){
 						truee++;
+						console.log('This is truee value : ');
 					} 
 				}
 				totalTrue++;
@@ -1300,7 +1303,7 @@ $(function() {
 			 		var isBilled = [];
 			 		var totalRow = 0;
 			 	
-			 		
+			 		tempServiceNameList.length = 0;
 
 			 		for (var i=0; i<arr.length; i+=11){
 			 			
@@ -1309,14 +1312,8 @@ $(function() {
 			 			
 			 			soNUmber.push(String(arr[i]));
 			 			siNumber.push(String(arr[i+1]));
-			 			serviceCodeList.push(String($.trim(arr[i+2]))); // This
-																		// array
-																		// is
-																		// for
-																		// checking
-																		// duplicate
-																		// service
-																		// name
+			 			serviceCodeList.push(String($.trim(arr[i+2]))); 
+			 			tempServiceNameList.push(String(arr[i+3]).replace(/\|/g, ',')); 
 			 			serviceCode.push(String(arr[i+2]));
 			 			serviceDesc.push(String(arr[i+3]).replace(/\|/g, ','));
 			 			serviceCat.push(String(arr[i+4]));
