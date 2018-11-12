@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -946,7 +949,7 @@ public class PatientDaoImpl implements PatientDao {
 		sql.append(" AND d.EHR_EMR_NUM = c.ECD_EM_NUM ");
 		sql.append(" GROUP BY d.EHR_CRT_DT ");
 
-		System.out.println("Get Previous record Query : \r\n" + sql.toString());
+		System.out.println("Get Previous record Query : " + sql.toString());
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, ipNumber);
@@ -1042,162 +1045,6 @@ public class PatientDaoImpl implements PatientDao {
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, empCode);
-		return ps;
-	}
-
-	public List<String> getServiceList() throws SQLException {
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement24(con); ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Indoor Patient List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement24(Connection con) throws SQLException {
-		String sql = "SELECT DISTINCT b.BMH_MAJOR_CD, UPPER(b.BMH_MAJOR_DESC) FROM " + "        BI_SERVICE_MASTER a,"
-				+ "        BI_MAJORMINOR_HEADER b" + "        WHERE " + "        a.BSM_SERVICE_STATUS = 'A' "
-				+ "        AND a.BSM_MAJOR_CD = b.BMH_MAJOR_CD "
-				+ "        AND b.BMH_MAJOR_CD <> 'DKMJ' ORDER BY UPPER(b.BMH_MAJOR_DESC)";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-
-		return ps;
-	}
-
-	public List<String> getSpecimenList(String serviceCode) throws SQLException {
-
-		System.out.println("In getSpecimenList");
-		System.out.println("Service Code : " + serviceCode);
-
-		List<String> list = new ArrayList<>();
-		String[] specimanCodeArray = null;
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-
-			/*CallableStatement callableStatement = con
-					.prepareCall("{call PKGMM_BI_SERVICE_ORDER.PKG_POPULATE_SPECIMAN(?,?,?,?)}");
-
-			callableStatement.setString(1, serviceCode);
-			callableStatement.registerOutParameter(2, oracle.jdbc.internal.OracleTypes.ARRAY, "PKGMM_BI_SERVICE_ORDER.VAR_TEST_CODE_T");
-			callableStatement.registerOutParameter(3, oracle.jdbc.internal.OracleTypes.ARRAY, "PKGMM_BI_SERVICE_ORDER.VAR_SPECIMAN_CODE_T");
-			callableStatement.registerOutParameter(4, oracle.jdbc.internal.OracleTypes.ARRAY, "PKGMM_BI_SERVICE_ORDER.VAR_SPECIMAN_DESC_T");
-
-			callableStatement.execute();
-
-			ARRAY arr = ((OracleCallableStatement) callableStatement).getARRAY(3);
-			if (arr != null) {
-				specimanCodeArray = (String[]) arr.getArray();
-			} else {
-				System.out.println("Data is null");
-			}
-
-			ARRAY arr1 = ((OracleCallableStatement) callableStatement).getARRAY(4);
-			String[] specimanValueArray = (String[]) arr1.getArray();
-
-			for (int i = 0; i < specimanCodeArray.length; i++) {
-				list.add(specimanCodeArray[i]);
-				list.add(specimanValueArray[i]);
-			}*/
-			
-			list.add("1");
-			list.add("Ram2");
-			list.add("2");
-			list.add("Ram4");
-			list.add("3");
-			list.add("Ram1");
-			list.add("4");
-			list.add("Ram3");
-			list.add("5");
-			list.add("Banajit Da");
-			
-			
-
-			System.out.println("Specimen List : " + list);
-			return list;
-		}
-
-	}
-
-	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException {
-
-		List<ServiceOrder> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement25(con, serviceCat, serviceDesc);
-					ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						ServiceOrder serviceOrder = new ServiceOrder();
-						serviceOrder.setServiceId(rs.getString(1));
-						serviceOrder.setMinorCode(rs.getString(2));
-						serviceOrder.setServiceCode(rs.getString(3));
-						serviceOrder.setServiceName(rs.getString(4));
-						serviceOrder.setRate(rs.getString(5));
-						serviceOrder.setDiscount(rs.getString(6));
-						serviceOrder.setQty("1");
-						serviceOrder.setDiscountAmount("0");
-						serviceOrder.setNetAmount("0");
-						list.add(serviceOrder);
-					} while (rs.next());
-				}
-			}
-			System.out.println("Indoor Patient List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc)
-			throws SQLException {
-		String sql = "select s.BSM_SERVICE_ID,s.BSM_MINOR_CD, s.BSM_SERVICE_CD, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount "
-				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
-				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
-				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
-				+ "  and  h.bcr_bill_class_cd = 'NORMAL' " + "  and  d.brd_ssrvc_cd      = s.bsm_service_id "
-				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 "
-				+ "  and s.BSM_MAJOR_CD = ? and upper(s.bsm_service_desc) like upper('%'|| ? ||'%')";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, serviceCat.trim());
-		ps.setString(2, serviceDesc.trim());
-		return ps;
-	}
-
-	public List<String> getPanelServiceCodeList(String serviceCode) throws SQLException {
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement26(con, serviceCode); ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-					} while (rs.next());
-				}
-			}
-			System.out.println("Indoor Patient List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement26(Connection con, String serviceCode) throws SQLException {
-		String sql = " select b.LAT_TEST_CD, a.LTM_TEST_DESC  from " + "       ls_test_master a, "
-				+ "       ls_panel_test b " + "  		where " + "       a.LTM_TEST_CD = b.LAT_TEST_CD "
-				+ "       and b.LAT_PANEL_CD = ?";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, serviceCode);
 		return ps;
 	}
 
@@ -1423,6 +1270,453 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(2, userRole.trim());
 
 		return ps;
+	}
+
+	public List<String> getServiceList() throws SQLException {
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement24(con); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement24(Connection con) throws SQLException {
+		String sql = "SELECT DISTINCT b.BMH_MAJOR_CD, UPPER(b.BMH_MAJOR_DESC) " + "FROM "
+				+ "        BI_SERVICE_MASTER a," + "        BI_MAJORMINOR_HEADER b" + "        WHERE "
+				+ "        a.BSM_SERVICE_STATUS = 'A' " + "        AND a.BSM_MAJOR_CD = b.BMH_MAJOR_CD "
+				+ "        AND b.BMH_MAJOR_CD <> 'DKMJ' ORDER BY UPPER(b.BMH_MAJOR_DESC)";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+
+		return ps;
+	}
+
+	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException {
+
+		List<ServiceOrder> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement25(con, serviceCat, serviceDesc);
+					ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						ServiceOrder serviceOrder = new ServiceOrder();
+						serviceOrder.setServiceId(rs.getString(1));
+						serviceOrder.setMinorCode(rs.getString(2));
+						serviceOrder.setServiceCode(rs.getString(3));
+						serviceOrder.setServiceName(rs.getString(4));
+						serviceOrder.setRate(rs.getString(5));
+						serviceOrder.setDiscount(rs.getString(6));
+						serviceOrder.setTreatedBy(rs.getString(7));
+						serviceOrder.setQty("1");
+						serviceOrder.setDiscountAmount("0");
+						serviceOrder.setNetAmount("0");
+						list.add(serviceOrder);
+					} while (rs.next());
+				}
+			}
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc)
+			throws SQLException {
+		String sql = "select s.BSM_SERVICE_ID,s.BSM_MINOR_CD, s.BSM_SERVICE_CD, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount, NVL(BSM_TREATED_BY, 'N')  treat_by "
+				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
+				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
+				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
+				+ "  and  h.bcr_bill_class_cd = 'NORMAL' " + "  and  d.brd_ssrvc_cd      = s.bsm_service_id "
+				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 "
+				+ "  and s.BSM_MAJOR_CD = ? and upper(s.bsm_service_desc) like upper('%'|| ? ||'%')";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, serviceCat.trim());
+		ps.setString(2, serviceDesc.trim());
+		return ps;
+	}
+
+	public List<String> getPanelServiceCodeList(String serviceCode) throws SQLException {
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement26(con, serviceCode); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement26(Connection con, String serviceCode) throws SQLException {
+		String sql = " select b.LAT_TEST_CD, a.LTM_TEST_DESC  from " + "       ls_test_master a, "
+				+ "       ls_panel_test b " + "  		where " + "       a.LTM_TEST_CD = b.LAT_TEST_CD "
+				+ "       and b.LAT_PANEL_CD = ?";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, serviceCode);
+		return ps;
+	}
+
+	public List<String> getSpecimenList(String serviceCode) throws SQLException {
+
+		System.out.println("in getSpecimenList");
+		System.out.println("Service Code : " + serviceCode);
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement27(con, serviceCode); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Specimen List : " + list);
+			return list;
+		}
+
+	}
+
+	private PreparedStatement createPreparedStatement27(Connection con, String serviceCode) throws SQLException {
+		String sql = "SELECT B.LTS_TEST_CD AS TEST_CODE, " + "B.LTS_SPECIMEN_CD AS SPECIMAN_CODE, "
+				+ "A.LSM_SPECIMEN_DESC AS SPEC_DESC, LTS_DEFAULT_FLAG " + "FROM LS_SPECIMEN_MASTER A, "
+				+ "LS_TEST_SPECIMEN_MASTER B " + "WHERE A.LSM_SPECIMEN_CD=B.LTS_SPECIMEN_CD "
+				+ "AND B.LTS_TEST_CD  = UPPER(?) " + "ORDER BY B.LTS_DEFAULT_FLAG DESC,LSM_SPECIMEN_DESC ";
+
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, serviceCode);
+
+		return ps;
+	}
+
+	public List<String> getDoctorList() throws SQLException {
+
+		System.out.println("in getDoctorList");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement28(con); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Specimen List : " + list);
+			return list;
+		}
+
+	}
+
+	private PreparedStatement createPreparedStatement28(Connection con) throws SQLException {
+		String sql = "SELECT DISTINCT  A.EEM_EMP_NUM,"
+				+ "A.EEM_FIRST_NAME || ' ' || A.EEM_MIDDLE_NAME || ' ' || A.EEM_LAST_NAME AS EEM_NAME "
+				+ "FROM    HR_EMPLOYEE_MASTER A, " + "GA_CLINICAL_STAFF_MASTER B "
+				+ "WHERE A.EEM_EMP_NUM=B.GCS_EMPLOYEE_NUM " + "AND A.EEM_EMP_STATUS='A' "
+				+ "AND B.GCS_STAFF_TYPE_CD IN ('CONS','SURG') " + "ORDER BY EEM_NAME ";
+
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		return ps;
+	}
+
+	public String insertServiceOrderData(String soNumber, String patientNo, String netAmount, String doctorId,
+			String mrdNumber, String patientType, String visitNo, String userId, String disIndication,
+			String referDoctorCode, String[] serviceId, String[] qty, String[] disAmount) throws SQLException {
+
+		System.out.println("In insertServiceOrderData");
+		String result = "";
+		String soId = "";
+
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (CallableStatement cs = createCallableStatement2(con, soNumber, patientNo, netAmount, doctorId, mrdNumber,
+					patientType, visitNo, userId)) {
+				soId = cs.getString(1);
+				result = cs.getString(9);
+				
+				System.out.println("SO Number : " + soId);
+				System.out.println("PKG_I_SERVORDER_HEADER_N OUT PARAMETER : " + result);
+				
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			System.out.println("PKG_I_SERVORDER_HEADER_N OUT PARAMETER : " + result);
+
+			int length1 = removeDuplicateSpace(serviceId, serviceId.length);
+			int length2 = removeDuplicateSpace(qty, qty.length);
+			int length3 = removeDuplicateSpace(disAmount, disAmount.length);
+
+			for (int i = 0; i < length1; i++) {
+
+				System.out.println("Service Id : " + serviceId[i]);
+				System.out.println("Qty : " + qty[i]);
+				System.out.println("Discount : " + disAmount[i]);
+
+				try (CallableStatement cs = createCallableStatement3(con, soId, serviceId[i], qty[i], disAmount[i],
+						disIndication, referDoctorCode, userId)) {
+					result = cs.getString(8);
+				} catch (SQLException e) {
+					con.rollback();
+					con.setAutoCommit(true);
+					e.printStackTrace();
+				}
+			}
+
+			System.out.println("PKG_I_SERVORDER_DETAIL OUT PARAMETER : " + result);
+
+			if (result.equalsIgnoreCase("1")) {
+				con.commit();
+				System.out.println("All Transactions are commited");
+			} else {
+				System.out.println("All Transactions are rollbacked");
+				con.rollback();
+			}
+
+		}
+
+		if (result.equals("1"))
+			return soId;
+		return "0";
+
+	}
+
+	private CallableStatement createCallableStatement2(Connection con, String soNumber, String patNumber,
+			String netAmount, String doctorId, String mrdNumber, String patType, String visitNumber, String userId)
+			throws SQLException {
+		CallableStatement cs = con
+				.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_HEADER(?,?,?,?,?,?,?,?,?)}");
+		cs.registerOutParameter(1, Types.VARCHAR);
+		cs.setString(1, soNumber);
+		cs.setString(2, patNumber);
+		cs.setString(3, netAmount);
+		cs.setString(4, doctorId);
+		cs.setString(5, mrdNumber);
+		cs.setString(6, patType);
+		cs.setString(7, visitNumber);
+		cs.setString(8, userId);
+		cs.registerOutParameter(9, Types.VARCHAR);
+		cs.execute();
+		return cs;
+	}
+
+	private CallableStatement createCallableStatement3(Connection con, String soNumber, String serviceId, String qty,
+			String disAmount, String disIndi, String reffDocCode, String userId) throws SQLException {
+		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?)}");
+		cs.setString(1, soNumber);
+		cs.setString(2, serviceId);
+		cs.setString(3, qty);
+		cs.setString(4, userId);
+		cs.setString(5, disAmount);
+		cs.setString(6, disIndi);
+		cs.setString(7, reffDocCode);
+		cs.registerOutParameter(8, Types.VARCHAR);
+		cs.execute();
+		return cs;
+	}
+
+	public int removeDuplicateSpace(String arr[], int n) {
+		if (n == 0 || n == 1) {
+			return n;
+		}
+		int j = 0;
+		for (int i = 0; i < arr.length; i++) {
+			if (!arr[i].isEmpty()) {
+				arr[j++] = arr[i];
+			}
+		}
+		return j;
+	}
+
+	public List<List<String>> getPrevServiceOrderList(String patientNo) throws SQLException {
+		System.out.println("in getPrevServiceOrderList");
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		List<String> column = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement29(con, patientNo); ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					column.add(rsmd.getColumnName(i));
+				}
+
+				list.add(column);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+
+					list.add(row);
+				}
+			}
+
+			System.out.println("Previous Service Order List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement29(Connection con, String patientNo) throws SQLException {
+		String sql = "select * from " + "( "
+				+ "select distinct a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, 'NOT BILLED' VCHR_NO "
+				+ "from bi_service_header a, " + "     bi_service_detail b " + "where "
+				+ "     a.bsh_txn_num = b.BSD_TXN_NUM " + "     and b.BSD_VOUCHER_NO is null " + "union all "
+				+ "select distinct  a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, c.BVM_VCHR_NUM "
+				+ "from bi_service_header a, " + "     bi_service_detail b, " + "     bi_voucher_header c " + "where "
+				+ "     a.bsh_txn_num = b.BSD_TXN_NUM " + "     and b.BSD_VOUCHER_NO = c.BVM_VCHR_NUM " + ") "
+				+ "where BSH_PAT_NUM = ? ORDER BY 4 DESC";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, patientNo);
+		return ps;
+	}
+
+	public List<String> getServiceOrderDetail(String soNumber) throws SQLException {
+		System.out.println("in getServiceOrderDetail");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement30(con, soNumber); ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							list.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+
+				}
+			}
+
+			System.out.println("Previous Service Order Detail : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement30(Connection con, String soNumber) throws SQLException {
+		String sql = "select  * from ( "
+				+ "select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
+				+ ",sd.bsd_qty   qty  , 0  rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd , 'NOT_BILLED'   vch_num "
+				+ " from        bi_service_detail   sd " + " ,bi_service_master   sm "
+				+ " where sd.bsd_service_id    = sm.bsm_service_id " + "  and       sd.bsd_voucher_no   is null "
+				+ " union all "
+				+ " select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
+				+ " ,sd.bsd_qty   qty  , vd.bvd_srvc_rate rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd  , vd.bvd_vchr_num  "
+				+ " from       bi_service_detail   sd " + "           ,bi_service_master   sm "
+				+ "           ,bi_voucher_detail   vd " + " where      sd.bsd_service_id    = sm.bsm_service_id "
+				+ " and        sd.bsd_voucher_no    = vd.bvd_vchr_num "
+				+ " and        sd.bsd_service_id    = vd.bvd_srvc_id " + " ) where     so_num  = ?";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, soNumber);
+		return ps;
+	}
+
+	public String getServiceIdRate(String serviceId, String patientNo) throws SQLException {
+
+		System.out.println("In getServiceIdRate");
+		
+		System.out.println("Service Id : " + serviceId);
+		System.out.println("Patient Id : " + patientNo);
+		
+		String discountType = "";
+		String discountRate = "";
+		String rate = "";
+		String errorCode = "";
+		String errorMsg = "";
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy");
+		Date date = new Date();
+		String currentDate = sdf.format(date);
+		
+		System.out.println("Current Date : " + currentDate);
+		
+		
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+			try (CallableStatement cs = createCallableStatement4(con, serviceId, patientNo, currentDate)) {
+
+				discountType = cs.getString(4);
+				discountRate = String.valueOf(cs.getDouble(5));
+				rate = String.valueOf(cs.getDouble(6));
+				errorCode = cs.getString(7);
+				errorMsg = cs.getString(8);
+				
+				System.out.println("Discount Type : " + discountType);
+				System.out.println("Discount Rate : " + discountRate);
+				System.out.println("Rate : " + rate);
+				
+				
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+
+			System.out.println("BSP_GET_SERVICE_RATE ERROR CODE : " + errorCode + " ERROR MSG : " + errorMsg);
+
+		}
+		
+		return rate;
+
+	}
+
+	private CallableStatement createCallableStatement4(Connection con, String serviceId, String patientNo, String currentDate)
+			throws SQLException {
+		CallableStatement cs = con
+				.prepareCall("{call PKGMM_BI_SERVORDER_SEARCH.BSP_GET_SERVICE_RATE(?,?,?,?,?,?,?,?)}");
+		cs.setString(1, serviceId.trim());
+		cs.setString(2, patientNo.trim());
+		cs.setString(3, currentDate);
+		cs.registerOutParameter(4, Types.VARCHAR);
+		cs.registerOutParameter(5, Types.DECIMAL);
+		cs.registerOutParameter(6, Types.DECIMAL);
+		cs.registerOutParameter(7, Types.VARCHAR);
+		cs.registerOutParameter(8, Types.VARCHAR);
+		cs.execute();
+		return cs;
 	}
 
 }

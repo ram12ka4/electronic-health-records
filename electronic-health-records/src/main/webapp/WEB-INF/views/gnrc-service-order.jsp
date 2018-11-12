@@ -24,19 +24,30 @@
 	sizes="16x16" />
 <!-- End of CSS -->
 
-<style type="text/css">
+<style>
 
-input::-webkit-calendar-picker-indicator {
-  display: none;/* remove default arrow */
+.modal {
+  text-align: center;
+  padding: 0!important;
 }
-.myarrow:after {
-    content: url(https://i.stack.imgur.com/i9WFO.png);
-    margin-left: -20px; 
-    padding: .1em;
-    pointer-events:none;
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
 
 </style>
+
+
 
 </head>
 <body>
@@ -120,7 +131,7 @@ input::-webkit-calendar-picker-indicator {
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor" readonly="readonly">
+										placeholder="Refer Doctor">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -254,7 +265,7 @@ input::-webkit-calendar-picker-indicator {
 										</select>
 									</div>
 									<div class="col-md-3">
-										<button type="button" class="btn btn-primary btn-sm">Add
+										<button type="button" class="btn btn-primary btn-sm add-service">Add
 											Service</button>
 										<button type="button" class="btn btn-primary btn-sm row-add">Add
 											Row</button>
@@ -282,7 +293,7 @@ input::-webkit-calendar-picker-indicator {
 									<th>Dis(%)</th>
 									<th>Dis Amnt</th>
 									<th>Net Amnt</th>
-									<th>Spec Desc</th>
+									<th>Specimen/Treated by</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -295,19 +306,19 @@ input::-webkit-calendar-picker-indicator {
 								<div class="form-group-sm">
 									<label class="control-label col-md-1" for="gross-amount">Gross</label>
 									<div class="col-md-2">
-										<input type="text"
+										<input type="text" name="grossAmount"
 											class="form-control dis-auto-width dis-bottom-margin text-align-right"
 											id="sum-gross-amount">
 									</div>
 									<label class="control-label col-md-1" for="discount">Discount</label>
 									<div class="col-md-2">
-										<input type="text"
+										<input type="text" name="totalDiscount"
 											class="form-control dis-auto-width dis-bottom-margin text-align-right"
 											id="sum-discount-amount">
 									</div>
 									<label class="control-label col-md-1" for="net-amount">Net</label>
 									<div class="col-md-2">
-										<input type="text"
+										<input type="text" name="totalNetAmount"
 											class="form-control dis-auto-width dis-bottom-margin text-align-right"
 											id="sum-net-amount">
 									</div>
@@ -352,7 +363,7 @@ input::-webkit-calendar-picker-indicator {
 	<%@include file="progress-circle-modal.jsp"%>
 	<%@include file="confirm-box.html"%>
 	<%@include file="alert-box.html"%>
-	<%@include file="doctor-note-modal.jsp"%>
+	<%-- <%@include file="doctor-note-modal.jsp"%> --%>
 
 	<!-- End of Form Submit Alert Message -->
 
@@ -373,7 +384,7 @@ input::-webkit-calendar-picker-indicator {
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 
-
+	<%@include file="gnrc-modal.jsp"%>
 	<%@include file="success-error-msg.jsp"%>
 
 

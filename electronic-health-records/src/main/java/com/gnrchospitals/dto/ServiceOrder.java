@@ -11,8 +11,17 @@ public class ServiceOrder {
 	private String discount;
 	private String discountAmount;
 	private String netAmount;
+	private String treatedBy;
 	
 	
+
+	public String getTreatedBy() {
+		return treatedBy;
+	}
+
+	public void setTreatedBy(String treatedBy) {
+		this.treatedBy = treatedBy;
+	}
 
 	public String getMinorCode() {
 		return minorCode;
@@ -90,9 +99,10 @@ public class ServiceOrder {
 	public String toString() {
 		return "ServiceOrder [serviceName=" + serviceName + ", serviceId=" + serviceId + ", minorCode=" + minorCode
 				+ ", serviceCode=" + serviceCode + ", qty=" + qty + ", rate=" + rate + ", discount=" + discount
-				+ ", discountAmount=" + discountAmount + ", netAmount=" + netAmount + "]";
+				+ ", discountAmount=" + discountAmount + ", netAmount=" + netAmount + ", treatedBy=" + treatedBy + "]";
 	}
 
+	
 	
 
 }

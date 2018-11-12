@@ -1,4 +1,4 @@
-<%@page import="com.gnrchospitals.dto.Patient"%>
+	<%@page import="com.gnrchospitals.dto.Patient"%>
 <%@page import="com.gnrchospitals.dao.PatientDao"%>
 <%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
