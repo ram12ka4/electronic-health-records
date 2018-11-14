@@ -58,7 +58,7 @@ public interface PatientDao {
 	public List<String> getDoctorList() throws SQLException;
 	
 	public String insertServiceOrderData(String serviceOrderKey, String patientNo,String netAmount,String doctorId,String mrd,String patientType,String visitNo, 
-			String userId,String disIndication,String referDoctor,String [] serviceId,String [] qty,String []disAmount) throws SQLException;
+			String userId,String disIndication,String referDoctor,String [] serviceId,String [] qty,String []disAmount,  String[] disPercent, String[] specimen, String[] treatedBy) throws SQLException;
 
 	public List<List<String>> getPrevServiceOrderList(String patientNo) throws SQLException;
 

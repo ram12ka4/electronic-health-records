@@ -60,6 +60,9 @@ public class ServiceOrderServlet extends HttpServlet {
 		String[] serviceId = request.getParameterValues("serviceId");
 		String[] qty = request.getParameterValues("qty");
 		String[] disAmount = request.getParameterValues("disAmount");
+		String[] disPercent = request.getParameterValues("discount");
+		String[] specimen = request.getParameterValues("specimen");
+		String[] treatedBy = request.getParameterValues("treatedBy");
 		String disIndication = "P";
 		String referDoctor = request.getParameter("referDoctor") == null
 				|| request.getParameter("referDoctor").isEmpty() ? "" : request.getParameter("referDoctor");
@@ -95,7 +98,7 @@ public class ServiceOrderServlet extends HttpServlet {
 
 			if ("INSERT_SERVICE_ORDER".equals(action)) {
 				String soNumber = patientDao.insertServiceOrderData(serviceOrderoNumber, patientNo, netAmount, doctorId,
-						mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId, qty, disAmount);
+						mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId, qty, disAmount, disPercent, specimen, treatedBy);
 				out.print(soNumber);
 			} else if ("FETCH_SERVICE_ID_RATE".equals(action)) {
 				String currentRate = patientDao.getServiceIdRate(serviceId[0], patientNo);

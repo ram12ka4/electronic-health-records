@@ -1447,7 +1447,7 @@ public class PatientDaoImpl implements PatientDao {
 
 	public String insertServiceOrderData(String soNumber, String patientNo, String netAmount, String doctorId,
 			String mrdNumber, String patientType, String visitNo, String userId, String disIndication,
-			String referDoctorCode, String[] serviceId, String[] qty, String[] disAmount) throws SQLException {
+			String referDoctorCode, String[] serviceId, String[] qty, String[] disAmount, String[] disPercent, String[] specimen, String[] treatedBy) throws SQLException {
 
 		System.out.println("In insertServiceOrderData");
 		String result = "";
@@ -1482,11 +1482,14 @@ public class PatientDaoImpl implements PatientDao {
 
 				System.out.println("Service Id : " + serviceId[i]);
 				System.out.println("Qty : " + qty[i]);
-				System.out.println("Discount : " + disAmount[i]);
+				System.out.println("Discount Amount : " + disAmount[i]);
+				System.out.println("Discount Percent : " + disPercent[i]);
+				System.out.println("Specimen : " + specimen[i]);
+				System.out.println("Treated By : " + treatedBy[i]);
 
 				try (CallableStatement cs = createCallableStatement3(con, soId, serviceId[i], qty[i], disAmount[i],
-						disIndication, referDoctorCode, userId)) {
-					result = cs.getString(8);
+						disIndication, referDoctorCode, disPercent[i], specimen[i], treatedBy[i], userId)) {
+					result = cs.getString(10);
 				} catch (SQLException e) {
 					con.rollback();
 					con.setAutoCommit(true);
@@ -1532,16 +1535,18 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private CallableStatement createCallableStatement3(Connection con, String soNumber, String serviceId, String qty,
-			String disAmount, String disIndi, String reffDocCode, String userId) throws SQLException {
-		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?)}");
+			String disAmount, String disIndi, String reffDocCode, String discountPercent, String  specimenCode, String treatedBy, String userId) throws SQLException {
+		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?,?,?)}");
 		cs.setString(1, soNumber);
 		cs.setString(2, serviceId);
 		cs.setString(3, qty);
 		cs.setString(4, userId);
 		cs.setString(5, disAmount);
 		cs.setString(6, disIndi);
-		cs.setString(7, reffDocCode);
-		cs.registerOutParameter(8, Types.VARCHAR);
+		cs.setString(7, treatedBy);
+		cs.setString(8, discountPercent);
+		cs.setString(9, specimenCode);
+		cs.registerOutParameter(10, Types.VARCHAR);
 		cs.execute();
 		return cs;
 	}
@@ -1636,16 +1641,16 @@ public class PatientDaoImpl implements PatientDao {
 	private PreparedStatement createPreparedStatement30(Connection con, String soNumber) throws SQLException {
 		String sql = "select  * from ( "
 				+ "select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
-				+ ",sd.bsd_qty   qty  , 0  rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd , 'NOT_BILLED'   vch_num "
-				+ " from        bi_service_detail   sd " + " ,bi_service_master   sm "
-				+ " where sd.bsd_service_id    = sm.bsm_service_id " + "  and       sd.bsd_voucher_no   is null "
+				+ ",sd.bsd_qty   qty  , 0  rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd , 'NOT_BILLED'   vch_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by,  TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE  "
+				+ " from        bi_service_detail   sd " + " ,bi_service_master   sm, bi_service_header sh "
+				+ " where sd.bsd_service_id    = sm.bsm_service_id " + "  and       sd.bsd_voucher_no   is null and     sh.bsh_txn_num = sd.BSD_TXN_NUM "
 				+ " union all "
 				+ " select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
-				+ " ,sd.bsd_qty   qty  , vd.bvd_srvc_rate rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd  , vd.bvd_vchr_num  "
-				+ " from       bi_service_detail   sd " + "           ,bi_service_master   sm "
+				+ " ,sd.bsd_qty   qty  , vd.bvd_srvc_rate rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd  , vd.bvd_vchr_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by, TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE  "
+				+ " from       bi_service_detail   sd " + "           ,bi_service_master   sm, bi_service_header sh "
 				+ "           ,bi_voucher_detail   vd " + " where      sd.bsd_service_id    = sm.bsm_service_id "
 				+ " and        sd.bsd_voucher_no    = vd.bvd_vchr_num "
-				+ " and        sd.bsd_service_id    = vd.bvd_srvc_id " + " ) where     so_num  = ?";
+				+ " and        sd.bsd_service_id    = vd.bvd_srvc_id and sh.bsh_txn_num = sd.BSD_TXN_NUM ) where     so_num  = ?";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, soNumber);

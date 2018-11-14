@@ -25,26 +25,24 @@
 <!-- End of CSS -->
 
 <style>
-
 .modal {
-  text-align: center;
-  padding: 0!important;
+	text-align: center;
+	padding: 0 !important;
 }
 
 .modal:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -4px;
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	margin-right: -4px;
 }
 
 .modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
+	display: inline-block;
+	text-align: left;
+	vertical-align: middle;
 }
-
 </style>
 
 
@@ -155,9 +153,9 @@
 									<input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="admin-doctor" value="<%=patient.getDoctorIncharge()%>"
-										name="consultant" placeholder="Consultant"
-										readonly="readonly">
-										<input type="hidden" value="<%=patient.getDoctorId()%>" name="doctorId">
+										name="consultant" placeholder="Consultant" readonly="readonly">
+									<input type="hidden" value="<%=patient.getDoctorId()%>"
+										name="doctorId">
 								</div>
 							</div>
 
@@ -265,7 +263,8 @@
 										</select>
 									</div>
 									<div class="col-md-3">
-										<button type="button" class="btn btn-primary btn-sm add-service">Add
+										<button type="button"
+											class="btn btn-primary btn-sm add-service">Add
 											Service</button>
 										<button type="button" class="btn btn-primary btn-sm row-add">Add
 											Row</button>
@@ -301,25 +300,25 @@
 
 						<hr>
 
-						<div class="row">
+						<!-- <div class="row">
 							<div class="form-horizontal">
 								<div class="form-group-sm">
 									<label class="control-label col-md-1" for="gross-amount">Gross</label>
 									<div class="col-md-2">
 										<input type="text" name="grossAmount"
-											class="form-control dis-auto-width dis-bottom-margin text-align-right"
+											class="form-control dis-auto-width dis-bottom-margin gross-text-right"
 											id="sum-gross-amount">
 									</div>
 									<label class="control-label col-md-1" for="discount">Discount</label>
 									<div class="col-md-2">
 										<input type="text" name="totalDiscount"
-											class="form-control dis-auto-width dis-bottom-margin text-align-right"
+											class="form-control dis-auto-width dis-bottom-margin gross-text-right"
 											id="sum-discount-amount">
 									</div>
 									<label class="control-label col-md-1" for="net-amount">Net</label>
 									<div class="col-md-2">
 										<input type="text" name="totalNetAmount"
-											class="form-control dis-auto-width dis-bottom-margin text-align-right"
+											class="form-control dis-auto-width dis-bottom-margin gross-text-right"
 											id="sum-net-amount">
 									</div>
 									<div class="col-xs-offset-10 button-right-offset">
@@ -329,15 +328,30 @@
 
 								</div>
 							</div>
-						</div>
-						<!-- 	<div class="row">
-
-							<div class="col-xs-offset-10 button-right-offset">
-								<button type="reset" class="btn btn-primary btn-sm">Reset</button>
-								<button type="submit" class="btn btn-success btn-sm">Submit</button>
-							</div>
-
 						</div> -->
+						<div class="row">
+							
+							<label id="total-label" for="pat-category">Total : </label>
+							
+							<input type="text" name="grossAmount"
+								class="form-control dis-auto-width dis-bottom-margin gross-text-right"
+								id="sum-gross-amount" readonly="readonly"> <input
+								type="text" name="totalDiscount"
+								class="form-control dis-auto-width dis-bottom-margin gross-text-right"
+								id="sum-discount-amount" readonly="readonly"> <input
+								type="text" name="totalNetAmount"
+								class="form-control dis-auto-width dis-bottom-margin gross-text-right"
+								id="sum-net-amount" readonly="readonly">
+
+							<button type="button" id="btn-reset"
+								class="btn btn-primary btn-reset">Reset</button>
+							<button type="button" id="btn-submit"
+								class="btn btn-success btn-submit">Submit</button>
+						</div>
+
+
+
+
 
 
 

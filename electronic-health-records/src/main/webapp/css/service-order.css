@@ -69,6 +69,17 @@ input[type="text"].dis-bottom-margin {
 	text-align: right;
 }
 
+input[type="text"].dis-bottom-margin.gross-text-right {
+	background-image: url(http://i.imgur.com/Fd7NROx.png);
+	border: 1px solid #aaa;
+	padding: 5px;
+	padding-left: 20px;
+	background-size: 10px 15px;
+	background-repeat: no-repeat;
+	background-position: 8px 6px;
+	text-align: right;
+}
+
 .form-inline .form-control.text-align-center {
 	text-align: center;
 }
@@ -96,4 +107,39 @@ hr:after {
 
 .swal-overlay {
 	background-color: rgba(43, 165, 137, 0.45);
+}
+
+#sum-gross-amount, #sum-discount-amount, #sum-net-amount {
+	float: left;
+	width: 100px;
+}
+
+
+
+#total-label {
+	float: left;
+	width: auto;
+	margin-left: 350px;
+}
+
+#sum-gross-amount {
+	margin-left: 96px;
+}
+
+#sum-discount-amount {
+	margin-left: 66px;
+}
+
+#sum-net-amount {
+	margin-left: 1px;
+}
+
+#btn-reset {
+	margin-left: 120px;
+	padding: 5px 10px;
+}
+
+#btn-submit {
+	margin-left: 8px;
+	padding: 5px 10px;
 }

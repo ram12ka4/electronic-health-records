@@ -7,27 +7,31 @@ $(function() {
 	var serviceOrderNo = 0;
 	var doctorList = [];
 	var soDetailList = [];
-	var tempServiceNameList = [];
-	var enterServiceNameList = [];
+	var serviceNameList = [];
 
 	/*
 	 * Disable features
 	 */
 	$('.add-service').prop('disabled', true);
 	
+	/*
+	 *  Initial Set Value
+	 */
+		$('#fromDate').datepicker().datepicker("setDate", new Date());
+		$('.qty').attr({
+			'min': 1,
+			'max': 10
+		});
 	
 	
-	
-	$('#fromDate').datepicker().datepicker("setDate", new Date());
 	var select = $(".select-box");
 
 	select.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
 
 	var req = $.ajax({
-				url : '/patient.transfer',
+				url : 'patient.transfer',
 				type : 'post',
 				datatype : 'text',
-				
 				data : {
 					ACTION : 'GET_SERVICE_LIST'
 				},
@@ -135,7 +139,7 @@ $(function() {
 									'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
 									'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 									'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-									'<span id="addSpecimen"></span>',
+									'<span class="addSpecDoctor"></span>',
 									'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 					.draw(false);
 		}
@@ -160,18 +164,23 @@ $(function() {
 	  // console.log('Service Id -> ' + serviceId);
 	  // console.log('minor Code -> ' + minorCode);
 	  // console.log('Service Code -> ' + serviceCode);
+	   //console.log('Service Code -> ' + serviceName);
 	  
 	  
-	  tempServiceNameList.splice(tempServiceNameList.indexOf(serviceName), 1);
+	  serviceNameList.splice(serviceNameList.indexOf($.trim(serviceName)), 1);
+	  
+	  /*for (x in serviceNameList){
+		  console.log('Service Name List after deleting service desc : ' + serviceNameList[x]);
+	  }*/
 	 
 	
 	  if (minorCode.localeCompare("PANMIN") === 0){
 		  // console.log('If part');
 		  fetchDeletedPanelServiceCode(serviceCode);
-		  serviceCodeList.splice(serviceCodeList.indexOf(serviceCode), 1);
+		  serviceCodeList.splice(serviceCodeList.indexOf($.trim(serviceCode)), 1);
 	  } else {
 		  // console.log('Else part');
-		  serviceCodeList.splice(serviceCodeList.indexOf(serviceCode), 1);
+		  serviceCodeList.splice(serviceCodeList.indexOf($.trim(serviceCode)), 1);
 	  }
 	  
 	 
@@ -221,7 +230,7 @@ $(function() {
 												'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
 												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-												'<span id="addSpecDoctor"></span>',
+												'<span class="addSpecDoctor"></span>',
 												'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 								.draw();
 
@@ -239,7 +248,7 @@ $(function() {
 			  '<input type="text" name="discount"  class="text-align-center discount form-control dis-auto-width  dis-bottom-margin">', 
 			  '<input type="text" name="disAmount"  class="text-align-right disAmount form-control dis-auto-width  dis-bottom-margin" readonly>', 
 			  '<input type="text" name="netAmount"  class="text-align-right netAmount form-control dis-auto-width  dis-bottom-margin" readonly>', 
-			  '<span id="addSpecDoctor"></span>', 
+			  '<span class="addSpecDoctor"></span>', 
 			  '<div  class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ]).draw();
 	  });
 	 
@@ -268,10 +277,10 @@ $(function() {
 										},
 										success : function(data) {
 											serviceList.length = 0;
-											//tempServiceNameList.length = 0;
+											// serviceNameList.length = 0;
 											for (var i = 0; i < data.length; i++) {
 
-												tempServiceNameList.push(String($.trim(data[i]["serviceName"])));
+												serviceNameList.push(String($.trim(data[i]["serviceName"])));
 												
 												serviceList
 														.push({
@@ -357,7 +366,7 @@ $(function() {
 												var isTrue = duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, e);
 												console.log('IsTrue : ' + isTrue);
 												if (isTrue == true){
-													switchSpecimenDcotorName(serviceCode, currentRow, treatedBy);
+													switchSpecimenDcotorName(serviceCode, currentRow, treatedBy, '','','');
 												} 
 												return false;
 											}
@@ -365,7 +374,7 @@ $(function() {
 					});
 	
 	/*
-	 * Duplicate check with service code
+	 * Duplicate check between service codes
 	 */
 	function duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, event) {
 		
@@ -377,8 +386,10 @@ $(function() {
 		  tempArr.length = 0;
 		
 		
-		  for (var i =0; i<serviceCodeList.length; i++){
-		  console.log('ServiceCode List : ' + serviceCodeList[i]); }
+		  for (var i =0; i<serviceCodeList.length; i++)
+		  {
+		  console.log('ServiceCode List : ' + serviceCodeList[i]);
+}
 		 
 			
 			/*
@@ -461,14 +472,31 @@ $(function() {
 			return true;
 		}
 	
+	// switchSpecimenDcotorName(SERVICE_CODE, currentRow, TREATED_BY - Y/N,
+	// MAJOR_CODE, DOCTOR NAME OR DOCTOR CODE, SPECIMEN NAME OR CODE)
 	
-	function switchSpecimenDcotorName(serviceCode, currentRow, treatedBy){
+	function switchSpecimenDcotorName(serviceCode, currentRow, treatedBy, majorCode, doctorCode, specimenCode){
 		
-		var serviceCategory = $('.select-box').val();
+		var serviceCategory;
 		
-		console.log('Service Category : ' + serviceCategory);
-		console.log('Service Code : ' + serviceCode);
+		if (majorCode === ''){
+			// console.log('Service Code in if part');
+			serviceCategory = $('.select-box').val();
+		} else {
+			// console.log('Service Code in else part');
+			serviceCategory = majorCode;
+		}
 		
+					
+		/*
+		 * console.log('---------------------------------------------------');
+		 * console.log('Service Category : ' + serviceCategory);
+		 * console.log('Service Code : ' + serviceCode); console.log('Current
+		 * Row Object : ' + currentRow); console.log('Treated By : ' +
+		 * treatedBy); console.log('Doctor Code : ' + doctorCode);
+		 * console.log('Specimen Code : ' + specimenCode);
+		 * console.log('----------------------END-----------------------------');
+		 */
 		if (serviceCategory === "LABMAJ") {
 			
 			var req = $.ajax({
@@ -483,15 +511,13 @@ $(function() {
 				success: function(data){
 					
 					data = data.replace(/^\W+|\W+$/g, "");
-					console.log('Specimen List : ' + data);
+					// console.log('Specimen List : ' + data);
 
 					if (data.length !== 0) {
 						arr = data.replace("[", "").replace("]", "").split(",");
-						addSpecimenListEntry(arr, currentRow);
+						addSpecimenListEntry(arr, currentRow, specimenCode);
 						
-					} else {
-						swal('Ohh no!', 'No Specimen found', 'info');
-					}
+					} 
 					
 					
 					
@@ -509,16 +535,17 @@ $(function() {
 			
 			
 		} else {
-			console.log('else part');
-			console.log('Treated By : ' + treatedBy);
+			// console.log('else part');
+			// console.log('Treated By : ' + treatedBy);
 			
 			
 			if (treatedBy === 'Y'){
-				
 				var input = '<input type="text" name="doctorName"  class="doctorName form-control dis-auto-width  dis-bottom-margin">';
-				currentRow.find('#addSpecDoctor').append(input);
-				
-			
+				var treatedBy = '<input type="hidden" name="treatedBy" class="treatedBy">';
+				var hiddenInput = '<input type="hidden" name="specimen" value="NA">';
+				currentRow.find('.addSpecDoctor').append(input);
+				currentRow.find('.addSpecDoctor').append(hiddenInput);
+				currentRow.find('.addSpecDoctor').append(treatedBy);
 				
 				 $.ajax({
 						
@@ -546,12 +573,25 @@ $(function() {
 											});
 								}
 								
-								/*
-								 * for (var i=0; i<doctorList.length; i++){
-								 * console.log('Doctor List : ' +
-								 * JSON.stringify(doctorList[i])); }
-								 */
+								var doctorName;
 								
+								if (doctorCode){
+									
+									// console.log('previous doctor name exist :
+									// ' + doctorCode);
+									
+									for (var i=0; i<doctorList.length; i++){
+										 // console.log('Doctor List : ' +
+											// JSON.stringify(doctorList[i]));
+										 
+										 if (doctorCode === doctorList[i]['doctorId']){
+											 doctorName = doctorList[i]['label'];
+										 }
+								 }
+									currentRow.find('.treatedBy').val(doctorCode);
+									currentRow.find('.doctorName').val(doctorName);
+									
+								}
 							} else {
 								swal('Ohh no!', 'No Doctor found', 'info');
 							}
@@ -569,6 +609,12 @@ $(function() {
 						
 					});
 				
+			} else {
+				
+				var input = '<input type="hidden" name="treatedBy" value="NA">';
+				var hiddenInput = '<input type="hidden" name="specimen" value="NA">';
+				currentRow.find('.addSpecDoctor').append(input);
+				currentRow.find('.addSpecDoctor').append(hiddenInput);
 			}
 		}
 	}
@@ -587,14 +633,18 @@ $(function() {
 			source: doctorList,
 			select: function(event, ui){
 				$(this).val(ui.item.label);
+				var currentRow = $(this).closest('tr');
+				currentRow.find('.treatedBy').val(ui.item.doctorId);
+				
 			}
 		});
 	});
 	
 	
-
-	
-	  function addSpecimenListEntry(specimenList, currentRow) {
+	/*
+	 * Add specimen to specific service id of PATHOLOGY department
+	 */
+	  function addSpecimenListEntry(specimenList, currentRow, specimenCode) {
 		  
 			var select = document.createElement("select");
 			select.setAttribute("name", "specimen");
@@ -603,6 +653,8 @@ $(function() {
 			select.classList.add("dis-auto-width");
 			select.classList.add("dis-bottom-margin");
 			 
+			var hiddenInput = "<input type='hidden' value='NA' name='treatedBy'>";
+			
 			var i =0;
 		  
 		  while (i < specimenList.length) {
@@ -617,8 +669,15 @@ $(function() {
 				
 				i += 2;
 			}
-			select1 = currentRow.find('#addSpecimen');
+			select1 = currentRow.find('.addSpecDoctor');
 			select1.append(select);
+			select1.append(hiddenInput);
+			// console.log('addSpecimenListEntry : ' + specimenCode);
+			
+			if (specimenCode !== 'NA'){
+				var mySelect = currentRow.find('.specimen');
+				$(mySelect).val(specimenCode);
+			}
 	    }
 	
 	
@@ -636,7 +695,7 @@ $(function() {
 					function(event, param) {
 						event.preventDefault();
 						
-						console.log($(this));
+						// console.log($(this));
 						
 						isNumber($(this));
 						
@@ -665,13 +724,6 @@ $(function() {
 						currentRow.find('.netAmount').val(itemNetAmount);
 						calculateGrossSummary();
 					});
-	
-	
-	/*
-	 * Specimen Description
-	 */
-	
-	
 	
 	
 	
@@ -760,7 +812,7 @@ $(function() {
 	
   function fetchDeletedPanelServiceCode(serviceCode){
 		  
-		  // console.log('In fetchDeletedPanelServiceCode');
+		  console.log('In fetchDeletedPanelServiceCode');
 		  
 		  $.ajax({
 				url : '/patient.transfer',
@@ -833,7 +885,7 @@ $(function() {
 					currentRow.find('.minorCode').val('');
 					currentRow.find('.serviceCode').val('');
 					if (token === 1){
-						swal("Duplicate Service", "\"" + serviceDesc + "\" service name already exists", "info");
+						swal("Duplicate Service", "\"" + serviceDesc + "\" <br> SERVICE NAME already exists", "info");
 					} else {
 						swal("Duplicate Service", "\"" + childServiceDesc + "\" is present in \""+ serviceDesc +"\" service name.\n\r Please check", "info");
 					}
@@ -853,34 +905,29 @@ $(function() {
 	 * Disable default Enter keypress form submit event
 	 */
 
-	$('.serviceDesc').on('keypress', function(event) {
+	$(document).on('keypress', '.serviceDesc', function(event) {
 		var x = event.which || event.keyCode;
-		console.log('Service Desc event : ' + x);
+		// console.log('Service Desc event : ' + x);
 		
-		let unique = [...new Set(tempServiceNameList)];
+		let unique = [...new Set(serviceNameList)];
 		console.log('Total Unique : ' + unique);
 		
 		var currentRow = $(this).closest('tr');
 	
 		if (x === 13) {
 			event.preventDefault();
-			
-			/*
-			 * User entered service names
-			 */
-			//enterServiceNameList.push($.trim($(this).val()));
-			
+
 			var count = 0;
 			
 			for (var i=0; i<unique.length; i++){
-				console.log('temp name :' + unique[i]);
-				console.log('typed Value : ' + $(this).val());
+				// console.log('temp name :' + unique[i]);
+				// console.log('typed Value : ' + $(this).val());
 				if ($.trim($(this).val()).localeCompare($.trim(unique[i])) === 0){
 					count++;
 				} 
 			}
 			
-			console.log('total count : ' + count);
+			// console.log('total count : ' + count);
 			
 			if (count === 0){
 				swal('Sorry!', 'Unknown Service description', 'info');
@@ -892,7 +939,7 @@ $(function() {
 		} else if (x == 8){
 		
 			var serviceCode = currentRow.find('.serviceCode').val();
-			console.log('service code to be deleted : '+ serviceCode);
+			// console.log('service code to be deleted : '+ serviceCode);
 			currentRow.find('.qty').val('');
 			currentRow.find('.rate').val('');
 			currentRow.find('.discount').val('');
@@ -902,7 +949,9 @@ $(function() {
 			currentRow.find('.serviceCode').val('');
 			currentRow.find('.serviceId').val('');
 			currentRow.find('.minorCode').val('');
+			currentRow.find('.serviceDesc').val('');
 			currentRow.find('.specimen').hide();
+			currentRow.find('.addSpecDoctor').children().remove();
 			
 			var count =0;
 			for (var i=0; i<serviceCodeList.length; i++){
@@ -922,17 +971,17 @@ $(function() {
 			var count = 0;
 			
 			for (var i=0; i<unique.length; i++){
-				console.log('temp name : ' + unique[i]);
-				console.log('typed Value : ' + $(this).val());
+				// console.log('temp name : ' + unique[i]);
+				// console.log('typed Value : ' + $(this).val());
 				
 				if ($.trim($(this).val()).localeCompare($.trim(unique[i])) === 0){
-					//console.log('return false');
+					// console.log('return false');
 					count++;
 				} 
 				
 			}
 			
-			console.log('total count : ' + count);
+			// console.log('total count : ' + count);
 			
 			if (count === 0){
 				swal('Sorry!', 'Unknown Service description', 'info');
@@ -941,32 +990,32 @@ $(function() {
 			
 			
 			var rate = currentRow.find('.rate').val();
-			console.log('rate : ' + rate);
+			// console.log('rate : ' + rate);
 			if (rate === ''){
-				console.log('In rate if part');
+				// console.log('In rate if part');
 				currentRow.find('.serviceDesc').val('');
-				///currentRow.find('.serviceDesc').focus();
+				// /currentRow.find('.serviceDesc').focus();
 			}
 			
 		}
 	});
 	
-	$('.doctorName').on('keypress', function(event) {
+	$(document).on('keypress', '.doctorName', function(event) {
 		var x = event.which || event.keyCode;
 		if (x === 13) {
 			event.preventDefault();
 		}
 	});
 
-	$('.qty').on('keypress', function(event) {
+	$(document).on('keypress', '.qty', function(event) {
 		var x = event.which || event.keyCode;
-		console.log('Qty event : ' + x);
+		// console.log('Qty event : ' + x);
 		if (x === 13) {
 			event.preventDefault();
 		}
 	});
 	
-	$('.discount').on('keypress', function(event) {
+	$(document).on('keypress', '.discount', function(event) {
 		var x = event.which || event.keyCode;
 		if (x === 13) {
 			event.preventDefault();
@@ -995,37 +1044,48 @@ $(function() {
 			  buttonsStyling: false,
 			})
 			
+		
+			/*
+			 * data validation
+			 */
+			var x = dataValidation();
+			if (!x){
+				swalWithBootstrapButtons('Ohh no!', 'No Data available <br> Or <br> There is something wrong', 'info');
+				return false;
+			}
+			
 			
 		
-		var truee = 0;
-		var totalTrue = 0;
+		var trueCount = 0;
+		var totalCount = 0;
 		
-		let unique = [...new Set(tempServiceNameList)];
+		let unique = [...new Set(serviceNameList)];
 		console.log('total Unique : ' + unique);
 		console.log('total Unique length : ' + unique.length);
 		
 		$('.serviceDesc').each(function(event){
-			
-			
-			
-			if ($(this).val() !== ''){
+			console.log('entered name : ' + $(this).val());
+			if ($(this).val()){
+				console.log('step 1');
 				for (var j=0; j<unique.length; j++){
-					//console.log('previous typed Value : ' + unique[j]);
-					console.log('entered name : ' + $(this).val());
-					if ($.trim($(this).val()).localeCompare($.trim(unique[j])) === 0){
-						truee++;
-						console.log('This is truee value : ');
+						
+					//if ($.trim($(this).val()).localeCompare($.trim(unique[j])) === 0){
+						if ($.trim($(this).val()) === $.trim(unique[j])){
+						console.log('Stored Value : ' + unique[j]);
+						console.log('entered name : ' + $(this).val());
+						trueCount++;
+						console.log('True');
 					} 
 				}
-				totalTrue++;
+				totalCount++;
 			}
 			
 		});
 		
-		console.log('Truee count : ' + truee);
-		console.log('Total True count : ' + totalTrue);
+		console.log('Truee count : ' + trueCount);
+		console.log('Total True count : ' + totalCount);
 		
-		if (truee !== totalTrue){
+		if (trueCount !== totalCount){
 			swal('Sorry!', 'Kindly rectify unknown Service description before submitting', 'info');
 			return false;
 		}
@@ -1045,12 +1105,12 @@ $(function() {
 			}).then((result) => {
 			  if (result.value) {
 				  
-				  console.log('Result : ' + result.value);
-				  console.log('Order id : ' + serviceOrderId);
+				 // console.log('Result : ' + result.value);
+				 // console.log('Order id : ' + serviceOrderId);
 				  
 				  if (!serviceOrderId){
 					  
-					  console.log('Service Id not present');
+					  // console.log('Service Id not present');
 					  
 					  $.ajax({
 					        type: "POST",
@@ -1060,9 +1120,9 @@ $(function() {
 					        success: function(response) {
 					        	serviceOrderNo = response;
 					        	if (serviceOrderNo === 0){
-					        		swal('Ohh no!!','Data have not been saved.\n\r error code :' + serviceOrderNo,'error');
+					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + serviceOrderNo,'error');
 					        	} else {
-					        		swal('Well done!','Data have been saved.\n\r service order id :' + serviceOrderNo,'success');
+					        		swal('Well done!','Data have been saved.<br> SERVICE ORDER ID :' + serviceOrderNo,'success');
 					        		reset();
 					        	}
 					        },
@@ -1079,7 +1139,7 @@ $(function() {
 					  
 				  } else {
 					  
-					  console.log('Service Id present');
+					  // console.log('Service Id present');
 					  $.ajax({
 					        type: "POST",
 					        url: "/patient.transfer",
@@ -1088,9 +1148,9 @@ $(function() {
 					        success: function(response) {
 					        	serviceOrderNo = response;
 					        	if (serviceOrderNo === 0){
-					        		swal('Ohh no!!','Data have not been saved.\n\r error code :' + serviceOrderNo,'error');
+					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + serviceOrderNo,'error');
 					        	} else {
-					        		swal('Well done!','Data have been updated.\n\r service order id :' + serviceOrderNo,'success');
+					        		swal('Well done!','Data have been updated.<br> SERVICE ORDER ID :' + serviceOrderNo,'success');
 					        		reset();
 					        	}
 					        },
@@ -1132,21 +1192,8 @@ $(function() {
 	
 	$(document).on('click', '.previousBtn', function(event){
 		
-		/*
-		 * var patId = $(this).attr('data-id'); console.log('patient Id ' +
-		 * patId);
-		 * 
-		 * const {value: patNumber} = swal({ title: 'Enter Patient Number',
-		 * input: 'text', inputValue: patId, showCancelButton: true,
-		 * inputValidator: (value) => { return !value && 'You need to write
-		 * something!'; } }).then(function(result){
-		 * 
-		 * console.log('Click value : ' + result.value);
-		 * 
-		 * if (result.value){
-		 */
-					
-					console.log('Count : ' + ++count);
+							
+					// console.log('Count : ' + ++count);
 					
 					  $('.myModal .modal-body').load( '/patient.transfer', 
 							  { ACTION :  'FETCH_PREVIOUS_SERVICE_ORDER', 
@@ -1217,7 +1264,8 @@ $(function() {
 					  
 					
 					  
-					$('.myModal .modal-title').html("Previous Service Order  Record");
+					$('.myModal .modal-title').html("Previous Service Order  Record : " + $('#patient-no').val());
+					$('.myModal .modal-title').css('text-align', 'center');
 					
 					  
 					  
@@ -1234,22 +1282,14 @@ $(function() {
 					
 					
 					
-				/*
-				 * } else if ( result.dismiss === swal.DismissReason.cancel ){
-				 * $('.myModal').modal('hide'); }
-				 */
-					
 			
-		
-	
-		// });
 			
 		
 		
 	});
 	
 	/*
-	 * Function for getting Service order detail..
+	 * Function for getting previous Service order detail..
 	 */
 	
 	$(document).on('click', '.view-btn', function(event){
@@ -1258,6 +1298,7 @@ $(function() {
 		 reset();
 		 
 		 var soNumber = $(this).attr('so-no');
+		
 		 
 		 // console.log('IP Number : ' + ipNumber);
 		// console.log('SO Number : ' + soNumber);
@@ -1301,19 +1342,19 @@ $(function() {
 			 		var discount = [];
 			 		var doctorCode = [];
 			 		var isBilled = [];
+			 		var specimen = [];
+			 		var treatedBy = [];
 			 		var totalRow = 0;
+			 		var soDate;
 			 	
-			 		tempServiceNameList.length = 0;
+			 		serviceNameList.length = 0;
 
-			 		for (var i=0; i<arr.length; i+=11){
-			 			
-			 			// console.log('Sevice Description ' +
-						// String(arr[i+3]));
+			 		for (var i=0; i<arr.length; i+=14){
 			 			
 			 			soNUmber.push(String(arr[i]));
 			 			siNumber.push(String(arr[i+1]));
 			 			serviceCodeList.push(String($.trim(arr[i+2]))); 
-			 			tempServiceNameList.push(String(arr[i+3]).replace(/\|/g, ',')); 
+			 			serviceNameList.push(String($.trim(arr[i+3])).replace(/\|/g, ',')); 
 			 			serviceCode.push(String(arr[i+2]));
 			 			serviceDesc.push(String(arr[i+3]).replace(/\|/g, ','));
 			 			serviceCat.push(String(arr[i+4]));
@@ -1323,20 +1364,25 @@ $(function() {
 			 			discount.push(String(arr[i+8]));
 			 			doctorCode.push(String(arr[i+9]));
 			 			isBilled.push(String(arr[i+10]));
+			 			specimen.push(String(arr[i+11]));
+			 			treatedBy.push(String(arr[i+12]));
+			 			soDate = String($.trim(arr[i+13]));
 			 			++totalRow;
 			 		}
+			 		
+			 		console.log('Service Order date : ' + soDate);
+			 		$('#fromDate').datepicker().datepicker("setDate", soDate);
+			 		
+			 		/*for (x in serviceNameList){
+			 			console.log('Service Name List after fetching service order : ' + serviceNameList[x]);
+			 		}*/
 
 			 		var i = 0;
 			 		var initialRow = 10;
 			 		
-			 		// console.log('Initial Row : ' + initialRow + ' Total Row :
-					// ' + totalRow);
-			 		
 			 		if (totalRow > initialRow){
 			 			
 			 			var remainRow = totalRow - initialRow;
-			 			
-			 		// console.log('Remaining row : ' + remainRow);
 			 			
 			 			var l = 0;
 			 			
@@ -1356,7 +1402,7 @@ $(function() {
 											'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
 											'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 											'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-											'<span id="addSpecDoctor"></span>',
+											'<span class="addSpecDoctor"></span>',
 											'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 							.draw();
 			 				l++;
@@ -1373,6 +1419,8 @@ $(function() {
 			 				if (i < totalRow){
 				 			$(this).val(serviceDesc[i]);
 				 			$(this).prop('readonly', false);
+				 			// var $this = $(this);
+			 				
 			 				}
 				 			i++;
 				 		});
@@ -1431,6 +1479,9 @@ $(function() {
 				 			if (i < totalRow){
 				 				$(this).val($.trim(serviceCode[i]));
 				 				$(this).prop('readonly', false);
+				 				var currentRow = $(this).parents('tr');
+				 				switchSpecimenDcotorName($.trim(serviceCode[i]), currentRow, $.trim(treatedBy[i]), $.trim(serviceCat[i]), $.trim(doctorCode[i]), $.trim(specimen[i]));
+				 				
 				 			}
 				 			i++;
 				 		});
@@ -1466,10 +1517,12 @@ $(function() {
 				 			}
 				 			i++;
 				 		});
+				 		
+				 	
 			 			
 			 			
 			 		} else {
-			 			// console.log('Billed');
+			 			console.log('Billed');
 			 			
 			 			$('#btn-submit').prop('disabled', true);
 			 			
@@ -1485,7 +1538,7 @@ $(function() {
 				 		i =0;
 				 		$('.rate').each(function(event){
 				 			if (i < totalRow){
-				 				console.log('In if part');
+				 				// console.log('In if part');
 				 				$(this).val($.trim(rate[i]));
 				 				$(this).prop('readonly', true);
 			 					
@@ -1567,9 +1620,51 @@ $(function() {
 	});
 	
 	
+	function dataValidation(){
+		
+		var serviceCount = 0;
+		var qtyCount = 0;
+		var discountCount = 0;
+		
+		const swalWithBootstrapButtons = swal.mixin({
+			  confirmButtonClass: 'btn btn-success',
+			  cancelButtonClass: 'btn btn-danger',
+			  buttonsStyling: false,
+			})
+		
+		$('.serviceDesc').each(function(){
+			if ($(this).val()){
+				serviceCount++;
+			}
+		});
+		
+		$('.qty').each(function(){
+			if ($(this).val()){
+				qtyCount++;
+			}
+		});
+		
+		$('.discount').each(function(){
+			if ($(this).val()){
+				discountCount++;
+			}
+		});	
+
+		console.log('Total Data : ' + serviceCount);
+		console.log('Total Data : ' + qtyCount);
+		console.log('Total Data : ' + discountCount);
+		console.log(discountCount == 0 && qtyCount == 0 && serviceCount == 0);
+		
+		if (discountCount == 0 && qtyCount == 0 && serviceCount == 0){
+			return false;
+		}
+	}
+	
 	function reset(){
 		// console.log('Reset Called');
 		
+		$('#fromDate').datepicker().datepicker("setDate", new Date());
+		$('.select-box').prop('selectedIndex',0);
 		$('#order-id').val('');
 		$('.serviceDesc').val('');
 		$('.serviceDesc').prop('readonly', false);
@@ -1586,7 +1681,9 @@ $(function() {
 		$('#sum-gross-amount').val('');
 		$('#sum-discount-amount').val('');
 		$('#sum-net-amount').val('');
+		$('.addSpecDoctor').children().remove();
 		serviceCodeList.length = 0;
+		serviceNameList.length = 0;
 		$('.specimen').hide();
 		
 		var totalRow = 0;
@@ -1599,7 +1696,8 @@ $(function() {
 		var i = 0;
  		var initialRow = 10;
  		
- 		console.log('Initial Row : ' + initialRow + ' Total Row :' + totalRow);
+ 		// console.log('Initial Row : ' + initialRow + ' Total Row :' +
+		// totalRow);
  		
  		if (totalRow < initialRow){
  			
@@ -1625,7 +1723,7 @@ $(function() {
 								'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
 								'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 								'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<span id="addSpecDoctor"></span>',
+								'<span class="addSpecDoctor"></span>',
 								'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 				.draw();
  				l++;
@@ -1634,10 +1732,6 @@ $(function() {
  		} else {
  			
  			table.rows().remove().draw();
- 			
- 			
- 			//var counter = 10;
- 			
  			
  			
  			for (var i = 0; i < counter; i++) {
@@ -1653,43 +1747,14 @@ $(function() {
  										'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
  										'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
  										'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
- 										'<span id="addSpecimen"></span>',
+ 										'<span class="addSpecDoctor"></span>',
  										'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
  						.draw(false);
  			}
- 			
-
- 			
- 			
- 			
- 			
- 		}
+  		}
 		
 		
 	}
-	
-
-
-
-	// This code solves the problem, at least in IE and Firefox (haven't tested
-	// any other, but I give it a reasonable chance of working if the problem
-	// even exists in other browsers).
-
-	// Prevent the backspace key from navigating back.
-/*
- * $(document).unbind('keydown').bind('keydown', function (event) { if
- * (event.keyCode === 8) { var doPrevent = true; var types = ["text",
- * "password", "file", "search", "email", "number", "date", "color", "datetime",
- * "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
- * var d = $(event.srcElement || event.target); var disabled =
- * d.prop("readonly") || d.prop("disabled"); if (!disabled) { if
- * (d[0].isContentEditable) { doPrevent = false; } else if (d.is("input")) { var
- * type = d.attr("type"); if (type) { type = type.toLowerCase(); } if
- * (types.indexOf(type) > -1) { doPrevent = false; } } else if
- * (d.is("textarea")) { doPrevent = false; } } if (doPrevent) {
- * event.preventDefault(); return false; } } });
- */
-
 	
 	
 
@@ -1701,7 +1766,7 @@ $(function() {
 function isNumber1(event) {
 	
 	var char = String.fromCharCode(event.which || event.keyCode);
-	console.log(char);
+	// console.log(char);
 	if (!(/[0-9]/.test(char))){
 		console.log('test failed');
 		// event.preventDefault();
@@ -1717,7 +1782,7 @@ function isNumber2(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-    	console.log('test failed');
+    	// console.log('test failed');
         return false;
     }
     return true;
@@ -1727,7 +1792,7 @@ function isNumber2(evt) {
  * Style 3
  */
 function isNumber(input) {
-	console.log(input.val());
+	// console.log(input.val());
 	var replaceInput = input.val();
 	var regex = /[^0-9]/;
 	replaceInput = replaceInput.replace(regex, "");
