@@ -45,7 +45,7 @@ public class LogoutServlet extends HttpServlet {
 				response.setDateHeader("Expires", 0);
 			}
 
-			response.sendRedirect("/login.do");
+			response.sendRedirect("login.do");
 
 		}
 

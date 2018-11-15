@@ -1,3 +1,19 @@
+<style>
+	h3 {
+		text-transform: uppercase;
+		text-align: center;
+	}
+</style>
+
+
+<%
+	String moduleName = (String)session.getAttribute("moduleName");
+	String loginUser = (String)session.getAttribute("userName");
+	String loginIp = (String)session.getAttribute("loginFrom");
+
+%>
+
+
 		<div class="row">
 
 					<header id="nav-header" class="clearfix">
@@ -5,7 +21,7 @@
 						
 						<div class="form-header-name">
 							
-							<h3>SERVICE ORDERING</h3>
+							<h3><%=moduleName%></h3>
 													
 						</div>
 							<!-- NAV BAR -->
@@ -26,8 +42,8 @@
 						</div>
 						<div class="col-md-7">
 							<ul>
-								<li id="welcome" class="hidden-xs">Welcome to GNRC !!! Ram</li>
-								<li id="welcome" class="hidden-xs">Login ip : 172.16.20.112</li>
+								<li id="welcome" class="hidden-xs">Welcome to GNRC&nbsp;!!!&nbsp;<%=loginUser%></li>
+								<li id="welcome" class="hidden-xs">Login IP : <%=loginIp%></li>
 								<li class="fixed-width"><a href="#"> <span
 										class="glyphicon glyphicon-bell" aria-hidden="true"></span> <span
 										class="label label-warning">3</span>

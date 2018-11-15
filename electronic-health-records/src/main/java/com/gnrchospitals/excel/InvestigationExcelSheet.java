@@ -1,11 +1,9 @@
 package com.gnrchospitals.excel;
 
 import java.io.IOException;
-
 import java.io.OutputStream;
 import java.util.List;
 
-import org.apache.lucene.document.Field.Index;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;

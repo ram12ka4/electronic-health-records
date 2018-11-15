@@ -77,7 +77,7 @@ $(document)
 										document
 												.getElementById("doctor-note-frm").method = "post";
 										document
-												.getElementById("doctor-note-frm").action = "/docnote.do";
+												.getElementById("doctor-note-frm").action = "docnote.do";
 										document.getElementById("doctor-note-frm").submit();
 
 									});
@@ -91,7 +91,7 @@ $(document)
 						var id = $(this).data('id');
 						//alert(id);
 						
-						$('.myModal .modal-body').load('/docnote.do?ACTION=FETCH_DOCTOR_NOTE&ip_no='+id, function(){
+						$('.myModal .modal-body').load('docnote.do?ACTION=FETCH_DOCTOR_NOTE&ip_no='+id, function(){
 							
 							$('.myModal').modal({show:true});
 						});
@@ -103,7 +103,7 @@ $(document)
 						alert(id);
 						$('.editModal .update-note').attr('data-id', id);
 						
-						$('.editModal .modal-body').load('/docnote.do?ACTION=FETCH_DOCTOR_NOTE_BY_ED_ID&ed_no='+id, function(){
+						$('.editModal .modal-body').load('docnote.do?ACTION=FETCH_DOCTOR_NOTE_BY_ED_ID&ed_no='+id, function(){
 							$('.myModal').modal('hide');
 							$('.editModal').modal({show:true});
 						});
@@ -139,7 +139,7 @@ $(document)
 
 						req = $.ajax({
 							dataType: "html",
-							url : '/docnote.do',
+							url : 'docnote.do',
 							type : 'POST',
 							data : {
 								emrDetNo : id,
@@ -169,7 +169,7 @@ $(document)
 
 						req = $.ajax({
 							dataType: "html",
-							url : '/docnote.do',
+							url : 'docnote.do',
 							type : 'POST',
 							data : {
 								emrDetNo : id,

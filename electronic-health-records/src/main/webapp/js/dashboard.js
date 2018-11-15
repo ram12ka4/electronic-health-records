@@ -20,9 +20,9 @@ $(document).ready(function() {
 	});
 	
 	$('#menu-toggle').click(function() {
-		alert("ram")
+		//alert("ram")
 		$('#side-menu').toggleClass('hidden-xs');
-		alert("ram1");
+		//alert("ram1");
 	});
 
 	/*

@@ -297,7 +297,7 @@ public class ConsultRecordServlet extends HttpServlet {
 					boolean isEmrClinicalDataInsert = patientDao.insertEmrClinicalData(patient);
 
 					if (!isEmrClinicalDataInsert) {
-						response.sendRedirect("/consult.do?token=fail&msg=Something went wrong");
+						response.sendRedirect("consult.do?token=fail&msg=Something went wrong");
 					}
 
 				} else {
@@ -327,9 +327,9 @@ public class ConsultRecordServlet extends HttpServlet {
 				System.out.println("Time takes to process this : " + (end - start) + " ms");
 
 				if (isEmrHealthDataInsert) {
-					response.sendRedirect("/consult.do?token=success&msg=Data have been added successfully");
+					response.sendRedirect("consult.do?token=success&msg=Data have been added successfully");
 				} else {
-					response.sendRedirect("/consult.do?token=fail&msg=Something went wrong");
+					response.sendRedirect("consult.do?token=fail&msg=Something went wrong");
 				}
 			}
 

@@ -272,9 +272,9 @@ public class DoctorOrderServlet extends HttpServlet {
 				System.out.println("Time takes to process this : " + (end - start) + " ms");
 
 				if (isEmrHealthDataInsert) {
-					response.sendRedirect("/docorder.do?token=success&msg=Data have been added successfully");
+					response.sendRedirect("docorder.do?token=success&msg=Data have been added successfully");
 				} else {
-					response.sendRedirect("/docorder.do?token=fail&msg=Something went wrong");
+					response.sendRedirect("docorder.do?token=fail&msg=Something went wrong");
 				}
 			}
 

@@ -22,9 +22,6 @@ import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.ServiceOrder;
 import com.gnrchospitals.util.LoginDBConnection;
 
-import oracle.jdbc.internal.OracleCallableStatement;
-import oracle.sql.ARRAY;
-
 public class PatientDaoImpl implements PatientDao {
 
 	private Patient patient = Patient.getInstance();

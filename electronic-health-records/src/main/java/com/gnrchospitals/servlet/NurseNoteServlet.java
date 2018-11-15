@@ -247,9 +247,9 @@ public class NurseNoteServlet extends HttpServlet {
 				System.out.println("Time takes to process this : " + (end - start) + " ms");
 
 				if (isEmrHealthDataInsert) {
-					response.sendRedirect("/docnote.do?token=success&msg=Data have been added successfully");
+					response.sendRedirect("docnote.do?token=success&msg=Data have been added successfully");
 				} else {
-					response.sendRedirect("/docnote.do?token=fail&msg=Something went wrong");
+					response.sendRedirect("docnote.do?token=fail&msg=Something went wrong");
 				}
 
 			}

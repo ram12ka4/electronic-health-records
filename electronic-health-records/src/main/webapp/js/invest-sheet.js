@@ -133,7 +133,7 @@ $(document)
 										$('.confirmModal').modal('hide');
 
 										document.getElementById("invest-frm").method = "post";
-										document.getElementById("invest-frm").action = "/invest.do";
+										document.getElementById("invest-frm").action = "invest.do";
 										document.getElementById("invest-frm")
 												.submit();
 

@@ -139,7 +139,7 @@ $(function() {
 													'data' : "ipNumber",
 													"render" : function(
 															jsonIpNumber) {
-														return '<a href="/pat_panel.do?ip_no='
+														return '<a href="pat_panel.do?ip_no='
 																+ jsonIpNumber
 																+ '"class="context-menu-one btn btn-info btn-xs">Click</a>';
 													}
@@ -262,7 +262,7 @@ $(function() {
 																		'data' : "ipNumber",
 																		"render" : function(
 																				jsonIpNumber) {
-																			return '<a href="/pat_panel.do?ip_no='
+																			return '<a href="pat_panel.do?ip_no='
 																					+ jsonIpNumber
 																					+ '"class="context-menu-one btn btn-info btn-xs">Click</a>';
 																		}
@@ -309,9 +309,10 @@ $(function() {
 	$.contextMenu({
 
 		selector : '.context-menu-one',
+		trigger: 'left',
 		callback : function(key, options) {
 			var m = "clicked: " + key;
-			window.console && console.log(m) || alert(m);
+			//window.console && console.log(m) || alert(m);
 		},
 		items : {
 			"receivePatient" : {
@@ -337,9 +338,13 @@ $(function() {
 				callback : function(itemKey, opt, e) {
 					var m = $(this).attr('href');
 
-					window.location.href = m.replace('pat_panel.do', 'patient.transfer');
+					//console.log('Mapping : ' + m);
+					m = m + '&moduleName=service ordering';
+					window.location.href = m.replace('pat_panel.do', 'service.order');
 					
-					window.console	&& console.log(m.replace('pat_panel.do', 'patient.transfer')) || alert(m);
+					console.log(m.replace('pat_panel.do', 'service.order'));
+					
+					//window.console	&& console.log(m.replace('pat_panel.do', 'patient.transfer')) || alert(m);
 				}
 			},
 			"vitalEntry" : {

@@ -224,9 +224,9 @@ tbody tr {
 
 
 		<header class="clearfix">
-			<span class="slide pull-left"> <a href="#"
+			<!-- <span class="slide pull-left"> <a href="#"
 				onclick="openSlideMenu()"><i class="fas fa-bars"></i></a>
-			</span>
+			</span> -->
 
 
 			<h5 class="pull-right">

@@ -121,7 +121,7 @@ $(function() {
 		}
 
 		document.getElementById("doctor-order-frm").method = "post";
-		document.getElementById("doctor-order-frm").action = "/docorder.do";
+		document.getElementById("doctor-order-frm").action = "docorder.do";
 		document.getElementById("doctor-order-frm").submit();
 
 	});
@@ -134,7 +134,7 @@ $(function() {
 				alert("previous Btn");
 
 				$('.myModal .modal-body').load(
-						'/docorder.do?ACTION=DOCTOR_PREVIOUS_ORDERS',
+						'docorder.do?ACTION=DOCTOR_PREVIOUS_ORDERS',
 						function() {
 
 							$('.myModal').modal({
@@ -167,7 +167,7 @@ $(function() {
 
 		req = $.ajax({
 			dataType: "html",
-			url : '/docorder.do',
+			url : 'docorder.do',
 			type : 'POST',
 			data : {
 				emrDetNo : id,

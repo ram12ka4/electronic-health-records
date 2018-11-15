@@ -219,9 +219,9 @@ public class TransferSummaryServlet extends HttpServlet {
 				System.out.println("Time takes to process this : " + (end - start) + " ms");
 
 				if (isEmrHealthDataInsert) {
-					response.sendRedirect("/transfer.do?token=success&msg=Data have been added successfully");
+					response.sendRedirect("transfer.do?token=success&msg=Data have been added successfully");
 				} else {
-					response.sendRedirect("/transfer.do?token=fail&msg=Something went wrong");
+					response.sendRedirect("transfer.do?token=fail&msg=Something went wrong");
 				}
 
 			}

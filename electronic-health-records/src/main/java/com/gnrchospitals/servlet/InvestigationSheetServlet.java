@@ -728,9 +728,9 @@ public class InvestigationSheetServlet extends HttpServlet {
 				System.out.println("Time takes to process this : " + (end - start) + " ms");
 
 				if (isEmrHealthDataInsert) {
-					response.sendRedirect("/invest.do?token=success&msg=Data have been added successfully");
+					response.sendRedirect("invest.do?token=success&msg=Data have been added successfully");
 				} else {
-					response.sendRedirect("/invest.do?token=fail&msg=Something went wrong");
+					response.sendRedirect("invest.do?token=fail&msg=Something went wrong");
 				}
 			}
 		} catch (Exception ex) {

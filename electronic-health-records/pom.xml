@@ -74,8 +74,13 @@
 					<artifactId>tomcat7-maven-plugin</artifactId>
 					<version>2.2</version>
 					<configuration>
+						<url>http://10.0.0.100:8081/manager/text</url>
+						<server>TomcatServer</server>
 						<path>/</path>
+						<username>admin</username>
+                    	<password>gnrc@321</password>
 						<contextReloadable>true</contextReloadable>
+						<update>true</update>
 					</configuration>
 				</plugin>
 			</plugins>

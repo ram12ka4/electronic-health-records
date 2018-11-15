@@ -30,7 +30,7 @@ $(document).ready(
 						}
 						
 						document.getElementById("index").method = "post";
-						document.getElementById("index").action = "/login.do";
+						document.getElementById("index").action = "login.do";
 						document.getElementById("index").submit(); 
 
 					});

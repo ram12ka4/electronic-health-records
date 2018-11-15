@@ -29,7 +29,7 @@ $(function() {
 	select.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
 
 	var req = $.ajax({
-				url : 'patient.transfer',
+				url : 'service.order',
 				type : 'post',
 				datatype : 'text',
 				data : {
@@ -266,7 +266,7 @@ $(function() {
 
 							$
 									.ajax({
-										url : '/patient.transfer',
+										url : 'service.order',
 										type : 'post',
 										dataType : 'json',
 										data : {
@@ -409,7 +409,7 @@ $(function() {
 			if (minorCode.localeCompare("PANMIN") === 0){
 		
 				$.ajax({
-					url : '/patient.transfer',
+					url : 'service.order',
 					type : 'post',
 					dataType : 'text',
 					data : {
@@ -502,7 +502,7 @@ $(function() {
 			var req = $.ajax({
 					
 				type: 'post',
-				url: '/patient.transfer',
+				url: 'service.order',
 				dataType : 'text',
 				data : {
 					ACTION : 'FETCH_SPECIMEN_LIST',
@@ -550,7 +550,7 @@ $(function() {
 				 $.ajax({
 						
 						type: 'post',
-						url: '/patient.transfer',
+						url: 'service.order',
 						dataType : 'json',
 						data : {
 							ACTION : 'FETCH_DOCTOR_LIST',
@@ -815,7 +815,7 @@ $(function() {
 		  console.log('In fetchDeletedPanelServiceCode');
 		  
 		  $.ajax({
-				url : '/patient.transfer',
+				url : 'service.order',
 				type : 'post',
 				dataType : 'text',
 				data : {
@@ -1049,7 +1049,7 @@ $(function() {
 			 * data validation
 			 */
 			var x = dataValidation();
-			if (!x){
+			if (x === false){
 				swalWithBootstrapButtons('Ohh no!', 'No Data available <br> Or <br> There is something wrong', 'info');
 				return false;
 			}
@@ -1114,7 +1114,7 @@ $(function() {
 					  
 					  $.ajax({
 					        type: "POST",
-					        url: "/patient.transfer",
+					        url: "service.order",
 					        data:  frm.serialize() + "&ACTION=INSERT_SERVICE_ORDER",
 					        cache: false,
 					        success: function(response) {
@@ -1142,7 +1142,7 @@ $(function() {
 					  // console.log('Service Id present');
 					  $.ajax({
 					        type: "POST",
-					        url: "/patient.transfer",
+					        url: "service.order",
 					        data:  frm.serialize() + "&soNumber="+serviceOrderId+"&ACTION=INSERT_SERVICE_ORDER",
 					        cache: false,
 					        success: function(response) {
@@ -1195,7 +1195,7 @@ $(function() {
 							
 					// console.log('Count : ' + ++count);
 					
-					  $('.myModal .modal-body').load( '/patient.transfer', 
+					  $('.myModal .modal-body').load( 'service.order', 
 							  { ACTION :  'FETCH_PREVIOUS_SERVICE_ORDER', 
 					  },
 					  function(response, status, xhr) {
@@ -1305,7 +1305,7 @@ $(function() {
 		 
 		 var req = $.ajax({
 			 		
-			 	url: '/patient.transfer',
+			 	url: 'service.order',
 			 	type: 'post',
 			 	datatype: 'text',
 			 	data: {
@@ -1438,7 +1438,7 @@ $(function() {
 				 			if (i < totalRow){
 				 				// console.log('In if part');
 				 				var req = $.ajax({
-					 				url: '/patient.transfer',
+					 				url: 'service.order',
 					 				type: 'post',
 					 				datatype: 'text',
 					 				data: {
@@ -1657,6 +1657,8 @@ $(function() {
 		
 		if (discountCount == 0 && qtyCount == 0 && serviceCount == 0){
 			return false;
+		} else {
+			return true;
 		}
 	}
 	

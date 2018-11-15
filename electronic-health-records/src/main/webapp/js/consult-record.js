@@ -110,7 +110,7 @@ $(function() {
 		$('.confirmModal').modal('hide');
 
 		document.getElementById("consult-record-frm").method = "post";
-		document.getElementById("consult-record-frm").action = "/consult.do";
+		document.getElementById("consult-record-frm").action = "consult.do";
 		document.getElementById("consult-record-frm").submit();
 
 	});
@@ -128,7 +128,7 @@ $(function() {
 				// alert("previous Btn");
 
 				$('.myModal .modal-body').load(
-						'/consult.do?ACTION=PREVIOUS_CONSULT_RECORDS',
+						'consult.do?ACTION=PREVIOUS_CONSULT_RECORDS',
 						function() {
 							
 							$('.circleModal').modal('hide');
@@ -171,7 +171,7 @@ $(function() {
 						req = $
 								.ajax({
 									dataType : "html",
-									url : '/consult.do',
+									url : 'consult.do',
 									type : 'POST',
 									data : {
 										emrDetNo : id,
