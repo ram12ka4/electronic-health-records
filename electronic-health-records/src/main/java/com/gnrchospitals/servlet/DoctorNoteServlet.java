@@ -23,7 +23,7 @@ import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.SequenceNumber;
 
-@WebServlet(urlPatterns = "/docnote.do")
+@WebServlet(urlPatterns = "/doctor.note")
 public class DoctorNoteServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -114,14 +114,14 @@ public class DoctorNoteServlet extends HttpServlet {
 				}
 
 			} else {
-
+				session.setAttribute("moduleName", request.getParameter("moduleName"));
 				request.setAttribute("token", token);
 				request.setAttribute("msg", msg);
-				request.setAttribute("ipName", (String) session.getAttribute("ipNo"));
+				request.setAttribute("ipNumber", (String) session.getAttribute("ip_no"));
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
-			sendErrorReirect(request, response, "WEB-INF/views/error.jsp", e);
+			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
 		}
 
 	}
@@ -255,7 +255,7 @@ public class DoctorNoteServlet extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			sendErrorReirect(request, response, "WEB-INF/views/error.jsp", e);
+			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
 		}
 
 	}

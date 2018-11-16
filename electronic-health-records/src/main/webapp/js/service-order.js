@@ -1105,12 +1105,12 @@ $(function() {
 			}).then((result) => {
 			  if (result.value) {
 				  
-				 // console.log('Result : ' + result.value);
-				 // console.log('Order id : ' + serviceOrderId);
+				 console.log('Result : ' + result.value);
+				 console.log('Order id : ' + serviceOrderId);
 				  
 				  if (!serviceOrderId){
 					  
-					  // console.log('Service Id not present');
+					  console.log('Service Id not present');
 					  
 					  $.ajax({
 					        type: "POST",

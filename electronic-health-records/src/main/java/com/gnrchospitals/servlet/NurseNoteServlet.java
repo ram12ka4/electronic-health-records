@@ -118,7 +118,7 @@ public class NurseNoteServlet extends HttpServlet {
 				request.setAttribute("token", token);
 				request.setAttribute("msg", msg);
 				request.setAttribute("ipName", (String) session.getAttribute("ipNo"));
-				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-notes.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "WEB-INF/views/error.jsp", e);

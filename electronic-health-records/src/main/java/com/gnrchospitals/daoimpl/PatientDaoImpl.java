@@ -1184,9 +1184,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	public List<String> getParentLink(String userRole) throws SQLException {
-
 		ArrayList<String> list = new ArrayList<>();
-
 		try (Connection con = LoginDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement22(con, userRole);
 				ResultSet rs = ps.executeQuery()) {

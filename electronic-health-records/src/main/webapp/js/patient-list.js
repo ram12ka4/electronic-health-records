@@ -309,81 +309,55 @@ $(function() {
 	$.contextMenu({
 
 		selector : '.context-menu-one',
-		trigger: 'left',
+		trigger : 'left',
 		callback : function(key, options) {
 			var m = "clicked: " + key;
-			//window.console && console.log(m) || alert(m);
+			// window.console && console.log(m) || alert(m);
 		},
 		items : {
-			"receivePatient" : {
-				name : "Receive Patient",
-				icon : "edit",
-				// superseeds "global" callback
-				callback : function(itemKey, opt, e) {
-					var m = $(this).attr('href');
-
-					window.location.href = m.replace('pat_panel.do', 'ram.do');
-					window.console
-							&& console.log(m.replace('pat_panel.do', 'ram.do'))
-							|| alert(m);
-				}
-			},
 			"neuroVitalChart" : {
 				name : "Neuro Vital Chart",
 				icon : "cut"
 			},
-			"nurseServiceOrder" : {
+			"doctorNote" : {
+				name : "Doctor Note",
+				icon : "cut",
+				callback : function(itemKey, opt, e) {
+					window.console &&  console.log('Item Key : ' + itemKey);
+					window.console &&  console.log('Option : ' + opt);
+					window.console &&  console.log('Event : ' + e.which);
+					var m = $(this).attr('href');
+					m = m + '&moduleName=doctor note/order';
+					window.location.href = m.replace('pat_panel.do', 'doctor.note');
+				}
+			},
+			"nurseNote" : {
+				name : "Nurse Note",
+				icon : "cut",
+				callback : function(itemKey, opt, e) {
+					window.console &&  console.log('Item Key : ' + itemKey);
+					window.console &&  console.log('Option : ' + opt);
+					window.console &&  console.log('Event : ' + e.which);
+					var m = $(this).attr('href');
+					m = m + '&moduleName=nurse note';
+					window.location.href = m.replace('pat_panel.do', 'nurse.note');
+				}
+			},
+			"serviceOrder" : {
 				name : "Service Ordering",
 				icon : "cut",
 				callback : function(itemKey, opt, e) {
 					var m = $(this).attr('href');
 
-					//console.log('Mapping : ' + m);
+					// console.log('Mapping : ' + m);
 					m = m + '&moduleName=service ordering';
-					window.location.href = m.replace('pat_panel.do', 'service.order');
-					
+					window.location.href = m.replace('pat_panel.do',
+							'service.order');
+
 					console.log(m.replace('pat_panel.do', 'service.order'));
-					
-					//window.console	&& console.log(m.replace('pat_panel.do', 'patient.transfer')) || alert(m);
-				}
-			},
-			"vitalEntry" : {
-				name : "Vital Entry",
-				icon : "cut"
-			},
-			"bedPosition" : {
-				name : "Bed Position",
-				icon : "copy"
-			},
-			"nurseNotes" : {
-				name : "Nurse Notes",
-				icon : "paste"
-			},
-			"bedTransfer" : {
-				name : "Bed Transfer",
-				icon : "delete"
-			},
-			"dischargeRequest" : {
-				name : "Discharge Request",
-				icon : "delete"
-			},
-			"deathPosting" : {
-				name : "Death Posting",
-				icon : "delete"
-			},
-			"drugReturn" : {
-				name : "Drug Return",
-				icon : "delete"
-			},
-			"dischargeSummary" : {
-				name : "Discharge Summary",
-				icon : "delete"
-			},
-			"sep1" : "---------",
-			"quit" : {
-				name : "Quit",
-				icon : function() {
-					return 'context-menu-icon context-menu-icon-quit';
+
+					// window.console && console.log(m.replace('pat_panel.do',
+					// 'patient.transfer')) || alert(m);
 				}
 			}
 		}

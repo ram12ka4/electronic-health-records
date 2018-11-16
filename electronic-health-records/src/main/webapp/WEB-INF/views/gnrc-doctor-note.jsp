@@ -19,10 +19,34 @@
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-forms.css">
 <link rel="stylesheet" href="css/circle.css">
-<link rel="stylesheet" href="css/doctor-note.css">
+<link rel="stylesheet" href="css/doctor-note-order.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
+
+<style>
+.modal {
+	text-align: center;
+	padding: 0 !important;
+}
+
+.modal:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	margin-right: -4px;
+}
+
+.modal-dialog {
+	display: inline-block;
+	text-align: left;
+	vertical-align: middle;
+}
+</style>
+
+
+
 </head>
 <body>
 
@@ -51,10 +75,10 @@
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) session.getAttribute("ipNo") == null ? ""
-				: (String) session.getAttribute("ipNo");
+		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
+				: (String) request.getAttribute("ipNumber");
 
-		System.out.println("Ip Name : " + ipNumber);
+		System.out.println("Patient Number  : " + ipNumber);
 
 		Enumeration<String> noteDate = request.getParameterNames();
 
@@ -70,126 +94,133 @@
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form id="doctor-note-frm">
+	<form id="service-order-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
+
+
 			<div class="row">
+
+
 				<div class="col-md-12">
+
 					<div class="admin-content-con">
-						<header class="clearfix">
-							<h5 class="pull-left">DOCTOR'S NOTES</h5>
-							<h5 class="pull-right">QR/9-28</h5>
-						</header>
+
+						<div class="row">
+
+							<div class="form-group-sm">
+								<div class="col-md-2">
+									<label class="control-label" for="order-id">Note No</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="order-id" value="" name="orderNo" placeholder="Order No"
+										readonly="readonly">
+								</div>
+
+								<!-- <div class="col-md-1">
+									<label class="control-label" for="patient-type">Pat Type</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
+										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
+								</div> -->
+								<div class="col-md-3">
+									<label class="control-label" for="refer-doctor">Referred
+										Doctor</label> <input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="refer-doctor" value="" name="referDoctor"
+										placeholder="Refer Doctor">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="patient-name">Patient
+										Name</label> <input type="text"
+										class="form-control dis-auto-width dis-bottom-margin input-sm"
+										id="patient-name" value="<%=patient.getPatientName()%>"
+										name="patientName" placeholder="Name" readonly="readonly">
+								</div>
+
+								<div class="col-md-2">
+									<label class="control-label" for="speciality">Speciality</label>
+									<input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="admin-dept" value="<%=patient.getSpeciality()%>"
+										name="speciality" placeholder="Speciality" readonly="readonly">
+								</div>
 
 
-						<div class="form-horizontal">
-
-
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="name"><span
-									class="required-label" id="name"> Name</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="name"
-										value="<%=patient.getPatientName()%>" name="name"
-										placeholder="Name" readonly>
-								</div>
-								<label class="control-label col-xs-1" for="age"><span
-									class="required-label" id="age"> Age</span> :</label>
-								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm"
-										value="<%=patient.getAge()%>" id="age" name="age"
-										placeholder="Age" readonly>
-								</div>
-								<label class="control-label col-xs-2" for="sex"><span
-									class="required-label" id="sex"> Sex</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="sex"
-										value="<%=patient.getSex()%>" name="sex" placeholder="Y"
-										readonly>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="service"><span
-									class="required-label" id="service"> Service Unit</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" name="service"
-										placeholder="Service Unit" readonly>
-								</div>
-								<label class="control-label col-xs-1" for="bed"><span
-									class="required-label" id="bed"> Bed</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="bed"
-										value="<%=patient.getBedNo()%>" name="bed"
-										placeholder="Date of Birth" readonly>
-								</div>
-								<label class="control-label col-xs-1" for="ward"><span
-									class="required-label" id="ward"> Ward</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="ward"
-										value="<%=patient.getWardNo()%>" name="ward"
-										placeholder="Ward" readonly>
+								<div class="col-md-3">
+									<label class="control-label" for="consultant">Consultant</label>
+									<input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="admin-doctor" value="<%=patient.getDoctorIncharge()%>"
+										name="consultant" placeholder="Consultant" readonly="readonly">
+									<input type="hidden" value="<%=patient.getDoctorId()%>"
+										name="doctorId">
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="ip-no"><span
-									class="required-label" id="ip-no"> IP No.</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="ip-no"
-										value="<%=patient.getIpNumber()%>" name="ip_no"
-										placeholder="IP Number" readonly>
-								</div>
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd"> MRD No.</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="mrd"
-										id="mrd" value="<%=patient.getMrdNumber()%>" name="mrd_no"
-										placeholder="Date of Birth" readonly>
-								</div>
-								<label class="control-label col-xs-1" for="note-date"><span
-									class="required-label" id="note-date"> Date</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="fromDate"
-										name="DN003" placeholder="Date of Birth">
+
+						</div>
+
+						<div class="row">
+							<div class="form-group-sm">
+								<div class="col-md-2">
+									<label class="control-label" for="order-date">Order
+										Date</label> <input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="fromDate" value="" name="orderDate"
+										placeholder="Ordering Date" readonly="readonly">
 								</div>
 
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="doctor-name"><span
-									class="required-label" id="doctor-name"> Doctor Name</span> :</label>
-								<div class="col-xs-4">
-									<input type="text" class="form-control input-sm"
-										value="${sessionScope.username.username}" name="DN001"
-										placeholder="Doctor Name">
-									<div class="checkbox">
-										<label> <input type="checkbox" name="DN002">
-											Visiting Doctor
-										</label>
-									</div>
+								<div class="col-md-2">
+									<label class="control-label" for="ward">Ward</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="ward" value="<%=patient.getWardNo()%>" name="ward"
+										placeholder="Ward" readonly="readonly">
 								</div>
 
-							</div>
-
-
-
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="note"><span
-									class="required-label" id="note"> Note</span> :</label>
-								<div class="col-xs-8">
-									<textarea rows="5" cols="" class="form-control input-sm"
-										name="DN004" id="note"></textarea>
+								<div class="col-md-1">
+									<label class="control-label" for="bed">Bed</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="bed"
+										value="<%=patient.getBedNo()%>" name="bed" placeholder="Bed"
+										readonly="readonly">
+								</div>
+								<div class="col-md-2">
+									<label class="control-label" for="mrd">MR No.</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="mrd"
+										value="<%=patient.getMrdNumber()%>" name="mrd"
+										placeholder="Mrd" readonly="readonly">
 								</div>
 
-							</div>
-
-							<div class="form-group">
-								<div style="padding-right: 16px;" class="pull-right">
-									<button type="button" class="btn btn-warning" name="reset">Reset</button>
-									<%-- <a href="#myModal" class="btn btn-success" data-id='<%=ipNumber%>' data-toggle="modal">Previous Notes</a> --%>
-									<button type="button" class="btn btn-success previousBtn"
-										data-id='<%=ipNumber%>'>Previous Notes</button>
-									<button type="button" class="btn btn-primary"
-										name="doctor_note_submit" id="submit-btn">Submit</button>
+								<div class="col-md-2">
+									<label class="control-label" for="patient-no">Pat. No.</label>
+									<input type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="patient-no" value="<%=patient.getIpNumber()%>"
+										name="patientNo" placeholder="Patient No" readonly="readonly">
+								</div>
+								<div class="col-md-1">
+									<label class="control-label" for="visit-no">Visit No.</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin"
+										id="visit-no" value="" name="visitNo" placeholder="Visit No"
+										readonly="readonly">
+								</div>
+								<div class="col-md-1">
+									<label class="control-label" for="sex">Sex</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="sex"
+										value="<%=patient.getSex()%>" name="sex" placeholder="Sex"
+										readonly="readonly">
+								</div>
+								<div class="col-md-1">
+									<label class="control-label" for="age">Age</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="age"
+										value="<%=patient.getAge()%>" name="age" placeholder="Age"
+										readonly="readonly">
 								</div>
 							</div>
 						</div>
@@ -198,7 +229,118 @@
 			</div>
 
 
+			<div class="row">
+				<div class="col-md-12">
+					<div class="admin-content-con">
+
+
+						<div class="row">
+
+
+							<div class="form-horizontal">
+								<div class="form-group-sm">
+									<label class="control-label col-md-1" for="pat-category">Patient
+										Cat</label>
+									<div class="col-md-2">
+										<input type="hidden" name="patCategoryCode"
+											value="<%=patient.getPatientCategoryCode()%>"> <input
+											type="text" value="<%=patient.getPatientCategory()%>"
+											class="form-control dis-auto-width dis-bottom-margin"
+											readonly="readonly">
+									</div>
+									<label class="control-label col-md-1" for="pat-category">Pat
+										Sub Cat</label>
+									<div class="col-md-2">
+										<input type="hidden" name="patSubCategoryCode"
+											value="<%=patient.getPatientSubCategoryCode()%>"> <input
+											type="text" value="<%=patient.getPatientSubCategory()%>"
+											class="form-control dis-auto-width dis-bottom-margin input-sm"
+											readonly="readonly">
+									</div>
+
+									<div class="col-md-6">
+										<div class="panel with-nav-tabs panel-default">
+											<div class="panel-heading">
+												<ul class="nav nav-tabs">
+													<li class="active"><a href="#tab0default"data-toggle="tab">TREATMENT</a></li>
+													<li><a href="#tab1default" data-toggle="tab">MEDICATION</a></li>
+													<li><a href="#tab2default" data-toggle="tab">LABORATORY</a></li>
+													<li><a href="#tab3default" data-toggle="tab">DIET</a></li>
+													<li><a href="#tab4default" data-toggle="tab">OTHERS</a></li>
+													<li><a href="#tab5default" data-toggle="tab">PREVIOUS NOTES</a></li>
+												</ul>
+											</div>
+
+										</div>
+									<%-- 	<button type="button"
+											class="btn btn-primary btn-sm previousBtn"
+											data-id='<%=ipNumber%>'>Previous Order</button> --%>
+									</div>
+
+								</div>
+							</div>
+
+
+
+						</div>
+
+				
+
+						<div class="panel-body">
+							<div class="tab-content">
+								<div class="tab-pane fade in active" id="tab0default">
+								<div class="summernote" id="treatment"></div>
+								
+								</div>
+								<div class="tab-pane fade" id="tab1default">
+								<div class="summernote" id="medication"></div>
+								</div>
+								<div class="tab-pane fade" id="tab2default">
+								<div class="summernote" id="laboratory"></div>
+								</div>
+								<div class="tab-pane fade" id="tab3default">
+									<div class="summernote" id="diet"></div>
+								</div>
+								<div class="tab-pane fade" id="tab4default">
+								<div class="summernote" id="others"></div>
+								</div>
+								<div class="tab-pane fade" id="tab5default">
+								<div class="summernote" id="others"></div>
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						
+						
+						
+
+						<hr>
+
+
+						<div class="row">
+							<div class="form-horizontal">
+								<div class="form-group-sm">
+									<div class="col-xs-offset-9 button-right-offset">
+										<button type="button" id="btn-reset"
+											class="btn btn-primary btn-sm">Reset</button>
+										<button type="button" id="btn-submit"
+											class="btn btn-success btn-sm">Submit</button>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
 		</div>
+
+
 
 		<!-- End of Dashboard -->
 	</form>
@@ -211,7 +353,7 @@
 	<%@include file="progress-circle-modal.jsp"%>
 	<%@include file="confirm-box.html"%>
 	<%@include file="alert-box.html"%>
-	<%@include file="doctor-note-modal.jsp"%>
+	<%-- <%@include file="doctor-note-modal.jsp"%> --%>
 
 	<!-- End of Form Submit Alert Message -->
 
@@ -228,12 +370,13 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
-	<script type="text/javascript" src="js/doctor-note.js"></script>
+	<script type="text/javascript" src="js/doctor-note-order.js"></script>
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 
-
+	<%@include file="gnrc-modal.jsp"%>
 	<%@include file="success-error-msg.jsp"%>
+
 
 
 </body>
