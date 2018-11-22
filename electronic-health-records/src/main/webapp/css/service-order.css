@@ -143,3 +143,11 @@ hr:after {
 	margin-left: 8px;
 	padding: 5px 10px;
 }
+
+.form-group.custom-form-group {
+	margin: 1.5rem;
+}
+
+.text-uppercase.text-center {
+	text-align: center;
+}

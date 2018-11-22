@@ -2,124 +2,44 @@ package com.gnrchospitals.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
-import com.gnrchospitals.dao.SequenceNumberDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
-import com.gnrchospitals.daoimpl.SequenceNumberDaoImpl;
-import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
-import com.gnrchospitals.dto.SequenceNumber;
 
 @WebServlet(urlPatterns = "/doctor.note")
 public class DoctorNoteServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-
-	private Patient patient = null;
-	private Emr emr = null;
-	private SequenceNumberDao sequenceNumberDao = new SequenceNumberDaoImpl();
 	private PatientDao patientDao = new PatientDaoImpl();
-	private Map<String, String> keyValue = new HashMap<>();
+	private Patient patient = Patient.getInstance(); // Singleton class
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String token = request.getParameter("token") == null ? "" : request.getParameter("token");
+		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
+		
+		HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
+
 		try {
 
-			String token = request.getParameter("token") == null ? "" : request.getParameter("token");
-			String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
-			String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
-			String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
-			String emrDetNo = request.getParameter("ed_no") == null ? "" : request.getParameter("ed_no");
-			HttpSession session = request.getSession();
+			
 
-			PrintWriter out = response.getWriter();
+			session.setAttribute("moduleName", request.getParameter("moduleName"));
+			request.setAttribute("ipNumber", request.getParameter("ip_no"));
+			request.setAttribute("token", token);
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
 
-			System.out.println("IP NO : " + ipNo);
-			System.out.println("EMR DET NO : " + emrDetNo);
-			System.out.println("ACTION : " + action);
-
-			if ("FETCH_DOCTOR_NOTE_BY_ED_ID".equals(action)) {
-
-				List<List<String>> list = patientDao.getDoctorNote(emrDetNo);
-				List<String> col = list.get(0);
-				List<String> row = list.get(1);
-				System.out.println("Doctor list in modal " + list);
-
-				int rowCount = row.size() / col.size();
-				int i = 0;
-				int indexStart = 0;
-
-				while (i < rowCount) {
-
-					indexStart = i * col.size();
-
-					out.println("<div class=\"comment-head-dash clearfix\">\r\n"
-							+ "  <div class=\"commenter-name-dash pull-left\">" + row.get(indexStart) + "</div>\r\n"
-							+ "  <div class=\"days-dash pull-right\" id=\"now\">" + row.get(indexStart + 3)
-							+ "</div>\r\n" + "				</div>");
-					out.println("<p><textarea rows=\"5\" class=\"form-control input-sm updated-note\">"
-							+ row.get(indexStart + 1) + "</textarea></p>");
-
-					i++;
-				}
-
-			} else if ("FETCH_DOCTOR_NOTE".equals(action)) {
-
-				List<List<String>> list = patientDao.getDoctorPreviousData(ipNo, "DOCTOR_PREVIOUS_NOTES");
-				System.out.println("Doctor Previous Notes :" + list);
-
-				List<String> col = list.get(0);
-				List<String> row = list.get(1);
-				System.out.println("Doctor list in modal " + list);
-
-				System.out.println("DOCTORE REPORT STATUS : " + row);
-
-				int rowCount = row.size() / col.size();
-				int i = 0;
-				int indexStart = 0;
-
-				while (i < rowCount) {
-
-					indexStart = i * col.size();
-
-					out.println("<div class=\"comment-head-dash clearfix\">\r\n"
-							+ "  <div class=\"commenter-name-dash pull-left\">" + row.get(indexStart) + "</div>\r\n"
-							+ "  <div class=\"days-dash pull-right\" id=\"now\">" + row.get(indexStart + 3)
-							+ "</div>\r\n" + "				</div>");
-					out.println("<p><textarea rows=\"5\" class=\"form-control input-sm\" readonly>"
-							+ row.get(indexStart + 1) + "</textarea></p>");
-					out.println("<div class=\"modal-footer1 clearfix\">\r\n" + "					<a data-id=\""
-							+ row.get(indexStart + 2) + "\" data-toggle=\"modal\"\r\n"
-							+ "						class=\"btn btn-warning btn-sm doctor-edit-button pull-left\" >edit</a> <a\r\n"
-							+ "						data-id=\"" + row.get(indexStart + 2)
-							+ "\" data-toggle=\"modal\"\r\n"
-							+ "						class=\"btn btn-primary btn-sm doctor-del-button pull-right\">del</a>\r\n"
-							+ "				</div>");
-
-					i++;
-				}
-
-			} else {
-				session.setAttribute("moduleName", request.getParameter("moduleName"));
-				request.setAttribute("token", token);
-				request.setAttribute("msg", msg);
-				request.setAttribute("ipNumber", (String) session.getAttribute("ip_no"));
-				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
-			}
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
 		}
@@ -129,130 +49,93 @@ public class DoctorNoteServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+
+		String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
+		String patientNo = patient.getIpNumber();
+		String mrd = patient.getMrdNumber();
+		String visitNo = patient.getVisit();
+		String refDoctorId =  request.getParameter("referDocId") == null ? "" : request.getParameter("referDocId");
+		String wardNo = patient.getWardNo();
+		String bedNo = patient.getBedNo();
+		String advice = request.getParameter("treatment") == null || request.getParameter("treatment").isEmpty() ? ""	: request.getParameter("treatment");
+		String medication = request.getParameter("medication") == null || request.getParameter("medication").isEmpty() ? ""	: request.getParameter("medication");
+		String laboratory = request.getParameter("laboratory") == null || request.getParameter("laboratory").isEmpty() ? ""	: request.getParameter("laboratory");
+		String diet = request.getParameter("diet") == null || request.getParameter("diet").isEmpty() ? ""	: request.getParameter("diet");
+		String progress = request.getParameter("progress") == null || request.getParameter("progress").isEmpty() ? ""	: request.getParameter("progress");
+		String userId = (String) session.getAttribute("user");
+		String doctorOrderoNumber = request.getParameter("noteNumber") == null ? "" : request.getParameter("noteNumber");
+	
+
+		System.out.println("ACTION : " + action);
+		System.out.println("patientNo : " + patientNo);
+		System.out.println("mrd: " + mrd);
+		System.out.println("visitNo : " + visitNo);
+		System.out.println("doctorId : " + refDoctorId);
+		System.out.println("wardNo : " + wardNo);
+		System.out.println("bedNo : " + bedNo);
+		System.out.println("advice : " + advice);
+		System.out.println("medication : " + medication);
+		System.out.println("laboratory : " + laboratory);
+		System.out.println("diet : " + diet);
+		System.out.println("progress : " + progress);
+		System.out.println("userId : " + userId);
+	
+
 		try {
-			PrintWriter out = response.getWriter();
-
-			String action = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
-			String ipNo = request.getParameter("ip_no") == null ? "" : request.getParameter("ip_no");
-			String emr_det = request.getParameter("emrDetNo") == null ? "" : request.getParameter("emrDetNo");
-			String note = request.getParameter("doctor_note") == null ? "" : request.getParameter("doctor_note");
-
-			System.out.println("ACTION : " + action);
-			System.out.println("IP NO : " + ipNo);
-			System.out.println("NOTE : " + note);
-			System.out.println("EMD DET NO" + emr_det);
-
-			if ("UPDATE_NOTE".equals(action)) {
-				boolean status = updateDoctorNote(note, emr_det);
-				System.out.println("DELETE STATUS : " + status);
-				out.print(status);
-
-			} else if ("DEL_NOTE".equals(action)) {
-
-				System.out.println("EMD DET NO" + emr_det);
-				boolean status = deleteDoctorNote(emr_det);
-				System.out.println("DELETE STATUS : " + status);
-				out.print(status);
-
-			} else {
-
-				HttpSession session = request.getSession();
-				Enumeration<String> parameterName = request.getParameterNames();
-
-				String userName = (String) session.getAttribute("user");
-				// String mrdNo = request.getParameter("mrd_no") == null ? "" :
-				// request.getParameter("mrd_no");
-
-				long start = System.currentTimeMillis();
-
-				// System.out.println("USER NAME : " + userName);
-				// System.out.println("MRD NO : " + mrdNo);
-				// System.out.println("IP NO : " + ipNo);
-
-				boolean isIpPresent = patientDao.getValidatedIp(ipNo);
-
-				System.out.println("IS IP PRESENT : " + isIpPresent);
-
-				String emrNo = "";
-
-				// System.out.println("Sequence Number : " + emrSeqNum);
-
-				patient = Patient.getInstance();
-				System.out.println("Patient Instance ID before insertEmrClinicalData " + patient);
-
-				if (!isIpPresent) {
-
-					SequenceNumber emrSeqNum = new SequenceNumber("EMR", userName);
-					emrNo = sequenceNumberDao.getSequenceNumber(emrSeqNum);
-					emr = Emr.getInstance();
-					System.out.println("EMR Instance ID before insertEmrClinicalData " + emr);
-
-					emr.setEmrNo(emrNo);
-					emr.setVisitNo("VT01");
-					emr.setEncounterNo("1");
-					emr.setCreateUser(userName);
-					emr.setUpdateUser(userName);
-					patient.setEmr(emr);
-
-					boolean isEmrClinicalDataInsert = patientDao.insertEmrClinicalData(patient);
-
-					if (!isEmrClinicalDataInsert) {
-						response.sendRedirect(
-								"/WEB-INF/views/gnrc-doctor-note.jsp?token=fail&msg=EmrClinicalRecord insert failed");
-					}
-
-				} else {
-					boolean emrStatus = patientDao.findEmrByIpNumber(ipNo);
-					System.out.println("Find Emr status : " + emrStatus);
-					emrNo = patient.getEmr().getEmrNo();
+			
+			if ("INSERT_UPDATE_DOCTOR_ORDER".equals(action)) {
+				
+				String soNumber = patientDao.insertDoctorOrderData(patientNo, mrd, "VT01", refDoctorId, "", bedNo, advice, medication, laboratory, diet, progress, userId, doctorOrderoNumber);
+				out.print(soNumber);
+			
+			//	out.print(soNumber);
+			} else if ("FETCH_DOCTOR_LIST".equals(action)) {
+				List<String> list = patientDao.getDoctorList();
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonMapper = mapper.writeValueAsString(list);
+				System.out.println("Service Rate List : " + jsonMapper);
+				out.println(jsonMapper);
+			} else if ("FETCH_PREVIOUS_SERVICE_ORDER".equals(action)) {
+				/*List<List<String>> list = patientDao.getPrevServiceOrderList(patientNo);
+				List<String> row = list.get(1);
+				List<String> column = list.get(0);
+				out.println(
+						"<table id=\"example1\" class=\"table-striped table-bordered nowrap\" style=\"width:100%\">");
+				out.println("<thead>");
+				out.println("<tr>");
+				out.println("<th>Select</th>");
+				for (int i = 0; i < column.size()-1; i++) {
+					out.println("<th>" + column.get(i+1) + "</th>");
 				}
-
-				SequenceNumber emrDetSeqNum = new SequenceNumber("EMRDET", userName);
-
-				System.out.println("EMRDET Sequence Number : " + emrDetSeqNum);
-
-				String emrDetNo = sequenceNumberDao.getSequenceNumber(emrDetSeqNum);
-
-				while (parameterName.hasMoreElements()) {
-
-					String paramName = parameterName.nextElement();
-					System.out.println("parameter Name " + paramName);
-
-					boolean isValid = patientDao.validateKey(paramName);
-					System.out.println("Is parameter Valid " + isValid);
-
-					if (isValid) {
-						String paramValue = request.getParameter(paramName) == null ? ""
-								: request.getParameter(paramName);
-						// System.out.println("parameter Value " + paramValue);
-						keyValue.put(paramName, paramValue);
-					}
+				out.println("<th>Action</th>");
+				out.println("</tr>");
+				out.println("</thead>");
+				out.println("<tbody>"); // problem in this section
+				int j = 0;
+				int colIndex = 0;
+				int rowIndex = row.size() / column.size();
+				while (j < rowIndex) {
+					out.println("<tr>");
+					out.println("<td>" + (j+1) + "</td>");
+					String ipNo= row.get(colIndex);
+					String soNo = row.get(colIndex+1);
+						for (int i=0; i<column.size()-1; i++) {
+							out.println("<td>" + row.get(colIndex+1) + "</td>");
+							colIndex++;
+						}
+						out.println("<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" so-no=\""+soNo+"\" ip-no=\""+ipNo+"\">View</button></div></td>");	
+					out.println("</tr>");
+					colIndex +=1;
+					j++;
 				}
-
-				patient = Patient.getInstance();
-				System.out.println("Patient Instance ID after insertEmrClinicalData " + patient);
-				emr = Emr.getInstance();
-				System.out.println("EMR Instance ID after insertEmrClinicalData " + emr);
-				// emr.setEmrNo(emrNo);
-				emr.setCreateUser(userName);
-				emr.setUpdateUser(userName);
-				emr.setKeyValue(keyValue);
-				emr.setEmrDetNo(emrDetNo);
-				patient.setEmr(emr);
-
-				boolean isEmrHealthDataInsert = patientDao.insertEmrHealthData(patient);
-
-				long end = System.currentTimeMillis();
-
-				System.out.println("Time takes to process this : " + (end - start) + " ms");
-
-				if (isEmrHealthDataInsert) {
-					response.sendRedirect("docnote.do?token=success&msg=Data have been added successfully");
-				} else {
-					response.sendRedirect("docnote.do?token=fail&msg=Something went wrong");
-				}
-
+				out.println("</tbody>");
+				out.println("</table>");*/
 			}
+			
+			
+			
 
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
@@ -260,23 +143,11 @@ public class DoctorNoteServlet extends HttpServlet {
 
 	}
 
-	public boolean deleteDoctorNote(String emrDetNumber) throws SQLException {
-
-		return patientDao.deleteDoctorData(emrDetNumber);
-
-	}
-
-	public boolean updateDoctorNote(String note, String emrDetNumber) throws SQLException {
-
-		return patientDao.updateDoctorNote(note, emrDetNumber);
-
-	}
-	
-	protected void sendErrorReirect(HttpServletRequest request, HttpServletResponse response, String errroPageURL, Throwable e) throws ServletException, IOException{
-		
-		 request.setAttribute ("javax.servlet.jsp.jspException", e);
+	protected void sendErrorReirect(HttpServletRequest request, HttpServletResponse response, String errroPageURL,
+			Throwable e) throws ServletException, IOException {
+		request.setAttribute("javax.servlet.jsp.jspException", e);
 		getServletConfig().getServletContext().getRequestDispatcher(errroPageURL).forward(request, response);
-		
+
 	}
 
 }

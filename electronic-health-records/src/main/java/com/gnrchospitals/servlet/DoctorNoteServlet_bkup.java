@@ -23,8 +23,8 @@ import com.gnrchospitals.dto.Emr;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.SequenceNumber;
 
-@WebServlet(urlPatterns = "/nurse.note")
-public class NurseNoteServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/doctor1.note")
+public class DoctorNoteServlet_bkup extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -75,8 +75,8 @@ public class NurseNoteServlet extends HttpServlet {
 							+ row.get(indexStart + 1) + "</textarea></p>");
 
 					i++;
-				}*/
-
+				}
+*/
 			} else if ("FETCH_DOCTOR_NOTE".equals(action)) {
 
 				List<List<String>> list = patientDao.getDoctorPreviousData(ipNo, "DOCTOR_PREVIOUS_NOTES");
@@ -114,12 +114,11 @@ public class NurseNoteServlet extends HttpServlet {
 				}
 
 			} else {
-
-				request.setAttribute("token", token);
-				request.setAttribute("msg", msg);
 				session.setAttribute("moduleName", request.getParameter("moduleName"));
 				request.setAttribute("ipNumber", (String) session.getAttribute("ip_no"));
-				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
+				request.setAttribute("token", token);
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);

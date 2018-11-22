@@ -316,8 +316,16 @@ $(function() {
 		},
 		items : {
 			"neuroVitalChart" : {
-				name : "Neuro Vital Chart",
-				icon : "cut"
+				name : "Vital Chart",
+				icon : "cut",
+				callback : function(itemKey, opt, e) {
+					window.console &&  console.log('Item Key : ' + itemKey);
+					window.console &&  console.log('Option : ' + opt);
+					window.console &&  console.log('Event : ' + e.which);
+					var m = $(this).attr('href');
+					m = m + '&moduleName=vital chart';
+					window.location.href = m.replace('pat_panel.do', 'vital.chart');
+				}
 			},
 			"doctorNote" : {
 				name : "Doctor Note",

@@ -3,12 +3,14 @@ package com.gnrchospitals.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
@@ -42,7 +44,9 @@ public class ServiceOrderServlet extends HttpServlet {
 		String serviceDesc = request.getParameter("serviceDesc") == null ? "" : request.getParameter("serviceDesc");
 		String serviceCode = request.getParameter("serviceCode") == null ? "" : request.getParameter("serviceCode");
 		String serviceOrderoNumber = request.getParameter("soNumber") == null ? "" : request.getParameter("soNumber");
-		//String serviceOrder = request.getParameter("orderNo") == null ? "" : request.getParameter("orderNo");
+		String doctorOrderNumber = request.getParameter("doctorNoteNumber") == null ? "" : request.getParameter("doctorNoteNumber");
+		String voucherNumber = request.getParameter("voucherNumber") == null ? "" : request.getParameter("voucherNumber");
+		
 
 		// PKG_I_SERVORDER_HEADER_N
 		String patientNo = patient.getIpNumber();
@@ -61,6 +65,7 @@ public class ServiceOrderServlet extends HttpServlet {
 		String[] disPercent = request.getParameterValues("discount");
 		String[] specimen = request.getParameterValues("specimen");
 		String[] treatedBy = request.getParameterValues("treatedBy");
+		String [] specimenChecked = request.getParameterValues("specimen-checkbox");
 		String disIndication = "P";
 		String referDoctor = request.getParameter("referDoctor") == null
 				|| request.getParameter("referDoctor").isEmpty() ? "" : request.getParameter("referDoctor");
@@ -95,8 +100,8 @@ public class ServiceOrderServlet extends HttpServlet {
 		try {
 
 			if ("INSERT_SERVICE_ORDER".equals(action)) {
-				String soNumber = patientDao.insertServiceOrderData(serviceOrderoNumber, patientNo, netAmount, doctorId,
-						mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId, qty, disAmount, disPercent, specimen, treatedBy);
+				String soNumber = patientDao.insertServiceOrderData(serviceOrderoNumber, doctorOrderNumber, patientNo, netAmount, doctorId,
+						mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId, qty, disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber);
 				out.print(soNumber);
 			} else if ("FETCH_SERVICE_ID_RATE".equals(action)) {
 				String currentRate = patientDao.getServiceIdRate(serviceId[0], patientNo);
@@ -106,6 +111,46 @@ public class ServiceOrderServlet extends HttpServlet {
 				List<String> list = patientDao.getServiceOrderDetail(serviceOrderoNumber);
 				System.out.println("Service Order Detail List : " + list);
 				out.print(list);
+			} else if ("FETCH_PATIENT_HISTORY".equals(action)) {
+				List<String> list = patientDao.getDoctorNote(doctorOrderNumber);
+				System.out.println("Doctor Note : " + list);
+				out.print(list);
+			} else if ("FETCH_PREVIOUS_PATIENT_HISTORY".equals(action)) { 
+				List<List<String>> list = patientDao.getPatientHistory(patientNo);
+				List<String> row = list.get(1);
+				List<String> column = list.get(0);
+				out.println(
+						"<table id=\"example1\" class=\"table-striped table-bordered nowrap\" style=\"width:100%\">");
+				out.println("<thead>");
+				out.println("<tr>");
+				out.println("<th>Select</th>");
+				for (int i = 0; i < column.size(); i++) {
+					out.println("<th>" + column.get(i) + "</th>");
+				}
+				out.println("<th>Action</th>");
+				out.println("</tr>");
+				out.println("</thead>");
+				out.println("<tbody>"); // problem in this section
+				int j = 0;
+				int colIndex = 0;
+				int rowIndex = row.size() / column.size();
+				while (j < rowIndex) {
+					out.println("<tr>");
+					out.println("<td>" + (j+1) + "</td>");
+					String ipNo= row.get(colIndex);
+					//String soNo = row.get(colIndex+1);
+						for (int i=0; i<column.size(); i++) {
+							out.println("<td>" + row.get(colIndex) + "</td>");
+							colIndex++;
+						}
+						out.println("<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" dr-no=\""+ipNo+"\">View</button></div></td>");	
+					out.println("</tr>");
+					//colIndex +=1;
+					j++;
+				}
+				out.println("</tbody>");
+				out.println("</table>");
+				// out.print(list);
 			} else if ("FETCH_PREVIOUS_SERVICE_ORDER".equals(action)) {
 				List<List<String>> list = patientDao.getPrevServiceOrderList(patientNo);
 				List<String> row = list.get(1);

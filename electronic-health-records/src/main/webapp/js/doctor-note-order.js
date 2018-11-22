@@ -4,110 +4,150 @@ $(function() {
 	 * Initial Set Value
 	 */
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
-
-	
-	/*
-	 * Enable super notes
-	 */
-	 $('#treatment').summernote({
-		 placeholder: 'Treatment',
-			tabsize: 2,
-	        height: 300,
-	        focus: true,
-	        minHeight: null,             // set minimum height of editor
-	        maxHeight: null,             // set maximum height of editor
-	        /*
-			 * toolbar: [ // [groupName, [list of button]] ['style', ['bold',
-			 * 'italic', 'underline', 'clear']], ['font', ['strikethrough',
-			 * 'superscript', 'subscript']], ['fontsize', ['fontsize']],
-			 * ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']],
-			 * ['height', ['height']] ]
-			 */
-
-		 });
-	 $('#medication').summernote({
-		 placeholder: 'Medication',
-		 tabsize: 2,
-		 height: 300,
-		 focus: true,
-		 minHeight: null,             // set minimum height of editor
-		 maxHeight: null,             // set maximum height of editor
-		 /*
-		  * toolbar: [ // [groupName, [list of button]] ['style', ['bold',
-		  * 'italic', 'underline', 'clear']], ['font', ['strikethrough',
-		  * 'superscript', 'subscript']], ['fontsize', ['fontsize']],
-		  * ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']],
-		  * ['height', ['height']] ]
-		  */
-		 
-	 });
-	 $('#laboratory').summernote({
-		 placeholder: 'Laboratory',
-		 tabsize: 2,
-		 height: 300,
-		 focus: true,
-		 minHeight: null,             // set minimum height of editor
-		 maxHeight: null,             // set maximum height of editor
-		 /*
-		  * toolbar: [ // [groupName, [list of button]] ['style', ['bold',
-		  * 'italic', 'underline', 'clear']], ['font', ['strikethrough',
-		  * 'superscript', 'subscript']], ['fontsize', ['fontsize']],
-		  * ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']],
-		  * ['height', ['height']] ]
-		  */
-		 
-	 });
-	 $('#diet').summernote({
-		 placeholder: 'Diet',
-		 tabsize: 2,
-		 height: 300,
-		 focus: true,
-		 minHeight: null,             // set minimum height of editor
-		 maxHeight: null,             // set maximum height of editor
-		 /*
-		  * toolbar: [ // [groupName, [list of button]] ['style', ['bold',
-		  * 'italic', 'underline', 'clear']], ['font', ['strikethrough',
-		  * 'superscript', 'subscript']], ['fontsize', ['fontsize']],
-		  * ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']],
-		  * ['height', ['height']] ]
-		  */
-		 
-	 });
-	 $('#others').summernote({
-		 placeholder: 'Others',
-		 tabsize: 2,
-		 height: 300,
-		 focus: true,
-		 minHeight: null,             // set minimum height of editor
-		 maxHeight: null,             // set maximum height of editor
-		 /*
-		  * toolbar: [ // [groupName, [list of button]] ['style', ['bold',
-		  * 'italic', 'underline', 'clear']], ['font', ['strikethrough',
-		  * 'superscript', 'subscript']], ['fontsize', ['fontsize']],
-		  * ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']],
-		  * ['height', ['height']] ]
-		  */
-		 
-	 });
-	
-
-	 
-	 $(document).on('click', '.btn-medic', function(event){
+		$('#medication').hide();
+		$('#laboratory').hide();
+		$('#diet').hide();
+		$('#progress').hide();
+		var doctorList = [];
 		
-		 
-		 
-	 })
-	 
+		 $.ajax({
+				
+				type: 'post',
+				url: 'doctor.note',
+				dataType : 'json',
+				data : {
+					ACTION : 'FETCH_DOCTOR_LIST',
+				},
+				success: function(data){
+					
+					// console.log('Doctor List : ' +
+					// JSON.stringify(data));
 
+					if (data.length !== 0) {
+						doctorList.length = 0;
+						
+						for (var i = 0; i < data.length; i+=2) {
+							doctorList
+									.push({
+										label : String(data[i+1]),
+										value : String(data[i+1]),
+										doctorId: String(data[i]),
+										doctorName: String(data[i+1])
+									});
+						}
+						
+					/*	var doctorName;
+						
+						if (doctorCode){
+							
+							// console.log('previous doctor name exist :
+							// ' + doctorCode);
+							
+							for (var i=0; i<doctorList.length; i++){
+								 // console.log('Doctor List : ' +
+									// JSON.stringify(doctorList[i]));
+								 
+								 if (doctorCode === doctorList[i]['doctorId']){
+									 doctorName = doctorList[i]['label'];
+								 }
+						 }
+							currentRow.find('.treatedBy').val(doctorCode);
+							currentRow.find('.doctorName').val(doctorName);
+							
+						}*/
+					} else {
+						swal('Ohh no!', 'No Doctor found', 'info');
+					}
+					
+					
+					
+				},
+				error: function(data){
+					var errorMsg = "There is a problem processing your request";
+					 swal('Sorry for inconvenience', errorMsg, 'info');
+					// alert(data.responseText);
+				}
+				
+				
+				
+			});
+		
+
+		$(document).on('click', '.btn-medic', function(event){
+				$('#treatment').hide();
+				$('#medication').show();
+				$('#laboratory').hide();
+				$('#diet').hide();
+				$('#progress').hide();
+			});
+			
+			$(document).on('click', '.btn-treat', function(event){
+				$('#treatment').show();
+				$('#medication').hide();
+				$('#laboratory').hide();
+				$('#diet').hide();
+				$('#progress').hide();
+			});	 
+			$(document).on('click', '.btn-lab', function(event){
+				$('#treatment').hide();
+				$('#medication').hide();
+				$('#laboratory').show();
+				$('#diet').hide();
+				$('#progress').hide();
+			});	 
+			$(document).on('click', '.btn-diet', function(event){
+				$('#treatment').hide();
+				$('#medication').hide();
+				$('#laboratory').hide();
+				$('#diet').show();
+				$('#progress').hide();
+			});	 
+			
+			$(document).on('click', '.btn-progress', function(event){
+				$('#treatment').hide();
+				$('#medication').hide();
+				$('#laboratory').hide();
+				$('#diet').hide();
+				$('#progress').show();
+			});	 
+			
 	
-	
+			$('body').on('keyup', '#refer-doctor', function(event){
+				event.preventDefault();
+				$(this).autocomplete({
+					autoFocus : true,
+					maxShowItems : 5,
+					minLength : 3,
+					delay : 500,
+					source: doctorList,
+					select: function(event, ui){
+						//$(this).val(ui.item.label);
+						console.log('Doctor Id ' + ui.item.doctorId);
+						$('#refDocId').val(ui.item.doctorId);
+						
+					}
+				});
+			});
+			
 		
 	
 
 	$(document).on('click', '#btn-submit', function(e){
 		
-		var frm = $('#service-order-frm');
-		var serviceOrderId = $('#order-id').val();
+		var treatment = $('#treatment').val();
+		var medication = $('#medication').val();
+		var laboratory = $('#laboratory').val();
+		var diet = $('#diet').val();
+		
+		
+		console.log('Treatment : ' + treatment);
+		console.log('Medication : ' + medication);
+		console.log('Laboratory : ' + laboratory);
+		console.log('Diet : ' + diet);
+		
+		
+		var frm = $('#doctor-note-order-frm');
+		var doctorNoteId = $('#note-order-id').val();
 		
 		const swalWithBootstrapButtons = swal.mixin({
 			  confirmButtonClass: 'btn btn-success',
@@ -119,58 +159,19 @@ $(function() {
 			/*
 			 * data validation
 			 */
-			var x = dataValidation();
+		/*	var x = dataValidation();
 			if (x === false){
 				swalWithBootstrapButtons('Ohh no!', 'No Data available <br> Or <br> There is something wrong', 'info');
 				return false;
-			}
+			}*/
 			
-			
-		
-		var trueCount = 0;
-		var totalCount = 0;
-		
-		let unique = [...new Set(serviceNameList)];
-		console.log('total Unique : ' + unique);
-		console.log('total Unique length : ' + unique.length);
-		
-		$('.serviceDesc').each(function(event){
-			console.log('entered name : ' + $(this).val());
-			if ($(this).val()){
-				console.log('step 1');
-				for (var j=0; j<unique.length; j++){
-						
-					// if
-					// ($.trim($(this).val()).localeCompare($.trim(unique[j]))
-					// === 0){
-						if ($.trim($(this).val()) === $.trim(unique[j])){
-						console.log('Stored Value : ' + unique[j]);
-						console.log('entered name : ' + $(this).val());
-						trueCount++;
-						console.log('True');
-					} 
-				}
-				totalCount++;
-			}
-			
-		});
-		
-		console.log('Truee count : ' + trueCount);
-		console.log('Total True count : ' + totalCount);
-		
-		if (trueCount !== totalCount){
-			swal('Sorry!', 'Kindly rectify unknown Service description before submitting', 'info');
-			return false;
-		}
-		
-		
 		
 		
 		swal({
 			  title: 'Are you sure?',
 			  text: "You won't be able to revert this!",
 			  type: 'warning',
-			  inputValue: serviceOrderId,
+			  inputValue: doctorNoteId,
 			  showCancelButton: true,
 			  confirmButtonColor: '#3085d6',
 			  cancelButtonColor: '#d33',
@@ -179,23 +180,23 @@ $(function() {
 			  if (result.value) {
 				  
 				 console.log('Result : ' + result.value);
-				 console.log('Order id : ' + serviceOrderId);
+				 console.log('Order id : ' + doctorNoteId);
 				  
-				  if (!serviceOrderId){
+				  if (!doctorNoteId){
 					  
-					  console.log('Service Id not present');
+					  console.log('Doctor Note Id not present');
 					  
 					  $.ajax({
 					        type: "POST",
-					        url: "service.order",
-					        data:  frm.serialize() + "&ACTION=INSERT_SERVICE_ORDER",
+					        url: "doctor.note",
+					        data:  frm.serialize() + "&ACTION=INSERT_UPDATE_DOCTOR_ORDER",
 					        cache: false,
 					        success: function(response) {
-					        	serviceOrderNo = response;
-					        	if (serviceOrderNo === 0){
-					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + serviceOrderNo,'error');
+					        	var doctorOrderNo = response;
+					        	if (doctorOrderNo === 0){
+					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + doctorOrderNo,'error');
 					        	} else {
-					        		swal('Well done!','Data have been saved.<br> SERVICE ORDER ID :' + serviceOrderNo,'success');
+					        		swal('Well done!','Data have been saved.<br> DOCTOR ORDER ID :' + doctorOrderNo,'success');
 					        		reset();
 					        	}
 					        },
@@ -215,8 +216,8 @@ $(function() {
 					  // console.log('Service Id present');
 					  $.ajax({
 					        type: "POST",
-					        url: "service.order",
-					        data:  frm.serialize() + "&soNumber="+serviceOrderId+"&ACTION=INSERT_SERVICE_ORDER",
+					        url: "doctor.note",
+					        data:  frm.serialize() + "&docNumber="+doctorNoteId+"&ACTION=INSERT_UPDATE_DOCTOR_ORDER",
 					        cache: false,
 					        success: function(response) {
 					        	serviceOrderNo = response;
@@ -268,8 +269,8 @@ $(function() {
 							
 					// console.log('Count : ' + ++count);
 					
-					  $('.myModal .modal-body').load( 'service.order', 
-							  { ACTION :  'FETCH_PREVIOUS_SERVICE_ORDER', 
+					  $('.myModal .modal-body').load( 'doctor.note', 
+							  { ACTION :  'FETCH_PREVIOUS_DOCTOR_ORDER', 
 					  },
 					  function(response, status, xhr) {
 					  if (status === 'error') { 
@@ -288,7 +289,7 @@ $(function() {
 							    columnDefs: [
 							    	{
 							    		'targets': 0,
-							    		'className': 'text-center',
+							    		'className': 'text-centmedication',
 							    		'orderable': false,
 							    		'width': '2%',
 							    		
@@ -337,7 +338,7 @@ $(function() {
 					  
 					
 					  
-					$('.myModal .modal-title').html("Previous Service Order  Record : " + $('#patient-no').val());
+					$('.myModal .modal-title').html("Previous Doctor Note  Record : " + $('#patient-no').val());
 					$('.myModal .modal-title').css('text-align', 'center');
 					
 					  
@@ -378,7 +379,7 @@ $(function() {
 		 
 		 var req = $.ajax({
 			 		
-			 	url: 'service.order',
+			 	url: 'doctor.note',
 			 	type: 'post',
 			 	datatype: 'text',
 			 	data: {
@@ -513,7 +514,7 @@ $(function() {
 				 			if (i < totalRow){
 				 				// console.log('In if part');
 				 				var req = $.ajax({
-					 				url: 'service.order',
+					 				url: 'doctor.note',
 					 				type: 'post',
 					 				datatype: 'text',
 					 				data: {
@@ -741,94 +742,13 @@ $(function() {
 		// console.log('Reset Called');
 		
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
-		$('.select-box').prop('selectedIndex',0);
-		$('#order-id').val('');
-		$('.serviceDesc').val('');
-		$('.serviceDesc').prop('readonly', false);
-		$('.serviceId').val('');
-		$('.minorCode').val('');
-		$('.serviceCode').val('');
-		$('.qty').val('');
-		$('.qty').prop('readonly', false);
-		$('.rate').val('');
-		$('.discount').val('');
-		$('.discount').prop('readonly', false);
-		$('.disAmount').val('');
-		$('.netAmount').val('');
-		$('#sum-gross-amount').val('');
-		$('#sum-discount-amount').val('');
-		$('#sum-net-amount').val('');
-		$('.addSpecDoctor').children().remove();
-		serviceCodeList.length = 0;
-		serviceNameList.length = 0;
-		$('.specimen').hide();
-		
-		var totalRow = 0;
-		
-		$('.serviceDesc').each(function(event){
-			totalRow++;
-		});
-		
-		
-		var i = 0;
- 		var initialRow = 10;
+		$('#treatment').val('');
+		$('#medication').val('');
+		$('#laboratory').val('');
+		$('#diet').val('');
+		$('#btn-submit').prop('disabled', false);
  		
- 		// console.log('Initial Row : ' + initialRow + ' Total Row :' +
-		// totalRow);
  		
- 		if (totalRow < initialRow){
- 			
- 			var remainRow = initialRow - totalRow ;
- 			
- 		// console.log('Remaining row : ' + remainRow);
- 			
- 			var l = 0;
- 			
- 			while(l<remainRow){
- 				
- 				// console.log('No of row : ' + l);
- 				
- 				table.row
-				.add(
-						[
-								'<div class="row-order" id="' + (totalRow + 1) + '">'
-										+ (totalRow + 1) + '</div>',
-								'<input type="text"	name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin" tabindex="'
-										+ (totalRow + 1) + '"><input type="hidden" class="serviceId" name="serviceId"><input type="hidden" name="minorCode" class="minorCode"><input type="hidden" name="serviceCode" class="serviceCode">',
-								'<input type="text"	name="qty" class="text-align-center qty form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="rate"  class="text-align-right rate form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
-								'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<span class="addSpecDoctor"></span>',
-								'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
-				.draw();
- 				l++;
- 				totalRow++;
- 			}
- 		} else {
- 			
- 			table.rows().remove().draw();
- 			
- 			
- 			for (var i = 0; i < counter; i++) {
- 				table.row
- 						.add(
- 								[
- 										'<div class="row-order" id="' + (i + 1) + '">'
- 												+ (i + 1) + '</div>',
- 										'<input type="text"	name="serviceDesc" class="serviceDesc form-control dis-auto-width dis-bottom-margin" tabindex="'
- 												+ (i + 1) + '"><input type="hidden" class="serviceId" name="serviceId"><input type="hidden" name="minorCode" class="minorCode"><input type="hidden" name="serviceCode" class="serviceCode">',
- 										'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin">',
- 										'<input type="text"	name="rate"  class="text-align-right rate form-control dis-auto-width dis-bottom-margin" readonly>',
- 										'<input type="text" name="discount" class="text-align-center discount form-control dis-auto-width dis-bottom-margin">',
- 										'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
- 										'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
- 										'<span class="addSpecDoctor"></span>',
- 										'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
- 						.draw(false);
- 			}
-  		}
 		
 		
 	}

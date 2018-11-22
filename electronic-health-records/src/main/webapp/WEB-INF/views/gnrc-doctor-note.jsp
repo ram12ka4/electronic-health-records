@@ -58,7 +58,7 @@
 		// allow access only if session exists
 		String user = null;
 		if (session.getAttribute("user") == null) {
-			response.sendRedirect("/login.do");
+			response.sendRedirect("login.do");
 		} else
 			user = (String) session.getAttribute("user");
 		String userName = null;
@@ -75,17 +75,11 @@
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
-				: (String) request.getAttribute("ipNumber");
-
+		String ipNumber = (String) request.getAttribute("ipNumber") == null ? "" : (String) request.getAttribute("ipNumber");
 		System.out.println("Patient Number  : " + ipNumber);
-
-		Enumeration<String> noteDate = request.getParameterNames();
-
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-
-		System.out.println("Patient Object " + patient);
+		System.out.println("Patient Object " + patient.toString());
 	%>
 
 
@@ -94,7 +88,7 @@
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form id="service-order-frm">
+	<form id="doctor-note-order-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -114,19 +108,12 @@
 									<label class="control-label" for="order-id">Note No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="order-id" value="" name="orderNo" placeholder="Order No"
+										id="note-order-id" value="" name="noteNumber" placeholder="Order No"
 										readonly="readonly">
+										<input type="hidden" name="referDocId" id="refDocId">
 								</div>
-
-								<!-- <div class="col-md-1">
-									<label class="control-label" for="patient-type">Pat Type</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
-										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
-								</div> -->
 								<div class="col-md-3">
-									<label class="control-label" for="refer-doctor">Referred
-										Doctor</label> <input type="text"
+									<label class="control-label" for="refer-doctor">Refer Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
 										placeholder="Refer Doctor">
@@ -259,64 +246,31 @@
 									</div>
 
 									<div class="col-md-6">
-										<div class="panel with-nav-tabs panel-default">
-											<div class="panel-heading">
-												<ul class="nav nav-tabs">
-													<li class="active"><a href="#tab0default"data-toggle="tab">TREATMENT</a></li>
-													<li><a href="#tab1default" data-toggle="tab">MEDICATION</a></li>
-													<li><a href="#tab2default" data-toggle="tab">LABORATORY</a></li>
-													<li><a href="#tab3default" data-toggle="tab">DIET</a></li>
-													<li><a href="#tab4default" data-toggle="tab">OTHERS</a></li>
-													<li><a href="#tab5default" data-toggle="tab">PREVIOUS NOTES</a></li>
-												</ul>
-											</div>
-
-										</div>
-									<%-- 	<button type="button"
+										<button type="button" class="btn btn-primary btn-sm btn-treat">ADVICE</button>
+										<button type="button" class="btn btn-primary btn-sm btn-medic">MEDICATION</button>
+										<button type="button" class="btn btn-primary btn-sm btn-lab">LABORATORY</button>
+										<button type="button" class="btn btn-primary btn-sm btn-diet">DIET</button>
+										<button type="button" class="btn btn-primary btn-sm btn-progress">PROGRESS</button>
+										<button type="button"
 											class="btn btn-primary btn-sm previousBtn"
-											data-id='<%=ipNumber%>'>Previous Order</button> --%>
+											data-id='<%=ipNumber%>'>History</button>
 									</div>
-
 								</div>
 							</div>
-
-
-
 						</div>
-
+						
 				
-
-						<div class="panel-body">
-							<div class="tab-content">
-								<div class="tab-pane fade in active" id="tab0default">
-								<div class="summernote" id="treatment"></div>
-								
-								</div>
-								<div class="tab-pane fade" id="tab1default">
-								<div class="summernote" id="medication"></div>
-								</div>
-								<div class="tab-pane fade" id="tab2default">
-								<div class="summernote" id="laboratory"></div>
-								</div>
-								<div class="tab-pane fade" id="tab3default">
-									<div class="summernote" id="diet"></div>
-								</div>
-								<div class="tab-pane fade" id="tab4default">
-								<div class="summernote" id="others"></div>
-								</div>
-								<div class="tab-pane fade" id="tab5default">
-								<div class="summernote" id="others"></div>
-								</div>
-							</div>
+						
+						
+						<div class="form-group">
+							<textarea name="treatment" class="form-control" id="treatment" rows="15" placeholder="Treatment"></textarea>
+							<textarea name="medication" class="form-control" id="medication" rows="15" placeholder="Medication"></textarea>
+							<textarea name= "laboratory" class="form-control" id="laboratory" rows="15" placeholder="Laboratory"></textarea>
+							<textarea name="diet" class="form-control" id="diet" rows="15" placeholder="Diet"></textarea>
+							<textarea name="progress" class="form-control" id="progress" rows="15" placeholder="progress"></textarea>
 						</div>
-						
-						
-						
-						
-						
-						
 
-						<hr>
+					
 
 
 						<div class="row">

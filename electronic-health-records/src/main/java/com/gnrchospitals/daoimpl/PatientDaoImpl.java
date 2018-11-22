@@ -486,7 +486,7 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	@Override
+/*	@Override
 	public List<List<String>> getDoctorNote(String emrDetId) throws SQLException {
 
 		List<List<String>> list = new ArrayList<>();
@@ -520,7 +520,7 @@ public class PatientDaoImpl implements PatientDao {
 		}
 		return list;
 
-	}
+	}*/
 
 	private PreparedStatement createPreparedStatement8(Connection con, String edNo) throws SQLException {
 
@@ -1440,26 +1440,30 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	public String insertServiceOrderData(String soNumber, String patientNo, String netAmount, String doctorId,
+	public String insertServiceOrderData(String soNumber, String docOrderNumber, String patientNo, String netAmount, String doctorId,
 			String mrdNumber, String patientType, String visitNo, String userId, String disIndication,
-			String referDoctorCode, String[] serviceId, String[] qty, String[] disAmount, String[] disPercent, String[] specimen, String[] treatedBy) throws SQLException {
+			String referDoctorCode, String[] serviceId, String[] qty, String[] disAmount, String[] disPercent, String[] specimen, 
+			String[] treatedBy,String [] specimenChecked,String voucherNumber) throws SQLException {
 
 		System.out.println("In insertServiceOrderData");
-		String result = "";
+		int result = 0;
 		String soId = "";
+		String returnMsg = "";
 
 
 		try (Connection con = LoginDBConnection.getConnection()) {
 
 			con.setAutoCommit(false);
 
-			try (CallableStatement cs = createCallableStatement2(con, soNumber, patientNo, netAmount, doctorId, mrdNumber,
+			try (CallableStatement cs = createCallableStatement2(con, soNumber, docOrderNumber, patientNo, netAmount, doctorId, mrdNumber,
 					patientType, visitNo, userId)) {
 				soId = cs.getString(1);
-				result = cs.getString(9);
+				result = cs.getInt(10);
+				returnMsg = cs.getString(11);
 				
 				System.out.println("SO Number : " + soId);
 				System.out.println("PKG_I_SERVORDER_HEADER_N OUT PARAMETER : " + result);
+				System.out.println("PKG_I_SERVORDER_HEADER_N RETURN MSG : " + returnMsg);
 				
 			} catch (SQLException e) {
 				con.rollback();
@@ -1472,6 +1476,12 @@ public class PatientDaoImpl implements PatientDao {
 			int length1 = removeDuplicateSpace(serviceId, serviceId.length);
 			int length2 = removeDuplicateSpace(qty, qty.length);
 			int length3 = removeDuplicateSpace(disAmount, disAmount.length);
+			
+			System.out.println("Service Id length : " + length1);
+			System.out.println("Specimen Length : " + specimen.length);
+			System.out.println("Treated By length : " + treatedBy.length);
+			System.out.println("Specimen Checked length : " + specimenChecked);
+			System.out.println("Voucher Number : " + voucherNumber);
 
 			for (int i = 0; i < length1; i++) {
 
@@ -1483,8 +1493,9 @@ public class PatientDaoImpl implements PatientDao {
 				System.out.println("Treated By : " + treatedBy[i]);
 
 				try (CallableStatement cs = createCallableStatement3(con, soId, serviceId[i], qty[i], disAmount[i],
-						disIndication, referDoctorCode, disPercent[i], specimen[i], treatedBy[i], userId)) {
-					result = cs.getString(10);
+						disIndication, referDoctorCode, disPercent[i], specimen[i], treatedBy[i], userId, specimenChecked[i], voucherNumber)) {
+					result = cs.getInt(12);
+					returnMsg = cs.getString(13);
 				} catch (SQLException e) {
 					con.rollback();
 					con.setAutoCommit(true);
@@ -1493,8 +1504,9 @@ public class PatientDaoImpl implements PatientDao {
 			}
 
 			System.out.println("PKG_I_SERVORDER_DETAIL OUT PARAMETER : " + result);
+			System.out.println("PKG_I_SERVORDER_HEADER_N RETURN MSG : " + returnMsg);
 
-			if (result.equalsIgnoreCase("1")) {
+			if (result == 1) {
 				con.commit();
 				System.out.println("All Transactions are commited");
 			} else {
@@ -1504,17 +1516,17 @@ public class PatientDaoImpl implements PatientDao {
 
 		}
 
-		if (result.equals("1"))
+		if (result == 1)
 			return soId;
 		return "0";
 
 	}
 
-	private CallableStatement createCallableStatement2(Connection con, String soNumber, String patNumber,
+	private CallableStatement createCallableStatement2(Connection con, String soNumber, String noteRefNumber, String patNumber,
 			String netAmount, String doctorId, String mrdNumber, String patType, String visitNumber, String userId)
 			throws SQLException {
 		CallableStatement cs = con
-				.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_HEADER(?,?,?,?,?,?,?,?,?)}");
+				.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_HEADER(?,?,?,?,?,?,?,?,?,?,?)}");
 		cs.registerOutParameter(1, Types.VARCHAR);
 		cs.setString(1, soNumber);
 		cs.setString(2, patNumber);
@@ -1523,15 +1535,17 @@ public class PatientDaoImpl implements PatientDao {
 		cs.setString(5, mrdNumber);
 		cs.setString(6, patType);
 		cs.setString(7, visitNumber);
-		cs.setString(8, userId);
-		cs.registerOutParameter(9, Types.VARCHAR);
+		cs.setString(8, noteRefNumber);
+		cs.setString(9, userId);
+		cs.registerOutParameter(10, Types.DECIMAL);
+		cs.registerOutParameter(11, Types.VARCHAR);
 		cs.execute();
 		return cs;
 	}
 
 	private CallableStatement createCallableStatement3(Connection con, String soNumber, String serviceId, String qty,
-			String disAmount, String disIndi, String reffDocCode, String discountPercent, String  specimenCode, String treatedBy, String userId) throws SQLException {
-		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?,?,?)}");
+			String disAmount, String disIndi, String reffDocCode, String discountPercent, String  specimenCode, String treatedBy, String userId,String specimenChecked, String voucherNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?,?,?,?,?)}");
 		cs.setString(1, soNumber);
 		cs.setString(2, serviceId);
 		cs.setString(3, qty);
@@ -1541,7 +1555,10 @@ public class PatientDaoImpl implements PatientDao {
 		cs.setString(7, treatedBy);
 		cs.setString(8, discountPercent);
 		cs.setString(9, specimenCode);
-		cs.registerOutParameter(10, Types.VARCHAR);
+		cs.setString(10, specimenChecked);
+		cs.setString(11, voucherNumber);
+		cs.registerOutParameter(12, Types.DECIMAL);
+		cs.registerOutParameter(13, Types.VARCHAR);
 		cs.execute();
 		return cs;
 	}
@@ -1595,10 +1612,10 @@ public class PatientDaoImpl implements PatientDao {
 
 	private PreparedStatement createPreparedStatement29(Connection con, String patientNo) throws SQLException {
 		String sql = "select * from " + "( "
-				+ "select distinct a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, 'NOT BILLED' VCHR_NO "
+				+ "select distinct a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, 'NOT BILLED' VCHR_NO, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO "
 				+ "from bi_service_header a, " + "     bi_service_detail b " + "where "
 				+ "     a.bsh_txn_num = b.BSD_TXN_NUM " + "     and b.BSD_VOUCHER_NO is null " + "union all "
-				+ "select distinct  a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, c.BVM_VCHR_NUM "
+				+ "select distinct  a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, c.BVM_VCHR_NUM, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO "
 				+ "from bi_service_header a, " + "     bi_service_detail b, " + "     bi_voucher_header c " + "where "
 				+ "     a.bsh_txn_num = b.BSD_TXN_NUM " + "     and b.BSD_VOUCHER_NO = c.BVM_VCHR_NUM " + ") "
 				+ "where BSH_PAT_NUM = ? ORDER BY 4 DESC";
@@ -1717,6 +1734,178 @@ public class PatientDaoImpl implements PatientDao {
 		cs.registerOutParameter(8, Types.VARCHAR);
 		cs.execute();
 		return cs;
+	}
+	
+	public String insertDoctorOrderData(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
+			String bedNo, String advice, String medication, String laboratory, String diet, String progress,
+			String userId, String doctorOrderoNumber) throws SQLException {
+
+		System.out.println("In insertDoctorOrderData");
+		int result = 0;
+		String drNumber = "";
+		String returnMsg = "";
+		
+
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+				try (CallableStatement cs = createCallableStatement5(con,patientNo, mrd, visitNo, doctorId, wardNo, 
+						bedNo, advice, medication, laboratory, diet, progress, userId, doctorOrderoNumber)) {
+					//result = String.valueOf(cs.getDouble(14));
+					result = cs.getInt(14);
+					drNumber = cs.getString(13);
+					returnMsg = cs.getString(15);
+					System.out.println("Out parameter result : " + result);
+					System.out.println("Out parameter drNumber : " + drNumber);
+					System.out.println("Out parameter returnMsg : " + returnMsg);
+				} catch (SQLException e) {
+					con.rollback();
+					con.setAutoCommit(true);
+					e.printStackTrace();
+				}
+		
+
+			System.out.println("PKG_I_DOCTOR_NOTE OUT PARAMETER : " + result);
+
+			if (result == 1) {
+				con.commit();
+				System.out.println("All Transactions are commited");
+			} else {
+				System.out.println("All Transactions are rollbacked");
+				con.rollback();
+			}
+
+		}
+
+		if (result == 1)
+			return drNumber;
+		return "0";
+
+	}
+
+	private CallableStatement createCallableStatement5(Connection con, String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
+			String bedNo, String advice, String medication, String laboratory, String diet, String progress,
+			String userId, String doctorOrderoNumber)
+			throws SQLException {
+		CallableStatement cs = con
+				.prepareCall("{call PKGJV_EMR.PKG_I_DOCTOR_NOTE(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		cs.setString(1, patientNo);
+		cs.setString(2, mrd);
+		cs.setString(3, visitNo);
+		cs.setString(4, doctorId);
+		cs.setString(5, wardNo);
+		cs.setString(6, bedNo);
+		cs.setString(7, advice);
+		cs.setString(8, medication);
+		cs.setString(9, laboratory);
+		cs.setString(10, diet);
+		cs.setString(11, progress);
+		cs.setString(12, userId);
+		cs.registerOutParameter(13, Types.VARCHAR);
+		cs.setString(13, doctorOrderoNumber);
+		cs.registerOutParameter(14, Types.DECIMAL);
+		cs.registerOutParameter(15, Types.VARCHAR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<List<String>> getPatientHistory(String patientNo) throws SQLException {
+		System.out.println("in getPrevServiceOrderList");
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		List<String> column = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement31(con, patientNo); ResultSet rs = ps.executeQuery()) {
+
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					column.add(rsmd.getColumnName(i));
+				}
+
+				list.add(column);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+
+					list.add(row);
+				}
+			}
+
+			System.out.println("Patient History List : " + list);
+			return list;
+		}
+	}
+
+	private PreparedStatement createPreparedStatement31(Connection con, String patientNo) throws SQLException {
+		String sql = " select distinct ecn.ECN_TXN_NUM DOCTOR_NOTE, TO_CHAR(ecn.ECN_NOTE_DT, 'DD-MON-YYYY hh:mi AM') \"DATE\", "
+					+ " hem.EEM_FIRST_NAME || ' ' || hem.EEM_MIDDLE_NAME || ' ' || hem.EEM_LAST_NAME AS REFER_DOCTOR, NVL(ecn.ECN_NOTE_STS, 'NOT PROCESS') STATUS" + 
+					"                from " + 
+					"                emr_clinical_detail ecd," + 
+					"                emr_clinical_note ecn," + 
+					"                HR_EMPLOYEE_MASTER hem," + 
+					"                GA_CLINICAL_STAFF_MASTER csm" + 
+					"                where " + 
+					"                hem.EEM_EMP_NUM=csm.GCS_EMPLOYEE_NUM  " + 
+					"                AND hem.EEM_EMP_STATUS='A' " + 
+					"				 AND csm.GCS_STAFF_TYPE_CD IN ('CONS','SURG')  " + 
+					"                and hem.EEM_EMP_NUM = ecn.ECN_DOCTOR_ID" + 
+					"                and ecd.ECD_PAT_NUM = ? " + 
+					"                and ecd.ECD_EM_NUM = ecn.ECN_EMR_NUM order by \"DATE\" desc";
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, patientNo);
+		return ps;
+	}
+	
+	public List<String> getDoctorNote(String doctorNoteNumber) throws SQLException {
+
+		System.out.println("in getDoctorNote");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (PreparedStatement ps = createPreparedStatement32(con, doctorNoteNumber); ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+						list.add(rs.getString(4));
+						list.add(rs.getString(5));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Doctor Note List : " + list);
+			return list;
+		}
+
+	}
+
+	private PreparedStatement createPreparedStatement32(Connection con,String doctorNoteNumber) throws SQLException {
+		String sql = "select t.ecn_txn_num "+
+				 "          ,t.ecn_note_dt " +  
+				 "			,upper(e.eem_first_name||' '||e.eem_middle_name||' '||e.eem_last_name )   doc_name " + 
+				"           ,t.ecn_note_type " + 
+				"           ,t.ecn_note_dtl " + 
+				"      from   emr_clinical_note   t  " + 
+				"            ,hr_employee_master  e  " + 
+				"      where  t.ecn_doctor_id = e.eem_emp_num " + 
+				"             and  t.ecn_txn_num   = ? ";
+
+		System.out.println(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, doctorNoteNumber);
+		return ps;
 	}
 
 }

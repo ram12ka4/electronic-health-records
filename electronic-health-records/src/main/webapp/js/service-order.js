@@ -9,13 +9,10 @@ $(function() {
 	var soDetailList = [];
 	var serviceNameList = [];
 
-	/*
-	 * Disable features
-	 */
-	$('.add-service').prop('disabled', true);
+	
 	
 	/*
-	 *  Initial Set Value
+	 * Initial Set Value
 	 */
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
 		$('.qty').attr({
@@ -164,14 +161,15 @@ $(function() {
 	  // console.log('Service Id -> ' + serviceId);
 	  // console.log('minor Code -> ' + minorCode);
 	  // console.log('Service Code -> ' + serviceCode);
-	   //console.log('Service Code -> ' + serviceName);
+	   // console.log('Service Code -> ' + serviceName);
 	  
 	  
 	  serviceNameList.splice(serviceNameList.indexOf($.trim(serviceName)), 1);
 	  
-	  /*for (x in serviceNameList){
-		  console.log('Service Name List after deleting service desc : ' + serviceNameList[x]);
-	  }*/
+	  /*
+		 * for (x in serviceNameList){ console.log('Service Name List after
+		 * deleting service desc : ' + serviceNameList[x]); }
+		 */
 	 
 	
 	  if (minorCode.localeCompare("PANMIN") === 0){
@@ -209,7 +207,7 @@ $(function() {
 	$(document)
 			.on(
 					'click',
-					'.row-add',
+					'.btn-row-add',
 					function(e) {
 						e.preventDefault();
 						var lastRowId = $('.row-order:last').attr('id');
@@ -497,6 +495,10 @@ $(function() {
 		 * console.log('Specimen Code : ' + specimenCode);
 		 * console.log('----------------------END-----------------------------');
 		 */
+		
+		console.log('Service Category : ' + serviceCategory);
+		console.log('Treated By : ' + treatedBy);
+		
 		if (serviceCategory === "LABMAJ") {
 			
 			var req = $.ajax({
@@ -532,11 +534,15 @@ $(function() {
 				
 			});
 			
+			var input = '<input type="hidden" name="treatedBy" value="NA">';
+			var hiddenInput = '<input type="hidden" name="specimen" value="NA">';
+			currentRow.find('.addSpecDoctor').append(input);
+			currentRow.find('.addSpecDoctor').append(hiddenInput);
 			
 			
 		} else {
-			// console.log('else part');
-			// console.log('Treated By : ' + treatedBy);
+			console.log('else part');
+			console.log('Treated By : ' + treatedBy);
 			
 			
 			if (treatedBy === 'Y'){
@@ -1037,6 +1043,9 @@ $(function() {
 		
 		var frm = $('#service-order-frm');
 		var serviceOrderId = $('#order-id').val();
+		var drOrderId = $('.doc-note').text();
+		 drOrderId = drOrderId.slice(14);
+		console.log('Doctor Order Id : ' + drOrderId);
 		
 		const swalWithBootstrapButtons = swal.mixin({
 			  confirmButtonClass: 'btn btn-success',
@@ -1069,7 +1078,9 @@ $(function() {
 				console.log('step 1');
 				for (var j=0; j<unique.length; j++){
 						
-					//if ($.trim($(this).val()).localeCompare($.trim(unique[j])) === 0){
+					// if
+					// ($.trim($(this).val()).localeCompare($.trim(unique[j]))
+					// === 0){
 						if ($.trim($(this).val()) === $.trim(unique[j])){
 						console.log('Stored Value : ' + unique[j]);
 						console.log('entered name : ' + $(this).val());
@@ -1113,12 +1124,13 @@ $(function() {
 					  console.log('Service Id not present');
 					  
 					  $.ajax({
+						    url: "service.order",
 					        type: "POST",
-					        url: "service.order",
-					        data:  frm.serialize() + "&ACTION=INSERT_SERVICE_ORDER",
-					        cache: false,
+					        datatype: 'text',
+					        data:  frm.serialize() + "&ACTION=INSERT_SERVICE_ORDER&doctorNoteNumber=" + drOrderId,
 					        success: function(response) {
 					        	serviceOrderNo = response;
+					        	console.log('Response : '  + response);
 					        	if (serviceOrderNo === 0){
 					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + serviceOrderNo,'error');
 					        	} else {
@@ -1138,8 +1150,7 @@ $(function() {
 					    });
 					  
 				  } else {
-					  
-					  // console.log('Service Id present');
+					  console.log('Service Id present');
 					  $.ajax({
 					        type: "POST",
 					        url: "service.order",
@@ -1187,10 +1198,99 @@ $(function() {
 		
 	});
 	
+	
 	var inputOptions = {};
 	var count = 0;
 	
-	$(document).on('click', '.previousBtn', function(event){
+	$(document).on('click', '.btn-pat-history', function(event){
+		
+							
+					// console.log('Count : ' + ++count);
+					
+					  $('.myModal .modal-body').load( 'service.order', 
+							  { ACTION :  'FETCH_PREVIOUS_PATIENT_HISTORY', 
+					  },
+					  function(response, status, xhr) {
+					  if (status === 'error') { 
+					  var msg = "Sorry but there was an error: "; 
+					  swal( "Oh no!", msg +  xhr.status + " " + xhr.statusText, "error");
+					}
+					  
+					var myTable = $('#example1').DataTable( 
+							  { 
+								searching: false,
+								scrollY :  "300px", 
+							    scrollX : true, 
+							    scrollCollapse : true, 
+							    paging :  false, 
+							    info: false,
+							    columnDefs: [
+							    	{
+							    		'targets': 0,
+							    		'className': 'text-center',
+							    		'orderable': false,
+							    		'width': '2%',
+							    		
+							    	},
+							    	{
+							    		'targets': 1,
+							    		'className': 'text-center',
+							    		'orderable': false,
+							    		'width': '10%',
+							    		
+							    	},
+							    	{
+							    		"targets": 2,
+							    		"className": "text-center",
+							    		"orderable": false,
+							    		'width': '3%'
+							    	},
+							    	{
+							    		"targets": 3,
+							    		"className": "text-center",
+							    		"orderable": false,
+							    		'width': '10%'
+							    	},
+							    	{
+									  "targets": 4,
+									  "className": "text-center",
+									  "orderable": false,
+									  'width': '10%'
+							    	},
+							    	{
+							    		"targets": 5,
+							    		"className": "text-center",
+							    		"orderable": false,
+							    		'width': '10%'
+							    	}
+							    	
+							    ]
+							    });
+					  
+					
+					  
+					$('.myModal .modal-title').html("Patient History Record : " + $('#patient-no').val());
+					$('.myModal .modal-title').css('text-align', 'center');
+					
+					  
+					  
+				
+					  
+					  $('.myModal').on('shown.bs.modal', function(){
+						  myTable.columns.adjust().draw(); 
+						}).modal({show: true});
+				});
+	});
+	
+	
+	
+	
+	
+	
+	var inputOptions = {};
+	var count = 0;
+	
+	$(document).on('click', '.btn-previous', function(event){
 		
 							
 					// console.log('Count : ' + ++count);
@@ -1256,6 +1356,12 @@ $(function() {
 							    		"className": "text-center",
 							    		"orderable": false,
 							    		'width': '2%'
+							    	},
+							    	{
+							    		"targets": 7,
+							    		"className": "text-center",
+							    		"orderable": false,
+							    		'width': '5%'
 							    	}
 							    	
 							    	
@@ -1274,19 +1380,112 @@ $(function() {
 					  $('.myModal').on('shown.bs.modal', function(){
 						  myTable.columns.adjust().draw(); 
 						}).modal({show: true});
-					  
-					 
-		
-					
 				});
-					
-					
-					
-			
-			
+	});
+	
+	
+	$(document).on('click', '.pat-view-btn', function(event){
+		
+		 $('.myModal').modal('hide');
+		 $('.customizer').toggleClass('open');
+		var drNoteId = $(this).attr('dr-no');
+		console.log('Dr. Note Id. ' + drNoteId);
+		 reset();
+		
+		
+		  $.ajax({
+			    url: "service.order",
+		        type: "POST",
+		        datatype: 'text',
+		        data:  {
+		        	ACTION: 'FETCH_PATIENT_HISTORY',
+		        	doctorNoteNumber: drNoteId
+		        },
+		        success: function(data) {
+		        	
+		        	data = data.replace(/^\W+|\W+$/g, "");
+					console.log(data);
+		        
+
+					if (data.length !== 0) {
+						
+						arr = data.replace("[", "").replace("]", "").split(",");
+						console.log('Arrray is : ' + arr);
+						console.log('Array length is : ' + arr.length);
+						
+						var i = 0;
+						var drNumber;
+						var notedate;
+						var doctorName;
+
+						while (i < arr.length) {
+							
+							drNumber = arr[i];
+							notedate = arr[i+1];
+							doctorName = arr[i+2];
+							var noteType = $.trim(arr[i+3]);
+							var noteDetail = arr[i+4];
+							
+							console.log('Note Type : ' + noteType);
+							
+							if (noteType === 'ADVC'){
+								console.log('In ADVC');
+								$('textarea#treatment').val(noteDetail);
+							} 
+							
+							if (noteType === 'DIET'){
+								console.log('In DIET');
+								$('textarea#diet').val(noteDetail);
+							} 
+							
+							if (noteType === 'MDCN'){
+								console.log('In MDCN');
+								$('textarea#medication').val(noteDetail);
+							} 
+							
+							if (noteType === 'SERV'){
+								console.log('In SERV');
+								$('textarea#laboratory').val(noteDetail);
+							} 
+							
+							if (noteType === 'PROG'){
+								console.log('In PROG');
+								$('textarea#progress').val(noteDetail);
+							} 
+							
+							i += 5;
+						}
+						
+						$('.doc-note').text('Doctor Note : ' + drNumber);
+						$('.note-date').text('Date : ' + notedate);
+						$('.refer-doctor').text('Refer Doctor : ' + doctorName);
+						
+						
+					}
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	
+		        },
+		        failure: function (data) {
+		            swal("Internal Error",  "Oops, your note was not saved.", "error");
+		        },
+		        error: function(data){
+		        	console.log(data.responseText);
+		        }
+		        
+		    });
+		
+		
 		
 		
 	});
+	
+	
+	
+	
 	
 	/*
 	 * Function for getting previous Service order detail..
@@ -1373,9 +1572,11 @@ $(function() {
 			 		console.log('Service Order date : ' + soDate);
 			 		$('#fromDate').datepicker().datepicker("setDate", soDate);
 			 		
-			 		/*for (x in serviceNameList){
-			 			console.log('Service Name List after fetching service order : ' + serviceNameList[x]);
-			 		}*/
+			 		/*
+					 * for (x in serviceNameList){ console.log('Service Name
+					 * List after fetching service order : ' +
+					 * serviceNameList[x]); }
+					 */
 
 			 		var i = 0;
 			 		var initialRow = 10;
@@ -1411,7 +1612,7 @@ $(function() {
 			 		}
 			 		
 			 		if ($.trim(isBilled[0]) === 'NOT_BILLED'){
-			 			// console.log('Not Billed');
+			 			console.log('Not Billed');
 			 			
 			 			$('#btn-submit').prop('disabled', false);
 			 			
@@ -1524,7 +1725,9 @@ $(function() {
 			 		} else {
 			 			console.log('Billed');
 			 			
-			 			$('#btn-submit').prop('disabled', true);
+			 			//$('#btn-submit').prop('disabled', true);
+			 			
+			 			$('#voucher-id').val($.trim(isBilled[0]));
 			 			
 			 			$('.serviceDesc').each(function(event){
 			 				if (i < totalRow){
@@ -1562,6 +1765,10 @@ $(function() {
 				 			if (i < totalRow){
 				 				$(this).val($.trim(serviceCode[i]));
 				 				$(this).prop('readonly', true);
+				 				var currentRow = $(this).parents('tr');
+				 				currentRow.find('.row-delete').remove();
+				 				currentRow.find('.delete-btn').append('<input type="checkbox" name="specimen-checkbox" class="form-check-input" id="materialUnchecked">');
+				 				switchSpecimenDcotorName($.trim(serviceCode[i]), currentRow, $.trim(treatedBy[i]), $.trim(serviceCat[i]), $.trim(doctorCode[i]), $.trim(specimen[i]));
 				 			}
 				 			i++;
 				 		});
@@ -1598,6 +1805,8 @@ $(function() {
 				 			}
 				 			i++;
 				 		});
+				 		
+				 		$('.row-delete').prop('disabled', true);
 			 		}
 			 	},
 			 	failure: function (response) { 
@@ -1687,7 +1896,8 @@ $(function() {
 		serviceCodeList.length = 0;
 		serviceNameList.length = 0;
 		$('.specimen').hide();
-		
+		$('#btn-submit').prop('disabled', false);
+		$('.row-delete').prop('disabled', false);
 		var totalRow = 0;
 		
 		$('.serviceDesc').each(function(event){

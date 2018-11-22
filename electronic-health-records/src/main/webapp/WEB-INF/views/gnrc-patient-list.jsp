@@ -66,9 +66,9 @@ tbody tr {
 	ArrayList<String> col = list.get(0);
 	ArrayList<String> row = list.get(1); */
 
-	List<String> linkList = patientDao.getParentLink(userRole);
+	//List<String> linkList = patientDao.getParentLink(userRole);
 
-	System.out.println(linkList);
+	//System.out.println(linkList);
 %>
 
 
@@ -83,7 +83,7 @@ tbody tr {
 		// allow access only if session exists
 		String user = null;
 		if (session.getAttribute("user") == null) {
-			response.sendRedirect("/login.do");
+			response.sendRedirect("login.do");
 		} else
 			user = (String) session.getAttribute("user");
 		String userName = null;
@@ -144,7 +144,7 @@ tbody tr {
 		<!--  /.container-fluid -->
 	</nav>
 
-	<div id="content">
+	<%-- <div id="content">
 		<div id="menu" class="my-nav">
 			<a href="#" class="close" onclick="closeSlideMenu()"> <i
 				class="fas fa-times"></i>
@@ -216,7 +216,7 @@ tbody tr {
 			</ul>
 		</div>
 	</div>
-
+ --%>
 
 
 	<div class="container">

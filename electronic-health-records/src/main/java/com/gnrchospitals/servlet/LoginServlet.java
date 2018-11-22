@@ -1,7 +1,6 @@
 package com.gnrchospitals.servlet;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,6 +71,7 @@ public class LoginServlet extends HttpServlet {
 
 		System.out.println("User Valid : " + userValidation);
 		System.out.println("User Name : " + userBean.getUsername());
+		System.out.println("User Role : " + userBean.getUserRole());
 		
 
 		if (userValidation) {
