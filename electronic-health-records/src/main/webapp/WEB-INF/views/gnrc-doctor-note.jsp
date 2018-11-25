@@ -110,13 +110,13 @@
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="note-order-id" value="" name="noteNumber" placeholder="Order No"
 										readonly="readonly">
-										<input type="hidden" name="referDocId" id="refDocId">
+										
 								</div>
 								<div class="col-md-3">
 									<label class="control-label" for="refer-doctor">Refer Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor">
+										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient

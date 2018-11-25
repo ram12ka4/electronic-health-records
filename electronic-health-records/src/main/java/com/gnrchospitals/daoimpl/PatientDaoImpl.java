@@ -1545,7 +1545,7 @@ public class PatientDaoImpl implements PatientDao {
 
 	private CallableStatement createCallableStatement3(Connection con, String soNumber, String serviceId, String qty,
 			String disAmount, String disIndi, String reffDocCode, String discountPercent, String  specimenCode, String treatedBy, String userId,String specimenChecked, String voucherNumber) throws SQLException {
-		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?,?,?,?,?)}");
+		CallableStatement cs = con.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		cs.setString(1, soNumber);
 		cs.setString(2, serviceId);
 		cs.setString(3, qty);
@@ -1611,14 +1611,21 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private PreparedStatement createPreparedStatement29(Connection con, String patientNo) throws SQLException {
-		String sql = "select * from " + "( "
-				+ "select distinct a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, 'NOT BILLED' VCHR_NO, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO "
-				+ "from bi_service_header a, " + "     bi_service_detail b " + "where "
-				+ "     a.bsh_txn_num = b.BSD_TXN_NUM " + "     and b.BSD_VOUCHER_NO is null " + "union all "
-				+ "select distinct  a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, c.BVM_VCHR_NUM, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO "
-				+ "from bi_service_header a, " + "     bi_service_detail b, " + "     bi_voucher_header c " + "where "
-				+ "     a.bsh_txn_num = b.BSD_TXN_NUM " + "     and b.BSD_VOUCHER_NO = c.BVM_VCHR_NUM " + ") "
-				+ "where BSH_PAT_NUM = ? ORDER BY 4 DESC";
+		String sql = " select * from  ( " + 
+					"  	select distinct a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, 'NOT BILLED' VCHR_NO, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO " + 
+					"		, SUM(DECODE(B.BSD_SPCMN_CD,'NA',0,1))  TOT_SPC , SUM(DECODE(B.BSD_PROCESS_STS,'Y',1,0))  TOT_PRC " + 
+					"   	from bi_service_header a,       bi_service_detail b  where " + 
+					"		a.bsh_txn_num = b.BSD_TXN_NUM       and b.BSD_VOUCHER_NO is null  " + 
+					"   	GROUP BY a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') , a.BSH_CRT_UID,  NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') " + 
+					"   	union all " + 
+					"		select distinct  a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE" + 
+					"                , a.BSH_CRT_UID, c.BVM_VCHR_NUM, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO " + 
+					"                ,SUM(DECODE(B.BSD_SPCMN_CD,'NA',0,1))  TOT_SPC , SUM(DECODE(B.BSD_PROCESS_STS,'Y',1,0))  TOT_PRC" + 
+					"				from bi_service_header a,       bi_service_detail b,       bi_voucher_header c  where " + 
+					"				     a.bsh_txn_num = b.BSD_TXN_NUM       and b.BSD_VOUCHER_NO = c.BVM_VCHR_NUM " + 
+					"                    GROUP BY a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') " + 
+					"                        , a.BSH_CRT_UID, c.BVM_VCHR_NUM, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') ) " + 
+					"				where BSH_PAT_NUM = ? ORDER BY 4 DESC ";
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, patientNo);
@@ -1653,12 +1660,12 @@ public class PatientDaoImpl implements PatientDao {
 	private PreparedStatement createPreparedStatement30(Connection con, String soNumber) throws SQLException {
 		String sql = "select  * from ( "
 				+ "select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
-				+ ",sd.bsd_qty   qty  , 0  rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd , 'NOT_BILLED'   vch_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by,  TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE  "
+				+ ",sd.bsd_qty   qty  , 0  rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd , 'NOT_BILLED'   vch_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by,  TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE, sd.BSD_PROCESS_STS, sh.BSH_NOTE_REF_NO   "
 				+ " from        bi_service_detail   sd " + " ,bi_service_master   sm, bi_service_header sh "
 				+ " where sd.bsd_service_id    = sm.bsm_service_id " + "  and       sd.bsd_voucher_no   is null and     sh.bsh_txn_num = sd.BSD_TXN_NUM "
 				+ " union all "
 				+ " select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
-				+ " ,sd.bsd_qty   qty  , vd.bvd_srvc_rate rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd  , vd.bvd_vchr_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by, TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE  "
+				+ " ,sd.bsd_qty   qty  , vd.bvd_srvc_rate rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd  , vd.bvd_vchr_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by, TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE, sd.BSD_PROCESS_STS, sh.BSH_NOTE_REF_NO   "
 				+ " from       bi_service_detail   sd " + "           ,bi_service_master   sm, bi_service_header sh "
 				+ "           ,bi_voucher_detail   vd " + " where      sd.bsd_service_id    = sm.bsm_service_id "
 				+ " and        sd.bsd_voucher_no    = vd.bvd_vchr_num "
@@ -1736,7 +1743,7 @@ public class PatientDaoImpl implements PatientDao {
 		return cs;
 	}
 	
-	public String insertDoctorOrderData(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
+	public String insertUpdateDoctorOrder(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
 			String bedNo, String advice, String medication, String laboratory, String diet, String progress,
 			String userId, String doctorOrderoNumber) throws SQLException {
 
@@ -1881,6 +1888,7 @@ public class PatientDaoImpl implements PatientDao {
 						list.add(rs.getString(3));
 						list.add(rs.getString(4));
 						list.add(rs.getString(5));
+						list.add(rs.getString(6));
 					} while (rs.next());
 				}
 			}
@@ -1893,10 +1901,11 @@ public class PatientDaoImpl implements PatientDao {
 
 	private PreparedStatement createPreparedStatement32(Connection con,String doctorNoteNumber) throws SQLException {
 		String sql = "select t.ecn_txn_num "+
-				 "          ,t.ecn_note_dt " +  
+				 "          ,TO_CHAR(t.ecn_note_dt, 'DD-MON-YYYY') NOTE_DATE  " +  
 				 "			,upper(e.eem_first_name||' '||e.eem_middle_name||' '||e.eem_last_name )   doc_name " + 
 				"           ,t.ecn_note_type " + 
-				"           ,t.ecn_note_dtl " + 
+				"           ,replace(t.ecn_note_dtl, ',', '|')" + 
+				"           ,t.ecn_doctor_id " + 
 				"      from   emr_clinical_note   t  " + 
 				"            ,hr_employee_master  e  " + 
 				"      where  t.ecn_doctor_id = e.eem_emp_num " + 
@@ -1907,5 +1916,7 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(1, doctorNoteNumber);
 		return ps;
 	}
+	
+
 
 }

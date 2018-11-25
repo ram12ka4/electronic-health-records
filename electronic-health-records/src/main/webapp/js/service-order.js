@@ -14,6 +14,7 @@ $(function() {
 	/*
 	 * Initial Set Value
 	 */
+	$('#voucher-id').val();
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
 		$('.qty').attr({
 			'min': 1,
@@ -137,7 +138,7 @@ $(function() {
 									'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 									'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 									'<span class="addSpecDoctor"></span>',
-									'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+									'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 					.draw(false);
 		}
 	
@@ -229,7 +230,7 @@ $(function() {
 												'<input type="text"	name="disAmount" class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="netAmount" class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<span class="addSpecDoctor"></span>',
-												'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+												'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 								.draw();
 
 					});
@@ -247,7 +248,7 @@ $(function() {
 			  '<input type="text" name="disAmount"  class="text-align-right disAmount form-control dis-auto-width  dis-bottom-margin" readonly>', 
 			  '<input type="text" name="netAmount"  class="text-align-right netAmount form-control dis-auto-width  dis-bottom-margin" readonly>', 
 			  '<span class="addSpecDoctor"></span>', 
-			  '<div  class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ]).draw();
+			  '<div  class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ]).draw();
 	  });
 	 
 	$(document)
@@ -364,7 +365,7 @@ $(function() {
 												var isTrue = duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, e);
 												console.log('IsTrue : ' + isTrue);
 												if (isTrue == true){
-													switchSpecimenDcotorName(serviceCode, currentRow, treatedBy, '','','');
+													switchSpecimenDcotorName(serviceCode, currentRow, treatedBy, '','','','','');
 												} 
 												return false;
 											}
@@ -473,7 +474,7 @@ $(function() {
 	// switchSpecimenDcotorName(SERVICE_CODE, currentRow, TREATED_BY - Y/N,
 	// MAJOR_CODE, DOCTOR NAME OR DOCTOR CODE, SPECIMEN NAME OR CODE)
 	
-	function switchSpecimenDcotorName(serviceCode, currentRow, treatedBy, majorCode, doctorCode, specimenCode){
+	function switchSpecimenDcotorName(serviceCode, currentRow, treatedBy, majorCode, doctorCode, specimenCode, serviceOrderBilled, specimenChecked){
 		
 		var serviceCategory;
 		
@@ -481,7 +482,7 @@ $(function() {
 			// console.log('Service Code in if part');
 			serviceCategory = $('.select-box').val();
 		} else {
-			// console.log('Service Code in else part');
+			console.log('Service Code in else part');
 			serviceCategory = majorCode;
 		}
 		
@@ -517,9 +518,21 @@ $(function() {
 
 					if (data.length !== 0) {
 						arr = data.replace("[", "").replace("]", "").split(",");
-						addSpecimenListEntry(arr, currentRow, specimenCode);
+						/*
+						 * var input = '<input type="hidden" name="treatedBy"
+						 * value="NA">';
+						 */
+						var hiddenInput = '<input type="hidden" class="specimen" name="specimen" value="NA">';
+						/* currentRow.find('.addSpecDoctor').append(input); */
+						currentRow.find('.addSpecDoctor').append(hiddenInput);
+						addSpecimenListEntry(arr, currentRow, specimenCode, serviceOrderBilled, specimenChecked);
 						
-					} 
+					} else {
+						var input = '<input type="hidden" class="treatedBy" name="treatedBy" value="NA">';
+						var hiddenInput = '<input type="hidden" class="specimen" name="specimen" value="NA">';
+						currentRow.find('.addSpecDoctor').append(input);
+						currentRow.find('.addSpecDoctor').append(hiddenInput);
+					}
 					
 					
 					
@@ -534,10 +547,11 @@ $(function() {
 				
 			});
 			
-			var input = '<input type="hidden" name="treatedBy" value="NA">';
-			var hiddenInput = '<input type="hidden" name="specimen" value="NA">';
-			currentRow.find('.addSpecDoctor').append(input);
-			currentRow.find('.addSpecDoctor').append(hiddenInput);
+			/* var input = '<input type="hidden" name="treatedBy" value="NA">'; */
+			// var hiddenInput = '<input type="hidden" class="specimen"
+			// name="specimen" value="NA">';
+			/* currentRow.find('.addSpecDoctor').append(input); */
+			// currentRow.find('.addSpecDoctor').append(hiddenInput);
 			
 			
 		} else {
@@ -547,8 +561,8 @@ $(function() {
 			
 			if (treatedBy === 'Y'){
 				var input = '<input type="text" name="doctorName"  class="doctorName form-control dis-auto-width  dis-bottom-margin">';
-				var treatedBy = '<input type="hidden" name="treatedBy" class="treatedBy">';
-				var hiddenInput = '<input type="hidden" name="specimen" value="NA">';
+				var treatedBy = '<input type="hidden" name="treatedBy" class="treatedBy" value="NA">';
+				var hiddenInput = '<input type="hidden" class="specimen" name="specimen" value="NA">';
 				currentRow.find('.addSpecDoctor').append(input);
 				currentRow.find('.addSpecDoctor').append(hiddenInput);
 				currentRow.find('.addSpecDoctor').append(treatedBy);
@@ -617,8 +631,8 @@ $(function() {
 				
 			} else {
 				
-				var input = '<input type="hidden" name="treatedBy" value="NA">';
-				var hiddenInput = '<input type="hidden" name="specimen" value="NA">';
+				var input = '<input type="hidden" class="treatedBy" name="treatedBy" value="NA">';
+				var hiddenInput = '<input type="hidden" class="specimen" name="specimen" value="NA">';
 				currentRow.find('.addSpecDoctor').append(input);
 				currentRow.find('.addSpecDoctor').append(hiddenInput);
 			}
@@ -650,16 +664,16 @@ $(function() {
 	/*
 	 * Add specimen to specific service id of PATHOLOGY department
 	 */
-	  function addSpecimenListEntry(specimenList, currentRow, specimenCode) {
+	  function addSpecimenListEntry(specimenList, currentRow, specimenCode, serviceOrderBilled, specimenChecked) {
 		  
 			var select = document.createElement("select");
-			select.setAttribute("name", "specimen");
-			select.setAttribute("class", "specimen");
+			select.setAttribute("name", "selectSpecimen");
+			select.setAttribute("class", "select-specimen");
 			select.classList.add("form-control");
 			select.classList.add("dis-auto-width");
 			select.classList.add("dis-bottom-margin");
 			 
-			var hiddenInput = "<input type='hidden' value='NA' name='treatedBy'>";
+			var hiddenInput = "<input type='hidden' value='NA' class='treatedBy' name='treatedBy'>";
 			
 			var i =0;
 		  
@@ -678,13 +692,49 @@ $(function() {
 			select1 = currentRow.find('.addSpecDoctor');
 			select1.append(select);
 			select1.append(hiddenInput);
-			// console.log('addSpecimenListEntry : ' + specimenCode);
+			// console.log('Specimen Code : ' + specimenCode);
 			
+			
+			
+			/*
+			 * If specimen code is available then a dynamic specimen drop down
+			 * box will be populated.
+			 */
 			if (specimenCode !== 'NA'){
-				var mySelect = currentRow.find('.specimen');
+				console.log('Spcimen Code : ' + specimenCode);
+				var mySelect = currentRow.find('.select-specimen');
 				$(mySelect).val(specimenCode);
+				currentRow.find('.specimen').val(specimenCode);
 			}
+			
+			/*
+			 * If specimen is billed then check box will be shown instead of
+			 * delete-btn
+			 */
+			if (serviceOrderBilled === 'BILLED'){
+				currentRow.find('.row-delete').remove();
+				currentRow.find('.delete-btn').append('<input type="checkbox" name="specimen-checkbox" value="N" class="form-check-input specimen-checkbox">');
+			}
+			
+			if (specimenChecked === 'Y'){
+				currentRow.find('.specimen-checkbox').prop('checked', true);
+				currentRow.find('.specimen-checkbox').prop('disabled', true);
+				currentRow.find('.chk-box').val('Y');
+				currentRow.find('.select-specimen').prop('disabled', true);
+			}
+		
 	    }
+	  
+	  $(document).on('change', '.select-specimen', function(event){
+		  
+		 var currentRow = $(this).closest('tr');
+		 var specimenCode = $(this).val();
+		 console.log('Select specimen value : ' + specimenCode);
+		 
+		 currentRow.find('.specimen').val(specimenCode);
+		  
+		  
+	  });
 	
 	
 	
@@ -1047,6 +1097,17 @@ $(function() {
 		 drOrderId = drOrderId.slice(14);
 		console.log('Doctor Order Id : ' + drOrderId);
 		
+		
+		
+		$('.specimen-checkbox').each(function(event){
+			console.log('In specimen checked');
+			var currentRow = $(this).closest('tr');
+			if ($(this).is(':checked')){
+				console.log('Checkbox checked');
+				currentRow.find('.chk-box').val('Y');
+			} 
+		});
+		
 		const swalWithBootstrapButtons = swal.mixin({
 			  confirmButtonClass: 'btn btn-success',
 			  cancelButtonClass: 'btn btn-danger',
@@ -1122,6 +1183,7 @@ $(function() {
 				  if (!serviceOrderId){
 					  
 					  console.log('Service Id not present');
+					  $('#voucher-id').val('');
 					  
 					  $.ajax({
 						    url: "service.order",
@@ -1211,74 +1273,85 @@ $(function() {
 							  { ACTION :  'FETCH_PREVIOUS_PATIENT_HISTORY', 
 					  },
 					  function(response, status, xhr) {
+						  
+						  
+						  
 					  if (status === 'error') { 
 					  var msg = "Sorry but there was an error: "; 
-					  swal( "Oh no!", msg +  xhr.status + " " + xhr.statusText, "error");
+					  swal( "Info!!!", 'No previous Doctor notes are available', "info");
+					  //swal( "Oh no!", msg +  xhr.status + " " + xhr.statusText, "error");
 					}
 					  
-					var myTable = $('#example1').DataTable( 
-							  { 
-								searching: false,
-								scrollY :  "300px", 
-							    scrollX : true, 
-							    scrollCollapse : true, 
-							    paging :  false, 
-							    info: false,
-							    columnDefs: [
-							    	{
-							    		'targets': 0,
-							    		'className': 'text-center',
-							    		'orderable': false,
-							    		'width': '2%',
-							    		
-							    	},
-							    	{
-							    		'targets': 1,
-							    		'className': 'text-center',
-							    		'orderable': false,
-							    		'width': '10%',
-							    		
-							    	},
-							    	{
-							    		"targets": 2,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '3%'
-							    	},
-							    	{
-							    		"targets": 3,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '10%'
-							    	},
-							    	{
-									  "targets": 4,
-									  "className": "text-center",
-									  "orderable": false,
-									  'width': '10%'
-							    	},
-							    	{
-							    		"targets": 5,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '10%'
-							    	}
-							    	
-							    ]
-							    });
 					  
+					if (status === 'success'){
+						
+						var myTable = $('#example1').DataTable( 
+								  { 
+									searching: false,
+									scrollY :  "300px", 
+								    scrollX : true, 
+								    scrollCollapse : true, 
+								    paging :  false, 
+								    info: false,
+								    columnDefs: [
+								    	{
+								    		'targets': 0,
+								    		'className': 'text-center',
+								    		'orderable': false,
+								    		'width': '2%',
+								    		
+								    	},
+								    	{
+								    		'targets': 1,
+								    		'className': 'text-center',
+								    		'orderable': false,
+								    		'width': '10%',
+								    		
+								    	},
+								    	{
+								    		"targets": 2,
+								    		"className": "text-center",
+								    		"orderable": false,
+								    		'width': '3%'
+								    	},
+								    	{
+								    		"targets": 3,
+								    		"className": "text-center",
+								    		"orderable": false,
+								    		'width': '10%'
+								    	},
+								    	{
+										  "targets": 4,
+										  "className": "text-center",
+										  "orderable": false,
+										  'width': '10%'
+								    	},
+								    	{
+								    		"targets": 5,
+								    		"className": "text-center",
+								    		"orderable": false,
+								    		'width': '10%'
+								    	}
+								    	
+								    ]
+								    });
+						  
+						
+						  
+						$('.myModal .modal-title').html("Patient History Record : " + $('#patient-no').val());
+						$('.myModal .modal-title').css('text-align', 'center');
+						
+						  
+						  
 					
+						  
+						  $('.myModal').on('shown.bs.modal', function(){
+							  myTable.columns.adjust().draw(); 
+							}).modal({show: true});
+						
+					}  
 					  
-					$('.myModal .modal-title').html("Patient History Record : " + $('#patient-no').val());
-					$('.myModal .modal-title').css('text-align', 'center');
-					
-					  
-					  
-				
-					  
-					  $('.myModal').on('shown.bs.modal', function(){
-						  myTable.columns.adjust().draw(); 
-						}).modal({show: true});
+			
 				});
 	});
 	
@@ -1299,184 +1372,207 @@ $(function() {
 							  { ACTION :  'FETCH_PREVIOUS_SERVICE_ORDER', 
 					  },
 					  function(response, status, xhr) {
-					  if (status === 'error') { 
+					  
+						  
+						  if (status === 'error') { 
+				      $('.myModal').modal('hide');
 					  var msg = "Sorry but there was an error: "; 
-					  swal( "Oh no!", msg +  xhr.status + " " + xhr.statusText, "error");
+					  // swal( "Info!", msg + xhr.status + " " +
+						// xhr.statusText, "error");
+					  swal( "Info!", 'No previous service order is available ', 'info');
 					}
 					  
-					var myTable = $('#example1').DataTable( 
-							  { 
-								searching: false,
-								scrollY :  "300px", 
-							    scrollX : true, 
-							    scrollCollapse : true, 
-							    paging :  false, 
-							    info: false,
-							    columnDefs: [
-							    	{
-							    		'targets': 0,
-							    		'className': 'text-center',
-							    		'orderable': false,
-							    		'width': '2%',
-							    		
-							    	},
-							    	{
-							    		'targets': 1,
-							    		'className': 'text-center',
-							    		'orderable': false,
-							    		'width': '10%',
-							    		
-							    	},
-							    	{
-							    		"targets": 2,
-							    		"className": "text-right",
-							    		"orderable": false,
-							    		'width': '3%'
-							    	},
-							    	{
-							    		"targets": 3,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '10%'
-							    	},
-							    	{
-							    		"targets": 4,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '3%'
-							    	},
-							    	{
-							    		"targets": 5,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '4%'
-							    	},
-							    	{
-							    		"targets": 6,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '2%'
-							    	},
-							    	{
-							    		"targets": 7,
-							    		"className": "text-center",
-							    		"orderable": false,
-							    		'width': '5%'
-							    	}
-							    	
-							    	
-							    ]
-							    });
+					  if (status === 'success'){
+						  
+							var myTable = $('#example1').DataTable( 
+									  { 
+										searching: false,
+										scrollY :  "300px", 
+									    scrollX : true, 
+									    scrollCollapse : true, 
+									    paging :  false, 
+									    info: false,
+									    columnDefs: [
+									    	{
+									    		'targets': 0,
+									    		'className': 'text-center',
+									    		'orderable': false,
+									    		'width': '2%',
+									    		
+									    	},
+									    	{
+									    		'targets': 1,
+									    		'className': 'text-center',
+									    		'orderable': false,
+									    		'width': '10%',
+									    		
+									    	},
+									    	{
+									    		"targets": 2,
+									    		"className": "text-right",
+									    		"orderable": false,
+									    		'width': '3%'
+									    	},
+									    	{
+									    		"targets": 3,
+									    		"className": "text-center",
+									    		"orderable": false,
+									    		'width': '10%'
+									    	},
+									    	{
+									    		"targets": 4,
+									    		"className": "text-center",
+									    		"orderable": false,
+									    		'width': '3%'
+									    	},
+									    	{
+									    		"targets": 5,
+									    		"className": "text-center",
+									    		"orderable": false,
+									    		'width': '4%'
+									    	},
+									    	{
+									    		"targets": 6,
+									    		"className": "text-center",
+									    		"orderable": false,
+									    		'width': '2%'
+									    	},
+									    	{
+									    		"targets": 7,
+									    		"className": "text-center",
+									    		"orderable": false,
+									    		'width': '5%'
+									    	}
+									    	
+									    	
+									    ]
+									    });
+							  
+							
+							  
+							$('.myModal .modal-title').html("Previous Service Order  Record : " + $('#patient-no').val());
+							$('.myModal .modal-title').css('text-align', 'center');
+							
+							  
+							  
+						
+							  
+							  $('.myModal').on('shown.bs.modal', function(){
+								  myTable.columns.adjust().draw(); 
+								}).modal({show: true});
+						  
+					  }
 					  
-					
-					  
-					$('.myModal .modal-title').html("Previous Service Order  Record : " + $('#patient-no').val());
-					$('.myModal .modal-title').css('text-align', 'center');
-					
-					  
-					  
-				
-					  
-					  $('.myModal').on('shown.bs.modal', function(){
-						  myTable.columns.adjust().draw(); 
-						}).modal({show: true});
+		
 				});
 	});
 	
 	
-	$(document).on('click', '.pat-view-btn', function(event){
+	$(document).on('click', '.pat-view-btn', function(event, param){
 		
 		 $('.myModal').modal('hide');
 		 $('.customizer').toggleClass('open');
-		var drNoteId = $(this).attr('dr-no');
+		var drNoteId;  // $(this).attr('dr-no');
+		
+		console.log('Param : ' + param);
+		
+		if (param === undefined){
+			drNoteId = $(this).attr('dr-no');
+		} else {
+			drNoteId = param;
+		}
 		console.log('Dr. Note Id. ' + drNoteId);
 		 reset();
 		
-		
-		  $.ajax({
-			    url: "service.order",
-		        type: "POST",
-		        datatype: 'text',
-		        data:  {
-		        	ACTION: 'FETCH_PATIENT_HISTORY',
-		        	doctorNoteNumber: drNoteId
-		        },
-		        success: function(data) {
-		        	
-		        	data = data.replace(/^\W+|\W+$/g, "");
-					console.log(data);
-		        
+		 if (drNoteId){
+			 
+			  $.ajax({
+				    url: "service.order",
+			        type: "POST",
+			        datatype: 'text',
+			        data:  {
+			        	ACTION: 'FETCH_PATIENT_HISTORY',
+			        	doctorNoteNumber: drNoteId
+			        },
+			        success: function(data) {
+			        	
+			        	data = data.replace(/^\W+|\W+$/g, "");
+						console.log(data);
+			        
 
-					if (data.length !== 0) {
-						
-						arr = data.replace("[", "").replace("]", "").split(",");
-						console.log('Arrray is : ' + arr);
-						console.log('Array length is : ' + arr.length);
-						
-						var i = 0;
-						var drNumber;
-						var notedate;
-						var doctorName;
+						if (data.length !== 0) {
+							
+							arr = data.replace("[", "").replace("]", "").split(",");
+							console.log('Arrray is : ' + arr);
+							console.log('Array length is : ' + arr.length);
+							
+							var i = 0;
+							var drNumber;
+							var notedate;
+							var doctorName;
 
-						while (i < arr.length) {
+							while (i < arr.length) {
+								
+								drNumber = arr[i];
+								notedate = arr[i+1];
+								doctorName = arr[i+2];
+								var noteType = $.trim(arr[i+3]);
+								var noteDetail = $.trim(arr[i+4]).replace(/\|/g, ',');
+								
+								console.log('Note Type : ' + noteType);
+								
+								if (noteType === 'ADVC'){
+									console.log('In ADVC');
+									$('textarea#treatment').val(noteDetail);
+								} 
+								
+								if (noteType === 'DIET'){
+									console.log('In DIET');
+									$('textarea#diet').val(noteDetail);
+								} 
+								
+								if (noteType === 'MDCN'){
+									console.log('In MDCN');
+									$('textarea#medication').val(noteDetail);
+								} 
+								
+								if (noteType === 'SERV'){
+									console.log('In SERV');
+									$('textarea#laboratory').val(noteDetail);
+								} 
+								
+								if (noteType === 'PROG'){
+									console.log('In PROG');
+									$('textarea#progress').val(noteDetail);
+								} 
+								
+								i += 6;
+							}
 							
-							drNumber = arr[i];
-							notedate = arr[i+1];
-							doctorName = arr[i+2];
-							var noteType = $.trim(arr[i+3]);
-							var noteDetail = arr[i+4];
+							$('.doc-note').text('Doctor Note : ' + drNumber);
+							$('.note-date').text('Date : ' + notedate);
+							$('.refer-doctor').text('Refer Doctor : ' + doctorName);
 							
-							console.log('Note Type : ' + noteType);
 							
-							if (noteType === 'ADVC'){
-								console.log('In ADVC');
-								$('textarea#treatment').val(noteDetail);
-							} 
-							
-							if (noteType === 'DIET'){
-								console.log('In DIET');
-								$('textarea#diet').val(noteDetail);
-							} 
-							
-							if (noteType === 'MDCN'){
-								console.log('In MDCN');
-								$('textarea#medication').val(noteDetail);
-							} 
-							
-							if (noteType === 'SERV'){
-								console.log('In SERV');
-								$('textarea#laboratory').val(noteDetail);
-							} 
-							
-							if (noteType === 'PROG'){
-								console.log('In PROG');
-								$('textarea#progress').val(noteDetail);
-							} 
-							
-							i += 5;
 						}
-						
-						$('.doc-note').text('Doctor Note : ' + drNumber);
-						$('.note-date').text('Date : ' + notedate);
-						$('.refer-doctor').text('Refer Doctor : ' + doctorName);
-						
-						
-					}
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	
-		        },
-		        failure: function (data) {
-		            swal("Internal Error",  "Oops, your note was not saved.", "error");
-		        },
-		        error: function(data){
-		        	console.log(data.responseText);
-		        }
-		        
-		    });
+			        	
+			        	
+			        	
+			        	
+			        	
+			        	
+			        },
+			        failure: function (data) {
+			            swal("Internal Error",  "Oops, your note was not saved.", "error");
+			        },
+			        error: function(data){
+			        	console.log(data.responseText);
+			        }
+			        
+			    });
+		 }
+		
+	
 		
 		
 		
@@ -1545,10 +1641,12 @@ $(function() {
 			 		var treatedBy = [];
 			 		var totalRow = 0;
 			 		var soDate;
+			 		var specimenChecked = [];
+			 		var drNumber = [];
 			 	
 			 		serviceNameList.length = 0;
 
-			 		for (var i=0; i<arr.length; i+=14){
+			 		for (var i=0; i<arr.length; i+=16){
 			 			
 			 			soNUmber.push(String(arr[i]));
 			 			siNumber.push(String(arr[i+1]));
@@ -1566,11 +1664,14 @@ $(function() {
 			 			specimen.push(String(arr[i+11]));
 			 			treatedBy.push(String(arr[i+12]));
 			 			soDate = String($.trim(arr[i+13]));
+			 			specimenChecked.push($.trim(arr[i+14]));
+			 			drNumber.push($.trim(arr[i+15]));
 			 			++totalRow;
 			 		}
 			 		
 			 		console.log('Service Order date : ' + soDate);
 			 		$('#fromDate').datepicker().datepicker("setDate", soDate);
+			 		$('#btn-submit').prop('disabled', false);
 			 		
 			 		/*
 					 * for (x in serviceNameList){ console.log('Service Name
@@ -1604,7 +1705,7 @@ $(function() {
 											'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 											'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 											'<span class="addSpecDoctor"></span>',
-											'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+											'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 							.draw();
 			 				l++;
 			 				initialRow++;
@@ -1681,7 +1782,7 @@ $(function() {
 				 				$(this).val($.trim(serviceCode[i]));
 				 				$(this).prop('readonly', false);
 				 				var currentRow = $(this).parents('tr');
-				 				switchSpecimenDcotorName($.trim(serviceCode[i]), currentRow, $.trim(treatedBy[i]), $.trim(serviceCat[i]), $.trim(doctorCode[i]), $.trim(specimen[i]));
+				 				switchSpecimenDcotorName($.trim(serviceCode[i]), currentRow, $.trim(treatedBy[i]), $.trim(serviceCat[i]), $.trim(doctorCode[i]), $.trim(specimen[i]), 'NOTBILLED');
 				 				
 				 			}
 				 			i++;
@@ -1725,7 +1826,31 @@ $(function() {
 			 		} else {
 			 			console.log('Billed');
 			 			
-			 			//$('#btn-submit').prop('disabled', true);
+			 			console.log('Trigger Click');
+				 		$('.pat-view-btn').trigger("click", [drNumber[0]]);
+				 		
+			 			
+			 			var totalSpec = 0;
+			 			for(x in specimen){
+			 				if ($.trim(specimen[x]) !== 'NA')
+			 				{
+			 					totalSpec++;
+			 				}
+			 			}
+			 			
+			 			var totalSpecCom = 0;
+			 			for(y in specimenChecked){
+			 				if ($.trim(specimenChecked[y]) !== 'N'){
+			 					totalSpecCom++;
+			 					console.log('Counted');
+			 				}
+			 			}
+			 			
+			 			console.log('Total Specimen : ' + totalSpec + ' Total Specimen Completed : ' + totalSpecCom);
+			 			
+			 			if (totalSpec === totalSpecCom){
+			 				$('#btn-submit').prop('disabled', true);
+			 			}
 			 			
 			 			$('#voucher-id').val($.trim(isBilled[0]));
 			 			
@@ -1765,16 +1890,23 @@ $(function() {
 				 			if (i < totalRow){
 				 				$(this).val($.trim(serviceCode[i]));
 				 				$(this).prop('readonly', true);
-				 				var currentRow = $(this).parents('tr');
-				 				currentRow.find('.row-delete').remove();
-				 				currentRow.find('.delete-btn').append('<input type="checkbox" name="specimen-checkbox" class="form-check-input" id="materialUnchecked">');
-				 				switchSpecimenDcotorName($.trim(serviceCode[i]), currentRow, $.trim(treatedBy[i]), $.trim(serviceCat[i]), $.trim(doctorCode[i]), $.trim(specimen[i]));
+				 				var currentRow = $(this).closest('tr');
+				 				/*
+								 * if (specimenChecked[i] === 'Y'){
+								 * console.log('Checked');
+								 * //currentRow.find('.specimen-checkbox').prop('checked',
+								 * true);
+								 * //$('.serviceCode').closest('tr').find('.specimen-checkbox').prop('checked',
+								 * true)
+								 * //currentRow.find('.chk-box').prop('disabled',
+								 * true); //$(this).prop('disabled', true); }
+								 */
+				 				switchSpecimenDcotorName($.trim(serviceCode[i]), currentRow, $.trim(treatedBy[i]), $.trim(serviceCat[i]), $.trim(doctorCode[i]), $.trim(specimen[i]), 'BILLED', specimenChecked[i]);
 				 			}
 				 			i++;
 				 		});
 				 		
 				 		i =0;
-				 		
 				 		$('.minorCode').each(function(event){
 				 			if (i < totalRow){
 				 				$(this).val($.trim(minorCode[i]));
@@ -1784,7 +1916,6 @@ $(function() {
 				 		});
 				 		
 				 		i =0;
-				 		
 				 		$('.serviceId').each(function(event){
 				 			if (i < totalRow){
 				 				$(this).val($.trim(siNumber[i]));
@@ -1792,11 +1923,8 @@ $(function() {
 				 			}
 				 			i++;
 				 		});
-				 		
 				 		$('#order-id').val(soNUmber[0]);
-				 		
 				 		i =0;
-				 		
 				 		$('.qty').each(function(event){
 				 			if (i < totalRow){
 				 			$(this).val(qty[i]);
@@ -1805,6 +1933,12 @@ $(function() {
 				 			}
 				 			i++;
 				 		});
+				 		
+				 		
+				 		
+				 	
+				 		
+				 	
 				 		
 				 		$('.row-delete').prop('disabled', true);
 			 		}
@@ -1898,6 +2032,14 @@ $(function() {
 		$('.specimen').hide();
 		$('#btn-submit').prop('disabled', false);
 		$('.row-delete').prop('disabled', false);
+		$('textarea#treatment').val('');
+		$('textarea#diet').val('');
+		$('textarea#medication').val('');
+		$('textarea#laboratory').val('');
+		$('textarea#progress').val('');
+		$('.doc-note').text('');
+		$('.note-date').text('');
+		$('.refer-doctor').text('');
 		var totalRow = 0;
 		
 		$('.serviceDesc').each(function(event){
@@ -1936,7 +2078,7 @@ $(function() {
 								'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 								'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
 								'<span class="addSpecDoctor"></span>',
-								'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+								'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 				.draw();
  				l++;
  				totalRow++;
@@ -1960,13 +2102,15 @@ $(function() {
  										'<input type="text"	name="disAmount"  class="text-align-right disAmount form-control dis-auto-width dis-bottom-margin" readonly>',
  										'<input type="text"	name="netAmount"  class="text-align-right netAmount form-control dis-auto-width dis-bottom-margin" readonly>',
  										'<span class="addSpecDoctor"></span>',
- 										'<div class="delete-btn"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+ 										'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
  						.draw(false);
  			}
   		}
 		
 		
 	}
+	
+	
 	
 	
 
@@ -2011,7 +2155,7 @@ function isNumber(input) {
 	input.val(replaceInput);
 }
 
-
+var ps = new PerfectScrollbar('.auto-scrollbar-container');
 
 
 

@@ -367,56 +367,37 @@
 				</a> <a class="customizer-toggle bg-danger box-shadow-3" href="#"> <i
 					class="fas fa-cog font-medium-3 spinner white"></i>
 				</a>
-				<div class="customizer-content p-2 ps-container ps-theme-dark ps-active-y">
+				<div
+					class="customizer-content p-2 ps-container ps-theme-dark ps-active-y">
 					<h4 class="text-uppercase text-center">Patient History</h4>
 					<h5 class="text-uppercase text-center doc-note"></h5>
 					<h5 class="text-uppercase text-center note-date"></h5>
 					<h5 class="text-uppercase text-center refer-doctor"></h5>
 
-<hr>
-					
+					<hr>
+					<div class="auto-scrollbar-container">
+						<div class="content">
 							<div class="form-group custom-form-group">
 								<label for="treatment">Advice</label>
 								<textarea name="treatment" class="form-control" id="treatment"></textarea>
 							</div>
-				
-					
 							<div class="form-group custom-form-group">
-									<label for="medication">Medication</label>
-						<textarea name="medication" class="form-control" id="medication"></textarea>
+								<label for="medication">Medication</label>
+								<textarea name="medication" class="form-control" id="medication"></textarea>
 							</div>
-				
-					
 							<div class="form-group custom-form-group">
 								<label for="laboratory">Laboratory</label>
-						<textarea name="laboratory" class="form-control" id="laboratory"></textarea>
+								<textarea name="laboratory" class="form-control" id="laboratory"></textarea>
 							</div>
-				
-					
 							<div class="form-group custom-form-group">
 								<label for="diet">Diet</label>
-						<textarea name="diet" class="form-control" id="diet"></textarea>
+								<textarea name="diet" class="form-control" id="diet"></textarea>
 							</div>
-				
-					
 							<div class="form-group custom-form-group">
-									<label for="progress">Progress</label>
-						<textarea name="progress" class="form-control" id="progress"></textarea>
+								<label for="progress">Progress</label>
+								<textarea name="progress" class="form-control" id="progress"></textarea>
 							</div>
-				
-
-					
-
-
-
-					<div class="ps-scrollbar-x-rail" style="left: 0px; bottom: -12px;">
-						<div class="ps-scrollbar-x" tabindex="0"
-							style="left: 0px; width: 0px;"></div>
-					</div>
-					<div class="ps-scrollbar-y-rail"
-						style="top: 15px; height: 654px; right: 3px;">
-						<div class="ps-scrollbar-y" tabindex="0"
-							style="top: 12px; height: 522px;"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -425,7 +406,7 @@
 
 		</div>
 
-		<input type="hidden" name="voucherNumber" id="voucher-id"/>
+		<input type="hidden" name="voucherNumber" id="voucher-id" />
 
 		<!-- End of Dashboard -->
 	</form>

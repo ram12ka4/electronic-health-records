@@ -3189,7 +3189,7 @@ body.vertical-layout.vertical-menu.menu-expanded .main-menu-footer .content {
 .customizer .customizer-content {
   position : relative;
   height : 100%;
-  overflow: hidden;
+  
 }
 .customizer a.customizer-toggle {
   background : #FFFFFF;

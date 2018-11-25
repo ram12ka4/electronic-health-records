@@ -44,14 +44,15 @@ public class ServiceOrderServlet extends HttpServlet {
 		String serviceDesc = request.getParameter("serviceDesc") == null ? "" : request.getParameter("serviceDesc");
 		String serviceCode = request.getParameter("serviceCode") == null ? "" : request.getParameter("serviceCode");
 		String serviceOrderoNumber = request.getParameter("soNumber") == null ? "" : request.getParameter("soNumber");
-		String doctorOrderNumber = request.getParameter("doctorNoteNumber") == null ? "" : request.getParameter("doctorNoteNumber");
-		String voucherNumber = request.getParameter("voucherNumber") == null ? "" : request.getParameter("voucherNumber");
-		
+		String doctorOrderNumber = request.getParameter("doctorNoteNumber") == null ? ""
+				: request.getParameter("doctorNoteNumber");
+		String voucherNumber = request.getParameter("voucherNumber") == null ? ""
+				: request.getParameter("voucherNumber");
 
 		// PKG_I_SERVORDER_HEADER_N
 		String patientNo = patient.getIpNumber();
-		String netAmount = request.getParameter("totalNetAmount") == null || request.getParameter("totalNetAmount").isEmpty() ? ""
-				: request.getParameter("totalNetAmount");
+		String netAmount = request.getParameter("totalNetAmount") == null
+				|| request.getParameter("totalNetAmount").isEmpty() ? "" : request.getParameter("totalNetAmount");
 		String doctorId = "000";
 		String mrd = patient.getMrdNumber();
 		String patientType = patient.getPatientCategoryCode();
@@ -65,7 +66,7 @@ public class ServiceOrderServlet extends HttpServlet {
 		String[] disPercent = request.getParameterValues("discount");
 		String[] specimen = request.getParameterValues("specimen");
 		String[] treatedBy = request.getParameterValues("treatedBy");
-		String [] specimenChecked = request.getParameterValues("specimen-checkbox");
+		String[] specimenChecked = request.getParameterValues("spcimenChkBox");
 		String disIndication = "P";
 		String referDoctor = request.getParameter("referDoctor") == null
 				|| request.getParameter("referDoctor").isEmpty() ? "" : request.getParameter("referDoctor");
@@ -82,26 +83,30 @@ public class ServiceOrderServlet extends HttpServlet {
 		System.out.println("referDoctor : " + referDoctor);
 		System.out.println("service Order Number : " + serviceOrderoNumber);
 
-	/*	if (serviceId != null || qty != null || disAmount != null) {
+		if (specimenChecked != null) {
+			for (String value : specimenChecked) {
+				System.out.println("Specimen Checked : " + value);
+			}
+		}
 
-			System.out.println("Before Array Elements");
+		if (treatedBy != null) {
+			for (String value : treatedBy) {
+				System.out.println("treatedBy : " + value);
+			}
+		}
 
-			for (String id : serviceId) {
-				System.out.println("Service Id " + id);
+		if (specimen != null) {
+			for (String value : specimen) {
+				System.out.println("Specimen : " + value);
 			}
-			for (String q : qty) {
-				System.out.println("Quantity " + q);
-			}
-			for (String amount : disAmount) {
-				System.out.println("Discount Amount " + amount);
-			}
-		}*/
+		}
 
 		try {
 
 			if ("INSERT_SERVICE_ORDER".equals(action)) {
-				String soNumber = patientDao.insertServiceOrderData(serviceOrderoNumber, doctorOrderNumber, patientNo, netAmount, doctorId,
-						mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId, qty, disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber);
+				String soNumber = patientDao.insertServiceOrderData(serviceOrderoNumber, doctorOrderNumber, patientNo,
+						netAmount, doctorId, mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId,
+						qty, disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber);
 				out.print(soNumber);
 			} else if ("FETCH_SERVICE_ID_RATE".equals(action)) {
 				String currentRate = patientDao.getServiceIdRate(serviceId[0], patientNo);
@@ -115,7 +120,7 @@ public class ServiceOrderServlet extends HttpServlet {
 				List<String> list = patientDao.getDoctorNote(doctorOrderNumber);
 				System.out.println("Doctor Note : " + list);
 				out.print(list);
-			} else if ("FETCH_PREVIOUS_PATIENT_HISTORY".equals(action)) { 
+			} else if ("FETCH_PREVIOUS_PATIENT_HISTORY".equals(action)) {
 				List<List<String>> list = patientDao.getPatientHistory(patientNo);
 				List<String> row = list.get(1);
 				List<String> column = list.get(0);
@@ -136,56 +141,107 @@ public class ServiceOrderServlet extends HttpServlet {
 				int rowIndex = row.size() / column.size();
 				while (j < rowIndex) {
 					out.println("<tr>");
-					out.println("<td>" + (j+1) + "</td>");
-					String ipNo= row.get(colIndex);
-					//String soNo = row.get(colIndex+1);
-						for (int i=0; i<column.size(); i++) {
-							out.println("<td>" + row.get(colIndex) + "</td>");
-							colIndex++;
-						}
-						out.println("<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" dr-no=\""+ipNo+"\">View</button></div></td>");	
+					out.println("<td>" + (j + 1) + "</td>");
+					String ipNo = row.get(colIndex);
+					// String soNo = row.get(colIndex+1);
+					for (int i = 0; i < column.size(); i++) {
+						out.println("<td>" + row.get(colIndex) + "</td>");
+						colIndex++;
+					}
+					out.println(
+							"<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" dr-no=\""
+									+ ipNo + "\">View</button></div></td>");
 					out.println("</tr>");
-					//colIndex +=1;
+					// colIndex +=1;
 					j++;
 				}
 				out.println("</tbody>");
 				out.println("</table>");
 				// out.print(list);
 			} else if ("FETCH_PREVIOUS_SERVICE_ORDER".equals(action)) {
+
 				List<List<String>> list = patientDao.getPrevServiceOrderList(patientNo);
 				List<String> row = list.get(1);
 				List<String> column = list.get(0);
 				out.println(
 						"<table id=\"example1\" class=\"table-striped table-bordered nowrap\" style=\"width:100%\">");
+				System.out.println(
+						"<table id=\"example1\" class=\"table-striped table-bordered nowrap\" style=\"width:100%\">");
 				out.println("<thead>");
+				System.out.println("<thead>");
 				out.println("<tr>");
+				System.out.println("<tr>");
 				out.println("<th>Select</th>");
-				for (int i = 0; i < column.size()-1; i++) {
-					out.println("<th>" + column.get(i+1) + "</th>");
+				System.out.println("<th>Select</th>");
+				for (int i = 0; i < column.size() - 3; i++) {
+					out.println("<th>" + column.get(i + 1) + "</th>");
+					System.out.println("<th>" + column.get(i + 1) + "</th>");
 				}
 				out.println("<th>Action</th>");
+				System.out.println("<th>Action</th>");
 				out.println("</tr>");
+				System.out.println("</tr>");
 				out.println("</thead>");
+				System.out.println("</thead>");
 				out.println("<tbody>"); // problem in this section
+				System.out.println("<tbody>"); // problem in this section
 				int j = 0;
 				int colIndex = 0;
 				int rowIndex = row.size() / column.size();
 				while (j < rowIndex) {
-					out.println("<tr>");
-					out.println("<td>" + (j+1) + "</td>");
-					String ipNo= row.get(colIndex);
-					String soNo = row.get(colIndex+1);
-						for (int i=0; i<column.size()-1; i++) {
-							out.println("<td>" + row.get(colIndex+1) + "</td>");
-							colIndex++;
+
+					String isBilled = row.get(colIndex + 5);
+					int totalSpecimen = Integer.parseInt(row.get(colIndex + 7));
+					int totalSpecimenDone = Integer.parseInt(row.get(colIndex + 8));
+
+					// System.out.println("Total Specimen : " + totalSpecimen);
+					// System.out.println("Total Specimen Done : " + totalSpecimenDone);
+					System.out.println("Row No. : " + j);
+
+					if (totalSpecimen > 0 && !isBilled.equalsIgnoreCase("NOT BILLED")) {
+						if (totalSpecimenDone == 0) {
+							// System.out.println("In if clause");
+							out.println("<tr class=\"redClass\">");
+							System.out.println("<tr class=\"redClass\">");
+						} else if (totalSpecimenDone < totalSpecimen) {
+							// System.out.println("In else if clause");
+							System.out.println("<tr class=\"orangeClass\">");
+							out.println("<tr class=\"orangeClass\">");
 						}
-						out.println("<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" so-no=\""+soNo+"\" ip-no=\""+ipNo+"\">View</button></div></td>");	
+						if (totalSpecimen == totalSpecimenDone) {
+							// System.out.println("In if clause again");
+							out.println("<tr class=\"greenClass\">");
+							System.out.println("<tr class=\"greenClass\">");
+						}
+					} else {
+						out.println("<tr>");
+						System.out.println("<tr>");
+					}
+
+					out.println("<td>" + (j + 1) + "</td>");
+					System.out.println("<td>" + (j + 1) + "</td>");
+					String ipNo = row.get(colIndex);
+					String soNo = row.get(colIndex + 1);
+					for (int i = 0; i < column.size() - 3; i++) {
+						out.println("<td>" + row.get(colIndex + 1) + "</td>");
+						System.out.println("<td>" + row.get(colIndex + 1) + "</td>");
+						colIndex++;
+					}
+					out.println(
+							"<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" so-no=\""
+									+ soNo + "\" ip-no=\"" + ipNo + "\">View</button></div></td>");
+					System.out.println(
+							"<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" so-no=\""
+									+ soNo + "\" ip-no=\"" + ipNo + "\">View</button></div></td>");
 					out.println("</tr>");
-					colIndex +=1;
+					System.out.println("</tr>");
+					colIndex += 3;
 					j++;
 				}
 				out.println("</tbody>");
+				System.out.println("</tbody>");
 				out.println("</table>");
+				System.out.println("</table>");
 				// out.print(list);
 			} else if ("GET_SERVICE_LIST".equals(action)) {
 				List<String> list = patientDao.getServiceList();

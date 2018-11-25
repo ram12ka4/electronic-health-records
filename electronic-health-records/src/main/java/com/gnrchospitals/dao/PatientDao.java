@@ -78,7 +78,7 @@ public interface PatientDao {
 
 	public List<String> getChildLink(String userRole, String catCode) throws SQLException;
 
-	public String insertDoctorOrderData(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
+	public String insertUpdateDoctorOrder(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
 			String bedNo, String advice, String medication, String laboratory, String diet, String progress,
 			String userId, String doctorOrderoNumber) throws SQLException;
 	

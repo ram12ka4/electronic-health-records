@@ -3,12 +3,14 @@ package com.gnrchospitals.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
@@ -86,19 +88,16 @@ public class DoctorNoteServlet extends HttpServlet {
 		try {
 			
 			if ("INSERT_UPDATE_DOCTOR_ORDER".equals(action)) {
-				
-				String soNumber = patientDao.insertDoctorOrderData(patientNo, mrd, "VT01", refDoctorId, "", bedNo, advice, medication, laboratory, diet, progress, userId, doctorOrderoNumber);
-				out.print(soNumber);
-			
-			//	out.print(soNumber);
+				String drNumber = patientDao.insertUpdateDoctorOrder(patientNo, mrd, "VT01", refDoctorId, "", bedNo, advice, medication, laboratory, diet, progress, userId, doctorOrderoNumber);
+				out.print(drNumber);
 			} else if ("FETCH_DOCTOR_LIST".equals(action)) {
 				List<String> list = patientDao.getDoctorList();
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
 				System.out.println("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
-			} else if ("FETCH_PREVIOUS_SERVICE_ORDER".equals(action)) {
-				/*List<List<String>> list = patientDao.getPrevServiceOrderList(patientNo);
+			} else if ("FETCH_PREVIOUS_DOCTOR_ORDER".equals(action)) {
+				List<List<String>> list = patientDao.getPatientHistory(patientNo);
 				List<String> row = list.get(1);
 				List<String> column = list.get(0);
 				out.println(
@@ -106,8 +105,8 @@ public class DoctorNoteServlet extends HttpServlet {
 				out.println("<thead>");
 				out.println("<tr>");
 				out.println("<th>Select</th>");
-				for (int i = 0; i < column.size()-1; i++) {
-					out.println("<th>" + column.get(i+1) + "</th>");
+				for (int i = 0; i < column.size(); i++) {
+					out.println("<th>" + column.get(i) + "</th>");
 				}
 				out.println("<th>Action</th>");
 				out.println("</tr>");
@@ -118,25 +117,30 @@ public class DoctorNoteServlet extends HttpServlet {
 				int rowIndex = row.size() / column.size();
 				while (j < rowIndex) {
 					out.println("<tr>");
-					out.println("<td>" + (j+1) + "</td>");
-					String ipNo= row.get(colIndex);
-					String soNo = row.get(colIndex+1);
-						for (int i=0; i<column.size()-1; i++) {
-							out.println("<td>" + row.get(colIndex+1) + "</td>");
-							colIndex++;
-						}
-						out.println("<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" so-no=\""+soNo+"\" ip-no=\""+ipNo+"\">View</button></div></td>");	
+					out.println("<td>" + (j + 1) + "</td>");
+					String drNo = row.get(colIndex);
+					// String soNo = row.get(colIndex+1);
+					for (int i = 0; i < column.size(); i++) {
+						out.println("<td>" + row.get(colIndex) + "</td>");
+						colIndex++;
+					}
+					out.println(
+							"<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" dr-no=\""
+									+ drNo + "\">View</button></div></td>");
 					out.println("</tr>");
-					colIndex +=1;
+					// colIndex +=1;
 					j++;
 				}
 				out.println("</tbody>");
-				out.println("</table>");*/
+				out.println("</table>");
+			} else if ("FETCH_PATIENT_HISTORY".equals(action)) {
+				List<String> list = patientDao.getDoctorNote(doctorOrderoNumber);
+				System.out.println("Doctor Note : " + list);
+				out.print(list);
+			} else {
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
+				return;
 			}
-			
-			
-			
-
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
 		}
