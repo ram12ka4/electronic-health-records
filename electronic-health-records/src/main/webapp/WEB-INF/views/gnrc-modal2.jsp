@@ -39,7 +39,7 @@
 	aria-labelledby="source-model-lebel">
 	<div class="modal-dialog">
 		<div class="ring">
-			Please wait 
+			Please wait <span> </span>
 		</div>
 	</div>
 </div>

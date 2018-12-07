@@ -1,0 +1,38 @@
+@charset "ISO-8859-1";
+
+
+.panel-heading {
+	padding: 0;
+}
+
+.nav > li > a {
+	padding: 5px 15px;
+}
+
+.panel-top-margin {
+	margin-top: 10px;
+}
+
+.blueClass {
+	background: blue;
+	color: white;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1).blueClass {
+	background: blue;
+	color: white;
+}
+
+.orangeClass {
+	background: orange;
+	color: white;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1).orangeClass {
+	background: orange;
+	color: white;
+}
+
+.table-striped>tbody>tr:hover {
+    background-color: #ff0000; /* Assuming you want the hover color to be white */
+}

@@ -59,7 +59,7 @@ public class DoctorNoteServlet extends HttpServlet {
 		String mrd = patient.getMrdNumber();
 		String visitNo = patient.getVisit();
 		String refDoctorId =  request.getParameter("referDocId") == null ? "" : request.getParameter("referDocId");
-		String wardNo = patient.getWardNo();
+		String wardNo = patient.getWardCode();
 		String bedNo = patient.getBedNo();
 		String advice = request.getParameter("treatment") == null || request.getParameter("treatment").isEmpty() ? ""	: request.getParameter("treatment");
 		String medication = request.getParameter("medication") == null || request.getParameter("medication").isEmpty() ? ""	: request.getParameter("medication");

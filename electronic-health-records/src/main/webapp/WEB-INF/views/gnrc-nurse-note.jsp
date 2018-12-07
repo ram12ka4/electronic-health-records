@@ -94,7 +94,7 @@
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form id="service-order-frm">
+	<form id="nurse-note-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -114,22 +114,15 @@
 									<label class="control-label" for="order-id">Note No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="order-id" value="" name="orderNo" placeholder="Order No"
+										id="note-id" value="" name="noteNo" placeholder="Note No"
 										readonly="readonly">
 								</div>
-
-								<!-- <div class="col-md-1">
-									<label class="control-label" for="patient-type">Pat Type</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
-										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
-								</div> -->
 								<div class="col-md-3">
 									<label class="control-label" for="refer-doctor">Referred
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor">
+										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -175,7 +168,7 @@
 									<label class="control-label" for="ward">Ward</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="ward" value="<%=patient.getWardNo()%>" name="ward"
+										id="ward" value="<%=patient.getWardDesc()%>" name="ward"
 										placeholder="Ward" readonly="readonly">
 								</div>
 
@@ -259,10 +252,6 @@
 									</div>
 
 									<div class="col-md-offset-10">
-										<!-- <button type="button" class="btn btn-primary btn-sm btn-treat">TREATMENT/ADVICE</button>
-										<button type="button" class="btn btn-primary btn-sm btn-medic">MEDICATION</button>
-										<button type="button" class="btn btn-primary btn-sm btn-lab">LABORATORY</button>
-										<button type="button" class="btn btn-primary btn-sm btn-diet">DIET</button> -->
 										<button type="button"
 											class="btn btn-primary btn-sm previousBtn"
 											data-id='<%=ipNumber%>'>Previous Note</button>
@@ -270,19 +259,16 @@
 								</div>
 							</div>
 						</div>
-						
-				
-						
-						
+
+
+
+
 						<div class="form-group">
-							<textarea class="form-control" id="treatment" rows="15" placeholder="Treatment"></textarea>
-							<textarea class="form-control" id="medication" rows="15" placeholder="Medication"></textarea>
-							<textarea class="form-control" id="laboratory" rows="15" placeholder="Laboratory"></textarea>
-							<textarea class="form-control" id="diet" rows="15" placeholder="Diet"></textarea>
-							<textarea class="form-control" id="others" rows="15" placeholder="Others"></textarea>
+							<textarea class="form-control" name="note" id="note" rows="15"
+								placeholder="Nurse Note"></textarea>
 						</div>
 
-					
+
 
 
 						<div class="row">
@@ -336,7 +322,7 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
-	<script type="text/javascript" src="js/doctor-note-order.js"></script>
+	<script type="text/javascript" src="js/nurse-note.js"></script>
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 

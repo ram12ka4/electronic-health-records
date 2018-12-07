@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +20,7 @@
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-forms.css">
 <link rel="stylesheet" href="css/circle.css">
-<link rel="stylesheet" href="css/doctor-note-order.css">
+<link rel="stylesheet" href="css/patient-transfer.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
@@ -58,7 +59,7 @@
 		// allow access only if session exists
 		String user = null;
 		if (session.getAttribute("user") == null) {
-			response.sendRedirect("login.do");
+			response.sendRedirect("/login.do");
 		} else
 			user = (String) session.getAttribute("user");
 		String userName = null;
@@ -75,11 +76,17 @@
 			sessionID = session.getId();
 		}
 
-		String ipNumber = (String) request.getAttribute("ipNumber") == null ? "" : (String) request.getAttribute("ipNumber");
+		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
+				: (String) request.getAttribute("ipNumber");
+
 		System.out.println("Patient Number  : " + ipNumber);
+
+		Enumeration<String> noteDate = request.getParameterNames();
+
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-		System.out.println("Patient Object " + patient.toString());
+
+		System.out.println("Patient Object " + patient);
 	%>
 
 
@@ -88,7 +95,7 @@
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form id="doctor-note-order-frm">
+	<form id="service-order-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -105,18 +112,25 @@
 
 							<div class="form-group-sm">
 								<div class="col-md-2">
-									<label class="control-label" for="order-id">Note No</label> <input
+									<label class="control-label" for="order-id">Order No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="note-order-id" value="" name="noteNumber" placeholder="Order No"
+										id="order-id" value="" name="orderNo" placeholder="Order No"
 										readonly="readonly">
-										
 								</div>
+
+								<!-- <div class="col-md-1">
+									<label class="control-label" for="patient-type">Pat Type</label> <input
+										type="text"
+										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
+										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
+								</div> -->
 								<div class="col-md-3">
-									<label class="control-label" for="refer-doctor">Refer Doctor</label> <input type="text"
+									<label class="control-label" for="refer-doctor">Referred
+										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
+										placeholder="Refer Doctor">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -219,11 +233,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="admin-content-con">
-
-
 						<div class="row">
-
-
 							<div class="form-horizontal">
 								<div class="form-group-sm">
 									<label class="control-label col-md-1" for="pat-category">Patient
@@ -245,46 +255,88 @@
 											readonly="readonly">
 									</div>
 
-									<div class="col-md-6">
-										<button type="button" class="btn btn-primary btn-sm btn-treat">ADVICE</button>
-										<button type="button" class="btn btn-primary btn-sm btn-medic">MEDICATION</button>
-										<button type="button" class="btn btn-primary btn-sm btn-lab">LABORATORY</button>
-										<button type="button" class="btn btn-primary btn-sm btn-diet">DIET</button>
-										<button type="button" class="btn btn-primary btn-sm btn-progress">PROGRESS</button>
+									<div class="col-md-3">
+
 										<button type="button"
-											class="btn btn-primary btn-sm previousBtn"
-											data-id='<%=ipNumber%>'>History</button>
+											class="btn btn-primary btn-sm btn-row-add">Add Row</button>
+										<button type="button"
+											class="btn btn-primary btn-sm btn-previous"
+											data-id='<%=ipNumber%>'>Prev Order</button>
 									</div>
 								</div>
 							</div>
 						</div>
-						
-				
-						
-						
-						<div class="form-group">
-							<textarea name="treatment" class="form-control" id="treatment" rows="15" placeholder="Treatment"></textarea>
-							<textarea name="medication" class="form-control" id="medication" rows="15" placeholder="Medication"></textarea>
-							<textarea name= "laboratory" class="form-control" id="laboratory" rows="15" placeholder="Laboratory"></textarea>
-							<textarea name="diet" class="form-control" id="diet" rows="15" placeholder="Diet"></textarea>
-							<textarea name="progress" class="form-control" id="progress" rows="15" placeholder="progress"></textarea>
-						</div>
-
-					
-
-
+						<hr>
 						<div class="row">
-							<div class="form-horizontal">
-								<div class="form-group-sm">
-									<div class="col-xs-offset-9 button-right-offset">
-										<button type="button" id="btn-reset"
-											class="btn btn-primary btn-sm">Reset</button>
-										<button type="button" id="btn-submit"
-											class="btn btn-success btn-sm">Submit</button>
-									</div>
-
-								</div>
+							<div class="col-md-6 dashboard-left-cell">
+								<table class="table" id="myTable" style="width: 100%">
+									<thead>
+										<tr>
+											<th>S/N</th>
+											<th>Service Description</th>
+											<th>Qty.</th>
+											<th>Rate</th>
+											<th>Dis(%)</th>
+											<th>Dis Amnt</th>
+											<th>Net Amnt</th>
+											<th>Specimen/Treated by</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th>S/N</th>
+											<th>Service Description</th>
+											<th>Qty.</th>
+											<th>Rate</th>
+											<th>Dis(%)</th>
+											<th>Dis Amnt</th>
+											<th>Net Amnt</th>
+											<th>Specimen/Treated by</th>
+											<th>Action</th>
+										</tr>
+									</tbody>
+								</table>
 							</div>
+							<div class="col-md-6 dashboard-right-cell">
+								<table class="table" id="myTable" style="width: 100%">
+									<thead>
+										<tr>
+											<th>S/N</th>
+											<th>Service Description</th>
+											<th>Qty.</th>
+											<th>Rate</th>
+											<th>Dis(%)</th>
+											<th>Dis Amnt</th>
+											<th>Net Amnt</th>
+											<th>Specimen/Treated by</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th>S/N</th>
+											<th>Service Description</th>
+											<th>Qty.</th>
+											<th>Rate</th>
+											<th>Dis(%)</th>
+											<th>Dis Amnt</th>
+											<th>Net Amnt</th>
+											<th>Specimen/Treated by</th>
+											<th>Action</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+
+						<hr>
+						<div class="row">
+							<button type="button" id="btn-reset"
+								class="btn btn-primary btn-reset">Reset</button>
+							<button type="button" id="btn-submit"
+								class="btn btn-success btn-submit">Submit</button>
 						</div>
 					</div>
 				</div>
@@ -292,30 +344,20 @@
 
 
 
+
+
+
 		</div>
 
-
+		<input type="hidden" name="voucherNumber" id="voucher-id" /> <input
+			type="hidden" name="chkBoxFlag" id="chk-box-flag" />
 
 		<!-- End of Dashboard -->
 	</form>
 
 	<!-- End of Registration Form -->
 
-
-
-	<!-- Form Submit Alert Message -->
-	<%@include file="progress-circle-modal.jsp"%>
-	<%@include file="confirm-box.html"%>
-	<%@include file="alert-box.html"%>
-	<%-- <%@include file="doctor-note-modal.jsp"%> --%>
-
-	<!-- End of Form Submit Alert Message -->
-
-
-
-
-
-
+	<%@include file="gnrc-modal.jsp"%>
 	<!-- Lower Layout -->
 	<%@include file="gnrc-page-lower-layout.jsp"%>
 	<!-- End of Lower Layout -->
@@ -324,12 +366,10 @@
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
-	<script type="text/javascript" src="js/doctor-note-order.js"></script>
+	<script type="text/javascript" src="js/patient-transfer.js"></script>
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 
-	<%@include file="gnrc-modal.jsp"%>
-	<%@include file="success-error-msg.jsp"%>
 
 
 

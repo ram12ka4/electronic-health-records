@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +17,8 @@ import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
 import com.gnrchospitals.dto.Patient;
 
-@WebServlet(urlPatterns = "/nurse.note")
-public class NurseNoteServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/patient.transfer")
+public class PatientTransferServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
@@ -30,13 +31,37 @@ public class NurseNoteServlet extends HttpServlet {
 		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
 		
 		HttpSession session = request.getSession();
+		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
 
 		try {
 			session.setAttribute("moduleName", request.getParameter("moduleName"));
 			request.setAttribute("ipNumber", request.getParameter("ip_no"));
 			request.setAttribute("token", token);
 			request.setAttribute("msg", msg);
-			request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-transfer.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
@@ -72,6 +97,31 @@ public class NurseNoteServlet extends HttpServlet {
 		System.out.println("userId : " + userId);
 		System.out.println("Nurse Note Id : " + nurseNoteNumber);
 		System.out.println("Nurse Note : " + nurseNote);
+		
+		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		// allow access only if session exists
+		String user = null;
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("/login.do");
+		} else
+			user = (String) session.getAttribute("user");
+		String userName = null;
+		String sessionID = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user"))
+					userName = cookie.getValue();
+				if (cookie.getName().equals("JSESSIONID"))
+					sessionID = cookie.getValue();
+			}
+		} else {
+			sessionID = session.getId();
+		}
 	
 
 		try {
@@ -125,7 +175,7 @@ public class NurseNoteServlet extends HttpServlet {
 				System.out.println("Nurse Note : " + list);
 				out.print(list);
 			} else {
-				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-transfer.jsp").forward(request, response);
 				return;
 			}
 		} catch (Exception e) {

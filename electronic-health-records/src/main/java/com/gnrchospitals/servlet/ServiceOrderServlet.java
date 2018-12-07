@@ -43,11 +43,12 @@ public class ServiceOrderServlet extends HttpServlet {
 		String serviceCat = request.getParameter("serviceCat") == null ? "" : request.getParameter("serviceCat");
 		String serviceDesc = request.getParameter("serviceDesc") == null ? "" : request.getParameter("serviceDesc");
 		String serviceCode = request.getParameter("serviceCode") == null ? "" : request.getParameter("serviceCode");
-		String serviceOrderoNumber = request.getParameter("soNumber") == null ? "" : request.getParameter("soNumber");
+		String serviceOrderNumber = request.getParameter("soNumber") == null ? "" : request.getParameter("soNumber");
 		String doctorOrderNumber = request.getParameter("doctorNoteNumber") == null ? ""
 				: request.getParameter("doctorNoteNumber");
 		String voucherNumber = request.getParameter("voucherNumber") == null ? ""
 				: request.getParameter("voucherNumber");
+		String checkBoxFlag = request.getParameter("chkBoxFlag") == "disable" ? "": request.getParameter("chkBoxFlag");
 
 		// PKG_I_SERVORDER_HEADER_N
 		String patientNo = patient.getIpNumber();
@@ -81,7 +82,8 @@ public class ServiceOrderServlet extends HttpServlet {
 		System.out.println("userId : " + userId);
 		System.out.println("disIndication : " + disIndication);
 		System.out.println("referDoctor : " + referDoctor);
-		System.out.println("service Order Number : " + serviceOrderoNumber);
+		System.out.println("service Order Number : " + serviceOrderNumber);
+		System.out.println("Checkbox Flag : " + checkBoxFlag);
 
 		if (specimenChecked != null) {
 			for (String value : specimenChecked) {
@@ -103,17 +105,17 @@ public class ServiceOrderServlet extends HttpServlet {
 
 		try {
 
-			if ("INSERT_SERVICE_ORDER".equals(action)) {
-				String soNumber = patientDao.insertServiceOrderData(serviceOrderoNumber, doctorOrderNumber, patientNo,
+			if ("INSERT_UPDATE_SERVICE_ORDER".equals(action)) {
+				String soNumber = patientDao.insertUpdateServiceOrder(serviceOrderNumber, doctorOrderNumber, patientNo,
 						netAmount, doctorId, mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId,
-						qty, disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber);
+						qty, disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber, checkBoxFlag);
 				out.print(soNumber);
 			} else if ("FETCH_SERVICE_ID_RATE".equals(action)) {
 				String currentRate = patientDao.getServiceIdRate(serviceId[0], patientNo);
 				System.out.println("Current Rate : " + currentRate);
 				out.print(currentRate);
 			} else if ("FETCH_PREV_SERVICE_ORDER_DETAIL".equals(action)) {
-				List<String> list = patientDao.getServiceOrderDetail(serviceOrderoNumber);
+				List<String> list = patientDao.getServiceOrderDetail(serviceOrderNumber);
 				System.out.println("Service Order Detail List : " + list);
 				out.print(list);
 			} else if ("FETCH_PATIENT_HISTORY".equals(action)) {
@@ -194,8 +196,8 @@ public class ServiceOrderServlet extends HttpServlet {
 					int totalSpecimen = Integer.parseInt(row.get(colIndex + 7));
 					int totalSpecimenDone = Integer.parseInt(row.get(colIndex + 8));
 
-					// System.out.println("Total Specimen : " + totalSpecimen);
-					// System.out.println("Total Specimen Done : " + totalSpecimenDone);
+					System.out.println("Total Specimen : " + totalSpecimen);
+					System.out.println("Total Specimen Done : " + totalSpecimenDone);
 					System.out.println("Row No. : " + j);
 
 					if (totalSpecimen > 0 && !isBilled.equalsIgnoreCase("NOT BILLED")) {

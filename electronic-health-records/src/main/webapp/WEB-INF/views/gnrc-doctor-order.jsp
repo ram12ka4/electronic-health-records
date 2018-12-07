@@ -136,7 +136,7 @@
 									class="required-label" id="ward"> Ward</span> :</label>
 								<div class="col-xs-3">
 									<input type="text" class="form-control input-sm" id="ward"
-										value="<%=patient.getWardNo()%>" name="ward" placeholder="Y"
+										value="<%=patient.getWardDesc()%>" name="ward" placeholder="Y"
 										readonly>
 								</div>
 								<label class="control-label col-xs-1" for="mrd"><span

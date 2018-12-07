@@ -175,7 +175,7 @@
 									<label class="control-label" for="ward">Ward</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="ward" value="<%=patient.getWardNo()%>" name="ward"
+										id="ward" value="<%=patient.getWardDesc()%>" name="ward"
 										placeholder="Ward" readonly="readonly">
 								</div>
 
@@ -407,19 +407,22 @@
 		</div>
 
 		<input type="hidden" name="voucherNumber" id="voucher-id" />
+		<input type="hidden" name="chkBoxFlag" id="chk-box-flag" />
 
 		<!-- End of Dashboard -->
 	</form>
 
 	<!-- End of Registration Form -->
 
+	<%@include file="gnrc-modal.jsp"%>
+	<%-- <%@include file="success-error-msg.jsp"%> --%>
 
 
 	<!-- Form Submit Alert Message -->
-	<%@include file="progress-circle-modal.jsp"%>
-	<%@include file="confirm-box.html"%>
-	<%@include file="alert-box.html"%>
-	<%-- <%@include file="doctor-note-modal.jsp"%> --%>
+	
+	<%-- <%@include file="confirm-box.html"%> --%>
+	<%-- <%@include file="alert-box.html"%> --%>
+	
 
 	<!-- End of Form Submit Alert Message -->
 
@@ -440,8 +443,7 @@
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 
-	<%@include file="gnrc-modal.jsp"%>
-	<%@include file="success-error-msg.jsp"%>
+	
 
 
 </body>

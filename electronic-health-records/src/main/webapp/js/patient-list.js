@@ -7,6 +7,11 @@ $(function() {
 	select.css("display", "inline");
 
 	// alert(id);
+	
+	 $('.circleModal').modal({
+			backdrop : 'static',
+			keyboard : false
+		});
 
 	select
 			.empty()
@@ -57,24 +62,9 @@ $(function() {
 
 			});
 
-	/*
-	 * $('#myTable').DataTable( {
-	 * 
-	 * ajax: { url: "patient.list", method: 'post', dataType: 'json', data: {
-	 * ACTION : 'GET_PAT_DET', empId : id, wardId : '0' },
-	 * 
-	 * success: function(data){ alert(data); } }, deferRender: true,
-	 * 
-	 * columns: [ { 'data': "ipNumber" }, { 'data': "ipName" }, { 'data':
-	 * "ward"}, { 'data': "bedNumber" }, { 'data': "admissionDate" }, { 'data':
-	 * "admittingDoctor" }, { 'data' : "speciality" }, { 'data' :
-	 * "subCategory"}, { 'render' : function(oObj){ return 'Bed Allocated'; } }, {
-	 * 'data': "ipNumber", "render" : function(jsonIpNumber){ return '<a
-	 * href="/pat_panel.do?ip_no='+ jsonIpNumber +'"class="context-menu-one btn
-	 * btn-info btn-xs">Click</a>'; } } ], rowId: 'extn', select: true, dom:
-	 * 'Bfrtip', scrollY: 500, paging: true, buttons: [ { text: 'Reload table',
-	 * action: function () { table.ajax.reload(); } } ] } );
-	 */
+	
+	
+	 
 
 	var req = $
 			.ajax({
@@ -90,6 +80,8 @@ $(function() {
 				success : function(data) {
 
 					// alert(data);
+					
+				$('.circleModal').modal('hide');
 
 					if ($.fn.dataTable.isDataTable('#myTable')) {
 						// alert('object already exists');
@@ -166,14 +158,7 @@ $(function() {
 														})
 											}
 										}
-									/*
-									 * rowId: 'extn', select: true, dom:
-									 * 'Bfrtip', scrollY: 500, paging: false,
-									 * buttons: [ { text: 'Reload Table',
-									 * action: function () {
-									 * table.ajax.reload(null, false); } } ]
-									 */
-
+							
 									});
 
 				},
@@ -367,18 +352,44 @@ $(function() {
 					// window.console && console.log(m.replace('pat_panel.do',
 					// 'patient.transfer')) || alert(m);
 				}
+			},
+			"pharmacyOrder" : {
+				name : "Pharmacy Ordering",
+				icon : "cut",
+				callback : function(itemKey, opt, e) {
+					var m = $(this).attr('href');
+
+					// console.log('Mapping : ' + m);
+					m = m + '&moduleName=pharmacy ordering';
+					window.location.href = m.replace('pat_panel.do',
+							'pharma.order');
+
+					console.log(m.replace('pat_panel.do', 'pharma.order'));
+
+					// window.console && console.log(m.replace('pat_panel.do',
+					// 'patient.transfer')) || alert(m);
+				}
+			},
+			"patientTransfer" : {
+				name : "Patient Transfer",
+				icon : "cut",
+				callback : function(itemKey, opt, e) {
+					var m = $(this).attr('href');
+
+					// console.log('Mapping : ' + m);
+					m = m + '&moduleName=Patient Transfer';
+					window.location.href = m.replace('pat_panel.do',
+							'patient.transfer');
+
+					console.log(m.replace('pat_panel.do', 'patient.transfer'));
+
+					// window.console && console.log(m.replace('pat_panel.do',
+					// 'patient.transfer')) || alert(m);
+				}
 			}
 		}
 	});
 
 });
 
-function openSlideMenu() {
-	document.getElementById('menu').style.width = "250px";
 
-}
-
-function closeSlideMenu() {
-	document.getElementById('menu').style.width = "0";
-
-}

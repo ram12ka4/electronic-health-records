@@ -12,7 +12,8 @@ public class Patient {
 	private String doctorIncharge;
 	private String speciality;
 	private String bedNo;
-	private String wardNo;
+	private String wardCode;
+	private String wardDesc;
 	private String maritalStatus;
 	private String patientCategoryCode;
 	private String patientSubCategoryCode;
@@ -123,9 +124,7 @@ public class Patient {
 		this.bedNo = bedNo;
 	}
 
-	public void setWardNo(String wardNo) {
-		this.wardNo = wardNo;
-	}
+	
 
 	public void setMaritalStatus(String maritalStatus) {
 		this.maritalStatus = maritalStatus;
@@ -167,9 +166,7 @@ public class Patient {
 		return bedNo;
 	}
 
-	public String getWardNo() {
-		return wardNo;
-	}
+	
 
 	public String getMaritalStatus() {
 		return maritalStatus;
@@ -183,15 +180,33 @@ public class Patient {
 		this.emr = emr;
 	}
 
+	public String getWardCode() {
+		return wardCode;
+	}
+
+	public void setWardCode(String wardCode) {
+		this.wardCode = wardCode;
+	}
+
+	public String getWardDesc() {
+		return wardDesc;
+	}
+
+	public void setWardDesc(String wardDesc) {
+		this.wardDesc = wardDesc;
+	}
+
 	@Override
 	public String toString() {
 		return "Patient [mrdNumber=" + mrdNumber + ", ipNumber=" + ipNumber + ", patientName=" + patientName + ", sex="
 				+ sex + ", age=" + age + ", admissionDate=" + admissionDate + ", doctorId=" + doctorId
-				+ ", doctorIncharge=" + doctorIncharge + ", speciality=" + speciality + ", bedNo=" + bedNo + ", wardNo="
-				+ wardNo + ", maritalStatus=" + maritalStatus + ", patientCategoryCode=" + patientCategoryCode
-				+ ", patientSubCategoryCode=" + patientSubCategoryCode + ", patientCategory=" + patientCategory
-				+ ", patientSubCategory=" + patientSubCategory + ", visit=" + visit + ", emr=" + emr + "]";
+				+ ", doctorIncharge=" + doctorIncharge + ", speciality=" + speciality + ", bedNo=" + bedNo
+				+ ", wardCode=" + wardCode + ", wardDesc=" + wardDesc + ", maritalStatus=" + maritalStatus
+				+ ", patientCategoryCode=" + patientCategoryCode + ", patientSubCategoryCode=" + patientSubCategoryCode
+				+ ", patientCategory=" + patientCategory + ", patientSubCategory=" + patientSubCategory + ", visit="
+				+ visit + ", emr=" + emr + "]";
 	}
+
 
 	
 

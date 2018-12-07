@@ -175,7 +175,7 @@
 									<label class="control-label" for="ward">Ward</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="ward" value="<%=patient.getWardNo()%>" name="ward"
+										id="ward" value="<%=patient.getWardDesc()%>" name="ward"
 										placeholder="Ward" readonly="readonly">
 								</div>
 

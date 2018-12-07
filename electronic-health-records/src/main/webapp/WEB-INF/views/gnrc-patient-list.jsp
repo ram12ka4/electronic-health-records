@@ -13,6 +13,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
+	
+
 <link rel="stylesheet" type="text/css" href="css/reset.css" />
 <link rel="stylesheet" type="text/css" href="css/patient-list.css" />
 <%@include file="gnrc-common-include-css.html"%>
@@ -217,6 +219,7 @@ tbody tr {
 		</div>
 	</div>
  --%>
+ 
 
 
 	<div class="container">
@@ -254,8 +257,14 @@ tbody tr {
 				</tr>
 			</thead>
 		</table>
+		
 	</div>
-
+	
+	
+	<%@include file="gnrc-modal.jsp"%>
+	<%-- <%@include file="spinner.html"%> --%>
+	
+	
 	<input type="hidden" name="user_id" value="${sessionScope.user}">
 	<%@include file="logout-modal.html"%>
 	<%@include file="gnrc-common-include-js.html"%>

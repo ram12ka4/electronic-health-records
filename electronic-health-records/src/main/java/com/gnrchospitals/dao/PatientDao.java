@@ -33,7 +33,8 @@ public interface PatientDao {
 
 	public abstract boolean deleteDoctorData(String emrDetId) throws SQLException;
 
-	//public abstract List<List<String>> getDoctorNote(String emrDetId) throws SQLException;
+	// public abstract List<List<String>> getDoctorNote(String emrDetId) throws
+	// SQLException;
 
 	public abstract boolean updateDoctorNote(String doctorNote, String emrDetId) throws SQLException;
 
@@ -57,13 +58,8 @@ public interface PatientDao {
 
 	public List<String> getDoctorList() throws SQLException;
 
-	public String insertServiceOrderData(String serviceOrderKey, String doctorOrderNo, String patientNo, String netAmount, String doctorId,
-			String mrd, String patientType, String visitNo, String userId, String disIndication, String referDoctor,
-			String[] serviceId, String[] qty, String[] disAmount, String[] disPercent, String[] specimen,
-			String[] treatedBy,String [] specimenChecked, String voucherNumber) throws SQLException;
-
 	public List<List<String>> getPrevServiceOrderList(String patientNo) throws SQLException;
-	
+
 	public List<List<String>> getPatientHistory(String patientNo) throws SQLException;
 
 	public List<String> getServiceOrderDetail(String soNumber) throws SQLException;
@@ -73,15 +69,41 @@ public interface PatientDao {
 	public String getServiceIdRate(String serviceId, String patientNo) throws SQLException;
 
 	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException;
+	
+	public List<String> getDrugReqItemList(String itemName) throws SQLException;
 
 	public List<String> getParentLink(String userRole) throws SQLException;
 
 	public List<String> getChildLink(String userRole, String catCode) throws SQLException;
 
+	public String insertUpdateServiceOrder(String serviceOrderKey, String doctorOrderNo, String patientNo,
+			String netAmount, String doctorId, String mrd, String patientType, String visitNo, String userId,
+			String disIndication, String referDoctor, String[] serviceId, String[] qty, String[] disAmount,
+			String[] disPercent, String[] specimen, String[] treatedBy, String[] specimenChecked, String voucherNumber,
+			String checkBoxFlag) throws SQLException;
+
 	public String insertUpdateDoctorOrder(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
 			String bedNo, String advice, String medication, String laboratory, String diet, String progress,
 			String userId, String doctorOrderoNumber) throws SQLException;
+
+	public String insertUpdateNurseNote(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
+			String bedNo, String nurseNote, String userId, String doctorOrderoNumber) throws SQLException;
+
+	public String insertUpdateVitalChart(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
+			String bedNo, Map<String, String> map, String userId, String vitalChartNumber) throws SQLException;
 	
+	public String insertUpdatePharmaOrder(String locationCode,String pharmaOrderNumber,String wardCode,String  stockingPoint,String mrd,String patientNo,String referDoctor,String userId,String [] itemCode,String [] qty) throws SQLException;
+
 	public List<String> getDoctorNote(String doctorOrderNumber) throws SQLException;
+
+	public List<String> getPreviousVitalChart(String ipNumber) throws SQLException;
+
+	public List<List<String>> getNurseNoteHistory(String patientNo) throws SQLException;
+
+	public List<String> getNurseNote(String nurseNoteNumber) throws SQLException;
+	
+	public List<List<String>> getPrevPharmaOrderList(String ipNumber) throws SQLException;
+	
+	public List<String> getPharmaOrderDetail(String poNumber) throws SQLException;
 
 }
