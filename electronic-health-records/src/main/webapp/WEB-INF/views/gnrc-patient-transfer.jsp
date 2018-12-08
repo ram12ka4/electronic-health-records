@@ -269,34 +269,86 @@
 						<hr>
 						<div class="row">
 							<div class="col-md-6 dashboard-left-cell">
-								<table class="table" id="myTable" style="width: 100%">
-									<thead>
-										<tr>
-											<th>S/N</th>
-											<th>Service Description</th>
-											<th>Qty.</th>
-											<th>Rate</th>
-											<th>Dis(%)</th>
-											<th>Dis Amnt</th>
-											<th>Net Amnt</th>
-											<th>Specimen/Treated by</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<th>S/N</th>
-											<th>Service Description</th>
-											<th>Qty.</th>
-											<th>Rate</th>
-											<th>Dis(%)</th>
-											<th>Dis Amnt</th>
-											<th>Net Amnt</th>
-											<th>Specimen/Treated by</th>
-											<th>Action</th>
-										</tr>
-									</tbody>
-								</table>
+								<div class="form-horizontal">
+							<div class="form-group">
+								<label class="control-label col-xs-2" for="mrd"><span
+									class="required-label" id="mrd">MRD Number</span> :</label>
+								<div class="col-xs-3">
+									<input type="text" class="form-control input-sm" id="mrd"
+										value="<%=patient.getMrdNumber()%>" name="mrd_number"
+										placeholder="MRD Number" readonly>
+								</div>
+								<label class="control-label col-xs-2" for="ip-num"><span
+									class="required-label" id="ip">IP Number</span> :</label>
+								<div class="col-xs-3">
+									<input type="text" class="form-control input-sm" id="ip"
+										name="ip_number" value="<%=patient.getIpNumber()%>"
+										placeholder="IP Number" readonly>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-xs-2" for="title"><span
+									class="required-label" id="pat-name"> Patient Name</span> :</label>
+								<div class="col-xs-3">
+									<input type="text" class="form-control input-sm" id="pat-name"
+										value="<%=patient.getPatientName()%>" name="pat_name"
+										placeholder="First Name" readonly>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-xs-2" for="age"><span
+									class="required-label" id="age"> Age</span> :</label>
+								<div class="col-xs-2">
+									<input type="text" class="form-control input-sm" name="age"
+										value="<%=patient.getAge()%>" placeholder="Age" readonly>
+								</div>
+								<label class="control-label col-xs-2" for="sex"><span
+									class="required-label"> Sex</span> :</label>
+								<div class="col-xs-2">
+									<input type="text" class="form-control input-sm" id="sex"
+										name="sex" value="<%=patient.getSex()%>" placeholder="Sex"
+										readonly>
+								</div>
+								<label class="control-label col-xs-2" for="weight"><span
+									class="required-label"> Weight</span> :</label>
+								<div class="col-xs-1">
+									<input type="text" class="form-control input-sm" id="weight"
+										value="" name="weight" placeholder="Weight">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-2" for="dt-of-admit"><span
+									class="required-label" id="dt-of-admit"> Date of
+										Admission</span> :</label>
+								<div class="col-xs-2">
+									<input type="text" class="form-control input-sm"
+										name="dt_of_admit" value="<%=patient.getAdmissionDate()%>"
+										placeholder="Date of Admission" readonly>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-xs-2" for="doctor"><span
+									class="required-label" id="doctor"> Consultant</span> :</label>
+								<div class="col-xs-3">
+									<input type="text" class="form-control input-sm" name="doctor"
+										value="<%=patient.getDoctorIncharge()%>" placeholder="Doctor"
+										readonly>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-2" for="status"><span
+									class="required-label" id="gender"> Clinical Diagnosis</span> :</label>
+								<div class="col-xs-5">
+									<input type="text" class="form-control input-sm"
+										name="last_name" placeholder="Last Name" required>
+								</div>
+							</div>
+
+						</div>
 							</div>
 							<div class="col-md-6 dashboard-right-cell">
 								<table class="table" id="myTable" style="width: 100%">
