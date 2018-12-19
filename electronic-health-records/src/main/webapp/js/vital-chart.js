@@ -33,7 +33,7 @@ $(function() {
 			},
 			success : function(data) {
 
-				// alert(data);
+				//alert(data);
 				console.log('Vital Chart length : ' + vitalChartList.length);
 				vitalChartList.length = 0;
 				//location.reload();
@@ -57,7 +57,7 @@ $(function() {
 				 
 		
 
-				if ($.fn.dataTable.isDataTable('#eyesOpenTable')) {
+				if ($.fn.dataTable.isDataTable('#eyesOpenTable')) {	
 					// alert('object already exists');
 					table = $('#eyesOpenTable').DataTable();
 					table.clear().destroy();
@@ -694,7 +694,7 @@ $(function() {
 					        	if (nurseNoteNo === 0){
 					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + nurseNoteNo,'error');
 					        	} else {
-					        		swal('Well done!','Data have been saved.<br> NURSE NOTE ID :' + nurseNoteNo,'success');
+					        		swal('Well done!','Data have been saved.<br> VITAL CHART ID :' + nurseNoteNo,'success');
 					        		reset();
 					        		//location.reload();
 					        		ajaxReq();
@@ -724,7 +724,7 @@ $(function() {
 					        	if (nurseNoteNo === 0){
 					        		swal('Ohh no!!','Data have not been saved.<br> ERROR CODE :' + nurseNoteNo,'error');
 					        	} else {
-					        		swal('Well done!','Data have been updated.<br> NURSE NOTE ID :' + nurseNoteNo,'success');
+					        		swal('Well done!','Data have been updated.<br> VITAL CHART ID :' + nurseNoteNo,'success');
 					        		reset();
 					        	}
 					        },

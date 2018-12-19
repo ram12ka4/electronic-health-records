@@ -1,9 +1,9 @@
 package com.gnrchospitals.dao;
 
-import com.gnrchospitals.dto.User;
+import java.sql.SQLException;
 
 public interface UserDao {
 
-	public abstract boolean authenticateUser(User user);
+	public abstract String authenticateUser(String userID, String password) throws SQLException;
 
 }

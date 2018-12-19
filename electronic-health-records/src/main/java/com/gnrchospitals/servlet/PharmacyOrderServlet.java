@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
@@ -22,6 +25,7 @@ public class PharmacyOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 6157982947117798172L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
+	private static Logger LOGGER = LoggerFactory.getLogger(PharmacyOrderServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -53,14 +57,14 @@ public class PharmacyOrderServlet extends HttpServlet {
 		String referDoctor = request.getParameter("referDoctor") == null
 				|| request.getParameter("referDocId").isEmpty() ? "" : request.getParameter("referDocId");
 
-		System.out.println("ACTION : " + action);
-		System.out.println("Pharma Order No : " + pharmaOrderNumber);
-		System.out.println("patientNo : " + patientNo);
-		System.out.println("mrd : " + mrd);
-		System.out.println("patientType : " + patientType);
-		System.out.println("visitNo : " + visitNo);
-		System.out.println("userId : " + userId);
-		System.out.println("referDoctor : " + referDoctor);
+		LOGGER.info("ACTION : " + action);
+		LOGGER.info("Pharma Order No : " + pharmaOrderNumber);
+		LOGGER.info("patientNo : " + patientNo);
+		LOGGER.info("mrd : " + mrd);
+		LOGGER.info("patientType : " + patientType);
+		LOGGER.info("visitNo : " + visitNo);
+		LOGGER.info("userId : " + userId);
+		LOGGER.info("referDoctor : " + referDoctor);
 
 	
 
@@ -69,23 +73,15 @@ public class PharmacyOrderServlet extends HttpServlet {
 			if ("INSERT_UPDATE_PHARMA_ORDER".equals(action)) {
 				String poNumber = patientDao.insertUpdatePharmaOrder("MAIN", pharmaOrderNumber, wardCode, "PHRMC", mrd, patientNo, referDoctor, userId, itemCode, qty);
 				out.print(poNumber);
-			} else if ("FETCH_SERVICE_ID_RATE".equals(action)) {
-				/*String currentRate = patientDao.getServiceIdRate(serviceId[0], patientNo);*/
-				//System.out.println("Current Rate : " + currentRate);
-				//out.print(currentRate);
 			} else if ("FETCH_PHARMA_ORDER_DETAIL".equals(action)) {
 				List<String> list = patientDao.getPharmaOrderDetail(pharmaOrderNumber);
-				System.out.println("Pharmacy Order Detail : " + list);
+				LOGGER.info("Pharmacy Order Detail : " + list);
 				out.print(list);
-			} else if ("FETCH_PATIENT_HISTORY".equals(action)) {
-				//List<String> list = patientDao.getDoctorNote(doctorOrderNumber);
-				//System.out.println("Doctor Note : " + list);
-				//out.print(list);
-			} else if ("FETCH_PREVIOUS_PHARMA_ORDER_LIST".equals(action)) {
+			}  else if ("FETCH_PREVIOUS_PHARMA_ORDER_LIST".equals(action)) {
 				List<List<String>> list = patientDao.getPrevPharmaOrderList(patientNo);
 				List<String> column = list.get(0);
 				
-				System.out.println("Column name : " + column);
+				LOGGER.info("Column name : " + column);
 				
 				List<String> row = list.get(1);
 				out.println(
@@ -127,24 +123,17 @@ public class PharmacyOrderServlet extends HttpServlet {
 			}  else if ("GET_SERVICE_LIST".equals(action)) {
 				List<String> list = patientDao.getServiceList();
 				out.print(list);
-			} else if ("FETCH_SPECIMEN_LIST".equals(action)) {
-				//List<String> list = patientDao.getSpecimenList(serviceCode);
-				//System.out.println("Specimen List : " + list);
-				//out.print(list);
-			} else if ("FETCH_DOCTOR_LIST".equals(action)) {
+			}  else if ("FETCH_DOCTOR_LIST".equals(action)) {
 				List<String> list = patientDao.getDoctorList();
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
-			} else if ("GET_PANEL_SERVICE_CODE".equals(action)) {
-				//List<String> list = patientDao.getPanelServiceCodeList(serviceCode);
-				//out.print(list);
-			} else if ("GET_ITEM_LIST_DRUG_REQ".equals(action)) {
+			}  else if ("GET_ITEM_LIST_DRUG_REQ".equals(action)) {
 				List<String> list = patientDao.getDrugReqItemList(itemName);
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-pharmacy-order.jsp").forward(request, response);

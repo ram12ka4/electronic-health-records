@@ -73,6 +73,90 @@ $(function() {
 				}
 
 			});
+	
+	
+	
+	/*
+	 * Fetching Doctor List with doctor id
+	 */
+	
+	 $.ajax({
+			type: 'post',
+			url: 'service.order',
+			dataType : 'json',
+			data : {
+				ACTION : 'FETCH_DOCTOR_LIST',
+			},
+			success: function(data){
+				
+				console.log('Doctor List : ' +  JSON.stringify(data));
+
+				if (data.length !== 0) {
+					doctorList.length = 0;
+					
+					for (var i = 0; i < data.length; i+=2) {
+						doctorList
+								.push({
+									label : String(data[i+1]),
+									value : String(data[i+1]),
+									doctorId: String(data[i]),
+									doctorName: String(data[i+1])
+								});
+					}
+					
+			
+				} else {
+					swal('Ohh no!', 'No Doctor found', 'info');
+				}
+			},
+			error: function(data){
+				var errorMsg = "There is a problem processing your request";
+				 swal('Sorry for inconvenience', errorMsg, 'info');
+				// alert(data.responseText);
+			},
+			failure: function(data){
+				var errorMsg = "There is a problem processing your request";
+				 swal('Sorry for inconvenience', errorMsg, 'info');
+			}
+		});
+
+		$('body').on('keyup', '#refer-doctor', function(event){
+			event.preventDefault();
+			$(this).autocomplete({
+				autoFocus : true,
+				maxShowItems : 5,
+				minLength : 3,
+				delay : 500,
+				source: doctorList,
+				select: function(event, ui){
+					// $(this).val(ui.item.label);
+					console.log('Doctor Id ' + ui.item.doctorId);
+					$('#ref-doc-id').val(ui.item.doctorId);
+					
+				}
+			});
+		});
+		
+		$(document).on('keypress', '#refer-doctor', function(event){
+			
+			var x = event.which || event.keyCode;
+			
+			console.log('Event Number : ' + x);
+			
+			/*
+			 * for detecting backspace event
+			 */
+			if (x === 8) {
+				$('#refer-doctor').val('');
+				$('#ref-doc-id').val('');
+			}
+			
+			
+		});
+	
+	
+	
+	
 
 	var table = $('#myTable').DataTable({
 
@@ -1431,9 +1515,8 @@ $(function() {
 						  if (status === 'error') { 
 				      $('.myModal').modal('hide');
 					  var msg = "Sorry but there was an error: "; 
-					  // swal( "Info!", msg + xhr.status + " " +
-						// xhr.statusText, "error");
-					  swal( "Info!", 'No previous service order is available ', 'info');
+					  swal( "Info!", msg + xhr.status + " " + xhr.statusText, "error");
+					  //swal( "Info!", 'No previous service order is available ', 'info');
 					}
 					  
 					  if (status === 'success'){
@@ -1605,7 +1688,7 @@ $(function() {
 							
 							$('.doc-note').text('Doctor Note : ' + drNumber);
 							$('.note-date').text('Date : ' + notedate);
-							$('.refer-doctor').text('Refer Doctor : ' + doctorName);
+							$('.refer-doctor-name').text('Refer Doctor : ' + doctorName);
 							
 							
 						}
@@ -1647,10 +1730,16 @@ $(function() {
 		 reset();
 		 
 		 var soNumber = $(this).attr('so-no');
+		 var doctorCode = $(this).attr('doc-code');
+		 var doctorName = $(this).attr('doc-name');
 		
 		 
 		 // console.log('IP Number : ' + ipNumber);
 		// console.log('SO Number : ' + soNumber);
+		 
+		 $('#refer-doctor').val($.trim(doctorName));
+		 $('#ref-doc-id').val($.trim(doctorCode));
+		 
 		 
 		 var req = $.ajax({
 			 		
@@ -1697,6 +1786,9 @@ $(function() {
 			 		var soDate;
 			 		var specimenChecked = [];
 			 		var drNumber = [];
+			 		
+			 	
+			 		
 			 	
 			 		serviceNameList.length = 0;
 
@@ -1889,6 +1981,8 @@ $(function() {
 			 			console.log('Trigger Click');
 				 		$('.pat-view-btn').trigger("click", [drNumber[0]]);
 				 		$('.btn-row-add').prop('disabled', true);
+				 		$('#refer-doctor').prop('disabled', true);
+				 		
 				 		
 			 			
 			 		/*	var totalSpec = 0;
@@ -2147,9 +2241,12 @@ $(function() {
 		$('textarea#progress').val('');
 		$('.doc-note').text('');
 		$('.note-date').text('');
-		$('.refer-doctor').text('');
+		$('.refer-doctor-name').text('');
 		$('.btn-row-add').prop('disabled', false);
 		var totalRow = 0;
+		$('#refer-doctor').val('');
+		$('#ref-doc-id').val('');
+		$('#refer-doctor').prop('disabled', false);
 		
 		$('.serviceDesc').each(function(event){
 			totalRow++;

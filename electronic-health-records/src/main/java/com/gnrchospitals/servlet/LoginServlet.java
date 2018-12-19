@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +12,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.gnrchospitals.dao.DatabaseDao;
-import com.gnrchospitals.dao.UserDao;
+import com.gnrchospitals.dao.LoginDao;
 import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
-import com.gnrchospitals.daoimpl.UserDaoImpl;
-import com.gnrchospitals.dto.User;
+import com.gnrchospitals.daoimpl.LoginDaoImpl;
 
 @WebServlet(urlPatterns = "/login.do")
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private LoginDao loginDao = new LoginDaoImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,44 +57,33 @@ public class LoginServlet extends HttpServlet {
 
 		DatabaseDao databaseDo = new DatabaseDaoImpl();
 		boolean loginDatabaseValidate = databaseDo.findByLocation(location);
-		
 		System.out.println("Login Database Validation " + loginDatabaseValidate);
 
-		User userBean = new User();
-		userBean.setId(id);
-		userBean.setPassword(password);
-
-		UserDao userdao = new UserDaoImpl();
-		boolean userValidation = userdao.authenticateUser(userBean);
-
-		System.out.println("User Valid : " + userValidation);
-		System.out.println("User Name : " + userBean.getUsername());
-		System.out.println("User Role : " + userBean.getUserRole());
+		
+		String userValidation = loginDao.validateUser(id, password);
+		System.out.println("User Validation : " + userValidation.substring(1));
+		
 		
 
-		if (userValidation) {
+		if (userValidation.contains("1")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", id);
-			session.setAttribute("userName", userBean.getUsername());
+			session.setAttribute("userName", userValidation.substring(1));
 			session.setAttribute("loginTime", today);
 			session.setAttribute("loginFrom", ipAddress);
 			session.setAttribute("location", location);
-			session.setAttribute("userRole", userBean.getUserRole());
+			
 			// setting session to expiry in 30 minutes
 			session.setMaxInactiveInterval(30 * 60);
 			Cookie userName = new Cookie("user", id);
 			response.addCookie(userName);
 			// Get the encoded URL string
-			//String encodeURL = response.encodeRedirectURL("/WEB-INF/views/dashboard.jsp");
 			String encodeURL = response.encodeRedirectURL("patient.portal");
 			 response.sendRedirect(encodeURL);
-			//request.getRequestDispatcher(encodeURL).forward(request, response);
 
 		} else {
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
 			request.setAttribute("msg", "Invalid Credentials! (user or password or location)");
-			// request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request,
-			// response);
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
 			rd.include(request, response);
 
 		}

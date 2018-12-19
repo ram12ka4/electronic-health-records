@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
@@ -24,6 +27,7 @@ public class VitalChartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
+	private static Logger LOGGER = LoggerFactory.getLogger(VitalChartServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -82,17 +86,17 @@ public class VitalChartServlet extends HttpServlet {
 		map.put(pupl, leftPupilCloseOPen + leftPupilSize);
 		map.put(pupr, rightPupilCloseOPen + rightPupilSize);
 
-		System.out.println("ACTION : " + action);
-		System.out.println("patientNo : " + patientNo);
-		System.out.println("mrd: " + mrd);
-		System.out.println("visitNo : " + visitNo);
-		System.out.println("doctorId : " + refDoctorId);
-		System.out.println("wardNo : " + wardNo);
-		System.out.println("bedNo : " + bedNo);
-		System.out.println("userId : " + userId);
-		System.out.println("Nurse Note Id : " + vitalChartNumber);
+		LOGGER.info("ACTION : " + action);
+		LOGGER.info("patientNo : " + patientNo);
+		LOGGER.info("mrd: " + mrd);
+		LOGGER.info("visitNo : " + visitNo);
+		LOGGER.info("doctorId : " + refDoctorId);
+		LOGGER.info("wardNo : " + wardNo);
+		LOGGER.info("bedNo : " + bedNo);
+		LOGGER.info("userId : " + userId);
+		LOGGER.info("Nurse Note Id : " + vitalChartNumber);
 		if (map != null) {
-			System.out.println("Map Value : " + map);
+			LOGGER.info("Map Value : " + map);
 		}
 
 		try {
@@ -105,13 +109,13 @@ public class VitalChartServlet extends HttpServlet {
 				List<String> list = patientDao.getDoctorList();
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
 			} else if ("FETCH_PREVIOUS_VITAL_CHART".equals(action)) {
 				List<String> list = patientDao.getPreviousVitalChart(patientNo);
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);

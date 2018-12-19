@@ -43,6 +43,10 @@
 	text-align: left;
 	vertical-align: middle;
 }
+
+div.table-container{
+	width: 100%;
+}
 </style>
 
 
@@ -268,7 +272,7 @@
 						</div>
 
 						<hr>
-
+					<div class="table-container">
 						<table class="table" id="myTable" style="width: 100%">
 							<thead>
 								<tr>
@@ -282,6 +286,8 @@
 								</tr>
 							</thead>
 						</table>
+					</div>
+						
 
 						<hr>
 						

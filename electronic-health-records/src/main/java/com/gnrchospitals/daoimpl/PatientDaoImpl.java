@@ -14,12 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.dto.Emr;
-import com.gnrchospitals.dto.IndoorPatient;
 import com.gnrchospitals.dto.Patient;
 import com.gnrchospitals.dto.ServiceOrder;
 import com.gnrchospitals.util.LoginDBConnection;
+
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.internal.OracleTypes;
 
@@ -88,9 +89,7 @@ public class PatientDaoImpl implements PatientDao {
 			if (rs.next()) {
 				return true;
 			}
-
 		}
-
 		return false;
 	}
 
@@ -107,7 +106,7 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	@Override
+/*	@Override
 	public boolean insertEmrClinicalData(Patient data) throws SQLException {
 		boolean flag = false;
 
@@ -165,9 +164,9 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(7, patientEmr.getEmr().getUpdateUser());
 
 		return ps;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean insertEmrHealthData(Patient data) throws SQLException {
 		boolean flag = false;
 
@@ -229,7 +228,7 @@ public class PatientDaoImpl implements PatientDao {
 			ps.addBatch();
 		}
 		return ps;
-	}
+	}*/
 
 	@Override
 	public boolean getValidatedIp(String ipNumber) throws SQLException {
@@ -292,7 +291,7 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	@Override
+	/*@Override
 	public List<List<String>> getDoctorPreviousData(String ipNumber, String action) throws SQLException {
 
 		List<List<String>> list = new ArrayList<>();
@@ -375,9 +374,9 @@ public class PatientDaoImpl implements PatientDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, ipNumber);
 		return ps;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean deleteDoctorData(String emrDetId) throws SQLException {
 		boolean flag = false;
 
@@ -422,9 +421,9 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(1, edNo);
 
 		return ps;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean updateDoctorNote(String doctorNote, String emrDetId) throws SQLException {
 		boolean flag = false;
 
@@ -471,41 +470,11 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(2, edNo);
 
 		return ps;
-	}
+	}*/
 
-	/*
-	 * @Override public List<List<String>> getDoctorNote(String emrDetId) throws
-	 * SQLException {
-	 * 
-	 * List<List<String>> list = new ArrayList<>(); List<String> col = new
-	 * ArrayList<>(); List<String> row = new ArrayList<>();
-	 * 
-	 * try (Connection con = LoginDBConnection.getConnection(); PreparedStatement ps
-	 * = createPreparedStatement8(con, emrDetId); ResultSet rs = ps.executeQuery())
-	 * {
-	 * 
-	 * ResultSetMetaData rsmd = rs.getMetaData();
-	 * 
-	 * for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-	 * col.add(rsmd.getColumnName(i)); }
-	 * 
-	 * list.add(col);
-	 * 
-	 * if (rs.next()) {
-	 * 
-	 * do { for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-	 * row.add(rs.getString(rsmd.getColumnName(i))); } } while (rs.next());
-	 * 
-	 * }
-	 * 
-	 * list.add(row);
-	 * 
-	 * } return list;
-	 * 
-	 * }
-	 */
 
-	private PreparedStatement createPreparedStatement8(Connection con, String edNo) throws SQLException {
+
+	/*private PreparedStatement createPreparedStatement8(Connection con, String edNo) throws SQLException {
 
 		System.out.println("EMR DET ID: " + edNo);
 
@@ -527,7 +496,7 @@ public class PatientDaoImpl implements PatientDao {
 		ps.setString(1, edNo);
 
 		return ps;
-	}
+	}*/
 
 	@Override
 	public List<String> getParameterList(String paramaterType) throws SQLException {
@@ -988,184 +957,6 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	public List<String> getWardList(String empCode) throws SQLException {
-
-		int doctorCount = 0;
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-
-			try (PreparedStatement ps = createPreparedStatement19(con, empCode); ResultSet rs = ps.executeQuery()) {
-
-				if (rs.next()) {
-					do {
-						doctorCount = Integer.valueOf(rs.getString(1));
-					} while (rs.next());
-				}
-			}
-
-			try (PreparedStatement ps = createPreparedStatement20(con, doctorCount, empCode);
-					ResultSet rs = ps.executeQuery()) {
-
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Indoor Patient List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement19(Connection con, String empCode) throws SQLException {
-		String sql = "SELECT COUNT(*) FROM AS_USER_ROLES WHERE HUR_USER_ID = ? AND HUR_ROLE_CD = 'DOC1'";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, empCode);
-		return ps;
-	}
-
-	private PreparedStatement createPreparedStatement20(Connection con, int doctorCount, String empCode)
-			throws SQLException {
-
-		StringBuilder sql = new StringBuilder();
-
-		System.out.println("Doctor Count : " + doctorCount);
-
-		if (doctorCount == 0) {
-			sql.append("select distinct a.WAT_CURR_WARD_CD, b.WWM_WARD_DESC from   wa_admission_txn a,"
-					+ "  wa_ward_master b  where a.WAT_CURR_WARD_CD = b.WWM_WARD_CD");
-		} else {
-			sql.append("select distinct a.WAT_CURR_WARD_CD, b.WWM_WARD_DESC from  wa_admission_txn a, "
-					+ "    wa_ward_master b  where  a.WAT_CURR_WARD_CD = b.WWM_WARD_CD and a.WAT_DOCTOR_INCHARGE = ?");
-		}
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-
-		if (doctorCount != 0) {
-			ps.setString(1, empCode);
-		}
-
-		return ps;
-	}
-
-	public ArrayList<ArrayList<String>> getPatientList(String empCode, String wardId) throws SQLException {
-
-		ArrayList<String> row = new ArrayList<>();
-		ArrayList<String> column = new ArrayList<>();
-		ArrayList<ArrayList<String>> list = new ArrayList<>();
-		int rowCount = 0;
-
-		try (Connection con = LoginDBConnection.getConnection();
-				PreparedStatement ps = createPreparedStatement21(con, empCode, wardId);
-				ResultSet rs = ps.executeQuery()) {
-
-			ResultSetMetaData rsmd = rs.getMetaData();
-
-			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				column.add(rsmd.getColumnName(i));
-			}
-
-			list.add(column);
-
-			if (rs.next()) {
-				do {
-					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-						row.add(rs.getString(rsmd.getColumnName(i)));
-					}
-					rowCount++;
-				} while (rs.next());
-			}
-
-			list.add(row);
-
-		}
-
-		System.out.println("Row Count + " + rowCount);
-		System.out.println("Indoor Patient List : " + list);
-		System.out.println("Indoor Patient List size : " + list.get(1).size());
-		return list;
-
-	}
-
-	private PreparedStatement createPreparedStatement21(Connection con, String empCode, String wardId)
-			throws SQLException {
-		StringBuilder sql = new StringBuilder();
-
-		sql.append(" select a.WAT_IP_NUM \"IP\", b.RRH_FIRST_NAME||' '||b.RRH_MIDDLE_NAME||' '||b.RRH_LAST_NAME NAME, "
-				+ "						                           d.WWM_WARD_DESC WARD, a.WAT_BED_CD \"BED\", a.WAT_ADMN_DT \"ADMN DATE\",  c.EEM_FIRST_NAME||' '||c.EEM_MIDDLE_NAME||' '||c.EEM_LAST_NAME as \"ADMN DOCTOR\" ,e.GDM_DEPT_DESC \"SPECIALITY\", f.gps_patient_subctgry_desc \"CATEGORY\""
-				+ "                                                    	  from "
-				+ "                                                         wa_admission_txn a, "
-				+ "                                                         RE_REGISTRATION_HEADER b, "
-				+ "                                                         hr_employee_master c, "
-				+ "                                                         wa_ward_master d, "
-				+ "                                                         ga_department_master e,"
-				+ "                                                         ga_patient_subcategory_master f"
-				+ "                                                         where "
-				+ "                                                         a.WAT_MR_NUM = b.RRH_MR_NUM "
-				+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD "
-				+ "                                                         and a.WAT_DOCTOR_INCHARGE = c.EEM_EMP_NUM"
-				+ "                                                         and a.WAT_ADMM_DEPT = e.GDM_DEPT_CD "
-				+ "                                                         and WAT_pat_status = 'ADIP' "
-				+ "                                                         and a.WAT_CURR_WARD_CD = d.WWM_WARD_CD ");
-
-		if (!"0".equals(wardId)) {
-			sql.append(" and a.WAT_CURR_WARD_CD = ? ");
-		}
-
-		sql.append("                                                         and a.WAT_DOCTOR_INCHARGE = ? "
-				+ "                                                         and f.GPS_PATIENT_CTGRY_CD = a.WAT_PATIENT_CATEGORY_CD"
-				+ "                                                         and f.GPS_PATIENT_SUBCTGRY_CD = a.WAT_PATIENT_SUBCATEGORY_CD"
-				+ "                                                         order by name");
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-
-		if (!"0".equals(wardId)) {
-			ps.setString(1, wardId);
-			ps.setString(2, empCode);
-		} else {
-			ps.setString(1, empCode);
-		}
-
-		return ps;
-	}
-
-	public List<IndoorPatient> getPatientList1(String empCode, String wardId) throws SQLException {
-
-		List<IndoorPatient> list = new ArrayList<>();
-		int rowCount = 0;
-
-		try (Connection con = LoginDBConnection.getConnection();
-				PreparedStatement ps = createPreparedStatement21(con, empCode, wardId);
-				ResultSet rs = ps.executeQuery()) {
-
-			while (rs.next()) {
-				IndoorPatient patient = new IndoorPatient();
-				patient.setIpNumber(rs.getString(1));
-				patient.setIpName(rs.getString(2));
-				patient.setWard(rs.getString(3));
-				patient.setBedNumber(rs.getString(4));
-				patient.setAdmissionDate(rs.getString(5));
-				patient.setAdmittingDoctor(rs.getString(6));
-				patient.setSpeciality(rs.getString(7));
-				patient.setSubCategory(rs.getString(8));
-				list.add(patient);
-			}
-
-		}
-
-		System.out.println("Row Count + " + rowCount);
-		System.out.println("Indoor Patient List : " + list);
-
-		return list;
-
-	}
-
 	public List<String> getParentLink(String userRole) throws SQLException {
 		ArrayList<String> list = new ArrayList<>();
 		try (Connection con = LoginDBConnection.getConnection();
@@ -1187,21 +978,10 @@ public class PatientDaoImpl implements PatientDao {
 
 	private PreparedStatement createPreparedStatement22(Connection con, String userRole) throws SQLException {
 		StringBuilder sql = new StringBuilder();
-
-		sql.append(" select  a.HCM_CATG_CD, a.HCM_CATG_DESC, count(*) ");
-		sql.append(" from ");
-		sql.append(" as_catg_master a,");
-		sql.append(" as_role_form_access b ");
-		sql.append(" where ");
-		sql.append(" a.HCM_CATG_CD = b.HFA_CATG_CD ");
-		sql.append(" and b.hfa_role_cd = ? ");
-		sql.append(" group by a.HCM_CATG_CD, a.HCM_CATG_DESC ");
-
+		
 		System.out.println(sql.toString());
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-
 		ps.setString(1, userRole.trim());
-
 		return ps;
 	}
 
@@ -1250,80 +1030,9 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	public List<String> getServiceList() throws SQLException {
 
-		List<String> list = new ArrayList<>();
 
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement24(con); ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Indoor Patient List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement24(Connection con) throws SQLException {
-		String sql = "SELECT DISTINCT b.BMH_MAJOR_CD, UPPER(b.BMH_MAJOR_DESC) " + "FROM "
-				+ "        BI_SERVICE_MASTER a," + "        BI_MAJORMINOR_HEADER b" + "        WHERE "
-				+ "        a.BSM_SERVICE_STATUS = 'A' " + "        AND a.BSM_MAJOR_CD = b.BMH_MAJOR_CD "
-				+ "        AND b.BMH_MAJOR_CD <> 'DKMJ' ORDER BY UPPER(b.BMH_MAJOR_DESC)";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-
-		return ps;
-	}
-
-	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException {
-
-		List<ServiceOrder> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement25(con, serviceCat, serviceDesc);
-					ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						ServiceOrder serviceOrder = new ServiceOrder();
-						serviceOrder.setServiceId(rs.getString(1));
-						serviceOrder.setMinorCode(rs.getString(2));
-						serviceOrder.setServiceCode(rs.getString(3));
-						serviceOrder.setServiceName(rs.getString(4));
-						serviceOrder.setRate(rs.getString(5));
-						serviceOrder.setDiscount(rs.getString(6));
-						serviceOrder.setTreatedBy(rs.getString(7));
-						serviceOrder.setQty("1");
-						serviceOrder.setDiscountAmount("0");
-						serviceOrder.setNetAmount("0");
-						list.add(serviceOrder);
-					} while (rs.next());
-				}
-			}
-			System.out.println("Indoor Patient List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement25(Connection con, String serviceCat, String serviceDesc)
-			throws SQLException {
-		String sql = "select s.BSM_SERVICE_ID,s.BSM_MINOR_CD, s.BSM_SERVICE_CD, s.bsm_service_desc,d.brd_dsct_rate,s.bsm_cash_discount, NVL(BSM_TREATED_BY, 'N')  treat_by "
-				+ " from   bi_category_rate_detail    d" + " ,bi_category_rate_header    h"
-				+ " ,bi_service_master          s" + "  where  d.brd_ctgry_dsct_cd = h.bcr_ctgry_dsct_cd "
-				+ "  and  h.bcr_ctgry_cd      = 'REG' " + "  and  h.bcr_grade_cd      = 'REG' "
-				+ "  and  h.bcr_bill_class_cd = 'NORMAL' " + "  and  d.brd_ssrvc_cd      = s.bsm_service_id "
-				+ "  and  s.bsm_service_status = 'A' " + "  and  d.brd_dsct_rate     > 0 "
-				+ "  and s.BSM_MAJOR_CD = ? and upper(s.bsm_service_desc) like upper('%'|| ? ||'%')";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, serviceCat.trim());
-		ps.setString(2, serviceDesc.trim());
-		return ps;
-	}
+	
 
 	public List<String> getPanelServiceCodeList(String serviceCode) throws SQLException {
 
@@ -1353,78 +1062,12 @@ public class PatientDaoImpl implements PatientDao {
 		return ps;
 	}
 
-	public List<String> getSpecimenList(String serviceCode) throws SQLException {
+	
 
-		System.out.println("in getSpecimenList");
-		System.out.println("Service Code : " + serviceCode);
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement27(con, serviceCode); ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(2));
-						list.add(rs.getString(3));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Specimen List : " + list);
-			return list;
-		}
-
-	}
-
-	private PreparedStatement createPreparedStatement27(Connection con, String serviceCode) throws SQLException {
-		String sql = "SELECT B.LTS_TEST_CD AS TEST_CODE, " + "B.LTS_SPECIMEN_CD AS SPECIMAN_CODE, "
-				+ "A.LSM_SPECIMEN_DESC AS SPEC_DESC, LTS_DEFAULT_FLAG " + "FROM LS_SPECIMEN_MASTER A, "
-				+ "LS_TEST_SPECIMEN_MASTER B " + "WHERE A.LSM_SPECIMEN_CD=B.LTS_SPECIMEN_CD "
-				+ "AND B.LTS_TEST_CD  = UPPER(?) " + "ORDER BY B.LTS_DEFAULT_FLAG DESC,LSM_SPECIMEN_DESC ";
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, serviceCode);
-
-		return ps;
-	}
-
-	public List<String> getDoctorList() throws SQLException {
-
-		System.out.println("in getDoctorList");
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement28(con); ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Specimen List : " + list);
-			return list;
-		}
-
-	}
-
-	private PreparedStatement createPreparedStatement28(Connection con) throws SQLException {
-		String sql = "SELECT DISTINCT  A.EEM_EMP_NUM,"
-				+ "A.EEM_FIRST_NAME || ' ' || A.EEM_MIDDLE_NAME || ' ' || A.EEM_LAST_NAME AS EEM_NAME "
-				+ "FROM    HR_EMPLOYEE_MASTER A, " + "GA_CLINICAL_STAFF_MASTER B "
-				+ "WHERE A.EEM_EMP_NUM=B.GCS_EMPLOYEE_NUM " + "AND A.EEM_EMP_STATUS='A' "
-				+ "AND B.GCS_STAFF_TYPE_CD IN ('CONS','SURG') " + "ORDER BY EEM_NAME ";
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		return ps;
-	}
+	
 
 	public String insertUpdateServiceOrder(String soNumber, String docOrderNumber, String patientNo, String netAmount,
-			String doctorId, String mrdNumber, String patientType, String visitNo, String userId, String disIndication,
+			 String mrdNumber, String patientType, String visitNo, String userId, String disIndication,
 			String referDoctorCode, String[] serviceId, String[] qty, String[] disAmount, String[] disPercent,
 			String[] specimen, String[] treatedBy, String[] specimenChecked, String voucherNumber, String checkBoxFlag)
 			throws SQLException {
@@ -1449,7 +1092,7 @@ public class PatientDaoImpl implements PatientDao {
 				System.out.println("Fresh Service order entry or Service order updation");
 
 				try (CallableStatement cs = createCallableStatement2(con, soNumber, docOrderNumber, patientNo,
-						netAmount, doctorId, mrdNumber, patientType, visitNo, userId)) {
+						netAmount, referDoctorCode, mrdNumber, patientType, visitNo, userId)) {
 					soId = cs.getString(1);
 					result = cs.getInt(10);
 					returnMsg = cs.getString(11);
@@ -1488,7 +1131,7 @@ public class PatientDaoImpl implements PatientDao {
 						System.out.println("Treated By : " + treatedBy[i]);
 
 						try (CallableStatement cs = createCallableStatement3(con, soId, serviceId[i], qty[i],
-								disAmount[i], disIndication, referDoctorCode, disPercent[i], specimen[i], treatedBy[i],
+								disAmount[i], disIndication, disPercent[i], specimen[i], treatedBy[i],
 								userId, specimenChecked[i], voucherNumber)) {
 
 							result = cs.getInt(12);
@@ -1573,7 +1216,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private CallableStatement createCallableStatement2(Connection con, String soNumber, String noteRefNumber,
-			String patNumber, String netAmount, String doctorId, String mrdNumber, String patType, String visitNumber,
+			String patNumber, String netAmount, String refDocCode, String mrdNumber, String patType, String visitNumber,
 			String userId) throws SQLException {
 		CallableStatement cs = con
 				.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_HEADER(?,?,?,?,?,?,?,?,?,?,?)}");
@@ -1581,7 +1224,7 @@ public class PatientDaoImpl implements PatientDao {
 		cs.setString(1, soNumber);
 		cs.setString(2, patNumber);
 		cs.setString(3, netAmount);
-		cs.setString(4, doctorId);
+		cs.setString(4, refDocCode);
 		cs.setString(5, mrdNumber);
 		cs.setString(6, patType);
 		cs.setString(7, visitNumber);
@@ -1594,7 +1237,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	private CallableStatement createCallableStatement3(Connection con, String soNumber, String serviceId, String qty,
-			String disAmount, String disIndi, String reffDocCode, String discountPercent, String specimenCode,
+			String disAmount, String disIndi,String discountPercent, String specimenCode,
 			String treatedBy, String userId, String specimenChecked, String voucherNumber) throws SQLException {
 		CallableStatement cs = con
 				.prepareCall("{call PKGJV_BI_SERVICE_ORDER.PKG_I_SERVORDER_DETAIL(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
@@ -1641,105 +1284,7 @@ public class PatientDaoImpl implements PatientDao {
 		return j;
 	}
 
-	public List<List<String>> getPrevServiceOrderList(String patientNo) throws SQLException {
-		System.out.println("in getPrevServiceOrderList");
-
-		List<List<String>> list = new ArrayList<>();
-		List<String> row = new ArrayList<>();
-		List<String> column = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement29(con, patientNo); ResultSet rs = ps.executeQuery()) {
-
-				ResultSetMetaData rsmd = rs.getMetaData();
-
-				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-					column.add(rsmd.getColumnName(i));
-				}
-
-				list.add(column);
-
-				if (rs.next()) {
-					do {
-						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-							row.add(rs.getString(rsmd.getColumnName(i)));
-						}
-					} while (rs.next());
-
-					list.add(row);
-				}
-			}
-
-			System.out.println("Previous Service Order List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement29(Connection con, String patientNo) throws SQLException {
-		String sql = " select * from  ( "
-				+ "  	select distinct a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE, a.BSH_CRT_UID, 'NOT BILLED' VCHR_NO, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO "
-				+ "		, count(a.BSH_TXN_NUM)  TOT_SPC , SUM(DECODE(B.BSD_PROCESS_STS,'Y',1,0))  TOT_PRC "
-				+ "   	from bi_service_header a,       bi_service_detail b  where "
-				+ "		a.bsh_txn_num = b.BSD_TXN_NUM       and b.BSD_VOUCHER_NO is null  "
-				+ "   	GROUP BY a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') , a.BSH_CRT_UID,  NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') "
-				+ "   	union all "
-				+ "		select distinct  a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') ORDER_DATE"
-				+ "                , a.BSH_CRT_UID, c.BVM_VCHR_NUM, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') NOTE_REF_NO "
-				+ "                ,count(a.BSH_TXN_NUM)  TOT_SPC , SUM(DECODE(B.BSD_PROCESS_STS,'Y',1,0))  TOT_PRC"
-				+ "				from bi_service_header a,       bi_service_detail b,       bi_voucher_header c  where "
-				+ "				     a.bsh_txn_num = b.BSD_TXN_NUM       and b.BSD_VOUCHER_NO = c.BVM_VCHR_NUM "
-				+ "                    GROUP BY a.BSH_PAT_NUM, a.BSH_TXN_NUM,  a.BSH_TXN_TOT_AMT, TO_CHAR(a.BSH_CRT_DT, 'DD-MON-YYYY hh:mi AM') "
-				+ "                        , a.BSH_CRT_UID, c.BVM_VCHR_NUM, NVL(a.BSH_NOTE_REF_NO, 'NOT AVAILABLE') ) "
-				+ "				where BSH_PAT_NUM = ? ORDER BY 4 DESC ";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, patientNo);
-		return ps;
-	}
-
-	public List<String> getServiceOrderDetail(String soNumber) throws SQLException {
-		System.out.println("in getServiceOrderDetail");
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement30(con, soNumber); ResultSet rs = ps.executeQuery()) {
-
-				ResultSetMetaData rsmd = rs.getMetaData();
-
-				if (rs.next()) {
-					do {
-						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-							list.add(rs.getString(rsmd.getColumnName(i)));
-						}
-					} while (rs.next());
-
-				}
-			}
-
-			System.out.println("Previous Service Order Detail : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement30(Connection con, String soNumber) throws SQLException {
-		String sql = "select  * from ( "
-				+ "select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
-				+ ",sd.bsd_qty   qty  , 0  rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd , 'NOT_BILLED'   vch_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by,  TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE, sd.BSD_PROCESS_STS, sh.BSH_NOTE_REF_NO   "
-				+ " from        bi_service_detail   sd " + " ,bi_service_master   sm, bi_service_header sh "
-				+ " where sd.bsd_service_id    = sm.bsm_service_id "
-				+ "  and       sd.bsd_voucher_no   is null and     sh.bsh_txn_num = sd.BSD_TXN_NUM " + " union all "
-				+ " select sd.bsd_txn_num  so_num , sd.bsd_service_id  serv_id , sm.bsm_service_cd  serv_cd  , replace(sm.bsm_service_desc, ',', '|')  serv_desc, sm.bsm_major_cd  maj_code, sm.bsm_minor_cd  min_code "
-				+ " ,sd.bsd_qty   qty  , vd.bvd_srvc_rate rate  , sd.bsd_conc_pct   conc_per, sd.bsd_docd  , vd.bvd_vchr_num, sd.BSD_SPCMN_CD, sm.bsm_treated_by, TO_CHAR(sh.BSH_TXN_DT, 'DD-MON-YYYY') ORDER_DATE, sd.BSD_PROCESS_STS, sh.BSH_NOTE_REF_NO   "
-				+ " from       bi_service_detail   sd " + "           ,bi_service_master   sm, bi_service_header sh "
-				+ "           ,bi_voucher_detail   vd " + " where      sd.bsd_service_id    = sm.bsm_service_id "
-				+ " and        sd.bsd_voucher_no    = vd.bvd_vchr_num "
-				+ " and        sd.bsd_service_id    = vd.bvd_srvc_id and sh.bsh_txn_num = sd.BSD_TXN_NUM ) where     so_num  = ?";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, soNumber);
-		return ps;
-	}
+	
 
 	public String getServiceIdRate(String serviceId, String patientNo) throws SQLException {
 
@@ -1876,97 +1421,7 @@ public class PatientDaoImpl implements PatientDao {
 		return cs;
 	}
 
-	public List<List<String>> getPatientHistory(String patientNo) throws SQLException {
-		System.out.println("in getPrevServiceOrderList");
-
-		List<List<String>> list = new ArrayList<>();
-		List<String> row = new ArrayList<>();
-		List<String> column = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement31(con, patientNo); ResultSet rs = ps.executeQuery()) {
-
-				ResultSetMetaData rsmd = rs.getMetaData();
-
-				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-					column.add(rsmd.getColumnName(i));
-				}
-
-				list.add(column);
-
-				if (rs.next()) {
-					do {
-						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-							row.add(rs.getString(rsmd.getColumnName(i)));
-						}
-					} while (rs.next());
-
-					list.add(row);
-				}
-			}
-
-			System.out.println("Patient History List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement31(Connection con, String patientNo) throws SQLException {
-		String sql = " select distinct ecn.ECN_TXN_NUM DOCTOR_NOTE, TO_CHAR(ecn.ECN_NOTE_DT, 'DD-MON-YYYY hh:mi AM') \"DATE\", "
-				+ " hem.EEM_FIRST_NAME || ' ' || hem.EEM_MIDDLE_NAME || ' ' || hem.EEM_LAST_NAME AS REFER_DOCTOR, NVL(ecn.ECN_NOTE_STS, 'NOT PROCESS') STATUS"
-				+ "                from " + "                emr_clinical_detail ecd,"
-				+ "                emr_clinical_note ecn," + "                HR_EMPLOYEE_MASTER hem,"
-				+ "                GA_CLINICAL_STAFF_MASTER csm" + "                where "
-				+ "                hem.EEM_EMP_NUM=csm.GCS_EMPLOYEE_NUM  "
-				+ "                AND hem.EEM_EMP_STATUS='A' "
-				+ "				 AND csm.GCS_STAFF_TYPE_CD IN ('CONS','SURG')  "
-				+ "                and hem.EEM_EMP_NUM = ecn.ECN_DOCTOR_ID" + "                and ecd.ECD_PAT_NUM = ? "
-				+ "                and ecd.ECD_EM_NUM = ecn.ECN_EMR_NUM order by \"DATE\" desc";
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, patientNo);
-		return ps;
-	}
-
-	public List<String> getDoctorNote(String doctorNoteNumber) throws SQLException {
-
-		System.out.println("in getDoctorNote");
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement32(con, doctorNoteNumber);
-					ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-						list.add(rs.getString(3));
-						list.add(rs.getString(4));
-						list.add(rs.getString(5));
-						list.add(rs.getString(6));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Doctor Note List : " + list);
-			return list;
-		}
-
-	}
-
-	private PreparedStatement createPreparedStatement32(Connection con, String doctorNoteNumber) throws SQLException {
-		String sql = "select t.ecn_txn_num " + "          ,TO_CHAR(t.ecn_note_dt, 'DD-MON-YYYY') NOTE_DATE  "
-				+ "			,upper(e.eem_first_name||' '||e.eem_middle_name||' '||e.eem_last_name )   doc_name "
-				+ "           ,t.ecn_note_type " + "           ,replace(t.ecn_note_dtl, ',', '|')"
-				+ "           ,t.ecn_doctor_id " + "      from   emr_clinical_note   t  "
-				+ "            ,hr_employee_master  e  " + "      where  t.ecn_doctor_id = e.eem_emp_num "
-				+ "             and  t.ecn_txn_num   = ? ";
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, doctorNoteNumber);
-		return ps;
-	}
+	
 
 	public String insertUpdateNurseNote(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
 			String bedNo, String nurseNote, String userId, String doctorOrderoNumber) throws SQLException {
@@ -2033,92 +1488,9 @@ public class PatientDaoImpl implements PatientDao {
 		return cs;
 	}
 
-	public List<List<String>> getNurseNoteHistory(String patientNo) throws SQLException {
-		System.out.println("in getNurseNoteHistory");
+	
 
-		List<List<String>> list = new ArrayList<>();
-		List<String> row = new ArrayList<>();
-		List<String> column = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement33(con, patientNo); ResultSet rs = ps.executeQuery()) {
-
-				ResultSetMetaData rsmd = rs.getMetaData();
-
-				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-					column.add(rsmd.getColumnName(i));
-				}
-
-				list.add(column);
-
-				if (rs.next()) {
-					do {
-						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-							row.add(rs.getString(rsmd.getColumnName(i)));
-						}
-					} while (rs.next());
-
-					list.add(row);
-				}
-			}
-
-			System.out.println("Nurse Note History : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement33(Connection con, String patientNo) throws SQLException {
-		String sql = "select distinct ecn.ECN_TXN_NUM NURSE_NOTE, TO_CHAR(ecn.ECN_NOTE_DT, 'DD-MON-YYYY hh:mi AM') \"DATE\", "
-				+ "upper(hem.eem_first_name||' '||hem.eem_middle_name||' '||hem.eem_last_name )   created_by " + "from "
-				+ "emr_clinical_detail ecd, " + "emr_clinical_note ecn,  " + "HR_EMPLOYEE_MASTER hem " + "where "
-				+ "hem.EEM_EMP_NUM=ecn.ECN_CRT_UID " + "and ecd.ECD_PAT_NUM = ? "
-				+ "and ecd.ECD_EM_NUM = ecn.ECN_EMR_NUM order by \"DATE\" desc ";
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, patientNo);
-		return ps;
-	}
-
-	public List<String> getNurseNote(String nurseNoteNumber) throws SQLException {
-
-		System.out.println("in getNurseNote");
-
-		List<String> list = new ArrayList<>();
-
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement34(con, nurseNoteNumber);
-					ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-						list.add(rs.getString(3));
-						list.add(rs.getString(4));
-						list.add(rs.getString(5));
-					} while (rs.next());
-				}
-			}
-
-			System.out.println("Doctor Note List : " + list);
-			return list;
-		}
-
-	}
-
-	private PreparedStatement createPreparedStatement34(Connection con, String nurseNoteNumber) throws SQLException {
-		String sql = "   select t.ecn_txn_num \r\n" + "  ,TO_CHAR(t.ecn_note_dt, 'DD-MON-YYYY') NOTE_DATE "
-				+ "  ,t.ecn_doctor_id " + "	,doctor_name " + "  ,replace(t.ecn_note_dtl, ',', '|') "
-				+ "  from   emr_clinical_note   t " + "  ,( "
-				+ "  select e.eem_emp_num, upper(e.eem_first_name||' '||e.eem_middle_name||' '||e.eem_last_name ) doctor_name "
-				+ "  from hr_employee_master  e" + "  union " + "  select 'NA', '' from dual " + "  ) e "
-				+ "  where  t.ecn_doctor_id = e.eem_emp_num " + "  and  t.ecn_txn_num   = ?";
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, nurseNoteNumber);
-		return ps;
-	}
+	
 
 	public String insertUpdateVitalChart(String patientNo, String mrd, String visitNo, String doctorId, String wardNo,
 			String bedNo, Map<String, String> map, String userId, String vitalChartNumber) throws SQLException {
@@ -2188,106 +1560,8 @@ public class PatientDaoImpl implements PatientDao {
 		return cs;
 	}
 
-	public List<String> getPreviousVitalChart(String ipNumber) throws SQLException {
-		System.out.println("in getPreviousVitalChart");
-		List<String> list = new ArrayList<>();
-		try (Connection con = LoginDBConnection.getConnection();) {
-			try (PreparedStatement ps = createPreparedStatement35(con, ipNumber); ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getString(1));
-						list.add(rs.getString(2));
-						list.add(rs.getString(3));
-						list.add(rs.getString(4));
-						list.add(rs.getString(5));
-						list.add(rs.getString(6));
-						list.add(rs.getString(7));
-						list.add(rs.getString(8));
-						list.add(rs.getString(9));
-						list.add(rs.getString(10));
-						list.add(rs.getString(11));
-					} while (rs.next());
-				}
-			}
 
-			System.out.println("Vital Chart List : " + list);
-			return list;
-		}
-	}
-
-	private PreparedStatement createPreparedStatement35(Connection con, String ipNumber) throws SQLException {
-		String sql = "select to_char(ecn.ECN_NOTE_DT, 'DD-MON-YYYY') \"date\" "
-				+ ",TO_CHAR(ecn.ECN_NOTE_DT, 'hh:mi AM') \"time\" " + ",ecn.ECN_NOTE_DT "
-				+ ",upper(hem.eem_first_name||' '||hem.eem_middle_name||' '||hem.eem_last_name )  created_by "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'EYOP' , ecn.ECN_NOTE_DTL, '')) eyeopen "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'VERE' , ecn.ECN_NOTE_DTL, '')) verbal_reponse "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'MORE' , ecn.ECN_NOTE_DTL, '')) motor_response "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'BLPD' , ecn.ECN_NOTE_DTL, '')) diastolic "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'BLPS' , ecn.ECN_NOTE_DTL, '')) systolic "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'PUPL' , ecn.ECN_NOTE_DTL, '')) pupil_left "
-				+ ",max(decode(ecn.ECN_NOTE_TYPE,'PUPR' , ecn.ECN_NOTE_DTL, '')) pupil_right " + " from "
-				+ "emr_clinical_detail ecd, " + "emr_clinical_note ecn, " + "HR_EMPLOYEE_MASTER hem " + " where "
-				+ "hem.EEM_EMP_NUM=ecn.ECN_CRT_UID " + "and ecd.ECD_PAT_NUM = ? "
-				+ "and ecn.ECN_NOTE_TYPE IN ('MORE', 'BLPD', 'BLPS', 'PUPR', 'PUPL', 'EYOP', 'VERE') "
-				+ "and ecd.ECD_EM_NUM = ecn.ECN_EMR_NUM "
-				+ "group by ecn.ECN_NOTE_DT, to_char(ecn.ECN_NOTE_DT, 'DD-MON-YYYY'), "
-				+ "TO_CHAR(ecn.ECN_NOTE_DT, 'hh:mi AM'), upper(hem.eem_first_name||' '||hem.eem_middle_name||' '||hem.eem_last_name) "
-				+ "order by ecn.ECN_NOTE_DT asc ";
-
-		System.out.println(sql.toString());
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, ipNumber);
-		return ps;
-	}
-
-	/*
-	 * public List<String> getDrugReqItemList(String itemName) throws SQLException {
-	 * System.out.println("In getDrugReqItemList"); int result = 0; String
-	 * vitalChartNo = ""; String returnMsg = ""; String [] itemDescStringArr = null;
-	 * 
-	 * try (Connection con = LoginDBConnection.getConnection()) {
-	 * con.setAutoCommit(false); try (CallableStatement cs =
-	 * createCallableStatement8(con,itemName)) {
-	 * 
-	 * ARRAY itemCodeArr = ((OracleCallableStatement)cs).getARRAY(3); ARRAY
-	 * itemDescArr = ((OracleCallableStatement)cs).getARRAY(4); ARRAY moleculeArr =
-	 * ((OracleCallableStatement)cs).getARRAY(5); ARRAY stockArr =
-	 * ((OracleCallableStatement)cs).getARRAY(6);
-	 * 
-	 * String [] itemCodeStringArr = (String [])(itemCodeArr.getArray());
-	 * itemDescStringArr = (String [])(itemDescArr.getArray()); String []
-	 * moleculeStringArr = (String [])(moleculeArr.getArray()); Integer []
-	 * stockStringArr = (Integer [])(stockArr.getArray());
-	 * 
-	 * 
-	 * for (String s : itemCodeStringArr) { System.out.println("Item Code : " + s);
-	 * }
-	 * 
-	 * for (String s : itemCodeStringArr) { System.out.println("Item Name : " + s);
-	 * }
-	 * 
-	 * for (String s : moleculeStringArr) { System.out.println("Molecule : " + s); }
-	 * 
-	 * for (int s : stockStringArr) { System.out.println("Item Code : " + s); }
-	 * 
-	 * } catch (SQLException e) { con.rollback(); con.setAutoCommit(true);
-	 * e.printStackTrace(); } }
-	 * 
-	 * return new ArrayList<String>(Arrays.asList(itemDescStringArr));
-	 * 
-	 * 
-	 * }
-	 * 
-	 * private CallableStatement createCallableStatement8(Connection con, String
-	 * itemName) throws SQLException { CallableStatement cs = con
-	 * .prepareCall("{call PKGJV_PH_MED_REQUEST.PKG_POPU_PROD(?,?,?,?,?,?)}");
-	 * cs.setString(1, itemName); cs.setString(2, "PHRMC");
-	 * cs.registerOutParameter(3, OracleTypes.ARRAY, "ITEM_CODE_T");
-	 * cs.registerOutParameter(4, OracleTypes.ARRAY, "ITEM_DESC_T");
-	 * cs.registerOutParameter(5, OracleTypes.ARRAY, "ITEM_UNIT_T");
-	 * cs.registerOutParameter(6, OracleTypes.ARRAY, "ITEM_QTY_T"); cs.execute();
-	 * return cs; }
-	 */
+	
 
 	public List<String> getDrugReqItemList(String itemName) throws SQLException {
 		System.out.println("In getDrugReqItemList");
@@ -2529,5 +1803,727 @@ public class PatientDaoImpl implements PatientDao {
 		cs.execute();
 		return cs;
 	}
+	
+	public List<String> getWardNameList() throws SQLException {
+		System.out.println("In getWardNameList");
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+			con.setAutoCommit(false);
+			try (CallableStatement cs = createCallableStatement14(con)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				ResultSetMetaData rsmd = rs.getMetaData();
+				
+				if (rs.next()) {
+					do {
+						for(int i =1; i<=rsmd.getColumnCount(); i++) {
+							list.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					}while(rs.next());
+				}
+				
+				
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+
+	}
+
+	private CallableStatement createCallableStatement14(Connection con) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_WA_PAT_TRANS.PRC_POPU_WARD(?,?); END;");
+		cs.setString(1, "");
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getWardBedNameList(String wardCode) throws SQLException {
+		System.out.println("In getWardBedNameList");
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+			con.setAutoCommit(false);
+			try (CallableStatement cs = createCallableStatement15(con, wardCode)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+					} while (rs.next());
+				}
+				
+				
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+
+	}
+
+	private CallableStatement createCallableStatement15(Connection con, String wardCode) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_WA_PAT_TRANS.PRC_POPU_BED(?,?); END;");
+		cs.setString(1, wardCode);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public String insertUpdatePatientTransfer(String patientNo, String mrd, String fromWardNumber, String fromBedNumber,
+			String toWardNumber, String toRoomNumber, String toBedNumber, String toBedType, String recommDcotorId,
+			String remark, String userId, String bedTypeFlag) throws SQLException {
+		
+		System.out.println("In insertUpdatePatientTransfer");
+		int result = 0;
+		String ptId = "";
+		String errorMsg = "";
+		
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+
+			con.setAutoCommit(false);
+
+					result = 0;
+					errorMsg = "ERROR";
+					
+				
+						try (CallableStatement cs = createCallableStatement16(con, patientNo, mrd, fromWardNumber, fromBedNumber,
+								 toWardNumber, toRoomNumber, toBedNumber, toBedType, recommDcotorId,
+								remark,userId, bedTypeFlag)) {
+							
+							ptId = cs.getString(13);
+							result = cs.getInt(14);
+							errorMsg = cs.getString(15);
+							
+							System.out.println("PKGJV_WA_PAT_TRANS.PRC_INS_OCCU_TRANS OUT PARAMETER : " + result);
+							System.out.println("PKGJV_WA_PAT_TRANS.PRC_INS_OCCU_TRANS RETURN MSG : " + errorMsg);
+							
+						} catch (SQLException e) {
+							con.rollback();
+							con.setAutoCommit(true);
+							e.printStackTrace();
+						}
+			
+
+				
+
+			
+			
+
+			if (result == 1) {
+				con.commit();
+				System.out.println("All Transactions are commited");
+			} else {
+				System.out.println("All Transactions are rollbacked");
+				con.rollback();
+			}
+
+		}
+
+		if (result == 1)
+			return ptId;
+		return "F" + errorMsg;
+	}
+	
+	private CallableStatement createCallableStatement16(Connection con, String patientNo, String mrd, String fromWardNumber, String fromBedNumber,
+			String toWardNumber, String toRoomNumber, String toBedNumber, String toBedType, String recommDcotorId,
+			String remark, String userId, String bedTypeFlag) throws SQLException {
+		CallableStatement cs = con
+				.prepareCall("{call PKGJV_WA_PAT_TRANS.PRC_INS_OCCU_TRANS(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		cs.setString(1, patientNo);
+		cs.setString(2, mrd);
+		cs.setString(3, fromWardNumber);
+		cs.setString(4, fromBedNumber);
+		cs.setString(5, toWardNumber);
+		cs.setString(6, toRoomNumber);
+		cs.setString(7, toBedNumber);
+		cs.setString(8, toBedType);
+		cs.setString(9, recommDcotorId);
+		cs.setString(10, remark);
+		cs.setString(11, userId);
+		cs.setString(12, bedTypeFlag);
+		cs.registerOutParameter(13, Types.VARCHAR);
+		cs.registerOutParameter(14, Types.NUMERIC);
+		cs.registerOutParameter(15, Types.VARCHAR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<List<String>> getPatientTransfer(String ipNumber) throws SQLException {
+		System.out.println("In getPrevPharmaOrderList");
+		List<List<String>> list = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		List<String> column = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+			con.setAutoCommit(false);
+			try (CallableStatement cs = createCallableStatement17(con, ipNumber)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				ResultSetMetaData rsmd = rs.getMetaData();
+				
+				for(int i=1; i<=rsmd.getColumnCount(); i++) {
+					column.add(rsmd.getColumnName(i));
+				}
+				
+				list.add(column);
+				if (rs.next()) {
+					do {
+						for(int i =1; i<=rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					}while(rs.next());
+				}
+				
+				
+				list.add(row);
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+
+	}
+
+	private CallableStatement createCallableStatement17(Connection con, String ipNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_WA_PAT_TRANS.PRC_POPU_OCCU_TRANS(?,?); END;");
+		cs.setString(1, ipNumber);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+
+	public List<String> getPatientList(String empCode, String wardCode) throws SQLException {
+		System.out.println("In getPatientList");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+			con.setAutoCommit(false);
+			try (CallableStatement cs = createCallableStatement18(con, empCode, wardCode)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(3);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString("IP_NO"));
+						list.add(rs.getString("PAT_NAME"));
+						list.add(rs.getString("WARD_DESC"));
+						list.add(rs.getString("BED_NO"));
+						list.add(rs.getString("ADM_DATE"));
+						list.add(rs.getString("DOCTOR_NAME"));
+						list.add(rs.getString("SPECIALITY"));
+						list.add(rs.getString("SUBCTGRY_DESC"));
+					}while(rs.next());
+				}
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+
+	}
+
+	private CallableStatement createCallableStatement18(Connection con, String empCode, String wardCode) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_GET_PATIENT_LIST(?,?,?); END;");
+		cs.setString(1, empCode);
+		cs.setString(2, wardCode);
+		cs.registerOutParameter(3, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getWardList(String empCode) throws SQLException {
+		System.out.println("In getWardList");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection()) {
+			con.setAutoCommit(false);
+			try (CallableStatement cs = createCallableStatement19(con, empCode)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString("WARD_CODE"));
+						list.add(rs.getString("WARD_DESC"));
+					}while(rs.next());
+				}
+			} catch (SQLException e) {
+				con.rollback();
+				con.setAutoCommit(true);
+				e.printStackTrace();
+			}
+		}
+
+		return list;
+
+	}
+
+	private CallableStatement createCallableStatement19(Connection con, String empCode) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_GET_WARD_LIST(?,?); END;");
+		cs.setString(1, empCode);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<List<String>> getPreviousNurseNotes(String patientNo) throws SQLException {
+		System.out.println("in getPreviousNurseNotes");
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		List<String> column = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement20(con, patientNo)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					column.add(rsmd.getColumnName(i));
+				}
+
+				list.add(column);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+
+					list.add(row);
+				}
+			}
+
+			System.out.println("Previous Nurse Notes : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement20(Connection con, String patientNo) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_POPU_NURSE_NOTE(?,?); END;");
+		cs.setString(1, patientNo);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getNurseNote(String nurseNoteNumber) throws SQLException {
+
+		System.out.println("in getNurseNote");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement21(con, nurseNoteNumber)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+						list.add(rs.getString(4));
+						list.add(rs.getString(5));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Doctor Note List : " + list);
+			return list;
+		}
+
+	}
+
+	private CallableStatement createCallableStatement21(Connection con, String nurseNoteNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_POPU_NURSE_NOTE_DET(?,?); END;");
+		cs.setString(1, nurseNoteNumber);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<List<String>> getPreviousDoctorNotes(String patientNo) throws SQLException {
+		System.out.println("in getPreviousDoctorNotes");
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		List<String> column = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement22(con, patientNo)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				ResultSetMetaData rsmd = rs.getMetaData();
+
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					column.add(rsmd.getColumnName(i));
+				}
+
+				list.add(column);
+
+				if (rs.next()) {
+					do {
+						for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+							row.add(rs.getString(rsmd.getColumnName(i)));
+						}
+					} while (rs.next());
+
+					list.add(row);
+				}
+			}
+
+			System.out.println("Previous Doctor Notes : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement22(Connection con, String patientNo) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_POPU_DOCTOR_NOTE(?,?); END;");
+		cs.setString(1, patientNo);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+
+	public List<String> getDoctorNote(String doctorNoteNumber) throws SQLException {
+
+		System.out.println("in getDoctorNote");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement23(con, doctorNoteNumber)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+						list.add(rs.getString(4));
+						list.add(rs.getString(5));
+						list.add(rs.getString(6));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Doctor Note List : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement23(Connection con, String doctorNoteNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_POPU_DOCTOR_NOTE_DET(?,?); END;");
+		cs.setString(1, doctorNoteNumber);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getPreviousVitalChart(String ipNumber) throws SQLException {
+		System.out.println("in getPreviousVitalChart");
+		List<String> list = new ArrayList<>();
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement24(con, ipNumber)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+						list.add(rs.getString(4));
+						list.add(rs.getString(5));
+						list.add(rs.getString(6));
+						list.add(rs.getString(7));
+						list.add(rs.getString(8));
+						list.add(rs.getString(9));
+						list.add(rs.getString(10));
+						list.add(rs.getString(11));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Vital Chart List : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement24(Connection con, String ipNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_EMR.PKG_POPU_VITAL_CHART(?,?); END;");
+		cs.setString(1, ipNumber);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+
+	public List<String> getServiceList() throws SQLException {
+		System.out.println("in getServiceList");
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement25(con)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(1);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement25(Connection con) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_BI_SERVICE_ORDER.PRC_POPU_MAJOR_CODE(?); END;");
+		cs.registerOutParameter(1, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<ServiceOrder> getServiceRateList(String serviceCat, String serviceDesc) throws SQLException {
+		System.out.println("in getServiceList");
+		List<ServiceOrder> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement26(con, serviceCat, serviceDesc)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(3);
+				
+				if (rs.next()) {
+					do {
+						ServiceOrder serviceOrder = new ServiceOrder();
+						serviceOrder.setServiceId(rs.getString(1));
+						serviceOrder.setMinorCode(rs.getString(2));
+						serviceOrder.setServiceCode(rs.getString(3));
+						serviceOrder.setServiceName(rs.getString(4));
+						serviceOrder.setRate(rs.getString(5));
+						serviceOrder.setDiscount(rs.getString(6));
+						serviceOrder.setTreatedBy(rs.getString(7));
+						serviceOrder.setQty("1");
+						serviceOrder.setDiscountAmount("0");
+						serviceOrder.setNetAmount("0");
+						list.add(serviceOrder);
+					} while (rs.next());
+				}
+			}
+			System.out.println("Indoor Patient List : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement26(Connection con, String serviceCat, String serviceDesc)
+			throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_BI_SERVICE_ORDER.PRC_POPU_SERVICE(?,?,?); END;");
+		cs.setString(1, serviceCat);
+		cs.setString(2, serviceDesc);
+		cs.registerOutParameter(3, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getSpecimenList(String serviceCode) throws SQLException {
+
+		System.out.println("in getSpecimenList");
+		System.out.println("Service Code : " + serviceCode);
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement27(con, serviceCode)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(2));
+						list.add(rs.getString(3));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Specimen List : " + list);
+			return list;
+		}
+
+	}
+
+	private CallableStatement createCallableStatement27(Connection con, String serviceCode) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_BI_SERVICE_ORDER.PRC_POPU_SPECIMEN(?,?); END;");
+		cs.setString(1, serviceCode);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getDoctorList() throws SQLException {
+
+		System.out.println("in getDoctorList");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement27(con)) {
+				
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(1);
+				
+				if (rs.next()) {
+					do {
+						list.add(rs.getString(1));
+						list.add(rs.getString(2));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Doctor List : " + list);
+			return list;
+		}
+
+	}
+
+	private CallableStatement createCallableStatement27(Connection con) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_BI_SERVICE_ORDER.PRC_POPU_REF_DOCTOR(?); END;");
+		cs.registerOutParameter(1, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<List<String>> getPrevServiceOrderList(String patientNo) throws SQLException {
+		
+		System.out.println("in getPrevServiceOrderList");
+
+		List<List<String>> list = new ArrayList<>();
+		List<String> row = new ArrayList<>();
+		List<String> column = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement29(con, patientNo)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+				
+					column.add("PAT_NUM");
+					column.add("REF_DOCTOR_CODE");
+					column.add("REF_DOCTOR_NAME");
+					column.add("TXN_NUM");
+					column.add("TOT_AMT");
+					column.add("TXN_DATE");
+					column.add("USER_ID");
+					column.add("VCHR_NUM");
+					column.add("NOTE_REF_NO");
+					column.add("TOT_SPC");
+					column.add("TOT_PRC");
+
+				list.add(column);
+
+				if (rs.next()) {
+					do {
+						row.add(rs.getString("PAT_NUM"));
+						row.add(rs.getString("REF_DOCTOR_CODE"));
+						row.add(rs.getString("REF_DOCTOR_NAME"));
+						row.add(rs.getString("TXN_NUM"));
+						row.add(rs.getString("TOT_AMT"));
+						row.add(rs.getString("TXN_DATE"));
+						row.add(rs.getString("USER_ID"));
+						row.add(rs.getString("VCHR_NUM"));
+						row.add(rs.getString("NOTE_REF_NO"));
+						row.add(rs.getString("TOT_SPC"));
+						row.add(rs.getString("TOT_PRC"));
+					} while (rs.next());
+
+					list.add(row);
+				}
+			}
+
+			System.out.println("Previous Service Order List : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement29(Connection con, String patientNo) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_BI_SERVICE_ORDER.PRC_POPU_SERVICE_HEADER(?,?); END;");
+		cs.setString(1, patientNo);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}
+	
+	public List<String> getServiceOrderDetail(String soNumber) throws SQLException {
+		
+		System.out.println("in getServiceOrderDetail");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement30(con, soNumber)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+
+				if (rs.next()) {
+					do {
+						list.add(rs.getString("SO_NUM"));
+						list.add(rs.getString("SERV_ID"));
+						list.add(rs.getString("SERV_CD"));
+						list.add(rs.getString("SERV_DESC"));
+						list.add(rs.getString("MAJ_CODE"));
+						list.add(rs.getString("MIN_CODE"));
+						list.add(rs.getString("QTY"));
+						list.add(rs.getString("RATE"));
+						list.add(rs.getString("CONC_PER"));
+						list.add(rs.getString("DOC_CODE"));
+						list.add(rs.getString("VCHR_NUM"));
+						list.add(rs.getString("SPCMN_CODE"));
+						list.add(rs.getString("TREAT_FLG"));
+						list.add(rs.getString("ORDER_DATE"));
+						list.add(rs.getString("PROCESS_STS"));
+						list.add(rs.getString("NOTE_REF_NO"));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Service Order Detail : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement30(Connection con, String soNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_BI_SERVICE_ORDER.PRC_POPU_SERVICE_DETAIL(?,?); END;");
+		cs.setString(1, soNumber);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}	
 
 }

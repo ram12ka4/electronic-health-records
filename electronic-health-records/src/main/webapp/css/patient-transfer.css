@@ -197,6 +197,13 @@ hr:after {
 	height: 700px;
 }
 
+.col-md-6.col-md-6-height {
+	min-height: 10px;
+}
 
 
+#recomm-doctor:after {
+	content: 'Dr.';
+}
 
+.dis-padding

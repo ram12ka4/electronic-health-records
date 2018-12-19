@@ -44,6 +44,19 @@
 	text-align: left;
 	vertical-align: middle;
 }
+.modal-lg {
+	width: 100%;
+}
+
+.col-md-offset-10 {
+    margin-left: 86.33333333%;
+}
+
+/* table.dataTable tbody td {
+    word-break: break-word;
+    vertical-align: top;
+} */
+
 </style>
 
 
@@ -95,7 +108,7 @@
 	<!-- End of Upper Layout -->
 
 	<!-- User Registration Form -->
-	<form id="service-order-frm">
+	<form id="patient-transfer-frm">
 
 		<!-- DASHBOARD -->
 		<div id="dashboard-con">
@@ -112,25 +125,18 @@
 
 							<div class="form-group-sm">
 								<div class="col-md-2">
-									<label class="control-label" for="order-id">Order No</label> <input
+									<label class="control-label" for="order-id">Transfer No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="order-id" value="" name="orderNo" placeholder="Order No"
+										id="transfer-id" value="" name="transferNo" placeholder="Transfer No"
 										readonly="readonly">
 								</div>
-
-								<!-- <div class="col-md-1">
-									<label class="control-label" for="patient-type">Pat Type</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
-										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
-								</div> -->
 								<div class="col-md-3">
 									<label class="control-label" for="refer-doctor">Referred
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor">
+										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -165,8 +171,7 @@
 						<div class="row">
 							<div class="form-group-sm">
 								<div class="col-md-2">
-									<label class="control-label" for="order-date">Order
-										Date</label> <input type="text"
+									<label class="control-label" for="order-date">Date</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="fromDate" value="" name="orderDate"
 										placeholder="Ordering Date" readonly="readonly">
@@ -177,7 +182,7 @@
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="ward" value="<%=patient.getWardDesc()%>" name="ward"
-										placeholder="Ward" readonly="readonly">
+										placeholder="Ward" readonly="readonly"><input type="hidden" name="wardCode" id="ward-code" value="<%=patient.getWardCode()%>">
 								</div>
 
 								<div class="col-md-1">
@@ -255,140 +260,90 @@
 											readonly="readonly">
 									</div>
 
-									<div class="col-md-3">
-
-										<button type="button"
-											class="btn btn-primary btn-sm btn-row-add">Add Row</button>
+									<div class="col-md-offset-10">
 										<button type="button"
 											class="btn btn-primary btn-sm btn-previous"
-											data-id='<%=ipNumber%>'>Prev Order</button>
+											data-id='<%=ipNumber%>'>Previous Transfer</button>
 									</div>
 								</div>
 							</div>
 						</div>
 						<hr>
 						<div class="row">
-							<div class="col-md-6 dashboard-left-cell">
+							<div class="col-md-5 dashboard-left-cell">
+								<br>
 								<div class="form-horizontal">
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="mrd"><span
-									class="required-label" id="mrd">MRD Number</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="mrd"
-										value="<%=patient.getMrdNumber()%>" name="mrd_number"
-										placeholder="MRD Number" readonly>
-								</div>
-								<label class="control-label col-xs-2" for="ip-num"><span
-									class="required-label" id="ip">IP Number</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="ip"
-										name="ip_number" value="<%=patient.getIpNumber()%>"
-										placeholder="IP Number" readonly>
-								</div>
-							</div>
+									<div class="form-group">
+										<label class="control-label col-xs-3" for="mrd"><span
+											class="required-label" id="mrd">Ward Name</span> :</label>
+										<div class="col-xs-8">
+											<select
+												class="form-control ward-name"
+												name="toWard">
+											</select>
+										</div>
+									</div>
 
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="title"><span
-									class="required-label" id="pat-name"> Patient Name</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" id="pat-name"
-										value="<%=patient.getPatientName()%>" name="pat_name"
-										placeholder="First Name" readonly>
-								</div>
-							</div>
+									<div class="form-group">
+										<label class="control-label col-xs-3" for="title"><span
+											class="required-label" id="pat-name">Recomm. Doctor</span> :</label>
+										<div class="col-xs-8">
+											<input type="text" class="form-control input-sm"
+												id="recomm-doctor" value="" name="recommDcotor"
+												placeholder="Recommend Doctor" style="color: black;"> <input type="hidden"
+												id="recomm-doctor-id" name="recommDcotorId">
+										</div>
+									</div>
 
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="age"><span
-									class="required-label" id="age"> Age</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" name="age"
-										value="<%=patient.getAge()%>" placeholder="Age" readonly>
-								</div>
-								<label class="control-label col-xs-2" for="sex"><span
-									class="required-label"> Sex</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm" id="sex"
-										name="sex" value="<%=patient.getSex()%>" placeholder="Sex"
-										readonly>
-								</div>
-								<label class="control-label col-xs-2" for="weight"><span
-									class="required-label"> Weight</span> :</label>
-								<div class="col-xs-1">
-									<input type="text" class="form-control input-sm" id="weight"
-										value="" name="weight" placeholder="Weight">
+									<div class="form-group">
+										<label class="control-label col-xs-3" for="age"><span
+											class="required-label" id="age">Transfer Time</span> :</label>
+										<div class="col-xs-6">
+											<input type="text" class="form-control input-sm"
+												name="transferDate" id="transferDate" value=""
+												placeholder="Transfer From">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-xs-3" for="age"><span
+											class="required-label" id="">Remarks</span> :</label>
+										<div class="col-xs-8">
+											<textarea name="remark" class="form-control"
+												id="remark" rows="3" placeholder="Remark"></textarea>
+										</div>
+									</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="dt-of-admit"><span
-									class="required-label" id="dt-of-admit"> Date of
-										Admission</span> :</label>
-								<div class="col-xs-2">
-									<input type="text" class="form-control input-sm"
-										name="dt_of_admit" value="<%=patient.getAdmissionDate()%>"
-										placeholder="Date of Admission" readonly>
-								</div>
-							</div>
+							<div class="col-md-6 dashboard-right-cell col-md-6-height">
+								
+									<table class="table table-striped table-bordered table-hover"
+										id="myTable" style="width: 100%">
+										<thead>
+											<tr>
+												<th>S/N</th>
+												<th>Room No</th>
+												<th>Bed No</th>
+												<th>Bed Type</th>
+												<th>Action</th>
+											</tr>
+										</thead>
 
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="doctor"><span
-									class="required-label" id="doctor"> Consultant</span> :</label>
-								<div class="col-xs-3">
-									<input type="text" class="form-control input-sm" name="doctor"
-										value="<%=patient.getDoctorIncharge()%>" placeholder="Doctor"
-										readonly>
-								</div>
-
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-2" for="status"><span
-									class="required-label" id="gender"> Clinical Diagnosis</span> :</label>
-								<div class="col-xs-5">
-									<input type="text" class="form-control input-sm"
-										name="last_name" placeholder="Last Name" required>
-								</div>
-							</div>
-
-						</div>
-							</div>
-							<div class="col-md-6 dashboard-right-cell">
-								<table class="table" id="myTable" style="width: 100%">
-									<thead>
-										<tr>
-											<th>S/N</th>
-											<th>Service Description</th>
-											<th>Qty.</th>
-											<th>Rate</th>
-											<th>Dis(%)</th>
-											<th>Dis Amnt</th>
-											<th>Net Amnt</th>
-											<th>Specimen/Treated by</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<th>S/N</th>
-											<th>Service Description</th>
-											<th>Qty.</th>
-											<th>Rate</th>
-											<th>Dis(%)</th>
-											<th>Dis Amnt</th>
-											<th>Net Amnt</th>
-											<th>Specimen/Treated by</th>
-											<th>Action</th>
-										</tr>
-									</tbody>
-								</table>
+									</table>
+								
 							</div>
 
 						</div>
 
 						<hr>
 						<div class="row">
-							<button type="button" id="btn-reset"
-								class="btn btn-primary btn-reset">Reset</button>
-							<button type="button" id="btn-submit"
-								class="btn btn-success btn-submit">Submit</button>
+							<div class="form-group-sm">
+								<div class="col-md-offset-9">
+									<button type="button" id="btn-reset"
+										class="btn btn-sm btn-primary btn-reset">Reset</button>
+									<button type="button" id="btn-submit"
+										class="btn btn-sm btn-success btn-submit">Submit</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -33,11 +33,11 @@ $(document).ready(function() {
 		var id = $(this).attr("id");
 		if ($('option:selected', this).val() === '0') {
 			// alert("red");
-			$(this).css('border', '1px solid red');
-			$('#' + id).css('color', 'red');
+			//$(this).css('border', '1px solid red');
+			//$('#' + id).css('color', 'red');
 		} else if ($(this).val() !== 0) {
-			$(this).css('border', '1px solid #00C492');
-			$('#' + id).css('color', '#00C492');
+			//$(this).css('border', '1px solid #00C492');
+			//$('#' + id).css('color', '#00C492');
 		}
 	});
 
@@ -48,9 +48,9 @@ $(document).ready(function() {
 	$('input[type="text"]').keyup(function() {
 		var id = $(this).attr("id");
 		if ($(this).val().length === 0) {
-			$("#" + id).css('color', 'red');
+			//$("#" + id).css('color', 'red');
 		} else if ($(this).val().length !== 0) {
-			$('#' + id).css('color', '#00C492');
+			//$('#' + id).css('color', '#00C492');
 		}
 	});
 

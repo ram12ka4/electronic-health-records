@@ -6,11 +6,13 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
@@ -23,39 +25,17 @@ public class PatientTransferServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
+	private static Logger LOGGER = LoggerFactory.getLogger(PatientTransferServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String token = request.getParameter("token") == null ? "" : request.getParameter("token");
 		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
-		
+
 		HttpSession session = request.getSession();
+		LOGGER.info("Patient Number : " + request.getParameter("ip_no"));
 		
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("/login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
-
 		try {
 			session.setAttribute("moduleName", request.getParameter("moduleName"));
 			request.setAttribute("ipNumber", request.getParameter("ip_no"));
@@ -79,66 +59,82 @@ public class PatientTransferServlet extends HttpServlet {
 		String patientNo = patient.getIpNumber();
 		String mrd = patient.getMrdNumber();
 		String visitNo = patient.getVisit();
-		String refDoctorId =  request.getParameter("referDocId") == null ? "" : request.getParameter("referDocId");
-		String wardNo = patient.getWardCode();
+		String refDoctorId = request.getParameter("referDocId") == null ? "" : request.getParameter("referDocId");
+		String fromWardNumber = patient.getWardCode();
+		String fromBedNumber = patient.getBedNo();
 		String bedNo = patient.getBedNo();
-		String nurseNote = request.getParameter("note") == null || request.getParameter("note").isEmpty() ? ""	: request.getParameter("note");
-		String userId = (String) session.getAttribute("user");
-		String nurseNoteNumber = request.getParameter("noteNo") == null ? "" : request.getParameter("noteNo");
-	
+		String toWardNumber = request.getParameter("toWard") == null || request.getParameter("toWard").isEmpty() ? ""
+				: request.getParameter("toWard");
+		String recommDcotorId = request.getParameter("recommDcotorId") == null
+				|| request.getParameter("recommDcotorId").isEmpty() ? "" : request.getParameter("recommDcotorId");
+		String remark = request.getParameter("remark") == null || request.getParameter("remark").isEmpty() ? ""
+				: request.getParameter("remark");
+		String vacanctWardBed = request.getParameter("vacanctWardBed") == null
+				|| request.getParameter("vacanctWardBed").isEmpty() ? "" : request.getParameter("vacanctWardBed");
+		LOGGER.info("Vacant Ward Bed " + vacanctWardBed);
+		String[] arr = vacanctWardBed.split("@", -1);
+		String toRoomNumber = "";
+		String toBedNumber = "";
+		String toBedType = "";
 
-		System.out.println("ACTION : " + action);
-		System.out.println("patientNo : " + patientNo);
-		System.out.println("mrd: " + mrd);
-		System.out.println("visitNo : " + visitNo);
-		System.out.println("doctorId : " + refDoctorId);
-		System.out.println("wardNo : " + wardNo);
-		System.out.println("bedNo : " + bedNo);
-		System.out.println("userId : " + userId);
-		System.out.println("Nurse Note Id : " + nurseNoteNumber);
-		System.out.println("Nurse Note : " + nurseNote);
+		LOGGER.info("Array Length : " + arr.length);
+		LOGGER.info("Array value : " + arr[0]);
 		
-		
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("/login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
+		if (arr.length > 1) {
+			toRoomNumber = arr[0];
+			toBedNumber = arr[1];
+			toBedType = arr[2];
+			LOGGER.info("To Room Number : " + toRoomNumber);
+			LOGGER.info("To Bed Number : " + toBedNumber);
+			LOGGER.info("To Bed Number : " + toBedType);
+			
 		}
+		String bedTypeFlag = "Y";
+		String userId = (String) session.getAttribute("user");
+		String patientTransferNumber = request.getParameter("ptNo") == null ? "" : request.getParameter("ptNo");
+
+		LOGGER.info("ACTION : " + action);
+		LOGGER.info("patientNo : " + patientNo);
+		LOGGER.info("mrd: " + mrd);
+		LOGGER.info("visitNo : " + visitNo);
+		LOGGER.info("doctorId : " + refDoctorId);
+		LOGGER.info("wardNo : " + fromWardNumber);
+		LOGGER.info("bedNo : " + bedNo);
+		LOGGER.info("userId : " + userId);
+		LOGGER.info("Ward Code : " + toWardNumber);
+
+
 	
 
 		try {
-			
-			if ("INSERT_UPDATE_NURSE_NOTE".equals(action)) {
-				String drNumber = patientDao.insertUpdateNurseNote(patientNo, mrd, "VT01", "NA", "", bedNo, nurseNote, userId, nurseNoteNumber);
-				out.print(drNumber);
+
+			if ("INSERT_UPDATE_PATIENT_TRANSFER".equals(action)) {
+				String ptNumber = patientDao.insertUpdatePatientTransfer(patientNo, mrd, fromWardNumber, fromBedNumber,
+						toWardNumber, toRoomNumber, toBedNumber, toBedType, recommDcotorId, remark, userId,
+						bedTypeFlag);
+				out.print(ptNumber);
 			} else if ("FETCH_DOCTOR_LIST".equals(action)) {
+				response.setContentType("application/json");
 				List<String> list = patientDao.getDoctorList();
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("FETCH_DOCTOR_LIST : " + jsonMapper);
 				out.println(jsonMapper);
-			} else if ("FETCH_PREVIOUS_NURSE_NOTE".equals(action)) {
-				List<List<String>> list = patientDao.getNurseNoteHistory(patientNo);
-				List<String> row = list.get(1);
+			} else if ("FETCH_WARD_LIST".equals(action)) {
+				List<String> list = patientDao.getWardNameList();
+				LOGGER.info("FETCH_WARD_LIST : " + list);
+				out.println(list);
+			} else if ("FETCH_WARD_BED_LIST".equals(action)) {
+				response.setContentType("application/json");
+				List<String> list = patientDao.getWardBedNameList(toWardNumber);
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonMapper = mapper.writeValueAsString(list);
+				LOGGER.info("FETCH_WARD_BED_LIST : " + jsonMapper);
+				out.println(jsonMapper);
+			} else if ("FETCH_PREVIOUS_PATIENT_TRANSFER".equals(action)) {
+				List<List<String>> list = patientDao.getPatientTransfer(patientNo);
 				List<String> column = list.get(0);
+				List<String> row = list.get(1);
 				out.println(
 						"<table id=\"example1\" class=\"table-striped table-bordered nowrap\" style=\"width:100%\">");
 				out.println("<thead>");
@@ -147,7 +143,7 @@ public class PatientTransferServlet extends HttpServlet {
 				for (int i = 0; i < column.size(); i++) {
 					out.println("<th>" + column.get(i) + "</th>");
 				}
-				out.println("<th>Action</th>");
+			/*	out.println("<th>Action</th>");*/
 				out.println("</tr>");
 				out.println("</thead>");
 				out.println("<tbody>"); // problem in this section
@@ -157,22 +153,22 @@ public class PatientTransferServlet extends HttpServlet {
 				while (j < rowIndex) {
 					out.println("<tr>");
 					out.println("<td>" + (j + 1) + "</td>");
-					String nrNo = row.get(colIndex);
+					//String ptNo = row.get(colIndex);
 					for (int i = 0; i < column.size(); i++) {
 						out.println("<td>" + row.get(colIndex) + "</td>");
 						colIndex++;
 					}
-					out.println(
+					/*out.println(
 							"<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" nr-no=\""
-									+ nrNo + "\">View</button></div></td>");
+									+ ptNo + "\">View</button></div></td>");*/
 					out.println("</tr>");
 					j++;
 				}
 				out.println("</tbody>");
 				out.println("</table>");
 			} else if ("FETCH_NURSE_NOTE_HISTORY".equals(action)) {
-				List<String> list = patientDao.getNurseNote(nurseNoteNumber);
-				System.out.println("Nurse Note : " + list);
+				List<String> list = patientDao.getNurseNote(patientTransferNumber);
+				LOGGER.info("Nurse Note-{} : " + list);
 				out.print(list);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-transfer.jsp").forward(request, response);

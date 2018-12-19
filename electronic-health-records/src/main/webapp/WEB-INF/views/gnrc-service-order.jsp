@@ -43,6 +43,10 @@
 	text-align: left;
 	vertical-align: middle;
 }
+
+div.table-container {
+	width: 100%;
+}
 </style>
 
 
@@ -117,19 +121,12 @@
 										id="order-id" value="" name="orderNo" placeholder="Order No"
 										readonly="readonly">
 								</div>
-
-								<!-- <div class="col-md-1">
-									<label class="control-label" for="patient-type">Pat Type</label> <input
-										type="text"
-										class="form-control dis-auto-width dis-bottom-margin" id="patient-type"
-										value="" name="patientType" placeholder="Patient Type" readonly="readonly">
-								</div> -->
 								<div class="col-md-3">
 									<label class="control-label" for="refer-doctor">Referred
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor">
+										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="ref-doc-id">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -281,56 +278,28 @@
 						</div>
 
 						<hr>
+						<div class="table-container">
+							<table class="table" id="myTable" style="width: 100%">
+								<thead>
+									<tr>
+										<th>S/N</th>
+										<th>Service Description</th>
+										<th>Qty.</th>
+										<th>Rate</th>
+										<th>Dis(%)</th>
+										<th>Dis Amnt</th>
+										<th>Net Amnt</th>
+										<th>Specimen/Treated by</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
 
-						<table class="table" id="myTable" style="width: 100%">
-							<thead>
-								<tr>
-									<th>S/N</th>
-									<th>Service Description</th>
-									<th>Qty.</th>
-									<th>Rate</th>
-									<th>Dis(%)</th>
-									<th>Dis Amnt</th>
-									<th>Net Amnt</th>
-									<th>Specimen/Treated by</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-						</table>
 
 						<hr>
-
-						<!-- <div class="row">
-							<div class="form-horizontal">
-								<div class="form-group-sm">
-									<label class="control-label col-md-1" for="gross-amount">Gross</label>
-									<div class="col-md-2">
-										<input type="text" name="grossAmount"
-											class="form-control dis-auto-width dis-bottom-margin gross-text-right"
-											id="sum-gross-amount">
-									</div>
-									<label class="control-label col-md-1" for="discount">Discount</label>
-									<div class="col-md-2">
-										<input type="text" name="totalDiscount"
-											class="form-control dis-auto-width dis-bottom-margin gross-text-right"
-											id="sum-discount-amount">
-									</div>
-									<label class="control-label col-md-1" for="net-amount">Net</label>
-									<div class="col-md-2">
-										<input type="text" name="totalNetAmount"
-											class="form-control dis-auto-width dis-bottom-margin gross-text-right"
-											id="sum-net-amount">
-									</div>
-									<div class="col-xs-offset-10 button-right-offset">
-										<button type="button" id="btn-reset" class="btn btn-primary btn-sm">Reset</button>
-										<button type="button" id="btn-submit" class="btn btn-success btn-sm">Submit</button>
-									</div>
-
-								</div>
-							</div>
-						</div> -->
+		
 						<div class="row">
-
 							<label id="total-label" for="pat-category">Total : </label> <input
 								type="text" name="grossAmount"
 								class="form-control dis-auto-width dis-bottom-margin gross-text-right"
@@ -372,7 +341,7 @@
 					<h4 class="text-uppercase text-center">Patient History</h4>
 					<h5 class="text-uppercase text-center doc-note"></h5>
 					<h5 class="text-uppercase text-center note-date"></h5>
-					<h5 class="text-uppercase text-center refer-doctor"></h5>
+					<h5 class="text-uppercase text-center refer-doctor-name"></h5>
 
 					<hr>
 					<div class="auto-scrollbar-container">
@@ -406,8 +375,8 @@
 
 		</div>
 
-		<input type="hidden" name="voucherNumber" id="voucher-id" />
-		<input type="hidden" name="chkBoxFlag" id="chk-box-flag" />
+		<input type="hidden" name="voucherNumber" id="voucher-id" /> <input
+			type="hidden" name="chkBoxFlag" id="chk-box-flag" />
 
 		<!-- End of Dashboard -->
 	</form>
@@ -419,10 +388,10 @@
 
 
 	<!-- Form Submit Alert Message -->
-	
+
 	<%-- <%@include file="confirm-box.html"%> --%>
 	<%-- <%@include file="alert-box.html"%> --%>
-	
+
 
 	<!-- End of Form Submit Alert Message -->
 
@@ -443,7 +412,7 @@
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 
-	
+
 
 
 </body>

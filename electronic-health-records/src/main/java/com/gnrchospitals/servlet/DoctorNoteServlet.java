@@ -97,7 +97,7 @@ public class DoctorNoteServlet extends HttpServlet {
 				System.out.println("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
 			} else if ("FETCH_PREVIOUS_DOCTOR_ORDER".equals(action)) {
-				List<List<String>> list = patientDao.getPatientHistory(patientNo);
+				List<List<String>> list = patientDao.getPreviousDoctorNotes(patientNo);
 				List<String> row = list.get(1);
 				List<String> column = list.get(0);
 				out.println(

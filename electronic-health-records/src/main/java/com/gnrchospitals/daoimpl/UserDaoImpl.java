@@ -1,67 +1,48 @@
 package com.gnrchospitals.daoimpl;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import com.gnrchospitals.dao.UserDao;
-import com.gnrchospitals.dto.User;
 import com.gnrchospitals.util.LoginDBConnection;
 
 public class UserDaoImpl implements UserDao {
 
-	@Override
-	public boolean authenticateUser(User user) {
-
+	public String authenticateUser(String userID, String password) throws SQLException {
+		System.out.println("in authenticateUser");
+		int result = 0;
 		String userName = "";
-		String password = "";
-		String userRole = "";
-
-		try (Connection con = LoginDBConnection.getConnection();
-				PreparedStatement ps = createPreparedStatement(con, user);
-				ResultSet rs = ps.executeQuery()) {
-
-			while (rs.next()) {
-				userName = rs.getString(1);
-				password = rs.getString(2);
-				userRole = rs.getString(3);
-				if (user.getPassword().equals(password)) {
-					user.setUsername(userName);
-					user.setUserRole(userRole);
-					return true;
-				}
-
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Connection failed");
-			e.printStackTrace();
+		String errorMsg = "";
+		try (Connection con = LoginDBConnection.getConnection()) {
+					result = 0;
+					errorMsg = "ERROR";
+						try (CallableStatement cs = createCallableStatement1(con, userID, password)) {
+							userName = cs.getString(3);
+							result = cs.getInt(4);
+							errorMsg = cs.getString(5);
+							System.out.println("PKGJV_LOGIN.PRC_VALIDATE_USER OUT PARAMETER : " + result);
+							System.out.println("PKGJV_LOGIN.PRC_VALIDATE_USER RETURN MSG : " + errorMsg);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 		}
 
-		System.out.println(password);
-
-		return false;
+		if (result == 1)
+			return result+userName;
+		return result+errorMsg;
 	}
 
-	private PreparedStatement createPreparedStatement(Connection con, User user) throws SQLException {
-
-		String id = user.getId();
-		StringBuilder sql = new StringBuilder();
-		
-		sql.append(" SELECT a.HUM_USER_NAME, dpw(a.HUM_USER_PASSWD), b.HUR_ROLE_CD ");
-		sql.append(" FROM ");
-		sql.append(" AS_USER_MASTER a, ");
-		sql.append(" AS_USER_ROLES b ");
-		sql.append(" WHERE a.HUM_USER_ID = ? ");
-		sql.append(" AND a.HUM_USER_STATUS = 'A' ");
-		sql.append(" AND a.HUM_USER_ID = b.HUR_USER_ID ");
-		
-
-		//String sql = "select HUM_USER_NAME, dpw(HUM_USER_PASSWD) from as_user_master where HUM_USER_ID = ? and HUM_USER_STATUS = 'A'";
-		PreparedStatement ps = con.prepareStatement(sql.toString());
-		ps.setString(1, id.trim());
-		return ps;
-	}
+	private CallableStatement createCallableStatement1(Connection con, String userID, String password) throws SQLException {
+		CallableStatement cs = con.prepareCall("{call PKGJV_LOGIN.PRC_VALIDATE_USER(?,?,?,?,?)}");
+		cs.setString(1, userID);
+		cs.setString(2, password);
+		cs.registerOutParameter(3, Types.VARCHAR);
+		cs.registerOutParameter(4, Types.BIGINT);
+		cs.registerOutParameter(5, Types.VARCHAR);
+		cs.execute();
+		return cs;
+	}	
 
 }

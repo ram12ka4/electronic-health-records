@@ -1,17 +1,24 @@
 $(function() {
 
 	var arr = new Array();
+	var patientListArr = [];
 
 	var select = $(".sel-ward");
-	var id = $('input[name=user_id]').val();
+	var id = $('#user-id').val();
+	console.log(' User Id : ' + id);
 	select.css("display", "inline");
 
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+		$($.fn.dataTable.tables(true)).css('width', '100%');
+		$($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+	});
+
 	// alert(id);
-	
-	 $('.circleModal').modal({
-			backdrop : 'static',
-			keyboard : false
-		});
+
+	$('.circleModal').modal({
+		backdrop : 'static',
+		keyboard : false
+	});
 
 	select
 			.empty()
@@ -24,7 +31,7 @@ $(function() {
 				type : 'post',
 				datatype : 'text',
 				data : {
-					ACTION : 'GET_WARD',
+					ACTION : 'GET_WARD_LIST',
 					empId : id,
 				},
 				success : function(data) {
@@ -62,234 +69,280 @@ $(function() {
 
 			});
 
-	
-	
-	 
+	var patientList = function() {
 
-	var req = $
-			.ajax({
-				url : 'patient.list',
-				method : 'post',
-				dataType : 'json',
-				data : {
-					ACTION : 'GET_PAT_DET',
-					empId : id,
-					wardId : '0'
+		var wardNo = $('.sel-ward').val();
+		if (wardNo === null) {
+			wardNo = '0';
+		}
+		console.log('Ward Number : ' + wardNo);
 
-				},
-				success : function(data) {
+		$
+				.ajax({
+					url : 'patient.list',
+					method : 'post',
+					dataType : 'json',
+					data : {
+						ACTION : 'GET_PAT_DET',
+						empId : id,
+						wardId : wardNo
 
-					// alert(data);
-					
-				$('.circleModal').modal('hide');
+					},
+					success : function(data) {
 
-					if ($.fn.dataTable.isDataTable('#myTable')) {
-						// alert('object already exists');
-						table = $('#myTable').DataTable();
-						table.clear().destroy();
+						console.log(data);
+
+						patientListArr.length = 0;
+
+						for (var i = 0; i < data.length; i += 8) {
+							patientListArr.push({
+								ip : String($.trim(data[i])),
+								name : String($.trim(data[i + 1])),
+								ward : String($.trim(data[i + 2])),
+								bed : String($.trim(data[i + 3])),
+								adminDate : String($.trim(data[i + 4])),
+								adminDoc : String($.trim(data[i + 5])),
+								speciality : String($.trim(data[i + 6])),
+								category : String($.trim(data[i + 7]))
+							});
+						}
+
+						$('.circleModal').modal('hide');
+
+						if ($.fn.dataTable.isDataTable('#myTable')) {
+							table = $('#myTable').DataTable();
+							table.clear().destroy();
+						}
+
+						// alert('object not exists');
+
+						var i = 0;
+
+						table = $('#myTable')
+								.DataTable(
+										{
+											'info' : false,
+											'order' : [],
+											'data' : patientListArr,
+											'createdRow' : function(row, data,
+													dataIndex) {
+												console.log('Row : '
+														+ JSON.stringify(row)
+														+ ' ' + ' Data : '
+														+ JSON.stringify(data)
+														+ ' ' + ' dataIndex : '
+														+ dataIndex);
+												$(row).attr('pat-number',
+														data['ip']);
+												$(row).addClass(
+														'context-menu-one');
+											},
+											deferRender : true,
+											columns : [ {
+												'data' : 'ip'
+											}, {
+												'data' : 'name'
+											}, {
+												'data' : 'ward'
+											}, {
+												'data' : 'bed'
+											}, {
+												'data' : 'adminDate'
+											}, {
+												'data' : 'adminDoc'
+											}, {
+												'data' : 'speciality'
+											}, {
+												'data' : 'category'
+											}, {
+												'render' : function(oObj) {
+													return 'Bed Allocated';
+												}
+											}
+
+											],
+											columnDefs : [
+													{
+														'targets' : [ 0, 1, 2,
+																3, 4, 5, 6, 7,
+																8 ],
+														'orderable' : false,
+														'width' : '5%'
+
+													},
+													{
+														'targets' : 0,
+														'createdCell' : function(
+																td, cellData,
+																rowData, row,
+																col) {
+															console
+																	.log('TD : '
+																			+ JSON
+																					.stringify(td)
+																			+ ' '
+																			+ ' Cell Data : '
+																			+ cellData
+																			+ ' '
+																			+ ' rowData : '
+																			+ JSON
+																					.stringify(rowData)
+																			+ ' row :'
+																			+ row
+																			+ ' '
+																			+ ' col : '
+																			+ col);
+															$(td).attr('id',
+																	'otherID');
+														}
+
+													}
+
+											],
+											responsive : {
+												details : {
+													display : $.fn.dataTable.Responsive.display
+															.modal({
+																header : function(
+																		row) {
+																	var data = row
+																			.data();
+																	console
+																			.log('Data : '
+																					+ JSON
+																							.stringify(data));
+
+																	return 'Patient Number '
+																			+ data['ipNumber'];
+
+																}
+															}),
+													renderer : $.fn.dataTable.Responsive.renderer
+															.tableAll({
+																tableClass : 'table'
+															})
+												}
+											}
+
+										});
+
+					},
+					failure : function(data) {
+						// alert("failure");
+						alert(data.responseText);
+					},
+					error : function(data) {
+						// alert("error");
+						alert(data.responseText);
 					}
 
-					// alert('object not exists');
+				});
 
-					table = $('#myTable')
-							.DataTable(
-									{
+	}
 
-										data : data,
-										// deferRender: true,
-										columns : [
-												{
-													'data' : "ipNumber"
-												},
-												{
-													'data' : 'ipName'
-												},
-												{
-													'data' : 'ward'
-												},
-												{
-													'data' : 'bedNumber'
-												},
-												{
-													'data' : 'admissionDate'
-												},
-												{
-													'data' : 'admittingDoctor'
-												},
-												{
-													'data' : 'speciality'
-												},
-												{
-													'data' : 'subCategory'
-												},
-												{
-													'render' : function(oObj) {
-														return 'Bed Allocated';
-													}
-												},
-												{
-													'data' : "ipNumber",
-													"render" : function(
-															jsonIpNumber) {
-														return '<a href="pat_panel.do?ip_no='
-																+ jsonIpNumber
-																+ '"class="context-menu-one btn btn-info btn-xs">Click</a>';
-													}
-												}
+	patientList();
 
-										],
-										responsive : {
-											details : {
-												display : $.fn.dataTable.Responsive.display
-														.modal({
-															header : function(
-																	row) {
-																var data = row
-																		.data();
-																return 'Details for '
-																		+ data[0]
-																		+ ' '
-																		+ data[1];
-															}
-														}),
-												renderer : $.fn.dataTable.Responsive.renderer
-														.tableAll({
-															tableClass : 'table'
-														})
-											}
-										}
-							
-									});
+	$(document).on('change', '.sel-ward', function() {
 
-				},
-				failure : function(data) {
-					// alert("failure");
-					alert(data.responseText);
-				},
-				error : function(data) {
-					// alert("error");
-					alert(data.responseText);
-				}
+		var ward = $(this).val();
 
-			});
+		patientList();
 
-	$(document)
-			.on(
-					'change',
-					'.sel-ward',
-					function() {
+		// alert(ward);
 
-						var ward = $(this).val();
+		/*
+		 * var req = $ .ajax({ url : 'patient.list', method : 'post', dataType :
+		 * 'json', data : { ACTION : 'GET_PAT_DET', empId : id, wardId : ward
+		 *  }, success : function(data) {
+		 * 
+		 * 
+		 * console.log(data);
+		 * 
+		 * patientListArr.length = 0;
+		 * 
+		 * for (var i =0; i<data.length; i+=8){ patientListArr.push({ ip:
+		 * String($.trim(data[i])), name: String($.trim(data[i+1])), ward:
+		 * String($.trim(data[i+2])), bed: String($.trim(data[i+3])), adminDate:
+		 * String($.trim(data[i+4])), adminDoc: String($.trim(data[i+5])),
+		 * speciality: String($.trim(data[i+6])), category:
+		 * String($.trim(data[i+7])) }); }
+		 * 
+		 * 
+		 * 
+		 * if ($.fn.dataTable.isDataTable('#myTable')) { table =
+		 * $('#myTable').DataTable(); table.clear().destroy(); }
+		 * 
+		 * table = $('#myTable') .DataTable( { info: false, order: [], data :
+		 * patientListArr, 'createdRow': function(row, data, dataIndex){
+		 * //console.log('Row : ' + JSON.stringify(row) + ' ' + ' Data : ' +
+		 * JSON.stringify(data) + ' ' + ' dataIndex : ' + dataIndex);
+		 * $(row).attr('pat-number', data['ip']);
+		 * $(row).addClass('context-menu-one'); }, columns : [ { 'data' : 'ip' }, {
+		 * 'data' : 'name' }, { 'data' : 'ward' }, { 'data' : 'bed' }, { 'data' :
+		 * 'adminDate' }, { 'data' : 'adminDoc' }, { 'data' : 'speciality' }, {
+		 * 'data' : 'category' }, { 'render' : function(oObj) { return 'Bed
+		 * Allocated'; } }
+		 * 
+		 * 
+		 *  ], responsive : { details : { display :
+		 * $.fn.dataTable.Responsive.display .modal({ header : function( row) {
+		 * var data = row .data(); console.log('Data: ' + data); return 'Details
+		 * for ' + data[0] + ' ' + data[1]; } }), renderer :
+		 * $.fn.dataTable.Responsive.renderer .tableAll({ tableClass : 'table' }) } },
+		 * columnDefs: [ { 'targets': [0,1,2,3,4,5,6,7,8], 'orderable': false,
+		 * 'width': '5%'
+		 *  },
+		 * 
+		 *  ] });
+		 *  }, failure : function(data) { console.log(data.responseText); },
+		 * error : function(data) { console.log(data.responseText); }
+		 * 
+		 * });
+		 */
 
-						// alert(ward);
+	});
 
-						var req = $
-								.ajax({
-									url : 'patient.list',
-									method : 'post',
-									dataType : 'json',
-									data : {
-										ACTION : 'GET_PAT_DET_BY_WARD',
-										empId : id,
-										wardId : ward
+	/*
+	 * 
+	 * https://swisnl.github.io/jQuery-contextMenu/demo.html JQuery Context Menu
+	 * 2.x
+	 * 
+	 * 
+	 * 
+	 */
 
-									},
-									success : function(data) {
+	var moduleName = $('#module-name').val();
+	var contextMenuList = [];
 
-										// alert(data);
+	$.ajax({
+		url : 'patient.list',
+		method : 'post',
+		dataType : 'json',
+		data : {
+			ACTION : 'GET_USER_CONTEXT_MENU',
+			moduleName : moduleName
 
-										if ($.fn.dataTable
-												.isDataTable('#myTable')) {
-											// alert('object already exists');
-											table = $('#myTable').DataTable();
-											table.clear().destroy();
-										}
+		},
+		success : function(data) {
 
-										// alert('object not exists');
+			console.log(data);
 
-										table = $('#myTable')
-												.DataTable(
-														{
+			contextMenuList.length = 0;
 
-															data : data,
-															columns : [
-																	{
-																		'data' : "ipNumber"
-																	},
-																	{
-																		'data' : 'ipName'
-																	},
-																	{
-																		'data' : 'ward'
-																	},
-																	{
-																		'data' : 'bedNumber'
-																	},
-																	{
-																		'data' : 'admissionDate'
-																	},
-																	{
-																		'data' : 'admittingDoctor'
-																	},
-																	{
-																		'data' : 'speciality'
-																	},
-																	{
-																		'data' : 'subCategory'
-																	},
-																	{
-																		'render' : function(
-																				oObj) {
-																			return 'Bed Allocated';
-																		}
-																	},
-																	{
-																		'data' : "ipNumber",
-																		"render" : function(
-																				jsonIpNumber) {
-																			return '<a href="pat_panel.do?ip_no='
-																					+ jsonIpNumber
-																					+ '"class="context-menu-one btn btn-info btn-xs">Click</a>';
-																		}
-																	}
-
-															],
-															responsive : {
-																details : {
-																	display : $.fn.dataTable.Responsive.display
-																			.modal({
-																				header : function(
-																						row) {
-																					var data = row
-																							.data();
-																					return 'Details for '
-																							+ data[0]
-																							+ ' '
-																							+ data[1];
-																				}
-																			}),
-																	renderer : $.fn.dataTable.Responsive.renderer
-																			.tableAll({
-																				tableClass : 'table'
-																			})
-																}
-															}
-														// paging: false
-														});
-
-									},
-									failure : function(data) {
-										// alert("failure");
-										alert(data.responseText);
-									},
-									error : function(data) {
-										// alert("error");
-										alert(data.responseText);
-									}
-
-								});
-
-					});
+			for (var i = 0; i < data.length; i += 2) {
+				contextMenuList.push({
+					frmName : String($.trim(data[i])),
+					frmPath : String($.trim(data[i + 1])),
+				});
+			}
+		},
+		error : function(data) {
+			console.log(data.responseText);
+		},
+		failure : function(data) {
+			console.log(data.responseText);
+		}
+	});
 
 	$.contextMenu({
 
@@ -297,99 +350,129 @@ $(function() {
 		trigger : 'left',
 		callback : function(key, options) {
 			var m = "clicked: " + key;
-			// window.console && console.log(m) || alert(m);
+			
+			window.console && console.log(moduleName) || alert(moduleName);
+			window.console && console.log(userCode) || alert(userCode);
+
 		},
 		items : {
-			"neuroVitalChart" : {
+			"Vital Chart" : {
 				name : "Vital Chart",
-				icon : "cut",
+				icon : "copy",
+				disabled : function(itemKey, opt) {
+					window.console && console.log('Item Key : ' + itemKey);
+					window.console && console.log('Option : ' + opt);
+					console.log(' Context Menu List : ' + JSON.stringify(contextMenuList));
+					for (var i =0; i<contextMenuList.length; i++){
+						if (itemKey === contextMenuList[i]['frmName']) {
+							//console.log('Vital Chart found');
+							return false;
+						}
+					}
+					return true;
+				},
 				callback : function(itemKey, opt, e) {
-					window.console &&  console.log('Item Key : ' + itemKey);
-					window.console &&  console.log('Option : ' + opt);
-					window.console &&  console.log('Event : ' + e.which);
-					var m = $(this).attr('href');
-					m = m + '&moduleName=vital chart';
-					window.location.href = m.replace('pat_panel.do', 'vital.chart');
+					window.console && console.log('Item Key : ' + itemKey);
+					window.console && console.log('Option : ' + opt);
+					window.console && console.log('Event : ' + e.which);
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'vital.chart?moduleName=vital chart&ip_no=' + m;
+					window.location.href = m;
 				}
 			},
-			"doctorNote" : {
-				name : "Doctor Note",
+			"Doctor's Note" : {
+				name : "Doctor's Note",
 				icon : "cut",
+				disabled : function(itemKey, opt) {
+					for (var i =0; i<contextMenuList.length; i++){
+						if (itemKey === contextMenuList[i]['frmName']) {
+							return false;
+						}
+					}
+					return true;
+				},
 				callback : function(itemKey, opt, e) {
-					window.console &&  console.log('Item Key : ' + itemKey);
-					window.console &&  console.log('Option : ' + opt);
-					window.console &&  console.log('Event : ' + e.which);
-					var m = $(this).attr('href');
-					m = m + '&moduleName=doctor note/order';
-					window.location.href = m.replace('pat_panel.do', 'doctor.note');
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'doctor.note?moduleName=doctor\'s note/order&ip_no=' + m;
+					window.location.href = m;
 				}
 			},
-			"nurseNote" : {
-				name : "Nurse Note",
+			"Nurse's Note" : {
+				name : "Nurse's Note",
 				icon : "cut",
+				disabled : function(itemKey, opt) {
+					for (var i =0; i<contextMenuList.length; i++){
+						if (itemKey === contextMenuList[i]['frmName']) {
+							return false;
+						}
+					}
+					return true;
+				},
 				callback : function(itemKey, opt, e) {
-					window.console &&  console.log('Item Key : ' + itemKey);
-					window.console &&  console.log('Option : ' + opt);
-					window.console &&  console.log('Event : ' + e.which);
-					var m = $(this).attr('href');
-					m = m + '&moduleName=nurse note';
-					window.location.href = m.replace('pat_panel.do', 'nurse.note');
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'nurse.note?moduleName=nurse\'s note&ip_no=' + m;
+					window.location.href = m;
 				}
 			},
-			"serviceOrder" : {
+			"Service Ordering" : {
 				name : "Service Ordering",
 				icon : "cut",
+				disabled : function(itemKey, opt) {
+					for (var i =0; i<contextMenuList.length; i++){
+						if (itemKey === contextMenuList[i]['frmName']) {
+							return false;
+						}
+					}
+					return true;
+				},
 				callback : function(itemKey, opt, e) {
-					var m = $(this).attr('href');
-
-					// console.log('Mapping : ' + m);
-					m = m + '&moduleName=service ordering';
-					window.location.href = m.replace('pat_panel.do',
-							'service.order');
-
-					console.log(m.replace('pat_panel.do', 'service.order'));
-
-					// window.console && console.log(m.replace('pat_panel.do',
-					// 'patient.transfer')) || alert(m);
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'service.order?moduleName=service ordering&ip_no=' + m;
+					window.location.href = m;
 				}
 			},
-			"pharmacyOrder" : {
+			"Pharmacy Ordering" : {
 				name : "Pharmacy Ordering",
 				icon : "cut",
+				disabled : function(itemKey, opt) {
+					for (var i =0; i<contextMenuList.length; i++){
+						if (itemKey === contextMenuList[i]['frmName']) {
+							return false;
+						}
+					}
+					return true;
+				},
 				callback : function(itemKey, opt, e) {
-					var m = $(this).attr('href');
-
-					// console.log('Mapping : ' + m);
-					m = m + '&moduleName=pharmacy ordering';
-					window.location.href = m.replace('pat_panel.do',
-							'pharma.order');
-
-					console.log(m.replace('pat_panel.do', 'pharma.order'));
-
-					// window.console && console.log(m.replace('pat_panel.do',
-					// 'patient.transfer')) || alert(m);
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'pharma.order?moduleName=pharmacy ordering&ip_no=' + m;
+					window.location.href = m;
 				}
 			},
-			"patientTransfer" : {
+			"Patient Transfer" : {
 				name : "Patient Transfer",
 				icon : "cut",
+				disabled : function(itemKey, opt) {
+					for (var i =0; i<contextMenuList.length; i++){
+						if (itemKey === contextMenuList[i]['frmName']) {
+							return false;
+						}
+					}
+					return true;
+				},
 				callback : function(itemKey, opt, e) {
-					var m = $(this).attr('href');
-
-					// console.log('Mapping : ' + m);
-					m = m + '&moduleName=Patient Transfer';
-					window.location.href = m.replace('pat_panel.do',
-							'patient.transfer');
-
-					console.log(m.replace('pat_panel.do', 'patient.transfer'));
-
-					// window.console && console.log(m.replace('pat_panel.do',
-					// 'patient.transfer')) || alert(m);
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'patient.transfer?moduleName=Patient Transfer&ip_no='
+							+ m;
+					window.location.href = m;
 				}
 			}
 		}
 	});
 
 });
-
-

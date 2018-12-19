@@ -1,8 +1,7 @@
-<%@page import="java.util.ArrayList"%>
-<%@ page language="java" contentType="text/html; utf-8"
-	pageEncoding="utf-8"%>
-<jsp:useBean id="indoorPat"
-	class="com.gnrchospitals.servlet.IndoorPatient" scope="request"></jsp:useBean>
+<%@page import="java.util.*, org.slf4j.Logger, org.slf4j.LoggerFactory"%>
+<%@ page language="java" contentType="text/html; utf-8" pageEncoding="utf-8"%>
+
+<jsp:useBean id="loginDao" class="com.gnrchospitals.daoimpl.LoginDaoImpl" type="com.gnrchospitals.dao.LoginDao" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,13 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GNRC</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="icon" href="images/favicon.jpg" type="image/jpeg"
-	sizes="16x16" />
-<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<link rel="icon" href="images/favicon.jpg" type="image/jpeg" sizes="16x16" />
 <%@include file="gnrc-common-include-css.html"%>
-<link
-	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700"rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/patient-portal.css">
 
 </head>
@@ -65,9 +60,16 @@
 		<!--  /.container-fluid -->
 	</nav>
 
+	<%
+		Logger LOGGER = LoggerFactory.getLogger("gnrc-patient-portal.jsp");
+		List<String> list = loginDao.userRole((String)session.getAttribute("user"));
+		LOGGER.info("User Role ", list);
+		
+	
+	%>
 
 	<div class="wrapper">
-		<img src="/images/favicon.jpg" alt="" />
+		<img src="images/favicon.jpg" alt="" />
 		<div class="title">
 			Patient Care Portal
 			<hr>
@@ -76,42 +78,42 @@
 
 		<div class="child-wrapper">
 			<div class="item">
-				<a href="#"> <img alt=""
+				<a href="#" id="DOCBNC"> <img alt=""
 					src="https://images.unsplash.com/photo-1537083702767-42f85f12834f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=4d6a5ae6edc99fca49f32ac49bd9651a&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>Doctor's Workbench</p>
 			</div>
 
 			<div class="item">
-				<a href="#"> <img alt=""
+				<a href="#" id="cpoe"> <img alt=""
 					src="https://images.unsplash.com/photo-1537301696988-4a82a4959466?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=3661e70b004783da572c645b572d9bb4&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>CPOE</p>
 			</div>
 
 			<div class="item">
-				<a href="#"> <img alt=""
+				<a href="#" id="emr"> <img alt=""
 					src="https://images.unsplash.com/photo-1537247008051-36551b94590b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=68be66396106df92785383421081aa2f&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>EMR</p>
 			</div>
 
 			<div class="item">
-				<a href="#"> <img alt=""
+				<a href="#" id="mrd"> <img alt=""
 					src="https://images.unsplash.com/photo-1537283211-be6e1d3a549b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=3a98cccc95076a3f4db6a786d897d746&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>MRD</p>
 			</div>
 
 			<div class="item">
-				<a href="#"> <img alt=""
+				<a href="#" id="birth-notify"> <img alt=""
 					src="https://images.unsplash.com/photo-1537278471568-5eedf39a5a0c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e134cd610674d094432ff5490fdf9504&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>Birth's Notification</p>
 			</div>
 
 			<div class="item">
-				<a href="patient.list"> <img alt="nurshing_workbench"
+				<a href="#" id="NURBNC"> <img alt="nurshing_workbench"
 					src="https://images.unsplash.com/photo-1537278917244-20d2027b22a4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5cc337d3abb07920a0cc130e53550043&auto=format&fit=crop&w=500&q=60" />
 				</a>
 				<p>Nursing Workbench</p>
@@ -138,9 +140,9 @@
 
 	</div>
 
-
+	<input type="hidden" id="modules" value="<%=list%>">
 	<%@include file="logout-modal.html"%>
 	<%@include file="gnrc-common-include-js.html"%>
-
+	<script type="text/javascript" src="js/patient-portal.js"></script>
 </body>
 </html>

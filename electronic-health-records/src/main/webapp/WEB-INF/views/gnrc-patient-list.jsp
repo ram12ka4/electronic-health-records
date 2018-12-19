@@ -13,7 +13,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
-	
+
 
 <link rel="stylesheet" type="text/css" href="css/reset.css" />
 <link rel="stylesheet" type="text/css" href="css/patient-list.css" />
@@ -56,13 +56,25 @@ thead tr {
 tbody tr {
 	font-size: 11px;
 }
+
+div.table-container {
+	width: 100%;
+}
+
+.modal-content .modal-title {
+  text-align: center;
+  
+}
+
+
+
 </style>
 
 </head>
 
 <%
-	String empCode = (String) session.getAttribute("user");
-	String userRole = (String) session.getAttribute("userRole");
+	/* String empCode = request.getParameter("categoryCode");
+	String userRole = (String) session.getAttribute("userRole"); */
 
 	/* ArrayList<ArrayList<String>> list = patientDao.getPatientList(empCode, "0");
 	ArrayList<String> col = list.get(0);
@@ -219,7 +231,7 @@ tbody tr {
 		</div>
 	</div>
  --%>
- 
+
 
 
 	<div class="container">
@@ -240,32 +252,36 @@ tbody tr {
 			</h5>
 		</header>
 
-		<table class="table table-striped table-bordered table-hover"
-			id="myTable" style="width: 100%">
-			<thead>
-				<tr>
-					<th>IP</th>
-					<th>NAME</th>
-					<th>WARD</th>
-					<th>BED</th>
-					<th>ADMN DATE</th>
-					<th>ADMN DOCTOR</th>
-					<th>SPECIALITY</th>
-					<th>CATEGORY</th>
-					<th>STATUS</th>
-					<th>ACTION</th>
-				</tr>
-			</thead>
-		</table>
-		
+		<div class="table-container">
+			<table class="table table-striped table-bordered table-hover nowrap"
+				id="myTable" style="width: 100%">
+				<thead>
+					<tr>
+						<th>IP</th>
+						<th>NAME</th>
+						<th>WARD</th>
+						<th>BED</th>
+						<th>ADMN DATE</th>
+						<th>ADMN DOCTOR</th>
+						<th>SPECIALITY</th>
+						<th>CATEGORY</th>
+						<th>STATUS</th>
+					</tr>
+				</thead>
+			</table>
+
+		</div>
+
+
 	</div>
-	
-	
+
+
 	<%@include file="gnrc-modal.jsp"%>
 	<%-- <%@include file="spinner.html"%> --%>
-	
-	
-	<input type="hidden" name="user_id" value="${sessionScope.user}">
+
+
+	<input type="hidden" id="module-name" name="moduleName" value="${sessionScope.categoryCode}">
+	<input type="hidden" id="user-id" name="userID" value="${sessionScope.user}">
 	<%@include file="logout-modal.html"%>
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/patient-list.js"></script>

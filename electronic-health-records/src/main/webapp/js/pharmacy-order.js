@@ -10,7 +10,6 @@ $(function() {
 	 */
 	$('#voucher-id').val();
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
-		
 		  $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
 		        $($.fn.dataTable.tables( true ) ).css('width', '100%');
 		        $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
@@ -389,7 +388,7 @@ $(function() {
 				}
 			}
 			
-		} else if (x == 8){
+		} else if (x == 8){ // Backspace event number = 8
 			console.log('itemName event : ' + x);
 			
 			itemCodeList.splice(itemCodeList.indexOf($.trim(currentRow.find('.itemCode').val())), 1);
