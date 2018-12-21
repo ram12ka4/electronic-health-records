@@ -1,4 +1,4 @@
-package com.gnrchospitals.servlet;
+package com.gnrchospitals.controller;
 
 import java.io.IOException;
 
@@ -12,10 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @WebServlet(urlPatterns = "/patient.portal")
-public class PatientPortalServlet extends HttpServlet {
+public class PatientPortalController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger LOGGER = LoggerFactory.getLogger(PatientPortalServlet.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(PatientPortalController.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

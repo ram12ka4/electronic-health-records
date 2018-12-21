@@ -1,4 +1,4 @@
-package com.gnrchospitals.servlet;
+package com.gnrchospitals.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,12 +20,12 @@ import com.gnrchospitals.daoimpl.PatientDaoImpl;
 import com.gnrchospitals.dto.Patient;
 
 @WebServlet(urlPatterns = "/pharma.order")
-public class PharmacyOrderServlet extends HttpServlet {
+public class PharmacyOrderController extends HttpServlet {
 
 	private static final long serialVersionUID = 6157982947117798172L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
-	private static Logger LOGGER = LoggerFactory.getLogger(PharmacyOrderServlet.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(PharmacyOrderController.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

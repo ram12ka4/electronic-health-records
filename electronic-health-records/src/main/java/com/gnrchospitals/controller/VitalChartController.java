@@ -1,4 +1,4 @@
-package com.gnrchospitals.servlet;
+package com.gnrchospitals.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,12 +22,12 @@ import com.gnrchospitals.daoimpl.PatientDaoImpl;
 import com.gnrchospitals.dto.Patient;
 
 @WebServlet(urlPatterns = "/vital.chart")
-public class VitalChartServlet extends HttpServlet {
+public class VitalChartController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
-	private static Logger LOGGER = LoggerFactory.getLogger(VitalChartServlet.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(VitalChartController.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

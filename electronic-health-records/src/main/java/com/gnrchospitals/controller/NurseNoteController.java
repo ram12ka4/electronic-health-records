@@ -1,4 +1,4 @@
-package com.gnrchospitals.servlet;
+package com.gnrchospitals.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,8 +16,8 @@ import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
 import com.gnrchospitals.dto.Patient;
 
-@WebServlet(urlPatterns = "/doctor.note")
-public class DoctorNoteServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/nurse.note")
+public class NurseNoteController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
@@ -30,17 +30,13 @@ public class DoctorNoteServlet extends HttpServlet {
 		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
 		
 		HttpSession session = request.getSession();
-		PrintWriter out = response.getWriter();
 
 		try {
-
-			
-
 			session.setAttribute("moduleName", request.getParameter("moduleName"));
 			request.setAttribute("ipNumber", request.getParameter("ip_no"));
 			request.setAttribute("token", token);
 			request.setAttribute("msg", msg);
-			request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
@@ -61,13 +57,9 @@ public class DoctorNoteServlet extends HttpServlet {
 		String refDoctorId =  request.getParameter("referDocId") == null ? "" : request.getParameter("referDocId");
 		String wardNo = patient.getWardCode();
 		String bedNo = patient.getBedNo();
-		String advice = request.getParameter("treatment") == null || request.getParameter("treatment").isEmpty() ? ""	: request.getParameter("treatment");
-		String medication = request.getParameter("medication") == null || request.getParameter("medication").isEmpty() ? ""	: request.getParameter("medication");
-		String laboratory = request.getParameter("laboratory") == null || request.getParameter("laboratory").isEmpty() ? ""	: request.getParameter("laboratory");
-		String diet = request.getParameter("diet") == null || request.getParameter("diet").isEmpty() ? ""	: request.getParameter("diet");
-		String progress = request.getParameter("progress") == null || request.getParameter("progress").isEmpty() ? ""	: request.getParameter("progress");
+		String nurseNote = request.getParameter("note") == null || request.getParameter("note").isEmpty() ? ""	: request.getParameter("note");
 		String userId = (String) session.getAttribute("user");
-		String doctorOrderoNumber = request.getParameter("noteNumber") == null ? "" : request.getParameter("noteNumber");
+		String nurseNoteNumber = request.getParameter("noteNo") == null ? "" : request.getParameter("noteNo");
 	
 
 		System.out.println("ACTION : " + action);
@@ -77,18 +69,15 @@ public class DoctorNoteServlet extends HttpServlet {
 		System.out.println("doctorId : " + refDoctorId);
 		System.out.println("wardNo : " + wardNo);
 		System.out.println("bedNo : " + bedNo);
-		System.out.println("advice : " + advice);
-		System.out.println("medication : " + medication);
-		System.out.println("laboratory : " + laboratory);
-		System.out.println("diet : " + diet);
-		System.out.println("progress : " + progress);
 		System.out.println("userId : " + userId);
+		System.out.println("Nurse Note Id : " + nurseNoteNumber);
+		System.out.println("Nurse Note : " + nurseNote);
 	
 
 		try {
 			
-			if ("INSERT_UPDATE_DOCTOR_ORDER".equals(action)) {
-				String drNumber = patientDao.insertUpdateDoctorOrder(patientNo, mrd, "VT01", refDoctorId, "", bedNo, advice, medication, laboratory, diet, progress, userId, doctorOrderoNumber);
+			if ("INSERT_UPDATE_NURSE_NOTE".equals(action)) {
+				String drNumber = patientDao.insertUpdateNurseNote(patientNo, mrd, "VT01", "NA", "", bedNo, nurseNote, userId, nurseNoteNumber);
 				out.print(drNumber);
 			} else if ("FETCH_DOCTOR_LIST".equals(action)) {
 				List<String> list = patientDao.getDoctorList();
@@ -96,8 +85,8 @@ public class DoctorNoteServlet extends HttpServlet {
 				String jsonMapper = mapper.writeValueAsString(list);
 				System.out.println("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
-			} else if ("FETCH_PREVIOUS_DOCTOR_ORDER".equals(action)) {
-				List<List<String>> list = patientDao.getPreviousDoctorNotes(patientNo);
+			} else if ("FETCH_PREVIOUS_NURSE_NOTE".equals(action)) {
+				List<List<String>> list = patientDao.getPreviousNurseNotes(patientNo);
 				List<String> row = list.get(1);
 				List<String> column = list.get(0);
 				out.println(
@@ -118,27 +107,25 @@ public class DoctorNoteServlet extends HttpServlet {
 				while (j < rowIndex) {
 					out.println("<tr>");
 					out.println("<td>" + (j + 1) + "</td>");
-					String drNo = row.get(colIndex);
-					// String soNo = row.get(colIndex+1);
+					String nrNo = row.get(colIndex);
 					for (int i = 0; i < column.size(); i++) {
 						out.println("<td>" + row.get(colIndex) + "</td>");
 						colIndex++;
 					}
 					out.println(
-							"<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" dr-no=\""
-									+ drNo + "\">View</button></div></td>");
+							"<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" nr-no=\""
+									+ nrNo + "\">View</button></div></td>");
 					out.println("</tr>");
-					// colIndex +=1;
 					j++;
 				}
 				out.println("</tbody>");
 				out.println("</table>");
-			} else if ("FETCH_PATIENT_HISTORY".equals(action)) {
-				List<String> list = patientDao.getDoctorNote(doctorOrderoNumber);
-				System.out.println("Doctor Note : " + list);
+			} else if ("FETCH_NURSE_NOTE_HISTORY".equals(action)) {
+				List<String> list = patientDao.getNurseNote(nurseNoteNumber);
+				System.out.println("Nurse Note : " + list);
 				out.print(list);
 			} else {
-				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
 				return;
 			}
 		} catch (Exception e) {
@@ -151,7 +138,6 @@ public class DoctorNoteServlet extends HttpServlet {
 			Throwable e) throws ServletException, IOException {
 		request.setAttribute("javax.servlet.jsp.jspException", e);
 		getServletConfig().getServletContext().getRequestDispatcher(errroPageURL).forward(request, response);
-
 	}
 
 }

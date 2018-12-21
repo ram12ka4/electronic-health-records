@@ -1,4 +1,4 @@
-package com.gnrchospitals.servlet;
+package com.gnrchospitals.controller;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;;
 
 @WebServlet(urlPatterns = "/logout.do")
-public class LogoutServlet extends HttpServlet {
+public class LogoutController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,8 +26,8 @@ public class LogoutServlet extends HttpServlet {
 					System.out.println("JSESSIONID=" + cookie.getValue());
 				}
 
-				cookie.setMaxAge(0);
-				response.addCookie(cookie);
+				/*cookie.setMaxAge(0);
+				response.addCookie(cookie);*/
 			}
 
 			HttpSession session = request.getSession(false);
