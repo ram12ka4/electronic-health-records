@@ -8,8 +8,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.gnrchospitals.dao.LoginDao;
 import com.gnrchospitals.util.LoginDBConnection;
+
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.internal.OracleTypes;
 
@@ -105,7 +107,6 @@ public class LoginDaoImpl implements LoginDao {
 					} while (rs.next());
 				}
 			}
-
 			System.out.println("User Menu : " + list);
 			return list;
 		}

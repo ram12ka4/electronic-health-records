@@ -1,7 +1,10 @@
 <%@page import="java.util.*, org.slf4j.Logger, org.slf4j.LoggerFactory"%>
-<%@ page language="java" contentType="text/html; utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; utf-8"
+	pageEncoding="utf-8"%>
 
-<jsp:useBean id="loginDao" class="com.gnrchospitals.daoimpl.LoginDaoImpl" type="com.gnrchospitals.dao.LoginDao" scope="request"></jsp:useBean>
+<jsp:useBean id="loginDao"
+	class="com.gnrchospitals.daoimpl.LoginDaoImpl"
+	type="com.gnrchospitals.dao.LoginDao" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,12 +13,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GNRC</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="icon" href="images/favicon.jpg" type="image/jpeg" sizes="16x16" />
+<link rel="icon" href="images/favicon.jpg" type="image/jpeg"
+	sizes="16x16" />
 <%@include file="gnrc-common-include-css.html"%>
-<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700"rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700"
+	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/patient-portal.css">
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // proxies
+	int timeout = session.getMaxInactiveInterval();
+	System.out.println("Patient Portal session time : " + timeout);
+	response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 
 </head>
+
+
 
 <body>
 	<nav class="navbar navbar-inverse">
@@ -46,13 +62,13 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown">
-					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Sign out <i class="fas fa-user"></i></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+							<li><a href="#" data-toggle="modal"
+								data-target="#logoutModal">Logout</a></li>
 							<li><a href="#">Change Password</a></li>
-						</ul>
-					</li>
+						</ul></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -62,10 +78,8 @@
 
 	<%
 		Logger LOGGER = LoggerFactory.getLogger("gnrc-patient-portal.jsp");
-		List<String> list = loginDao.userRole((String)session.getAttribute("user"));
+		List<String> list = loginDao.userRole((String) session.getAttribute("user"));
 		LOGGER.info("User Role ", list);
-		
-	
 	%>
 
 	<div class="wrapper">

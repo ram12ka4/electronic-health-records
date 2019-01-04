@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/gnrc-forms.css">
 <link rel="stylesheet" href="css/circle.css">
-<link rel="stylesheet" href="css/pharmacy-order.css">
+<link rel="stylesheet" href="css/pharmacy-return.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <%
@@ -27,7 +27,7 @@
 	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
 	response.setHeader("Expires", "0"); // proxies
 	int timeout = session.getMaxInactiveInterval();
-	System.out.println("Pharmacy Order session time : " + timeout);
+	System.out.println("Pharmacy Return session time : " + timeout);
 	response.setHeader("Refresh", timeout + "; URL = logout.do");
 %>
 <!-- End of CSS -->
@@ -96,8 +96,7 @@ div.table-container {
 									<label class="control-label" for="order-id">Order No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="order-id" value="" name="orderNo" placeholder="Order No"
-										readonly="readonly">
+										id="order-id" value="" name="orderNo" placeholder="Order No">
 								</div>
 								<div class="col-md-3">
 									<label class="control-label" for="refer-doctor">Referred
@@ -257,10 +256,12 @@ div.table-container {
 									<tr>
 										<th>S/N</th>
 										<th>Item Name</th>
-										<th>Quantity</th>
-										<th>Molecule</th>
-										<th>Stock</th>
-										<th>Bal.Quantity</th>
+										<th>Batch</th>
+										<th>Issued Qty.</th>
+										<th>Prev. Ret. Qty.</th>
+										<th>Return Qty.</th>
+										<th>Voucher No.</th>
+										<th>Remark</th>
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -291,6 +292,7 @@ div.table-container {
 		<input type="hidden" name="voucherNumber" id="voucher-id" /> <input
 			type="hidden" name="chkBoxFlag" id="chk-box-flag" />
 			<input type="hidden" name="formName" id="frm-name" value="${sessionScope.moduleName}">
+			
 
 		<!-- End of Dashboard -->
 	</form>
@@ -322,7 +324,7 @@ div.table-container {
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/dashboard.js"></script>
-	<script type="text/javascript" src="js/pharmacy-order.js"></script>
+	<script type="text/javascript" src="js/pharmacy-return.js"></script>
 	<script type="text/javascript" src="js/moment.js"></script>
 	<!-- End of JS -->
 

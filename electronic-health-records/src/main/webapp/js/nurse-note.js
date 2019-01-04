@@ -4,6 +4,7 @@ $(function() {
 	 * Initial Set Value
 	 */
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
+		$('#fromDate').datepicker().datepicker("option", "disabled", true);
 		var doctorList = [];
 		var errorMsg;
 		
@@ -60,7 +61,7 @@ $(function() {
 					delay : 500,
 					source: doctorList,
 					select: function(event, ui){
-						//$(this).val(ui.item.label);
+						// $(this).val(ui.item.label);
 						console.log('Doctor Id ' + ui.item.doctorId);
 						$('#refDocId').val(ui.item.doctorId);
 						
@@ -86,12 +87,11 @@ $(function() {
 			/*
 			 * data validation
 			 */
-		/*	var x = dataValidation();
-			console.log('data validation return value : ' + x);
-			if (x === false){
-				swalWithBootstrapButtons('Ohh no!', errorMsg , 'info');
-				return false;
-			}*/
+		/*
+		 * var x = dataValidation(); console.log('data validation return value : ' +
+		 * x); if (x === false){ swalWithBootstrapButtons('Ohh no!', errorMsg ,
+		 * 'info'); return false; }
+		 */
 			
 		
 		
@@ -197,7 +197,8 @@ $(function() {
 			  
 		  if (status === 'error') { 
 		  var msg = "Sorry but there was an error: "; 
-		  //swal( "Oh no!", msg +  xhr.status + " " + xhr.statusText, "error");
+		  // swal( "Oh no!", msg + xhr.status + " " + xhr.statusText,
+			// "error");
 		  swal('Info', 'No previous Nurse notes are available', 'info');
 		  $('.myModal').modal('hide');
 		}
@@ -322,7 +323,7 @@ $(function() {
 			            swal("Internal Error",  "Oops, your note was not saved.", "error");
 			        },
 			        error: function(data){
-			        	//console.log(data.responseText);
+			        	// console.log(data.responseText);
 			        	swal("Internal Error",  "No previous Nurse note is available", "error");
 			        }
 			        
@@ -366,12 +367,22 @@ $(function() {
 		$('#btn-submit').prop('disabled', false);
 	}
 	
+	/*window.onbeforeunload = WindowCloseHanlder;
+	function WindowCloseHanlder()
+	{
+	window.console.log('My Window is closing');
+	}*/
 	
 
 });
 
 
-
+if (window.history && window.history.pushState) {
+    window.history.pushState('', 'nurse-note', 'nurse.note?moduleName=' + document.getElementById('frm-name').value);
+    $(window).on('popstate', function() {
+        document.location.href = '';
+    });
+} 
 
 
 

@@ -1,10 +1,10 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="java.util.Enumeration"%>
-<%@page import="com.gnrchospitals.dto.Patient"%>
-<%@page import="com.gnrchospitals.dao.PatientDao"%>
-<%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="com.gnrchospitals.dto.Patient"%>
+<jsp:useBean id="patientDao"
+	class="com.gnrchospitals.daoimpl.PatientDaoImpl"
+	type="com.gnrchospitals.dao.PatientDao" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +23,14 @@
 <link rel="stylesheet" href="css/vital-chart.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // proxies
+	int timeout = session.getMaxInactiveInterval();
+	System.out.println("Vital Chart session time : " + timeout);
+	response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 <!-- End of CSS -->
 
 <style>
@@ -52,40 +60,10 @@
 <body>
 
 	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
-
 		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
 				: (String) request.getAttribute("ipNumber");
-
 		System.out.println("Patient Number  : " + ipNumber);
-
-		Enumeration<String> noteDate = request.getParameterNames();
-
-		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-
 		System.out.println("Patient Object " + patient);
 	%>
 
@@ -112,8 +90,8 @@
 
 							<div class="form-group-sm">
 								<div class="col-md-2">
-									<label class="control-label" for="order-id">Vital Chart No</label> <input
-										type="text"
+									<label class="control-label" for="order-id">Vital Chart
+										No</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="vital-no" value="" name="vitalNo" placeholder="Vital No"
 										readonly="readonly">
@@ -124,7 +102,8 @@
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
+										placeholder="Refer Doctor"><input type="hidden"
+										name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -286,7 +265,7 @@
 													</header>
 
 													<div class="form-horizontal">
-													<input type="hidden" name="EYOP" value="EYOP">
+														<input type="hidden" name="EYOP" value="EYOP">
 														<div class="radio">
 															<label> <input type="radio" name="eyesOpen"
 																class="eyesOpen" value="Spontaneously" checked>
@@ -315,7 +294,7 @@
 
 														</div>
 
-													<!-- 	<div class="radio">
+														<!-- 	<div class="radio">
 															<label> <input type="radio" name="optionsRadios"
 																id="optionsRadios2" value="Eyes closed by swelling = c"> Eyes closed
 																by swelling = c
@@ -326,7 +305,9 @@
 													<!-- 	</div> -->
 												</div>
 												<div class="col-md-9 dashboard-right-cell">
-													<table class="table table-striped table-bordered table-hover" id="eyesOpenTable" style="width: 100%">
+													<table
+														class="table table-striped table-bordered table-hover"
+														id="eyesOpenTable" style="width: 100%">
 														<thead>
 															<tr>
 																<th>S/N</th>
@@ -336,7 +317,7 @@
 																<th>Created By</th>
 															</tr>
 														</thead>
-														
+
 													</table>
 												</div>
 											</div>
@@ -366,8 +347,8 @@
 
 													<div class="radio">
 														<label> <input type="radio" name="verbalResponse"
-															class="verbalResponse" value="Inappropriate Words" checked>
-															Inappropriate Words
+															class="verbalResponse" value="Inappropriate Words"
+															checked> Inappropriate Words
 														</label>
 													</div>
 
@@ -388,14 +369,17 @@
 
 													<div class="radio">
 														<label> <input type="radio" name="verbalResponse"
-															class="verbalResponse" value="Endotracheal tube or tracheostomy = T"> Endotracheal
-															tube or tracheostomy = T
+															class="verbalResponse"
+															value="Endotracheal tube or tracheostomy = T">
+															Endotracheal tube or tracheostomy = T
 														</label>
 													</div>
 													<!-- 	</div> -->
 												</div>
 												<div class="col-md-9 dashboard-right-cell">
-													<table class="table table-striped table-bordered table-hover" id="verbalResTable" style="width: 100%">
+													<table
+														class="table table-striped table-bordered table-hover"
+														id="verbalResTable" style="width: 100%">
 														<thead>
 															<tr>
 																<th>S/N</th>
@@ -417,16 +401,16 @@
 													<input type="hidden" name="MORE" value="MORE">
 													<div class="radio">
 														<label> <input type="radio" name="motorResponse"
-															class="motorResponse" value="Obey Commands" checked> Obey
-															Commands
+															class="motorResponse" value="Obey Commands" checked>
+															Obey Commands
 														</label>
 													</div>
 
 
 													<div class="radio">
 														<label> <input type="radio" name="motorResponse"
-															class="motorResponse" value="Localize Pain"> Localize
-															Pain
+															class="motorResponse" value="Localize Pain">
+															Localize Pain
 														</label>
 													</div>
 
@@ -441,16 +425,16 @@
 
 													<div class="radio">
 														<label> <input type="radio" name="motorResponse"
-															class="motorResponse" value="Abnormal Flexion"> Abnormal
-															Flexion
+															class="motorResponse" value="Abnormal Flexion">
+															Abnormal Flexion
 														</label>
 
 													</div>
 
 													<div class="radio">
 														<label> <input type="radio" name="motorResponse"
-															class="motorResponse" value="Extension to Pain"> Extension to
-															Pain
+															class="motorResponse" value="Extension to Pain">
+															Extension to Pain
 														</label>
 
 													</div>
@@ -463,7 +447,9 @@
 												</div>
 
 												<div class="col-md-9 dashboard-right-cell">
-													<table class="table table-striped table-bordered table-hover" id="motorResTable" style="width: 100%">
+													<table
+														class="table table-striped table-bordered table-hover"
+														id="motorResTable" style="width: 100%">
 														<thead>
 															<tr>
 																<th>S/N</th>
@@ -484,15 +470,15 @@
 													<header class="clearfix">
 														<h5 class="pull-left">Blood Pressure</h5>
 													</header>
-													
+
 													<div class="form-horizontal">
 														<div class="form-group">
 															<label class="control-label col-xs-5" for="name"><span
 																class="required-label" id="name">Systolic</span> :</label>
 															<div class="col-xs-5">
-															<input type="hidden" name="BLPS" value="BLPS">
-																<select
-																	class="form-control select-form-control input-sm systolic" name="systolic">
+																<input type="hidden" name="BLPS" value="BLPS"> <select
+																	class="form-control select-form-control input-sm systolic"
+																	name="systolic">
 																	<option value="10">10</option>
 																	<option value="20">20</option>
 																	<option value="30">30</option>
@@ -523,11 +509,11 @@
 														<div class="form-group">
 															<label class="control-label col-xs-5" for="name"><span
 																class="required-label" id="name">Diastolic</span> :</label>
-																
+
 															<div class="col-xs-5">
-															<input type="hidden" name="BLPD" value="BLPD">
-																<select
-																	class="form-control select-form-control input-sm diastolic" name="diastolic">
+																<input type="hidden" name="BLPD" value="BLPD"> <select
+																	class="form-control select-form-control input-sm diastolic"
+																	name="diastolic">
 																	<option value="10">10</option>
 																	<option value="20">20</option>
 																	<option value="30">30</option>
@@ -559,7 +545,9 @@
 													<!-- </div> -->
 												</div>
 												<div class="col-md-9 dashboard-right-cell">
-													<table class="table table-striped table-bordered table-hover" id="bpTable" style="width: 100%">
+													<table
+														class="table table-striped table-bordered table-hover"
+														id="bpTable" style="width: 100%">
 														<thead>
 															<tr>
 																<th>S/N</th>
@@ -594,16 +582,18 @@
 															<label class="control-label col-xs-2" for="name"><span
 																class="required-label" id="name"></span> </label>
 															<div class="col-xs-6">
-															<input type="hidden" name="PUPL" value="PUPL">
-																<select class="form-control left-pupil-close-open" name="leftPupilCloseOPen">
+																<input type="hidden" name="PUPL" value="PUPL"> <select
+																	class="form-control left-pupil-close-open"
+																	name="leftPupilCloseOPen">
 																	<option value="+">&plus;</option>
 																	<option value="-">&minus;</option>
 																	<option value="C">C</option>
 																</select>
 															</div>
 															<div class="col-xs-6">
-															<input type="hidden" name="PUPR" value="PUPR">
-																<select class="form-control right-pupil-close-open" name="rightPupilCloseOPen">
+																<input type="hidden" name="PUPR" value="PUPR"> <select
+																	class="form-control right-pupil-close-open"
+																	name="rightPupilCloseOPen">
 																	<option value="+">&plus;</option>
 																	<option value="-">&minus;</option>
 																	<option value="C">C</option>
@@ -612,7 +602,8 @@
 														</div>
 														<div class="form-group">
 															<div class="col-xs-6">
-																<select class="form-control left-pupil-size" name="leftPupilSize">
+																<select class="form-control left-pupil-size"
+																	name="leftPupilSize">
 																	<option value="S">S</option>
 																	<option
 																		data-content="<i class='fas fa-circle' aria-hidden='true' style='font-size: 5px;'></i>&nbsp;1"
@@ -641,7 +632,8 @@
 																</select>
 															</div>
 															<div class="col-xs-6">
-																<select class="form-control right-pupil-size" name="rightPupilSize">
+																<select class="form-control right-pupil-size"
+																	name="rightPupilSize">
 																	<option value="S">S</option>
 																	<option
 																		data-content="<i class='fas fa-circle' aria-hidden='true' style='font-size: 5px;'></i>&nbsp;1"
@@ -675,7 +667,9 @@
 												<!-- 	</div> -->
 
 												<div class="col-md-9 dashboard-right-cell">
-													<table class="table table-striped table-bordered table-hover" id="pupilTable" style="width: 100%">
+													<table
+														class="table table-striped table-bordered table-hover"
+														id="pupilTable" style="width: 100%">
 														<thead>
 															<tr>
 																<th>S/N</th>
@@ -724,7 +718,7 @@
 
 		</div>
 
-
+	<input type="hidden" name="formName" id="frm-name" value="${sessionScope.moduleName}">
 
 		<!-- End of Dashboard -->
 	</form>

@@ -1,10 +1,10 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="java.util.Enumeration"%>
-<%@page import="com.gnrchospitals.dto.Patient"%>
-<%@page import="com.gnrchospitals.dao.PatientDao"%>
-<%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="com.gnrchospitals.dto.Patient"%>
+<jsp:useBean id="patientDao"
+	class="com.gnrchospitals.daoimpl.PatientDaoImpl"
+	type="com.gnrchospitals.dao.PatientDao" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +23,14 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
+<%
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+response.setHeader("Expires", "0"); // proxies
+int timeout = session.getMaxInactiveInterval();
+System.out.println("Service Order session time : " + timeout);
+response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 
 <style>
 .modal {
@@ -55,38 +63,12 @@ div.table-container {
 <body>
 
 	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("/login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
+		
 
 		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
 				: (String) request.getAttribute("ipNumber");
 
 		System.out.println("Patient Number  : " + ipNumber);
-
-		Enumeration<String> noteDate = request.getParameterNames();
-
-		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
 
 		System.out.println("Patient Object " + patient);
@@ -126,7 +108,8 @@ div.table-container {
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="ref-doc-id">
+										placeholder="Refer Doctor"><input type="hidden"
+										name="referDocId" id="ref-doc-id">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -298,7 +281,7 @@ div.table-container {
 
 
 						<hr>
-		
+
 						<div class="row">
 							<label id="total-label" for="pat-category">Total : </label> <input
 								type="text" name="grossAmount"
@@ -377,6 +360,7 @@ div.table-container {
 
 		<input type="hidden" name="voucherNumber" id="voucher-id" /> <input
 			type="hidden" name="chkBoxFlag" id="chk-box-flag" />
+			<input type="hidden" name="formName" id="frm-name" value="${sessionScope.moduleName}">
 
 		<!-- End of Dashboard -->
 	</form>
@@ -384,13 +368,9 @@ div.table-container {
 	<!-- End of Registration Form -->
 
 	<%@include file="gnrc-modal.jsp"%>
-	<%-- <%@include file="success-error-msg.jsp"%> --%>
-
 
 	<!-- Form Submit Alert Message -->
 
-	<%-- <%@include file="confirm-box.html"%> --%>
-	<%-- <%@include file="alert-box.html"%> --%>
 
 
 	<!-- End of Form Submit Alert Message -->

@@ -32,10 +32,22 @@ public class VitalChartController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
-		session.setAttribute("moduleName", request.getParameter("moduleName"));
-		request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-vital-chart.jsp").forward(request, response);
+		HttpSession session = request.getSession(true);
+		LOGGER.info("Session ID : " + session.getAttribute("user"));
+		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		if (session.getAttribute("user") == null) {
+			LOGGER.info("Session null");
+			response.sendRedirect("login.do");
+		} else {
+			LOGGER.info("user session exists");
+			session.setAttribute("moduleName", request.getParameter("moduleName"));
+			request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-vital-chart.jsp").forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

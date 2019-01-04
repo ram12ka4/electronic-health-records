@@ -1,14 +1,13 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="java.util.Enumeration"%>
-<%@page import="com.gnrchospitals.dto.Patient"%>
-<%@page import="com.gnrchospitals.dao.PatientDao"%>
-<%@page import="com.gnrchospitals.daoimpl.PatientDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="com.gnrchospitals.dto.Patient"%>
+<jsp:useBean id="patientDao"
+	class="com.gnrchospitals.daoimpl.PatientDaoImpl"
+	type="com.gnrchospitals.dao.PatientDao" scope="request"></jsp:useBean>
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,6 +22,14 @@
 <link rel="stylesheet" href="css/patient-transfer.css">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // proxies
+	int timeout = session.getMaxInactiveInterval();
+	System.out.println("Patient Transfer session time : " + timeout);
+	response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 <!-- End of CSS -->
 
 <style>
@@ -44,19 +51,14 @@
 	text-align: left;
 	vertical-align: middle;
 }
+
 .modal-lg {
 	width: 100%;
 }
 
 .col-md-offset-10 {
-    margin-left: 86.33333333%;
+	margin-left: 86.33333333%;
 }
-
-/* table.dataTable tbody td {
-    word-break: break-word;
-    vertical-align: top;
-} */
-
 </style>
 
 
@@ -65,40 +67,10 @@
 <body>
 
 	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("/login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
-
 		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
 				: (String) request.getAttribute("ipNumber");
-
 		System.out.println("Patient Number  : " + ipNumber);
-
-		Enumeration<String> noteDate = request.getParameterNames();
-
-		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
-
 		System.out.println("Patient Object " + patient);
 	%>
 
@@ -125,18 +97,19 @@
 
 							<div class="form-group-sm">
 								<div class="col-md-2">
-									<label class="control-label" for="order-id">Transfer No</label> <input
-										type="text"
+									<label class="control-label" for="order-id">Transfer No</label>
+									<input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="transfer-id" value="" name="transferNo" placeholder="Transfer No"
-										readonly="readonly">
+										id="transfer-id" value="" name="transferNo"
+										placeholder="Transfer No" readonly="readonly">
 								</div>
 								<div class="col-md-3">
 									<label class="control-label" for="refer-doctor">Referred
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
+										placeholder="Refer Doctor"><input type="hidden"
+										name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -171,7 +144,8 @@
 						<div class="row">
 							<div class="form-group-sm">
 								<div class="col-md-2">
-									<label class="control-label" for="order-date">Date</label> <input type="text"
+									<label class="control-label" for="order-date">Date</label> <input
+										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="fromDate" value="" name="orderDate"
 										placeholder="Ordering Date" readonly="readonly">
@@ -182,7 +156,9 @@
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="ward" value="<%=patient.getWardDesc()%>" name="ward"
-										placeholder="Ward" readonly="readonly"><input type="hidden" name="wardCode" id="ward-code" value="<%=patient.getWardCode()%>">
+										placeholder="Ward" readonly="readonly"><input
+										type="hidden" name="wardCode" id="ward-code"
+										value="<%=patient.getWardCode()%>">
 								</div>
 
 								<div class="col-md-1">
@@ -277,9 +253,7 @@
 										<label class="control-label col-xs-3" for="mrd"><span
 											class="required-label" id="mrd">Ward Name</span> :</label>
 										<div class="col-xs-8">
-											<select
-												class="form-control ward-name"
-												name="toWard">
+											<select class="form-control ward-name" name="toWard">
 											</select>
 										</div>
 									</div>
@@ -290,8 +264,9 @@
 										<div class="col-xs-8">
 											<input type="text" class="form-control input-sm"
 												id="recomm-doctor" value="" name="recommDcotor"
-												placeholder="Recommend Doctor" style="color: black;"> <input type="hidden"
-												id="recomm-doctor-id" name="recommDcotorId">
+												placeholder="Recommend Doctor" style="color: black;">
+											<input type="hidden" id="recomm-doctor-id"
+												name="recommDcotorId">
 										</div>
 									</div>
 
@@ -308,28 +283,28 @@
 										<label class="control-label col-xs-3" for="age"><span
 											class="required-label" id="">Remarks</span> :</label>
 										<div class="col-xs-8">
-											<textarea name="remark" class="form-control"
-												id="remark" rows="3" placeholder="Remark"></textarea>
+											<textarea name="remark" class="form-control" id="remark"
+												rows="3" placeholder="Remark"></textarea>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6 dashboard-right-cell col-md-6-height">
-								
-									<table class="table table-striped table-bordered table-hover"
-										id="myTable" style="width: 100%">
-										<thead>
-											<tr>
-												<th>S/N</th>
-												<th>Room No</th>
-												<th>Bed No</th>
-												<th>Bed Type</th>
-												<th>Action</th>
-											</tr>
-										</thead>
 
-									</table>
-								
+								<table class="table table-striped table-bordered table-hover"
+									id="myTable" style="width: 100%">
+									<thead>
+										<tr>
+											<th>S/N</th>
+											<th>Room No</th>
+											<th>Bed No</th>
+											<th>Bed Type</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+
+								</table>
+
 							</div>
 
 						</div>
@@ -358,6 +333,7 @@
 
 		<input type="hidden" name="voucherNumber" id="voucher-id" /> <input
 			type="hidden" name="chkBoxFlag" id="chk-box-flag" />
+			<input type="hidden" name="formName" id="frm-name" value="${sessionScope.moduleName}">
 
 		<!-- End of Dashboard -->
 	</form>

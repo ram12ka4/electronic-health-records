@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +13,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gnrchospitals.dao.DatabaseDao;
 import com.gnrchospitals.dao.LoginDao;
 import com.gnrchospitals.daoimpl.DatabaseDaoImpl;
@@ -22,6 +27,7 @@ public class LoginController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private LoginDao loginDao = new LoginDaoImpl();
+	private static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -48,18 +54,18 @@ public class LoginController extends HttpServlet {
 			// InetAddress localhost = InetAddress.getLocalHost();
 			String ipAddress = request.getRemoteAddr();
 
-			System.out.println("User ID : " + id);
-			System.out.println("Password : " + password);
-			System.out.println("Location : " + location);
-			System.out.println("Login Time : " + today);
-			System.out.println("Login From : " + ipAddress);
+			LOGGER.info("User ID : " + id);
+			LOGGER.info("Password : " + password);
+			LOGGER.info("Location : " + location);
+			LOGGER.info("Login Time : " + today);
+			LOGGER.info("Login From : " + ipAddress);
 
 			DatabaseDao databaseDo = new DatabaseDaoImpl();
 			boolean loginDatabaseValidate = databaseDo.findByLocation(location);
-			System.out.println("Login Database Validation " + loginDatabaseValidate);
+			LOGGER.info("Login Database Validation " + loginDatabaseValidate);
 
 			String userValidation = loginDao.validateUser(id, password);
-			System.out.println("User Validation : " + userValidation.substring(1));
+			LOGGER.info("User Validation : " + userValidation.substring(1));
 
 			if (userValidation.contains("1")) {
 
@@ -75,9 +81,10 @@ public class LoginController extends HttpServlet {
 				newSession.setAttribute("loginFrom", ipAddress);
 				newSession.setAttribute("location", location);
 
-				// setting session to expiry in 30 minutes
+				// setting session to expiry in 10 minutes
 				newSession.setMaxInactiveInterval(30 * 60);
 				Cookie userName = new Cookie("user", id);
+				userName.setMaxAge(10 * 60);
 				userName.setHttpOnly(true);
 				userName.setSecure(true);
 				response.addCookie(userName);

@@ -23,6 +23,14 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // proxies
+	int timeout = session.getMaxInactiveInterval();
+	System.out.println("Patient List session time : " + timeout);
+	response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 
 <style>
 .modal {
@@ -51,30 +59,6 @@
 <body>
 
 	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
-
 		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
 				: (String) request.getAttribute("ipNumber");
 
@@ -122,7 +106,8 @@
 										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
+										placeholder="Refer Doctor"><input type="hidden"
+										name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -292,7 +277,8 @@
 
 		</div>
 
-
+		<input type="hidden" name="formName" id="frm-name"
+			value="${sessionScope.moduleName}">
 
 		<!-- End of Dashboard -->
 	</form>

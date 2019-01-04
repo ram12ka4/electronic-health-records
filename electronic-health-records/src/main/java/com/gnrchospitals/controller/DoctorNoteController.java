@@ -30,23 +30,24 @@ public class DoctorNoteController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String token = request.getParameter("token") == null ? "" : request.getParameter("token");
-		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
+	/*	String token = request.getParameter("token") == null ? "" : request.getParameter("token");
+		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");*/
 		
-		HttpSession session = request.getSession();
-		PrintWriter out = response.getWriter();
-
-		try {
-			session.setAttribute("moduleName", request.getParameter("moduleName"));
-			request.setAttribute("ipNumber", request.getParameter("ip_no"));
-			request.setAttribute("token", token);
-			request.setAttribute("msg", msg);
-			request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
-
-		} catch (Exception e) {
-			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
-		}
-
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+		
+		HttpSession session = request.getSession(true);
+		
+		 if(session.getAttribute("user") == null) {
+				LOGGER.info("Session null");
+				response.sendRedirect("login.do");
+			} else {
+				LOGGER.info("user session exists");
+				session.setAttribute("moduleName", request.getParameter("moduleName"));
+				request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);
+			}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -71,19 +72,19 @@ public class DoctorNoteController extends HttpServlet {
 		String doctorOrderoNumber = request.getParameter("noteNumber") == null ? "" : request.getParameter("noteNumber");
 	
 
-		System.out.println("ACTION : " + action);
-		System.out.println("patientNo : " + patientNo);
-		System.out.println("mrd: " + mrd);
-		System.out.println("visitNo : " + visitNo);
-		System.out.println("doctorId : " + refDoctorId);
-		System.out.println("wardNo : " + wardNo);
-		System.out.println("bedNo : " + bedNo);
-		System.out.println("advice : " + advice);
-		System.out.println("medication : " + medication);
-		System.out.println("laboratory : " + laboratory);
-		System.out.println("diet : " + diet);
-		System.out.println("progress : " + progress);
-		System.out.println("userId : " + userId);
+		LOGGER.info("ACTION : " + action);
+		LOGGER.info("PATIENT NO : " + patientNo);
+		LOGGER.info("MRD : " + mrd);
+		LOGGER.info("VISIT NO : " + visitNo);
+		LOGGER.info("DOCTOR ID : " + refDoctorId);
+		LOGGER.info("WARD NO : " + wardNo);
+		LOGGER.info("BED NO : " + bedNo);
+		LOGGER.info("ADVICE : " + advice);
+		LOGGER.info("MEDICATION : " + medication);
+		LOGGER.info("LABORATORY : " + laboratory);
+		LOGGER.info("DIET : " + diet);
+		LOGGER.info("PROGRESS : " + progress);
+		LOGGER.info("USER ID : " + userId);
 	
 
 		try {
@@ -95,7 +96,7 @@ public class DoctorNoteController extends HttpServlet {
 				List<String> list = patientDao.getDoctorList();
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("FETCH_DOCTOR_LIST : " + jsonMapper);
 				out.println(jsonMapper);
 			} else if ("FETCH_PREVIOUS_DOCTOR_ORDER".equals(action)) {
 				List<List<String>> list = patientDao.getPreviousDoctorNotes(patientNo);
@@ -136,7 +137,7 @@ public class DoctorNoteController extends HttpServlet {
 				out.println("</table>");
 			} else if ("FETCH_PATIENT_HISTORY".equals(action)) {
 				List<String> list = patientDao.getDoctorNote(doctorOrderoNumber);
-				System.out.println("Doctor Note : " + list);
+				LOGGER.info("Doctor Note : " + list);
 				out.print(list);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-doctor-note.jsp").forward(request, response);

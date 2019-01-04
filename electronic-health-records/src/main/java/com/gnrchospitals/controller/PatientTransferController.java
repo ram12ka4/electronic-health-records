@@ -30,23 +30,21 @@ public class PatientTransferController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String token = request.getParameter("token") == null ? "" : request.getParameter("token");
-		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
-
-		HttpSession session = request.getSession();
-		LOGGER.info("Patient Number : " + request.getParameter("ip_no"));
+		HttpSession session = request.getSession(true);
 		
-		try {
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+		
+		if (session.getAttribute("user") == null) {
+			LOGGER.info("Session null");
+			response.sendRedirect("login.do");
+		} else {
+			LOGGER.info("user session exists");
 			session.setAttribute("moduleName", request.getParameter("moduleName"));
-			request.setAttribute("ipNumber", request.getParameter("ip_no"));
-			request.setAttribute("token", token);
-			request.setAttribute("msg", msg);
+			request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
 			request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-transfer.jsp").forward(request, response);
-
-		} catch (Exception e) {
-			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -79,7 +77,7 @@ public class PatientTransferController extends HttpServlet {
 
 		LOGGER.info("Array Length : " + arr.length);
 		LOGGER.info("Array value : " + arr[0]);
-		
+
 		if (arr.length > 1) {
 			toRoomNumber = arr[0];
 			toBedNumber = arr[1];
@@ -87,7 +85,7 @@ public class PatientTransferController extends HttpServlet {
 			LOGGER.info("To Room Number : " + toRoomNumber);
 			LOGGER.info("To Bed Number : " + toBedNumber);
 			LOGGER.info("To Bed Number : " + toBedType);
-			
+
 		}
 		String bedTypeFlag = "Y";
 		String userId = (String) session.getAttribute("user");
@@ -102,9 +100,6 @@ public class PatientTransferController extends HttpServlet {
 		LOGGER.info("bedNo : " + bedNo);
 		LOGGER.info("userId : " + userId);
 		LOGGER.info("Ward Code : " + toWardNumber);
-
-
-	
 
 		try {
 
@@ -143,7 +138,7 @@ public class PatientTransferController extends HttpServlet {
 				for (int i = 0; i < column.size(); i++) {
 					out.println("<th>" + column.get(i) + "</th>");
 				}
-			/*	out.println("<th>Action</th>");*/
+				/* out.println("<th>Action</th>"); */
 				out.println("</tr>");
 				out.println("</thead>");
 				out.println("<tbody>"); // problem in this section
@@ -153,14 +148,16 @@ public class PatientTransferController extends HttpServlet {
 				while (j < rowIndex) {
 					out.println("<tr>");
 					out.println("<td>" + (j + 1) + "</td>");
-					//String ptNo = row.get(colIndex);
+					// String ptNo = row.get(colIndex);
 					for (int i = 0; i < column.size(); i++) {
 						out.println("<td>" + row.get(colIndex) + "</td>");
 						colIndex++;
 					}
-					/*out.println(
-							"<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" nr-no=\""
-									+ ptNo + "\">View</button></div></td>");*/
+					/*
+					 * out.println(
+					 * "<td><div class=\"view-class\"><button class=\"btn btn-warning btn-sm pat-view-btn\" nr-no=\""
+					 * + ptNo + "\">View</button></div></td>");
+					 */
 					out.println("</tr>");
 					j++;
 				}

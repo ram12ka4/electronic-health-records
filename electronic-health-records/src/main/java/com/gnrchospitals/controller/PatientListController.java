@@ -25,17 +25,26 @@ public class PatientListController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
-	private LoginDao loginDao = new LoginDaoImpl(); 
+	private LoginDao loginDao = new LoginDaoImpl();
 	private static Logger LOGGER = LoggerFactory.getLogger(PatientListController.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
 		
-		System.out.println(" Category Code : " + request.getParameter("catCode"));
-		session.setAttribute("categoryCode", request.getParameter("catCode"));
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-list.jsp").forward(request, response);
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		if (session.getAttribute("user") == null) {
+			LOGGER.info("Session null");
+			response.sendRedirect("login.do");
+		} else {
+			LOGGER.info(" Category Code : " + request.getParameter("catCode"));
+			session.setAttribute("categoryCode", request.getParameter("catCode"));
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-list.jsp").forward(request, response);
+		}
 
 	}
 
@@ -45,10 +54,11 @@ public class PatientListController extends HttpServlet {
 		HttpSession session = request.getSession();
 		PrintWriter out = response.getWriter();
 
-		String userID = (String)session.getAttribute("user");
+		String userID = (String) session.getAttribute("user");
 		String action = request.getParameter("ACTION") == null || request.getParameter("ACTION").isEmpty() ? ""
 				: request.getParameter("ACTION");
-		String moduleName = request.getParameter("moduleName") == null || request.getParameter("moduleName").isEmpty() ? ""
+		String moduleName = request.getParameter("moduleName") == null || request.getParameter("moduleName").isEmpty()
+				? ""
 				: request.getParameter("moduleName");
 		String wardId = request.getParameter("wardId") == null || request.getParameter("wardId").isEmpty() ? ""
 				: request.getParameter("wardId");
@@ -60,7 +70,7 @@ public class PatientListController extends HttpServlet {
 				List<String> list = patientDao.getPatientList(userID, wardId);
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("GET_PAT_DET : " + jsonMapper);
+				LOGGER.info("GET_PAT_DET : " + jsonMapper);
 				out.print(jsonMapper);
 			} else if ("GET_WARD_LIST".equals(action)) {
 				List<String> list = patientDao.getWardList(userID);
@@ -70,9 +80,9 @@ public class PatientListController extends HttpServlet {
 				List<String> list = loginDao.userMenu(userID, moduleName);
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("GET_USER_CONTEXT_MENU : " + jsonMapper);
+				LOGGER.info("GET_USER_CONTEXT_MENU : " + jsonMapper);
 				out.print(jsonMapper);
-			}  else {
+			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-patient-list.jsp").forward(request, response);
 			}
 

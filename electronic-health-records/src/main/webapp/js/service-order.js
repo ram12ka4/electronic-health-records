@@ -16,6 +16,7 @@ $(function() {
 	 */
 	$('#voucher-id').val();
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
+		$('#fromDate').datepicker().datepicker("option", "disabled", true);
 		$('.qty').attr({
 			'min': 1,
 			'max': 10
@@ -89,7 +90,7 @@ $(function() {
 			},
 			success: function(data){
 				
-				console.log('Doctor List : ' +  JSON.stringify(data));
+				// console.log('Doctor List : ' + JSON.stringify(data));
 
 				if (data.length !== 0) {
 					doctorList.length = 0;
@@ -240,7 +241,7 @@ $(function() {
 	  
 	  var x = event.which || event.keyCode;
 	  
-	  console.log('delete btn event : ' + x);
+	 // console.log('delete btn event : ' + x);
 	  
 	  var row = $(this).closest('tr');
 	  
@@ -468,16 +469,16 @@ $(function() {
 	function duplicateCheckServiceCode(serviceDesc, minorCode, serviceCode, currentRow, event) {
 		
 		
-		console.log('In duplicateCheckServiceCode');
-	    console.log('Minor Code : ' + minorCode);
-		console.log('Service Code : ' + serviceCode);
+	// console.log('In duplicateCheckServiceCode');
+	// console.log('Minor Code : ' + minorCode);
+	// console.log('Service Code : ' + serviceCode);
 		
 		  tempArr.length = 0;
 		
 		
 		  for (var i =0; i<serviceCodeList.length; i++)
 		  {
-		  console.log('ServiceCode List : ' + serviceCodeList[i]);
+		// console.log('ServiceCode List : ' + serviceCodeList[i]);
 }
 		 
 			
@@ -646,8 +647,8 @@ $(function() {
 			
 			
 		} else {
-			console.log('else part');
-			console.log('Treated By : ' + treatedBy);
+			// console.log('else part');
+			// console.log('Treated By : ' + treatedBy);
 			
 			
 			if (treatedBy === 'Y'){
@@ -707,12 +708,16 @@ $(function() {
 										currentRow.find('.doctorName').prop('disabled', true);
 									}
 									
-									/*if (specimenChecked === 'Y'){
-										currentRow.find('.specimen-checkbox').prop('checked', true);
-										currentRow.find('.specimen-checkbox').prop('disabled', true);
-										currentRow.find('.chk-box').val('Y');
-										//currentRow.find('.select-specimen').prop('disabled', true);
-									}*/
+									/*
+									 * if (specimenChecked === 'Y'){
+									 * currentRow.find('.specimen-checkbox').prop('checked',
+									 * true);
+									 * currentRow.find('.specimen-checkbox').prop('disabled',
+									 * true);
+									 * currentRow.find('.chk-box').val('Y');
+									 * //currentRow.find('.select-specimen').prop('disabled',
+									 * true); }
+									 */
 									
 								}
 							} else {
@@ -745,7 +750,7 @@ $(function() {
 			currentRow.find('.specimen-checkbox').prop('checked', true);
 			currentRow.find('.specimen-checkbox').prop('disabled', true);
 			currentRow.find('.chk-box').val('P');
-			//currentRow.find('.select-specimen').prop('disabled', true);
+			// currentRow.find('.select-specimen').prop('disabled', true);
 		}
 	}
 	
@@ -822,15 +827,19 @@ $(function() {
 			 * delete-btn
 			 */
 			if (serviceOrderBilled === 'BILLED'){
-				//currentRow.find('.row-delete').remove();
-				//currentRow.find('.delete-btn').append('<input type="checkbox" name="specimen-checkbox" value="N" class="form-check-input specimen-checkbox">');
+				// currentRow.find('.row-delete').remove();
+				// currentRow.find('.delete-btn').append('<input type="checkbox"
+				// name="specimen-checkbox" value="N" class="form-check-input
+				// specimen-checkbox">');
 				currentRow.find('.select-specimen').prop('disabled', true);
 			}
 			
 			if (specimenChecked === 'Y'){
-				/*currentRow.find('.specimen-checkbox').prop('checked', true);
-				currentRow.find('.specimen-checkbox').prop('disabled', true);
-				currentRow.find('.chk-box').val('Y');*/
+				/*
+				 * currentRow.find('.specimen-checkbox').prop('checked', true);
+				 * currentRow.find('.specimen-checkbox').prop('disabled', true);
+				 * currentRow.find('.chk-box').val('Y');
+				 */
 				currentRow.find('.select-specimen').prop('disabled', true);
 			}
 		
@@ -1417,7 +1426,8 @@ $(function() {
 					  if (status === 'error') { 
 					  var msg = "Sorry but there was an error: "; 
 					  swal( "Info!!!", 'No previous Doctor notes are available', "info");
-					  //swal( "Oh no!", msg +  xhr.status + " " + xhr.statusText, "error");
+					  // swal( "Oh no!", msg + xhr.status + " " +
+						// xhr.statusText, "error");
 					}
 					  
 					  
@@ -1516,7 +1526,8 @@ $(function() {
 				      $('.myModal').modal('hide');
 					  var msg = "Sorry but there was an error: "; 
 					  swal( "Info!", msg + xhr.status + " " + xhr.statusText, "error");
-					  //swal( "Info!", 'No previous service order is available ', 'info');
+					  // swal( "Info!", 'No previous service order is
+						// available ', 'info');
 					}
 					  
 					  if (status === 'success'){
@@ -1985,13 +1996,10 @@ $(function() {
 				 		
 				 		
 			 			
-			 		/*	var totalSpec = 0;
-			 			for(x in specimen){
-			 				if ($.trim(specimen[x]) !== 'NA')
-			 				{
-			 					totalSpec++;
-			 				}
-			 			}*/
+			 		/*
+					 * var totalSpec = 0; for(x in specimen){ if
+					 * ($.trim(specimen[x]) !== 'NA') { totalSpec++; } }
+					 */
 			 			
 			 			
 			 			
@@ -2000,7 +2008,7 @@ $(function() {
 			 			$('.serviceDesc').each(function(event){
 			 				if (i < totalRow){
 			 					$(this).val($.trim(serviceDesc[i]));
-					 			//$(this).prop('readonly', true);
+					 			// $(this).prop('readonly', true);
 			 				}
 				 			i++;
 				 		});
@@ -2045,7 +2053,7 @@ $(function() {
 				 		$('.discount').each(function(event){
 				 			if (i < totalRow){
 				 			$(this).val($.trim(discount[i]));
-				 			//$(this).prop('readonly', true);
+				 			// $(this).prop('readonly', true);
 				 			}
 				 			i++;
 				 		});
@@ -2095,7 +2103,7 @@ $(function() {
 				 			if (i < totalRow){
 				 			$(this).val(qty[i]);
 				 			$(this).trigger('keyup', [totalRow]);
-				 			//$(this).prop('readonly', true);
+				 			// $(this).prop('readonly', true);
 				 			}
 				 			i++;
 				 		});
@@ -2312,15 +2320,13 @@ $(function() {
  						.draw(false);
  			}
   		}
-		
-		
 	}
-	
-	
-	
-	
-
 });
+
+
+
+
+
 
 /*
  * Style 1 not working properly
@@ -2364,5 +2370,13 @@ function isNumber(input) {
 var ps = new PerfectScrollbar('.auto-scrollbar-container');
 
 
+
+if (window.history && window.history.pushState) {
+    window.history.pushState('', null, 'service.order?moduleName=' + document.getElementById('frm-name').value);
+    $(window).on('popstate', function() {
+        document.location.href = '';
+    });
+} 
+	
 
 

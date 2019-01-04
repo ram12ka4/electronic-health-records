@@ -6,6 +6,7 @@ $(function() {
 	 * Initial Set Value
 	 */
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
+		$('#fromDate').datepicker().datepicker("option", "disabled", true);
 		var doctorList = [];
 		var vitalChartList = [];
 		var errorMsg;
@@ -833,7 +834,12 @@ $(function() {
 });
 
 
-
+if (window.history && window.history.pushState) {
+    window.history.pushState('', null, 'vital.chart?moduleName=' + document.getElementById('frm-name').value);
+    $(window).on('popstate', function() {
+        document.location.href = '';
+    });
+}
 
 
 

@@ -30,10 +30,22 @@ public class ServiceOrderController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		request.setAttribute("ipNumber", request.getParameter("ip_no"));
-		session.setAttribute("moduleName", request.getParameter("moduleName"));
-		request.getRequestDispatcher("/WEB-INF/views/gnrc-service-order.jsp").forward(request, response);
+		HttpSession session = request.getSession(true);
+		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+
+		if (session.getAttribute("user") == null) {
+			LOGGER.info("Session null");
+			response.sendRedirect("login.do");
+		} else {
+			LOGGER.info("user session exists");
+			session.setAttribute("moduleName", request.getParameter("moduleName"));
+			request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-service-order.jsp").forward(request, response);
+		}
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -52,7 +64,7 @@ public class ServiceOrderController extends HttpServlet {
 				: request.getParameter("doctorNoteNumber");
 		String voucherNumber = request.getParameter("voucherNumber") == null ? ""
 				: request.getParameter("voucherNumber");
-		String checkBoxFlag = request.getParameter("chkBoxFlag") == "disable" ? "": request.getParameter("chkBoxFlag");
+		String checkBoxFlag = request.getParameter("chkBoxFlag") == "disable" ? "" : request.getParameter("chkBoxFlag");
 
 		// PKG_I_SERVORDER_HEADER_N
 		String patientNo = patient.getIpNumber();
@@ -72,8 +84,9 @@ public class ServiceOrderController extends HttpServlet {
 		String[] treatedBy = request.getParameterValues("treatedBy");
 		String[] specimenChecked = request.getParameterValues("spcimenChkBox");
 		String disIndication = "P";
-		String referDoctor = request.getParameter("referDocId") == null
-				|| request.getParameter("referDocId").isEmpty() ? "000" : request.getParameter("referDocId");
+		String referDoctor = request.getParameter("referDocId") == null || request.getParameter("referDocId").isEmpty()
+				? "000"
+				: request.getParameter("referDocId");
 
 		LOGGER.info("ACTION : " + action);
 		LOGGER.info("patientNo : " + patientNo);
@@ -109,8 +122,8 @@ public class ServiceOrderController extends HttpServlet {
 
 			if ("INSERT_UPDATE_SERVICE_ORDER".equals(action)) {
 				String soNumber = patientDao.insertUpdateServiceOrder(serviceOrderNumber, doctorOrderNumber, patientNo,
-						netAmount, mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId,
-						qty, disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber, checkBoxFlag);
+						netAmount, mrd, patientType, visitNo, userId, disIndication, referDoctor, serviceId, qty,
+						disAmount, disPercent, specimen, treatedBy, specimenChecked, voucherNumber, checkBoxFlag);
 				out.print(soNumber);
 			} else if ("FETCH_SERVICE_ID_RATE".equals(action)) {
 				String currentRate = patientDao.getServiceIdRate(serviceId[0], patientNo);
@@ -234,8 +247,9 @@ public class ServiceOrderController extends HttpServlet {
 						colIndex++;
 					}
 					out.println(
-							"<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" doc-code=\""+ refDocCode +"\" doc-name=\""+ refDocName +"\" so-no=\""
-									+ soNo + "\" ip-no=\"" + ipNo + "\">View</button></div></td>");
+							"<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" doc-code=\""
+									+ refDocCode + "\" doc-name=\"" + refDocName + "\" so-no=\"" + soNo + "\" ip-no=\""
+									+ ipNo + "\">View</button></div></td>");
 					LOGGER.info(
 							"<td><div class=\"delete-btn\"><button class=\"btn btn-warning btn-sm view-btn\" so-no=\""
 									+ soNo + "\" ip-no=\"" + ipNo + "\">View</button></div></td>");

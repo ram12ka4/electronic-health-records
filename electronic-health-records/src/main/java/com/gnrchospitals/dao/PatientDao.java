@@ -95,5 +95,7 @@ public interface PatientDao {
 	public List<String> getPharmaOrderDetail(String poNumber) throws SQLException;
 	public List<String> getWardNameList() throws SQLException;
 	public List<String> getWardBedNameList(String wardCode) throws SQLException;
+	
+	public List<String> getDrugRetItemList(String patientNo) throws SQLException;
 
 }

@@ -37,6 +37,7 @@ $(function() {
 		 * Initial Set Value
 		 */
  		 $('#fromDate').datepicker().datepicker("setDate", new Date());
+ 		$('#fromDate').datepicker().datepicker("option", "disabled", true);
 		 setInterval(changeTime, 1);
 		 $('#transferDate').prop('disabled', true);
 		 $('#refer-doctor').prop('disabled', true);
@@ -185,7 +186,7 @@ $(function() {
 				console.log(response);
 				console.log('Data Length : ' + response.length);
 				wardBedList.length = 0;
-				//console.log('Vital Chart length : ' + wardBedList.length);
+				// console.log('Vital Chart length : ' + wardBedList.length);
 				
 		
 					
@@ -286,11 +287,11 @@ $(function() {
 			},
 			failure : function(data) {
 				// alert("failure");
-				//alert(data.responseText);
+				// alert(data.responseText);
 			},
 			error : function(data) {
 				// alert("error");
-				//alert(data.responseText);
+				// alert(data.responseText);
 			}
 
 		});
@@ -700,7 +701,12 @@ $(function() {
 });
 
 
-
+if (window.history && window.history.pushState) {
+    window.history.pushState('', null, 'patient.transfer?moduleName=' + document.getElementById('frm-name').value);
+    $(window).on('popstate', function() {
+        document.location.href = '';
+    });
+}  
 
 
 

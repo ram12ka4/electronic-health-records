@@ -19,10 +19,10 @@ import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
 import com.gnrchospitals.dto.Patient;
 
-@WebServlet(urlPatterns = "/pharma.order")
-public class PharmacyOrderController extends HttpServlet {
+@WebServlet(urlPatterns = "/pharma.return.request")
+public class PharmaReturnRequestController extends HttpServlet {
 
-	private static final long serialVersionUID = 6157982947117798172L;
+	private static final long serialVersionUID = 856280302832354672L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
 	private static Logger LOGGER = LoggerFactory.getLogger(PharmacyOrderController.class);
@@ -43,7 +43,7 @@ public class PharmacyOrderController extends HttpServlet {
 			LOGGER.info("user session exists");
 			session.setAttribute("moduleName", request.getParameter("moduleName"));
 			request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
-			request.getRequestDispatcher("/WEB-INF/views/gnrc-pharmacy-order.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/gnrc-pharmacy-return-req.jsp").forward(request, response);
 		}
 
 	}
@@ -144,14 +144,14 @@ public class PharmacyOrderController extends HttpServlet {
 				String jsonMapper = mapper.writeValueAsString(list);
 				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
-			} else if ("GET_ITEM_LIST_DRUG_REQ".equals(action)) {
-				List<String> list = patientDao.getDrugReqItemList(itemName);
+			} else if ("GET_ITEM_LIST_DRUG_RETURN".equals(action)) {
+				List<String> list = patientDao.getDrugRetItemList(patientNo);
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
 				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
 			} else {
-				request.getRequestDispatcher("/WEB-INF/views/gnrc-pharmacy-order.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-pharmacy-return-req.jsp").forward(request, response);
 			}
 		} catch (Exception ex) {
 			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", ex);

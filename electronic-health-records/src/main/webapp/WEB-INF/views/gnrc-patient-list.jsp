@@ -13,11 +13,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
-
+<link rel="stylesheet" href="css/circle.css">
 
 <link rel="stylesheet" type="text/css" href="css/reset.css" />
 <link rel="stylesheet" type="text/css" href="css/patient-list.css" />
 <%@include file="gnrc-common-include-css.html"%>
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // proxies
+	int timeout = session.getMaxInactiveInterval();
+	System.out.println("Patient List session time : " + timeout);
+	response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 <style>
 
 /* Ensure that the demo table scrolls */
@@ -62,58 +70,35 @@ div.table-container {
 }
 
 .modal-content .modal-title {
-  text-align: center;
-  
+	text-align: center;
 }
 
+.modal {
+	text-align: center;
+	padding: 0 !important;
+}
 
+.modal:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	margin-right: -4px;
+}
 
+.modal-dialog {
+	display: inline-block;
+	text-align: left;
+	vertical-align: middle;
+}
 </style>
 
 </head>
-
-<%
-	/* String empCode = request.getParameter("categoryCode");
-	String userRole = (String) session.getAttribute("userRole"); */
-
-	/* ArrayList<ArrayList<String>> list = patientDao.getPatientList(empCode, "0");
-	ArrayList<String> col = list.get(0);
-	ArrayList<String> row = list.get(1); */
-
-	//List<String> linkList = patientDao.getParentLink(userRole);
-
-	//System.out.println(linkList);
-%>
 
 
 
 <body>
 
-	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
-	%>
 
 	<nav class="navbar navbar-inverse">
 		<div class="container">
@@ -158,96 +143,11 @@ div.table-container {
 		<!--  /.container-fluid -->
 	</nav>
 
-	<%-- <div id="content">
-		<div id="menu" class="my-nav">
-			<a href="#" class="close" onclick="closeSlideMenu()"> <i
-				class="fas fa-times"></i>
-			</a>
-			<ul>
-				<li><a href="#" class="active">Home</a></li>
-
-				<%
-					int i = 0;
-					while (i < linkList.size()) {
-
-						String categoryCode = linkList.get(i);
-						String categoryName = linkList.get(i + 1);
-
-						List<String> subLinkList = patientDao.getChildLink(userRole, categoryCode);
-
-						int j = 0;
-						int count = 0;
-						while (j < subLinkList.size()) {
-
-							String subLinkName = subLinkList.get(j);
-							String subLinkPath = subLinkList.get(j + 1);
-
-							if (categoryName.equals(subLinkName)) {
-				%>
-				<li><a href="<%=subLinkPath%>"><%=subLinkName%></a></li>
-				<%
-					} else {
-
-								if (count == 0) {
-				%>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"><%=categoryName%><span class="caret"></span></a>
-					<ul class="dropdown-menu" role="menu">
-
-						<%
-							}
-						%>
-
-						<li><a href="<%=subLinkPath%>"><%=subLinkName%></a></li>
-
-
-
-
-						<%
-							}
-
-									j += 2;
-									count += 2;
-									
-								}
-						%>
-
-						<%
-							if (count == subLinkList.size()) {
-						%>
-					</ul></li>
-				<%
-					}
-				%>
-
-				<%
-					System.out.println("Child link list : " + subLinkList);
-
-						i += 3;
-					}
-				%>
-				<li><a href="#" class="active">Home</a></li>
-			</ul>
-		</div>
-	</div>
- --%>
-
-
-
 	<div class="container">
-
-
-
 		<header class="clearfix">
-			<!-- <span class="slide pull-left"> <a href="#"
-				onclick="openSlideMenu()"><i class="fas fa-bars"></i></a>
-			</span> -->
-
-
 			<h5 class="pull-right">
 				<select class="form-control input-sm sel-ward"
 					style="display: none;">
-
 				</select>
 			</h5>
 		</header>
@@ -280,8 +180,10 @@ div.table-container {
 	<%-- <%@include file="spinner.html"%> --%>
 
 
-	<input type="hidden" id="module-name" name="moduleName" value="${sessionScope.categoryCode}">
-	<input type="hidden" id="user-id" name="userID" value="${sessionScope.user}">
+	<input type="hidden" id="module-name" name="moduleName"
+		value="${sessionScope.categoryCode}">
+	<input type="hidden" id="user-id" name="userID"
+		value="${sessionScope.user}">
 	<%@include file="logout-modal.html"%>
 	<%@include file="gnrc-common-include-js.html"%>
 	<script type="text/javascript" src="js/patient-list.js"></script>

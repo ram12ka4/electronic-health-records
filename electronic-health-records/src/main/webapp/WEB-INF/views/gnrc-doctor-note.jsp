@@ -23,6 +23,14 @@
 <link rel="icon" href="images/favicon.jpg" type="image/jpeg"
 	sizes="16x16" />
 <!-- End of CSS -->
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // proxies
+	int timeout = session.getMaxInactiveInterval();
+	System.out.println("Patient List session time : " + timeout);
+	response.setHeader("Refresh", timeout + "; URL = logout.do");
+%>
 
 <style>
 .modal {
@@ -43,6 +51,12 @@
 	text-align: left;
 	vertical-align: middle;
 }
+
+.btn-primary.btn-doc-note:hover {
+	background: yellow;
+	color: red;
+}
+
 </style>
 
 
@@ -51,31 +65,8 @@
 <body>
 
 	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-		response.setHeader("Expires", "0"); // proxies
-
-		// allow access only if session exists
-		String user = null;
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("login.do");
-		} else
-			user = (String) session.getAttribute("user");
-		String userName = null;
-		String sessionID = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("user"))
-					userName = cookie.getValue();
-				if (cookie.getName().equals("JSESSIONID"))
-					sessionID = cookie.getValue();
-			}
-		} else {
-			sessionID = session.getId();
-		}
-
-		String ipNumber = (String) request.getAttribute("ipNumber") == null ? "" : (String) request.getAttribute("ipNumber");
+		String ipNumber = (String) request.getAttribute("ipNumber") == null ? ""
+				: (String) request.getAttribute("ipNumber");
 		System.out.println("Patient Number  : " + ipNumber);
 		PatientDao patientDao = new PatientDaoImpl();
 		Patient patient = patientDao.findByIpNumber(ipNumber);
@@ -108,15 +99,17 @@
 									<label class="control-label" for="order-id">Note No</label> <input
 										type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
-										id="note-order-id" value="" name="noteNumber" placeholder="Order No"
-										readonly="readonly">
-										
+										id="note-order-id" value="" name="noteNumber"
+										placeholder="Order No" readonly="readonly">
+
 								</div>
 								<div class="col-md-3">
-									<label class="control-label" for="refer-doctor">Refer Doctor</label> <input type="text"
+									<label class="control-label" for="refer-doctor">Refer
+										Doctor</label> <input type="text"
 										class="form-control dis-auto-width dis-bottom-margin"
 										id="refer-doctor" value="" name="referDoctor"
-										placeholder="Refer Doctor"><input type="hidden" name="referDocId" id="refDocId">
+										placeholder="Refer Doctor"><input type="hidden"
+										name="referDocId" id="refDocId">
 								</div>
 								<div class="col-md-2">
 									<label class="control-label" for="patient-name">Patient
@@ -246,31 +239,37 @@
 									</div>
 
 									<div class="col-md-6">
-										<button type="button" class="btn btn-primary btn-sm btn-treat">ADVICE</button>
-										<button type="button" class="btn btn-primary btn-sm btn-medic">MEDICATION</button>
-										<button type="button" class="btn btn-primary btn-sm btn-lab">LABORATORY</button>
-										<button type="button" class="btn btn-primary btn-sm btn-diet">DIET</button>
-										<button type="button" class="btn btn-primary btn-sm btn-progress">PROGRESS</button>
+										<button type="button" class="btn btn-primary btn-sm btn-treat btn-doc-note">ADVICE</button>
+										<button type="button" class="btn btn-primary btn-sm btn-medic btn-doc-note">MEDICATION</button>
+										<button type="button" class="btn btn-primary btn-sm btn-lab btn-doc-note">LAB. SERVICES</button>
+										<button type="button" class="btn btn-primary btn-sm btn-diet btn-doc-note">DIET</button>
 										<button type="button"
-											class="btn btn-primary btn-sm previousBtn"
+											class="btn btn-primary btn-sm btn-progress btn-doc-note">PROGRESS</button>
+										<button type="button"
+											class="btn btn-warning btn-sm previousBtn"
 											data-id='<%=ipNumber%>'>History</button>
 									</div>
 								</div>
 							</div>
 						</div>
-						
-				
-						
-						
+
+
+
+
 						<div class="form-group">
-							<textarea name="treatment" class="form-control" id="treatment" rows="15" placeholder="Treatment"></textarea>
-							<textarea name="medication" class="form-control" id="medication" rows="15" placeholder="Medication"></textarea>
-							<textarea name= "laboratory" class="form-control" id="laboratory" rows="15" placeholder="Laboratory"></textarea>
-							<textarea name="diet" class="form-control" id="diet" rows="15" placeholder="Diet"></textarea>
-							<textarea name="progress" class="form-control" id="progress" rows="15" placeholder="progress"></textarea>
+							<textarea name="treatment" class="form-control" id="treatment"
+								rows="15" placeholder="Treatment"></textarea>
+							<textarea name="medication" class="form-control" id="medication"
+								rows="15" placeholder="Medication"></textarea>
+							<textarea name="laboratory" class="form-control" id="laboratory"
+								rows="15" placeholder="Laboratory Services"></textarea>
+							<textarea name="diet" class="form-control" id="diet" rows="15"
+								placeholder="Diet"></textarea>
+							<textarea name="progress" class="form-control" id="progress"
+								rows="15" placeholder="Progress"></textarea>
 						</div>
 
-					
+
 
 
 						<div class="row">
@@ -294,7 +293,7 @@
 
 		</div>
 
-
+<input type="hidden" name="formName" id="frm-name" value="${sessionScope.moduleName}">
 
 		<!-- End of Dashboard -->
 	</form>

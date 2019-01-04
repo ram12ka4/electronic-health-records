@@ -26,8 +26,8 @@ public class LogoutController extends HttpServlet {
 					System.out.println("JSESSIONID=" + cookie.getValue());
 				}
 
-				/*cookie.setMaxAge(0);
-				response.addCookie(cookie);*/
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
 			}
 
 			HttpSession session = request.getSession(false);

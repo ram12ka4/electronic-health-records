@@ -252,8 +252,8 @@ $(function() {
 
 		/*
 		 * var req = $ .ajax({ url : 'patient.list', method : 'post', dataType :
-		 * 'json', data : { ACTION : 'GET_PAT_DET', empId : id, wardId : ward
-		 *  }, success : function(data) {
+		 * 'json', data : { ACTION : 'GET_PAT_DET', empId : id, wardId : ward },
+		 * success : function(data) {
 		 * 
 		 * 
 		 * console.log(data);
@@ -283,18 +283,14 @@ $(function() {
 		 * 'data' : 'category' }, { 'render' : function(oObj) { return 'Bed
 		 * Allocated'; } }
 		 * 
-		 * 
 		 *  ], responsive : { details : { display :
 		 * $.fn.dataTable.Responsive.display .modal({ header : function( row) {
 		 * var data = row .data(); console.log('Data: ' + data); return 'Details
 		 * for ' + data[0] + ' ' + data[1]; } }), renderer :
 		 * $.fn.dataTable.Responsive.renderer .tableAll({ tableClass : 'table' }) } },
 		 * columnDefs: [ { 'targets': [0,1,2,3,4,5,6,7,8], 'orderable': false,
-		 * 'width': '5%'
-		 *  },
-		 * 
-		 *  ] });
-		 *  }, failure : function(data) { console.log(data.responseText); },
+		 * 'width': '5%' },
+		 *  ] }); }, failure : function(data) { console.log(data.responseText); },
 		 * error : function(data) { console.log(data.responseText); }
 		 * 
 		 * });
@@ -350,7 +346,7 @@ $(function() {
 		trigger : 'left',
 		callback : function(key, options) {
 			var m = "clicked: " + key;
-			
+
 			window.console && console.log(moduleName) || alert(moduleName);
 			window.console && console.log(userCode) || alert(userCode);
 
@@ -362,10 +358,11 @@ $(function() {
 				disabled : function(itemKey, opt) {
 					window.console && console.log('Item Key : ' + itemKey);
 					window.console && console.log('Option : ' + opt);
-					console.log(' Context Menu List : ' + JSON.stringify(contextMenuList));
-					for (var i =0; i<contextMenuList.length; i++){
+					console.log(' Context Menu List : '
+							+ JSON.stringify(contextMenuList));
+					for (var i = 0; i < contextMenuList.length; i++) {
 						if (itemKey === contextMenuList[i]['frmName']) {
-							//console.log('Vital Chart found');
+							// console.log('Vital Chart found');
 							return false;
 						}
 					}
@@ -385,7 +382,7 @@ $(function() {
 				name : "Doctor's Note",
 				icon : "cut",
 				disabled : function(itemKey, opt) {
-					for (var i =0; i<contextMenuList.length; i++){
+					for (var i = 0; i < contextMenuList.length; i++) {
 						if (itemKey === contextMenuList[i]['frmName']) {
 							return false;
 						}
@@ -395,7 +392,8 @@ $(function() {
 				callback : function(itemKey, opt, e) {
 					var m = $(this).attr('pat-number');
 					window.console && console.log('Pat Number : ' + m);
-					m = 'doctor.note?moduleName=doctor\'s note/order&ip_no=' + m;
+					m = 'doctor.note?moduleName=doctor\'s note&ip_no='
+							+ m;
 					window.location.href = m;
 				}
 			},
@@ -403,7 +401,7 @@ $(function() {
 				name : "Nurse's Note",
 				icon : "cut",
 				disabled : function(itemKey, opt) {
-					for (var i =0; i<contextMenuList.length; i++){
+					for (var i = 0; i < contextMenuList.length; i++) {
 						if (itemKey === contextMenuList[i]['frmName']) {
 							return false;
 						}
@@ -417,11 +415,11 @@ $(function() {
 					window.location.href = m;
 				}
 			},
-			"Service Ordering" : {
-				name : "Service Ordering",
+			"Service Order" : {
+				name : "Service Order",
 				icon : "cut",
 				disabled : function(itemKey, opt) {
-					for (var i =0; i<contextMenuList.length; i++){
+					for (var i = 0; i < contextMenuList.length; i++) {
 						if (itemKey === contextMenuList[i]['frmName']) {
 							return false;
 						}
@@ -431,15 +429,15 @@ $(function() {
 				callback : function(itemKey, opt, e) {
 					var m = $(this).attr('pat-number');
 					window.console && console.log('Pat Number : ' + m);
-					m = 'service.order?moduleName=service ordering&ip_no=' + m;
+					m = 'service.order?moduleName=service order&ip_no=' + m;
 					window.location.href = m;
 				}
 			},
-			"Pharmacy Ordering" : {
-				name : "Pharmacy Ordering",
+			"Pharmacy Order" : {
+				name : "Pharmacy Order",
 				icon : "cut",
 				disabled : function(itemKey, opt) {
-					for (var i =0; i<contextMenuList.length; i++){
+					for (var i = 0; i < contextMenuList.length; i++) {
 						if (itemKey === contextMenuList[i]['frmName']) {
 							return false;
 						}
@@ -449,7 +447,25 @@ $(function() {
 				callback : function(itemKey, opt, e) {
 					var m = $(this).attr('pat-number');
 					window.console && console.log('Pat Number : ' + m);
-					m = 'pharma.order?moduleName=pharmacy ordering&ip_no=' + m;
+					m = 'pharma.order?moduleName=pharmacy order&ip_no=' + m;
+					window.location.href = m;
+				}
+			},
+			"Pharmacy Return Request" : {
+				name : "Pharmacy Return Request",
+				icon : "cut",
+				disabled : function(itemKey, opt) {
+					for (var i = 0; i < contextMenuList.length; i++) {
+						if (itemKey === contextMenuList[i]['frmName']) {
+							return false;
+						}
+					}
+					return true;
+				},
+				callback : function(itemKey, opt, e) {
+					var m = $(this).attr('pat-number');
+					window.console && console.log('Pat Number : ' + m);
+					m = 'pharma.return.request?moduleName=pharmacy Return request&ip_no=' + m;
 					window.location.href = m;
 				}
 			},
@@ -457,7 +473,7 @@ $(function() {
 				name : "Patient Transfer",
 				icon : "cut",
 				disabled : function(itemKey, opt) {
-					for (var i =0; i<contextMenuList.length; i++){
+					for (var i = 0; i < contextMenuList.length; i++) {
 						if (itemKey === contextMenuList[i]['frmName']) {
 							return false;
 						}
@@ -476,3 +492,14 @@ $(function() {
 	});
 
 });
+
+/*
+ * Disable previous button and let user to keep in current state
+ */
+
+if (window.history && window.history.pushState) {
+	window.history.pushState('', 'ram', 'patient.list?catCode=' + document.getElementById('module-name').value);
+	$(window).on('popstate', function() {
+		document.location.href = '';
+	});
+}

@@ -1,8 +1,9 @@
 $(function() {
 	
 	var itemList = [];
-	var itemCodeList  = [];
+	var batchList  = [];
 	var doctorList  = [];
+	var dataList = [];
 	
 	
 	/*
@@ -11,6 +12,10 @@ $(function() {
 	$('#voucher-id').val();
 		$('#fromDate').datepicker().datepicker("setDate", new Date());
 		$('#fromDate').datepicker().datepicker("option", "disabled", true);
+		$('#refer-doctor').prop('disabled', true);
+		$('#order-id').prop('disabled', true);
+
+		
 		  $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
 		        $($.fn.dataTable.tables( true ) ).css('width', '100%');
 		        $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
@@ -19,68 +24,6 @@ $(function() {
 	 * $('.circleModal').modal({ backdrop : 'static', keyboard : false });
 	 */
 		
-		
-		/*
-		 * Fetching Doctor List with doctor id
-		 */
-		
-		 $.ajax({
-				type: 'post',
-				url: 'doctor.note',
-				dataType : 'json',
-				data : {
-					ACTION : 'FETCH_DOCTOR_LIST',
-				},
-				success: function(data){
-					
-					// console.log('Doctor List : ' +
-					// JSON.stringify(data));
-
-					if (data.length !== 0) {
-						doctorList.length = 0;
-						
-						for (var i = 0; i < data.length; i+=2) {
-							doctorList
-									.push({
-										label : String(data[i+1]),
-										value : String(data[i+1]),
-										doctorId: String(data[i]),
-										doctorName: String(data[i+1])
-									});
-						}
-						
-				
-					} else {
-						swal('Ohh no!', 'No Doctor found', 'info');
-					}
-				},
-				error: function(data){
-					var errorMsg = "There is a problem processing your request";
-					 swal('Sorry for inconvenience', errorMsg, 'info');
-					// alert(data.responseText);
-				},
-				failure: function(data){
-					var errorMsg = "There is a problem processing your request";
-					 swal('Sorry for inconvenience', errorMsg, 'info');
-				}
-			});
-	
-			$('body').on('keyup', '#refer-doctor', function(event){
-				event.preventDefault();
-				$(this).autocomplete({
-					autoFocus : true,
-					maxShowItems : 5,
-					minLength : 3,
-					delay : 500,
-					source: doctorList,
-					select: function(event, ui){
-						// $(this).val(ui.item.label);
-						console.log('Doctor Id ' + ui.item.doctorId);
-						$('#refDocId').val(ui.item.doctorId);
-						
-					}
-				});
-			});
 	
 
 
@@ -103,10 +46,10 @@ $(function() {
 			"width" : "10%",
 			"targets" : 1
 		}, {
-			"width" : "1%",
+			"width" : "5%",
 			"targets" : 2
 		}, {
-			"width" : "10%",
+			"width" : "1%",
 			"targets" : 3
 		}, {
 			"width" : "1%",
@@ -116,8 +59,16 @@ $(function() {
 			"targets" : 5
 		},
 		 {
-			"width" : "2%",
+			"width" : "5%",
 			"targets" : 6
+		},
+		{
+			"width" : "5%",
+			"targets" : 7
+		},
+		{
+			"width" : "2%",
+			"targets" : 8
 		}
 		]
 
@@ -133,16 +84,19 @@ $(function() {
 											+ (i + 1) + '</div>',
 									'<input type="text"	name="itemName" class="itemName form-control dis-auto-width dis-bottom-margin" tabindex="'
 											+ (i + 1) + '"><input type="hidden" class="itemCode" name="itemCode">',
+									'<select class="form-control batch dis-auto-width" name="batch"></select>',
+									'<input type="text"	name="issueQty"  class="text-align-center issueQty form-control dis-auto-width dis-bottom-margin" readonly>',
+									'<input type="text"	name="prevRetQty"  class="text-align-center prevRetQty form-control dis-auto-width dis-bottom-margin" readonly>',
 									'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="'+ (i + 1) +'">',
-									'<input type="text"	name="molecule"  class="molecule form-control dis-auto-width dis-bottom-margin" readonly>',
-									'<input type="text"	name="stock"  class="text-align-center stock form-control dis-auto-width dis-bottom-margin" readonly>',
-									'<input type="text"	name="balQty"  class="text-align-center balQty form-control dis-auto-width dis-bottom-margin" readonly>',
+									'<input type="text"	name="voucherNo"  class="text-align-center voucherNo form-control dis-auto-width dis-bottom-margin" readonly>',
+									'<input type="text"	name="remark"  class="text-align-center remark form-control dis-auto-width dis-bottom-margin" tabindex="'+ (i + 1) +'">',
 									'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 					.draw(false);
 		}
 	
 
-	
+		var select = $(".batch");
+		select.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
 	
 	  $(document).on('click', '.row-delete', function(event) {
 	  event.preventDefault();
@@ -154,7 +108,7 @@ $(function() {
 	  var row = $(this).closest('tr');
 	  
 	  var itemCode = row.find('.itemCode').val();
-	  itemCodeList.splice(itemCodeList.indexOf($.trim(itemCode)), 1);
+	  batchList.splice(batchList.indexOf($.trim(itemCode)), 1);
 	  var id =  row.find('.row-order').attr('id'); 
 	  // alert('ID : ' + id);
 	  var siblings =  row.siblings(); 
@@ -188,11 +142,13 @@ $(function() {
 												+ (parseInt(lastRowId) + 1) + '</div>',
 										'<input type="text"	name="itemName" class="itemName form-control dis-auto-width dis-bottom-margin" tabindex="'
 												+ (parseInt(lastRowId) + 1) + '"><input type="hidden" class="itemCode" name="itemCode">',
+												'<select class="form-control batch dis-auto-width" name="batch"></select>',
+												'<input type="text"	name="issueQty"  class="text-align-center issueQty form-control dis-auto-width dis-bottom-margin" readonly>',
+												'<input type="text"	name="prevRetQty"  class="text-align-center prevRetQty form-control dis-auto-width dis-bottom-margin" readonly>',
 												'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="'+ (parseInt(lastRowId) + 1) +'">',
-										'<input type="text"	name="molecule"  class="text-align-center molecule form-control dis-auto-width dis-bottom-margin" readonly>',
-										'<input type="text"	name="stock"  class="text-align-center stock form-control dis-auto-width dis-bottom-margin" readonly>',
-										'<input type="text"	name="balQty"  class="text-align-center balQty form-control dis-auto-width dis-bottom-margin" readonly>',
-										'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+												'<input type="text"	name="voucherNo"  class="text-align-center voucherNo form-control dis-auto-width dis-bottom-margin" readonly>',
+												'<input type="text"	name="remark"  class="text-align-center remark form-control dis-auto-width dis-bottom-margin" tabindex="'+ (parseInt(lastRowId) + 1) +'">',
+												'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 						.draw(false);
 
 					});
@@ -209,61 +165,56 @@ $(function() {
 									+ (parseInt(lastRowId) + 1) + '</div>',
 							'<input type="text"	name="itemName" class="itemName form-control dis-auto-width dis-bottom-margin" tabindex="'
 									+ (parseInt(lastRowId) + 1) + '"><input type="hidden" class="itemCode" name="itemCode">',
+									'<select class="form-control batch dis-auto-width" name="batch"></select>',
+									'<input type="text"	name="issueQty"  class="text-align-center issueQty form-control dis-auto-width dis-bottom-margin" readonly>',
+									'<input type="text"	name="prevRetQty"  class="text-align-center prevRetQty form-control dis-auto-width dis-bottom-margin" readonly>',
 									'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="'+ (parseInt(lastRowId) + 1) +'">',
-							'<input type="text"	name="molecule"  class="text-align-center molecule form-control dis-auto-width dis-bottom-margin" readonly>',
-							'<input type="text"	name="stock"  class="text-align-center stock form-control dis-auto-width dis-bottom-margin" readonly>',
-							'<input type="text"	name="balQty"  class="text-align-center balQty form-control dis-auto-width dis-bottom-margin" readonly>',
+									'<input type="text"	name="voucherNo"  class="text-align-center voucherNo form-control dis-auto-width dis-bottom-margin" readonly>',
+									'<input type="text"	name="remark"  class="text-align-center remark form-control dis-auto-width dis-bottom-margin" tabindex="'+ (parseInt(lastRowId) + 1) +'">',
 							'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ]).draw(false); 
 			});
 	 
-	$(document)
-			.on(
-					'keyup',
-					'.itemName',
-					function(e) {
-						e.preventDefault();
-						var itemName = $(this).val();
-
-						if (itemName.length > 2) {
+							/*
+							 * Fetch all patient related previous medicine
+							 * purchase detail
+							 */
 
 							$.ajax({
-										url : 'pharma.order',
+										url : 'pharma.return.request',
 										type : 'post',
 										dataType : 'json',
 										data : {
-											ACTION : 'GET_ITEM_LIST_DRUG_REQ',
-											itemName : itemName,
+											ACTION : 'GET_ITEM_LIST_DRUG_RETURN'
 										},
 										success : function(data) {
 											itemList.length = 0;
-											for (var i = 0; i < data.length; i+=5) {
-
+											for (var i = 0; i < data.length; i+=7) {
 												itemList
 														.push({
 															label : String(data[i+1]),
 															value : String(data[i+1]),
 															itemCode: String(data[i]),
-															molecule: String(data[i+2]),
-															stock: String(data[i+3]),
-															qty: String(data[i+4])
+															batch: String(data[i+2]),
+															issueQty: String(data[i+3]),
+															prevRetQty: String(data[i+4]),
+															qty: String(data[i+5]),
+															voucherNo: String(data[i+6]),
+															searchPattern: String(data[i])+String(data[i+2])+String(data[i+6])
 														});
 											}
 										},
 										error : function(data) {
 											var errorMsg = "There is a problem processing your request";
-											alert(errorMsg);
-											alert(data.responseText);
+											console.log(errorMsg);
+											console.log(data.responseText);
 										},
 										failure: function(data){
 											var errorMsg = "There is a problem processing your request";
-											alert(errorMsg);
-											alert(data.responseText);
+											console.log(errorMsg);
+											console.log(data.responseText);
 										}
-
 									});
-						}
 
-					});
 
 	previousValue = "";
 
@@ -283,9 +234,6 @@ $(function() {
 												console.log('Autocomplete focus event');
 												var currentRow = $(this).closest('tr');
 												currentRow.find('.itemCode').val(ui.item.itemCode);
-												currentRow.find('.molecule').val(ui.item.molecule);
-												currentRow.find('.stock').val(ui.item.stock);
-												currentRow.find('.qty').val(ui.item.qty);
 												return false;
 											},
 											select : function(event, ui) {
@@ -293,43 +241,115 @@ $(function() {
 												$(this).val(ui.item.label);
 												var currentRow = $(this).closest('tr');
 												var itemCode = $.trim(ui.item.itemCode);
-												
-												console.log('Item Code List : ' + itemCodeList);
-												
-												var flag = false;
-												
-												if (itemCodeList.length > 0){
-													for(var i =0; i<itemCodeList.length; i++){
-														if (itemCode === itemCodeList[i]){
-															flag = false;
-															break;
-														} else {
-															flag = true;
-														} 
-													}
-													
-													if (flag === false){
-														swal('Info!', 'Duplicate Item Name', 'warning');
-														currentRow.find('.itemCode').val('');
-														currentRow.find('.itemName').val('');
-														currentRow.find('.molecule').val('');
-														currentRow.find('.stock').val('');
-														currentRow.find('.qty').val('');
-														return false;
+												// console.log('Item Code List :
+												// ' + batchList);
+												currentRow.find('.itemCode').val(ui.item.itemCode);
+												currentRow.find('.batch').empty().append('<option selected="selected" value="0">Select Batch</option>');
+												for(var i=0; i<itemList.length; i++){
+													//console.log('Given Item Code : ' + itemCode);
+													//console.log('Search Item Code : ' + JSON.stringify(itemList[i]));
+													if (itemCode === itemList[i]['itemCode']){
+														currentRow.find('.batch').append($("<option></option>").val(
+																$.trim(itemList[i]['voucherNo']+itemList[i]['batch'])).html($.trim(itemList[i]['batch'])));
 													}
 												}
-												
-												console.log('Item Code List : ' + itemCodeList);
-												
-												itemCodeList.push(itemCode);
-												currentRow.find('.itemCode').val(ui.item.itemCode);
-												currentRow.find('.molecule').val(ui.item.molecule);
-												currentRow.find('.stock').val(ui.item.stock);
-												currentRow.find('.qty').val(ui.item.qty);
 												return false;
 											}
 										});
 					});
+	
+	var previousItemCode;
+	var previousBatch;
+	var previousVoucher; 
+	
+	$('.batch').on('focus', function(event){
+		
+		var currentRow = $(this).closest('tr');
+		previousItemCode = currentRow.find('.itemCode').val();
+		previousBatch =  $(this).val();
+		previousVoucher =  currentRow.find('.voucherNo').val();
+		console.log('Previous ItemCode : ' + previousItemCode);
+		console.log('Previous Batch : ' + previousBatch);
+		console.log('Previous Voucher : ' + previousVoucher);
+		console.log('Data List in focus : ' + dataList);
+		
+	}).change(function(event){
+		var batchNo = $(this).val();
+		var currentRow = $(this).closest('tr');
+		var itemCode = currentRow.find('.itemCode').val();
+		var voucherNo;
+		
+		deletePreviousData(previousItemCode, previousBatch, previousVoucher);
+		
+		for(var i=0; i<itemList.length; i++){
+			
+			if ($.trim(batchNo) === itemList[i]['voucherNo']+itemList[i]['batch']){
+
+					voucherNo = itemList[i]['voucherNo'];
+					console.log('Item Code : ' + itemCode); 
+					console.log('Batch No : ' +	  batchNo); 
+					console.log('Voucher No : ' + voucherNo);
+				
+					
+					
+					var isDuplicateBatch = duplicateBatchNoCheck(itemCode, batchNo, voucherNo);
+					console.log('Data duplicate : ' + isDuplicateBatch);
+					
+					if (isDuplicateBatch === true){
+						swal('Info!', 'Duplicate batch number is not allowed', 'warning');
+						currentRow.find('.itemCode').val('');
+						currentRow.find('.batch').val('');
+						currentRow.find('.itemName').val('').focus();
+						currentRow.find('.issueQty').val('');
+						currentRow.find('.prevRetQty').val('');
+						currentRow.find('.qty').val('');
+						currentRow.find('.voucherNo').val('');
+						currentRow.find('.batch').empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+						break;
+					} else {
+							dataList.push($.trim(itemCode)+$.trim(batchNo)+$.trim(voucherNo));
+							currentRow.find('.issueQty').val(itemList[i]['issueQty']);
+							currentRow.find('.prevRetQty').val(itemList[i]['prevRetQty']);
+							currentRow.find('.qty').val(itemList[i]['qty']);
+							currentRow.find('.voucherNo').val(itemList[i]['voucherNo']);
+							break;
+					}
+				}
+		}
+		
+		console.log('Data List after deleting data : ' + dataList);
+		
+	
+	});
+	
+	
+	function duplicateBatchNoCheck(itemCode, batchNo, voucherNo){
+		var data = $.trim(itemCode)+$.trim(batchNo)+$.trim(voucherNo);
+		console.log('Duplicate Data : ' + data);
+		if (dataList.length > 0){
+			for (var i=0; i<dataList.length; i++){
+				if (data === dataList[i]){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	function deletePreviousData(preItemCode, preBatchNo, preVoucherNo){
+		console.log('In delete previous data');
+		console.log('Data List before deleting data : ' + dataList);
+		console.log('previous Item Code : ' + preItemCode); 
+		console.log('previous Batch No : ' +	  preBatchNo); 
+		console.log('previous Voucher No : ' + preVoucherNo);
+		console.log('Index of deleted data : ' + dataList.indexOf($.trim(preItemCode)+$.trim(preBatchNo)+$.trim(preVoucherNo)));
+		var index = dataList.indexOf($.trim(preItemCode)+$.trim(preBatchNo)+$.trim(preVoucherNo));
+		if (Math.sign(index) !== -1){
+			console.log('Delete previous data : ' + dataList.splice(index, 1));
+		}
+		
+	}
+	
 	
 	
 
@@ -368,9 +388,9 @@ $(function() {
 			
 			var flag = false;
 			
-			if (itemCodeList.length > 0){
-				for(var i =0; i<itemCodeList.length; i++){
-					if (itemCode === itemCodeList[i]){
+			if (batchList.length > 0){
+				for(var i =0; i<batchList.length; i++){
+					if (itemCode === batchList[i]){
 						flag = false;
 						break;
 					} else {
@@ -392,7 +412,7 @@ $(function() {
 		} else if (x == 8){ // Backspace event number = 8
 			console.log('itemName event : ' + x);
 			
-			itemCodeList.splice(itemCodeList.indexOf($.trim(currentRow.find('.itemCode').val())), 1);
+			batchList.splice(batchList.indexOf($.trim(currentRow.find('.itemCode').val())), 1);
 			currentRow.find('.itemCode').val('');
 			currentRow.find('.itemName').val('');
 			currentRow.find('.molecule').val('');
@@ -466,7 +486,7 @@ $(function() {
 				  if (!pharmaOrderId){
 					  console.log('Pharmacy Id not present and not billed');
 					  $.ajax({
-						    url: "pharma.order",
+						    url: "pharma.return",
 					        type: "POST",
 					        datatype: 'text',
 					        data:  frm.serialize() + "&ACTION=INSERT_UPDATE_PHARMA_ORDER",
@@ -492,7 +512,7 @@ $(function() {
 					  console.log('Pharmacy Id present but not billed only updation');
 					  $.ajax({
 					        type: "POST",
-					        url: "pharma.order",
+					        url: "pharma.return",
 					        data:  frm.serialize() + "&poNumber="+pharmaOrderId+"&ACTION=INSERT_UPDATE_PHARMA_ORDER",
 					        cache: false,
 					        success: function(response) {
@@ -544,7 +564,7 @@ $(function() {
 					
 					
 					
-					  $('.myModal .modal-body').load( 'pharma.order', 
+					  $('.myModal .modal-body').load( 'pharma.return', 
 							  { ACTION :  'FETCH_PREVIOUS_PHARMA_ORDER_LIST', 
 					  },
 					  function(response, status, xhr) {
@@ -655,7 +675,7 @@ $(function() {
 		 
 		 var req = $.ajax({
 			 		
-			 	url: 'pharma.order',
+			 	url: 'pharma.return',
 			 	type: 'post',
 			 	datatype: 'text',
 			 	data: {
@@ -680,7 +700,7 @@ $(function() {
 			 		for (var i=0; i<arr.length; i+=7){
 			 			poDate.push(String(arr[i]));
 			 			itemCode.push(String(arr[i+1]));
-			 			itemCodeList.push($.trim(String(arr[i+1])));
+			 			batchList.push($.trim(String(arr[i+1])));
 			 			itemName.push(String(arr[i+2]).replace(/\|/g, ','));
 			 			stock.push(String(arr[i+6]));
 			 			moleculeName.push(String(arr[i+3]).replace(/\|/g, ','));
@@ -706,11 +726,13 @@ $(function() {
 													+ (initialRow + 1) + '</div>',
 											'<input type="text"	name="itemName" class="itemName form-control dis-auto-width dis-bottom-margin" tabindex="'
 													+ (initialRow + 1) + '"><input type="hidden" class="itemCode" name="itemCode">',
-													'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="' + (initialRow + 1) + '">',
-											'<input type="text"	name="molecule"  class="molecule form-control dis-auto-width dis-bottom-margin" readonly>',
-											'<input type="text"	name="stock"  class="text-align-center stock form-control dis-auto-width dis-bottom-margin" readonly>',
-											'<input type="text"	name="balQty"  class="text-align-center balQty form-control dis-auto-width dis-bottom-margin" readonly>',
-											'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
+													'<select class="form-control batch dis-auto-width" name="batch"></select>',
+													'<input type="text"	name="issueQty"  class="text-align-center issueQty form-control dis-auto-width dis-bottom-margin" readonly>',
+													'<input type="text"	name="prevRetQty"  class="text-align-center prevRetQty form-control dis-auto-width dis-bottom-margin" readonly>',
+													'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="'+ (initialRow + 1) +'">',
+													'<input type="text"	name="voucherNo"  class="text-align-center voucherNo form-control dis-auto-width dis-bottom-margin" readonly>',
+													'<input type="text"	name="remark"  class="text-align-center remark form-control dis-auto-width dis-bottom-margin" tabindex="'+ (initialRow + 1) +'">',
+													'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 							.draw(false);
 			 				l++;
 			 				initialRow++;
@@ -870,7 +892,7 @@ $(function() {
 		$('.btn-row-add').prop('disabled', false);
 		$('.row-delete').prop('disabled', false);
 		$('#refer-doctor').prop('disabled', false);
-		itemCodeList.length = 0;
+		batchList.length = 0;
 		
 		
 		
@@ -903,10 +925,12 @@ $(function() {
 										+ (totalRow + 1) + '</div>',
 								'<input type="text"	name="itemName" class="itemName form-control dis-auto-width dis-bottom-margin" tabindex="'
 										+ (totalRow + 1) + '"><input type="hidden" class="itemId" name="serviceId">',
+										'<select class="form-control batch dis-auto-width" name="batch"></select>',
+										'<input type="text"	name="issueQty"  class="text-align-center issueQty form-control dis-auto-width dis-bottom-margin" readonly>',
+										'<input type="text"	name="prevRetQty"  class="text-align-center prevRetQty form-control dis-auto-width dis-bottom-margin" readonly>',
 										'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="'+ (totalRow + 1) +'">',
-								'<input type="text"	name="molecule"  class="molecule form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text"	name="stock"  class="text-align-center stock form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text"	name="balQty"  class="text-align-center balQty form-control dis-auto-width dis-bottom-margin" readonly>',
+										'<input type="text"	name="voucherNo"  class="text-align-center voucherNo form-control dis-auto-width dis-bottom-margin" readonly>',
+										'<input type="text"	name="remark"  class="text-align-center remark form-control dis-auto-width dis-bottom-margin" tabindex="'+ (totalRow + 1) +'">',
 								'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 				.draw(false);
  				l++;
@@ -925,10 +949,12 @@ $(function() {
 										+ (i + 1) + '</div>',
 								'<input type="text"	name="itemName" class="itemName form-control dis-auto-width dis-bottom-margin" tabindex="'
 										+ (i + 1) + '"><input type="hidden" class="itemCode" name="itemCode">',
+										'<select class="form-control batch dis-auto-width" name="batch"></select>',
+										'<input type="text"	name="issueQty"  class="text-align-center issueQty form-control dis-auto-width dis-bottom-margin" readonly>',
+										'<input type="text"	name="prevRetQty"  class="text-align-center prevRetQty form-control dis-auto-width dis-bottom-margin" readonly>',
 										'<input type="text"	name="qty"  class="text-align-center qty form-control dis-auto-width dis-bottom-margin" tabindex="'+ (i + 1) +'">',
-								'<input type="text"	name="molecule"  class="molecule form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text"	name="stock"  class="text-align-center stock form-control dis-auto-width dis-bottom-margin" readonly>',
-								'<input type="text"	name="balQty"  class="text-align-center balQty form-control dis-auto-width dis-bottom-margin" readonly>',
+										'<input type="text"	name="voucherNo"  class="text-align-center voucherNo form-control dis-auto-width dis-bottom-margin" readonly>',
+										'<input type="text"	name="remark"  class="text-align-center remark form-control dis-auto-width dis-bottom-margin" tabindex="'+ (i + 1) +'">',
 								'<div class="delete-btn"><input type="hidden" class="chk-box" name="spcimenChkBox" value="N"><button class="btn btn-warning btn-sm row-delete">X</button></div>' ])
 				.draw(false);
  			}
@@ -985,7 +1011,7 @@ function isNumber(input) {
 
 
 if (window.history && window.history.pushState) {
-    window.history.pushState('', null, 'pharma.order?moduleName=' + document.getElementById('frm-name').value);
+    window.history.pushState('', null, 'pharma.return.request?moduleName=' + document.getElementById('frm-name').value);
     $(window).on('popstate', function() {
         document.location.href = '';
     });

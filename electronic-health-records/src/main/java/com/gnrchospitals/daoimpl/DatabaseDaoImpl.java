@@ -15,14 +15,11 @@ public class DatabaseDaoImpl implements DatabaseDao {
 
 	@Override
 	public boolean findByLocation(String location) throws SQLException{
-
 		try (Connection con = LocationDBConnection.getConnection();
 				PreparedStatement ps = createPreparedStatement(con, location);
 				ResultSet rs = ps.executeQuery()) {
-
 			Database database = Database.getInstance();
 			System.out.println("Database Instance ID " + database);
-
 			if (rs.next()) {
 				database.setServerIp(rs.getString(1));
 				database.setDbPort(rs.getString(2));
@@ -32,7 +29,6 @@ public class DatabaseDaoImpl implements DatabaseDao {
 				return true;
 			}
 		}
-
 		return false;
 	}
 

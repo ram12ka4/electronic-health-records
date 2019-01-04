@@ -4,14 +4,12 @@
 	type="com.gnrchospitals.dao.LoginDao" scope="request"></jsp:useBean>
 
 <%
-	String ipNo = (String) session.getAttribute("ipNo");
-	System.out.println("IP No set in session " + ipNo);
-
+	/* 	String ipNo = (String) session.getAttribute("ipNo");
+		System.out.println("IP No set in session " + ipNo);
+	 */
 	String userCode = (String) session.getAttribute("user");
 	String categoryCode = (String) session.getAttribute("categoryCode");
-
 	List<String> list = loginDao.userMenu(userCode, categoryCode);
-	System.out.println("User Access Menu : " + list);
 %>
 
 
@@ -43,7 +41,8 @@
 						String formName = list.get(i);
 						String url = list.get(i + 1);
 				%>
-				<li><a href="<%=url%>?ip_no=${sessionScope.ipNo}&moduleName=<%=formName%>"><%=formName%></a></li>
+				<li><a
+					href="<%=url%>?ip_no=${sessionScope.ipNo}&moduleName=<%=formName%>"><%=formName%></a></li>
 				<%
 					}
 				%>

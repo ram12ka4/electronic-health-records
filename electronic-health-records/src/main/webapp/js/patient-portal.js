@@ -27,9 +27,12 @@ $(function(){
 		
 		
 	}
-	
-	
-	
-	
-	
 });
+
+if (window.history && window.history.pushState) {
+    window.history.pushState('', null, 'patient.portal');
+    $(window).on('popstate', function() {
+        document.location.href = '#';
+    });
+} 
+

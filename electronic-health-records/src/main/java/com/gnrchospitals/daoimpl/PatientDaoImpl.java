@@ -2525,5 +2525,43 @@ public class PatientDaoImpl implements PatientDao {
 		cs.execute();
 		return cs;
 	}	
+	
+	public List<String> getDrugRetItemList(String ipNumber) throws SQLException {
+		
+		System.out.println("in getDrugRetItemList");
+
+		List<String> list = new ArrayList<>();
+
+		try (Connection con = LoginDBConnection.getConnection();) {
+			try (CallableStatement cs = createCallableStatement31(con, ipNumber)) {
+
+				ResultSet rs = ((OracleCallableStatement)cs).getCursor(2);
+
+				if (rs.next()) {
+					do {
+						list.add(rs.getString("ITEM_CODE"));
+						list.add(rs.getString("ITEM_NAME"));
+						list.add(rs.getString("BATCH_NUM"));
+						list.add(rs.getString("ISU_QTY"));
+						list.add(rs.getString("RET_QTY"));
+						list.add("0");
+						list.add(rs.getString("VCH_NUM"));
+					} while (rs.next());
+				}
+			}
+
+			System.out.println("Drug Return Request Detail : " + list);
+			return list;
+		}
+	}
+
+	private CallableStatement createCallableStatement31(Connection con, String ipNumber) throws SQLException {
+		CallableStatement cs = con.prepareCall("BEGIN PKGJV_PH_MED_RET_REQUEST.PKG_POPU_PROD(?,?); END;");
+		cs.setString(1, ipNumber);
+		cs.registerOutParameter(2, OracleTypes.CURSOR);
+		cs.execute();
+		return cs;
+	}	
+
 
 }

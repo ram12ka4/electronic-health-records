@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnrchospitals.dao.PatientDao;
 import com.gnrchospitals.daoimpl.PatientDaoImpl;
@@ -22,25 +25,32 @@ public class NurseNoteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PatientDao patientDao = new PatientDaoImpl();
 	private Patient patient = Patient.getInstance(); // Singleton class
+	private static Logger LOGGER = LoggerFactory.getLogger(NurseNoteController.class);
+	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String token = request.getParameter("token") == null ? "" : request.getParameter("token");
-		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
+	/*	String token = request.getParameter("token") == null ? "" : request.getParameter("token");
+		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");*/
 		
-		HttpSession session = request.getSession();
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // proxies
+		
+		HttpSession session = request.getSession(true);
+		
+		 if(session.getAttribute("user") == null) {
+				LOGGER.info("Session null");
+				response.sendRedirect("login.do");
+			} else {
+				LOGGER.info("user session exists");
+				session.setAttribute("moduleName", request.getParameter("moduleName"));
+				request.setAttribute("ipNumber", (String) request.getParameter("ip_no"));
+				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
+			}
 
-		try {
-			session.setAttribute("moduleName", request.getParameter("moduleName"));
-			request.setAttribute("ipNumber", request.getParameter("ip_no"));
-			request.setAttribute("token", token);
-			request.setAttribute("msg", msg);
-			request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
-
-		} catch (Exception e) {
-			sendErrorReirect(request, response, "/WEB-INF/views/error.jsp", e);
-		}
+		
 
 	}
 
@@ -62,16 +72,16 @@ public class NurseNoteController extends HttpServlet {
 		String nurseNoteNumber = request.getParameter("noteNo") == null ? "" : request.getParameter("noteNo");
 	
 
-		System.out.println("ACTION : " + action);
-		System.out.println("patientNo : " + patientNo);
-		System.out.println("mrd: " + mrd);
-		System.out.println("visitNo : " + visitNo);
-		System.out.println("doctorId : " + refDoctorId);
-		System.out.println("wardNo : " + wardNo);
-		System.out.println("bedNo : " + bedNo);
-		System.out.println("userId : " + userId);
-		System.out.println("Nurse Note Id : " + nurseNoteNumber);
-		System.out.println("Nurse Note : " + nurseNote);
+		LOGGER.info("ACTION : " + action);
+		LOGGER.info("patientNo : " + patientNo);
+		LOGGER.info("mrd: " + mrd);
+		LOGGER.info("visitNo : " + visitNo);
+		LOGGER.info("doctorId : " + refDoctorId);
+		LOGGER.info("wardNo : " + wardNo);
+		LOGGER.info("bedNo : " + bedNo);
+		LOGGER.info("userId : " + userId);
+		LOGGER.info("Nurse Note Id : " + nurseNoteNumber);
+		LOGGER.info("Nurse Note : " + nurseNote);
 	
 
 		try {
@@ -83,7 +93,7 @@ public class NurseNoteController extends HttpServlet {
 				List<String> list = patientDao.getDoctorList();
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonMapper = mapper.writeValueAsString(list);
-				System.out.println("Service Rate List : " + jsonMapper);
+				LOGGER.info("Service Rate List : " + jsonMapper);
 				out.println(jsonMapper);
 			} else if ("FETCH_PREVIOUS_NURSE_NOTE".equals(action)) {
 				List<List<String>> list = patientDao.getPreviousNurseNotes(patientNo);
@@ -122,7 +132,7 @@ public class NurseNoteController extends HttpServlet {
 				out.println("</table>");
 			} else if ("FETCH_NURSE_NOTE_HISTORY".equals(action)) {
 				List<String> list = patientDao.getNurseNote(nurseNoteNumber);
-				System.out.println("Nurse Note : " + list);
+				LOGGER.info("Nurse Note : " + list);
 				out.print(list);
 			} else {
 				request.getRequestDispatcher("/WEB-INF/views/gnrc-nurse-note.jsp").forward(request, response);
